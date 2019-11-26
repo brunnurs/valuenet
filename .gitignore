@@ -1,3 +1,11 @@
+# manuell
+pre_trained_model/
+experiments/
+
+#intellij
+.idea/
+.ipynb_checkpoints
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
