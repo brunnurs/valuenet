@@ -6,6 +6,12 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+numpy = "*"
+torch = "*"
+torchvision = "*"
+nltk = "*"
+transformers = "*"
+tensorboard = "*"
 
 [requires]
 python_version = "3.6"
