@@ -19,7 +19,7 @@ def read_arguments_train():
     parser.add_argument('--seed', default=42, type=int)
     parser.add_argument('--toy', default=False, action='store_true')
     parser.add_argument('--data_set', default='spider', type=str)
-    parser.add_argument('--batch_size_encoder', default=4, type=int)
+    parser.add_argument('--batch_size_encoder', default=1, type=int)
     parser.add_argument('--encoder_pretrained_model', default='bert-base-uncased', type=str)
     parser.add_argument('--max_seq_length', default=222, type=int)
 
