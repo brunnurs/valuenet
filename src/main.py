@@ -15,10 +15,10 @@ from src.training import train
 from src.utils import setup_device, set_seed_everywhere, create_labels_for_dummy_task
 
 
-def create_experiment_folder(model_output_dir, data_dir):
+def create_experiment_folder(model_output_dir):
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    exp = "{}__{}".format(data_dir.upper(), timestamp)
+    exp = "{}__{}".format("Spider", timestamp)
 
     out_path = os.path.join(model_output_dir, exp)
     os.makedirs(out_path, exist_ok=True)
@@ -28,7 +28,7 @@ def create_experiment_folder(model_output_dir, data_dir):
 
 if __name__ == '__main__':
     args = read_arguments_train()
-    experiment_name, output_path = create_experiment_folder(args.model_output_dir, args.data_dir)
+    experiment_name, output_path = create_experiment_folder(args.model_output_dir)
     write_config_to_file(args, args.model_output_dir, experiment_name)
 
     device, n_gpu = setup_device()
@@ -68,6 +68,7 @@ if __name__ == '__main__':
               label_map,
               args.max_seq_length)
 
+        print("Evaluate on the dev-set")
         eval_results = evaluate(model,
                                 device,
                                 tokenizer,
@@ -79,5 +80,15 @@ if __name__ == '__main__':
 
         for key, value in eval_results.items():
             tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
+
+        print("Evaluate on the training set")
+        evaluate(model,
+                 device,
+                 tokenizer,
+                 train_loader,
+                 epoch,
+                 label_map,
+                 output_path,
+                 args.max_seq_length)
 
     tb_writer.close()
