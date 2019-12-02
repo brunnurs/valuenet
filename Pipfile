@@ -12,6 +12,7 @@ torchvision = "*"
 nltk = "*"
 transformers = "*"
 tensorboard = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.6"
