@@ -1,4 +1,5 @@
-from transformers import AdamW, WarmupLinearSchedule
+from transformers import AdamW
+from transformers.optimization import get_linear_schedule_with_warmup
 
 
 def build_optimizer_encoder(model, num_train_steps, learning_rate, adam_eps, warmup_steps, weight_decay):
@@ -10,6 +11,9 @@ def build_optimizer_encoder(model, num_train_steps, learning_rate, adam_eps, war
     ]
 
     optimizer = AdamW(optimizer_grouped_parameters, lr=learning_rate, eps=adam_eps)
-    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=warmup_steps, t_total=num_train_steps)
+
+    scheduler = get_linear_schedule_with_warmup(optimizer,
+                                                num_warmup_steps=warmup_steps,
+                                                num_training_steps=num_train_steps)
 
     return optimizer, scheduler
