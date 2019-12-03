@@ -11,6 +11,7 @@ from src.evaluation import evaluate
 from src.optimizer import build_optimizer_encoder
 from src.spider import spider_utils
 from src.training import train
+from sklearn.model_selection import train_test_split
 
 from src.utils import setup_device, set_seed_everywhere, create_labels_for_dummy_task
 
@@ -34,11 +35,15 @@ if __name__ == '__main__':
     device, n_gpu = setup_device()
     set_seed_everywhere(args.seed, n_gpu)
 
-    sql_data, table_data, val_sql_data, val_table_data = spider_utils.load_dataset(args.data_dir, use_small=args.toy)
-    train_loader, dev_loader = get_data_loader(sql_data, val_sql_data, args.batch_size_encoder, True, False)
+    data_1, _, data_2, _ = spider_utils.load_dataset(args.data_dir, use_small=args.toy)
+    data_total = data_1 + data_2
+
+    train_data, test_data = train_test_split(data_total, test_size=0.2)
+
+    train_loader, dev_loader = get_data_loader(train_data, test_data, args.batch_size_encoder, True, False)
 
     # TODO this might only be temporary for the dummy training task
-    label_map = create_labels_for_dummy_task(sql_data, val_sql_data)
+    label_map = create_labels_for_dummy_task(data_1, data_2)
 
     model, tokenizer = get_encoder_model(args.encoder_pretrained_model, len(label_map))
     model.to(device)
