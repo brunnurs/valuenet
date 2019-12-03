@@ -38,9 +38,10 @@ if __name__ == '__main__':
     data_1, _, data_2, _ = spider_utils.load_dataset(args.data_dir, use_small=args.toy)
     data_total = data_1 + data_2
 
-    train_data, test_data = train_test_split(data_total, test_size=0.2)
+    train_data, dev_data = train_test_split(data_total, test_size=0.2)
+    print("Data loaded! Training samples: {}, dev samples:{}".format(len(train_data), len(dev_data)))
 
-    train_loader, dev_loader = get_data_loader(train_data, test_data, args.batch_size_encoder, True, False)
+    train_loader, dev_loader = get_data_loader(train_data, dev_data, args.batch_size_encoder, True, False)
 
     # TODO this might only be temporary for the dummy training task
     label_map = create_labels_for_dummy_task(data_1, data_2)
@@ -63,16 +64,15 @@ if __name__ == '__main__':
     print("Start training with {} epochs".format(args.num_epochs))
     for epoch in tqdm(range(int(args.num_epochs))):
 
-        global_step = train(global_step,
-                            tb_writer,
-                            device,
-                            train_loader,
-                            model,
-                            tokenizer,
-                            optimizer,
-                            scheduler,
-                            label_map,
-                            args.max_seq_length)
+        train(tb_writer,
+              device,
+              train_loader,
+              model,
+              tokenizer,
+              optimizer,
+              scheduler,
+              label_map,
+              args.max_seq_length)
 
         print("Evaluate on the dev-set")
         eval_results = evaluate(model,
@@ -85,6 +85,6 @@ if __name__ == '__main__':
                                 args.max_seq_length)
 
         for key, value in eval_results.items():
-            tb_writer.add_scalar(key, value, global_step)
+            tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
 
     tb_writer.close()
