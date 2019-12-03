@@ -39,10 +39,9 @@ def tokenize_input(batch, label_map, tokenizer, max_length, device):
 
         tokens = question_tokens + columns_tokens
         segment_ids = question_segment_ids + columns_segment_ids
+        attention_mask = [1] * len(question_tokens) + [0] * len(columns_tokens)
 
         input_ids = tokenizer.convert_tokens_to_ids(tokens)
-
-        attention_mask = [1] * len(tokens)
 
         label_id = label_map[example['db_id']]
 
