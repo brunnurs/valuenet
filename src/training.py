@@ -4,7 +4,8 @@ from tqdm import tqdm
 from src.input_features import tokenize_input
 
 
-def train(tb_writer,
+def train(global_step,
+          tb_writer,
           device,
           train_dataloader,
           encoder_model,
@@ -13,7 +14,6 @@ def train(tb_writer,
           scheduler,
           label_map,
           max_seq_length):
-    global_step = 0
     tr_loss, logging_loss = 0.0, 0.0
     encoder_model.zero_grad()
 
@@ -43,3 +43,5 @@ def train(tb_writer,
         tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
         tb_writer.add_scalar('loss', (tr_loss - logging_loss), global_step)
         logging_loss = tr_loss
+
+    return global_step
