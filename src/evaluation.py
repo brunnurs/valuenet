@@ -56,16 +56,16 @@ def evaluate(model, device, tokenizer, dev_loader, epoch, label_map, output_path
     # is used (see BertForSequenceClassification)
     predicted_class = np.argmax(predictions, axis=1)
 
-    simple_accuracy = (predicted_class == ground_truth).mean()
     f1 = f1_score(y_true=ground_truth, y_pred=predicted_class, average='micro')
+    f1_macro = f1_score(y_true=ground_truth, y_pred=predicted_class, average='macro')
 
     report = classification_report(ground_truth, predicted_class,
                                    labels=list(label_map.values()),
                                    target_names=list(label_map.keys()))
 
     result = {'eval_loss': eval_loss,
-              'simple_accuracy': simple_accuracy,
-              'f1_score': f1}
+              'f1_score_micro': f1,
+              'f1_score_macro': f1_macro}
 
     with open(eval_results_path, "a+") as writer:
         tqdm.write("***** Eval results after epoch {} *****".format(epoch))
