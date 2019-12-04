@@ -58,15 +58,16 @@ if __name__ == '__main__':
     print("Start training with {} epochs".format(args.num_epochs))
     for epoch in tqdm(range(int(args.num_epochs))):
 
-        train(tb_writer,
-              device,
-              train_loader,
-              model,
-              tokenizer,
-              optimizer,
-              scheduler,
-              label_map,
-              args.max_seq_length)
+        global_step = train(global_step,
+                            tb_writer,
+                            device,
+                            train_loader,
+                            model,
+                            tokenizer,
+                            optimizer,
+                            scheduler,
+                            label_map,
+                            args.max_seq_length)
 
         print("Evaluate on the dev-set")
         eval_results = evaluate(model,
@@ -79,16 +80,6 @@ if __name__ == '__main__':
                                 args.max_seq_length)
 
         for key, value in eval_results.items():
-            tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
-
-        print("Evaluate on the training set")
-        evaluate(model,
-                 device,
-                 tokenizer,
-                 train_loader,
-                 epoch,
-                 label_map,
-                 output_path,
-                 args.max_seq_length)
+            tb_writer.add_scalar(key, value, global_step)
 
     tb_writer.close()
