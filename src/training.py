@@ -23,8 +23,11 @@ def train(global_step,
 
         examples = []
         for data_row in batch:
-            example = build_example(data_row, table_data)
-            examples.append(example)
+            try:
+                example = build_example(data_row, table_data)
+                examples.append(example)
+            except RuntimeError as e:
+                print(str(e))
 
         examples.sort(key=lambda e: -len(e.src_sent))
 

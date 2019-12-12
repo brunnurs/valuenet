@@ -37,7 +37,7 @@ def build_example(sql, table_data):
         rule_label = [eval(x) for x in sql['rule_label'].strip().split(' ')]
 
         if is_valid(rule_label, col_table_dict=col_table_dict, sql=sql) is False:
-            raise Exception("Invalid rule_label! Deal with it.")
+            raise RuntimeError("Invalid rule_label: {}. We don't use this sample".format(sql['rule_label']))
 
     example = Example(
         src_sent=process_dict['question_arg'],
