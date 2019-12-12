@@ -21,21 +21,14 @@ def setup_device():
     return device, n_gpu
 
 
-def create_labels_for_dummy_task(data_train, data_dev):
-    label_map = {}
-    next_label = 0
-    for label in data_train:
-        if not label['db_id'] in label_map:
-            label_map[label['db_id']] = next_label
-            next_label += 1
-
-    for label in data_dev:
-        if not label['db_id'] in label_map:
-            label_map[label['db_id']] = next_label
-            next_label += 1
-
-    return label_map
-
-
-def label_map_values(label_map):
-    return list(map(lambda key, value: value, label_map.items()))
+def load_word_emb(file_name, use_small=False):
+    print('Loading word embedding from %s' % file_name)
+    ret = {}
+    with open(file_name) as inf:
+        for idx, line in enumerate(inf):
+            if (use_small and idx >= 500000):
+                break
+            info = line.strip().split(' ')
+            if info[0].lower() not in ret:
+                ret[info[0]] = np.array(list(map(lambda x: float(x), info[1:])))
+    return ret

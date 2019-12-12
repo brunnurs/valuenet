@@ -311,7 +311,6 @@ def eval_acc(preds, sqls):
 def load_data_new(sql_path, table_data, use_small=False):
     sql_data = []
 
-    print("Loading data from %s" % sql_path)
     # sql_data basically is what we see in the original spider-data: https://github.com/taoyds/spider. it is though
     # already enriched with some information as e.g. POS (stanford_pos and nltk_pos) and NER (stanford_ner) The most
     # complex field is the sql-dict, which contains the structured sql similar to the "sql" attribute in spider For
@@ -326,6 +325,8 @@ def load_data_new(sql_path, table_data, use_small=False):
         data = lower_keys(data)
         sql_data += data
 
+    print("Load data from {}. N={}".format(sql_path, len(sql_data)))
+
     table_dict = {table['db_id']: table for table in table_data}
 
     return sql_data, table_dict
@@ -334,16 +335,16 @@ def load_data_new(sql_path, table_data, use_small=False):
 def load_dataset(dataset_dir, use_small=False):
     print("Loading from datasets...")
 
-    TABLE_PATH = os.path.join(dataset_dir, "tables.json")
-    TRAIN_PATH = os.path.join(dataset_dir, "train.json")
-    DEV_PATH = os.path.join(dataset_dir, "dev.json")
-    with open(TABLE_PATH) as inf:
-        print("Loading data from %s" % TABLE_PATH)
+    table_path = os.path.join(dataset_dir, "tables.json")
+    train_path = os.path.join(dataset_dir, "train.json")
+    dev_path = os.path.join(dataset_dir, "dev.json")
+    with open(table_path) as inf:
         # table_data is basically a dict with all the 200 (in train ca. 166) datasets of spider.
         # Each sub-dict contains the name of all tables, as well as relations between them (foreign keys, primary keys)
         table_data = json.load(inf)
+        print("Load data from {}. N={}".format(table_path, len(table_data)))
 
-    train_sql_data, train_table_data = load_data_new(TRAIN_PATH, table_data, use_small=use_small)
-    val_sql_data, val_table_data = load_data_new(DEV_PATH, table_data, use_small=use_small)
+    train_sql_data, train_table_data = load_data_new(train_path, table_data, use_small=use_small)
+    val_sql_data, val_table_data = load_data_new(dev_path, table_data, use_small=use_small)
 
     return train_sql_data, train_table_data, val_sql_data, val_table_data
