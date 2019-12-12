@@ -62,7 +62,6 @@ if __name__ == '__main__':
     print("Start training with {} epochs".format(args.num_epochs))
     t = TicToc()
     for epoch in tqdm(range(int(args.num_epochs))):
-
         sketch_loss_weight = 1 if epoch < args.loss_epoch_threshold else args.sketch_loss_weight
 
         t.tic()
@@ -78,17 +77,19 @@ if __name__ == '__main__':
 
         train_time = t.tocvalue()
 
-        tqdm.write("Training of epoch {} finished after {} seconds. Evaluate on the dev-set".format(epoch, train_time))
-        # eval_results = evaluate(model,
-        #                         device,
-        #                         tokenizer,
-        #                         dev_loader,
-        #                         epoch,
-        #                         label_map,
-        #                         output_path,
-        #                         args.max_seq_length)
+        tqdm.write("Training of epoch {} finished after {} seconds. Evaluate now on the dev-set".format(epoch, train_time))
+        sketch_acc, acc = evaluate(model,
+                                   dev_loader,
+                                   table_data,
+                                   args.beam_size)
 
-        # for key, value in eval_results.items():
-        #     tb_writer.add_scalar(key, value, global_step)
+        eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch, sketch_acc, acc)
+        tqdm.write(eval_results_string)
+
+        with open(os.path.join(output_path, "eval_results.txt"), "a+") as writer:
+            writer.write(eval_results_string + "\n")
+
+        tb_writer.add_scalar("sketch-accuracy", sketch_acc, global_step)
+        tb_writer.add_scalar("accuracy", acc, global_step)
 
     tb_writer.close()
