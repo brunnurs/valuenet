@@ -1,11 +1,9 @@
 import os
 
-import numpy as np
 import torch
-from sklearn.metrics import f1_score, classification_report
 from tqdm import tqdm
 
-from src.input_features import tokenize_input
+from src.spider.example_builder import build_example
 
 
 def get_key(value, dic):
@@ -14,65 +12,43 @@ def get_key(value, dic):
             return key
 
 
-def evaluate(model, device, tokenizer, dev_loader, epoch, label_map, output_path, max_seq_length):
-    eval_results_path = os.path.join(output_path, "eval_results.txt")
-    nb_eval_steps = 0
-    eval_loss = 0.0
-    predictions = None
-    ground_truth = None
+def evaluate(model, dev_loader, table_data, beam_size):
+    sketch_correct, rule_label_correct, total = 0, 0, 0
 
     for batch in tqdm(dev_loader, desc="Evaluating"):
         model.eval()
-        with torch.no_grad():
 
-            input_ids, attention_mask, segment_ids, label_ids = tokenize_input(batch,
-                                                                               label_map,
-                                                                               tokenizer,
-                                                                               max_seq_length,
-                                                                               device)
+        for data_row in batch:
+            example = build_example(data_row, table_data)
 
-            outputs = model(input_ids, attention_mask=attention_mask, token_type_ids=segment_ids, labels=label_ids)
+            with torch.no_grad():
+                results_all = model.parse(example, beam_size=beam_size)
 
-            # logits are always part of the output (see BertForSequenceClassification documentation), while loss is
-            # only available if labels are provided. Therefore the logits are here to find on first position.
-            tmp_eval_loss, logits = outputs[:2]
+            results = results_all[0]
+            list_preds = []
+            try:
 
-            eval_loss += tmp_eval_loss.mean().item()
+                pred = " ".join([str(x) for x in results[0].actions])
+                for x in results:
+                    list_preds.append(" ".join(str(x.actions)))
+            except Exception as e:
+                # print('Epoch Acc: ', e)
+                # print(results)
+                # print(results_all)
+                pred = ""
 
-        nb_eval_steps += 1
+            simple_json = example.sql_json['pre_sql']
 
-        if predictions is None:
-            predictions = logits.detach().cpu().numpy()
-            ground_truth = label_ids.detach().cpu().numpy()
-        else:
-            predictions = np.append(predictions, logits.detach().cpu().numpy(), axis=0)
-            ground_truth = np.append(ground_truth, label_ids.detach().cpu().numpy(), axis=0)
+            simple_json['sketch_result'] = " ".join(str(x) for x in results_all[1])
+            simple_json['model_result'] = pred
 
-    eval_loss = eval_loss / nb_eval_steps
+            truth_sketch = " ".join([str(x) for x in example.sketch])
+            truth_rule_label = " ".join([str(x) for x in example.tgt_actions])
 
-    # remember, the logits are simply the output from the last layer, without applying an activation function (e.g.
-    # sigmoid). for a simple classification this is also not necessary, we just take the index of the neuron with the
-    # maximal output. To calculate the loss though, the Softmax & Cross Entropy Loss
-    # is used (see BertForSequenceClassification)
-    predicted_class = np.argmax(predictions, axis=1)
+            if truth_sketch == simple_json['sketch_result']:
+                sketch_correct += 1
+            if truth_rule_label == simple_json['model_result']:
+                rule_label_correct += 1
+            total += 1
 
-    f1 = f1_score(y_true=ground_truth, y_pred=predicted_class, average='micro')
-    f1_macro = f1_score(y_true=ground_truth, y_pred=predicted_class, average='macro')
-
-    report = classification_report(ground_truth, predicted_class,
-                                   labels=list(label_map.values()),
-                                   target_names=list(label_map.keys()))
-
-    result = {'eval_loss': eval_loss,
-              'f1_score_micro': f1,
-              'f1_score_macro': f1_macro}
-
-    with open(eval_results_path, "a+") as writer:
-        eval_results_string = "Epoch: {}, F1 score micro: {} F1 score macro: {}".format(epoch, f1, f1_macro)
-        tqdm.write(eval_results_string)
-        writer.write(eval_results_string + "\n")
-
-        tqdm.write(report)
-        writer.write(report + "\n")
-
-    return result
+    return float(sketch_correct) / float(total), float(rule_label_correct) / float(total)

@@ -53,6 +53,9 @@ def read_arguments_train():
     parser.add_argument('--column_att', choices=['dot_prod', 'affine'], default='affine')
     parser.add_argument('--dropout', default=0.3, type=float, help='dropout rate')
 
+    # prediction configuration
+    parser.add_argument('--beam_size', default=5, type=int, help='beam size for beam search')
+    parser.add_argument('--decode_max_time_step', default=40, type=int, help='maximum number of time steps used in decoding and sampling')
 
     args = parser.parse_args()
 
