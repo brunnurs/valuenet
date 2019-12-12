@@ -13,6 +13,7 @@ nltk = "*"
 transformers = "*"
 tensorboard = "*"
 sklearn = "*"
+pytictoc = "*"
 
 [requires]
 python_version = "3.6"

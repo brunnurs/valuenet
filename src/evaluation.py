@@ -68,11 +68,9 @@ def evaluate(model, device, tokenizer, dev_loader, epoch, label_map, output_path
               'f1_score_macro': f1_macro}
 
     with open(eval_results_path, "a+") as writer:
-        tqdm.write("***** Eval results after epoch {} *****".format(epoch))
-        writer.write("***** Eval results after epoch {} *****\n".format(epoch))
-        for key in sorted(result.keys()):
-            tqdm.write("{}: {}".format(key, str(result[key])))
-            writer.write("{}: {}\n".format(key, str(result[key])))
+        eval_results_string = "Epoch: {}, F1 score micro: {} F1 score macro: {}".format(epoch, f1, f1_macro)
+        tqdm.write(eval_results_string)
+        writer.write(eval_results_string + "\n")
 
         tqdm.write(report)
         writer.write(report + "\n")
