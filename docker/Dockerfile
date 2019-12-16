@@ -1,12 +1,11 @@
-FROM pytorch/pytorch:latest
+FROM python:3.7
 
-RUN pip install torch
-RUN pip install torchvision
-RUN pip install tensorboard
-RUN pip install transformers
-RUN pip install numpy
-RUN pip install sklearn
-RUN pip install nltk
+COPY requirements.txt /tmp
+COPY download_nltk.py /tmp
+
+RUN pip install -r /tmp/requirements.txt
+
+RUN python /tmp/download_nltk.py
 
 ENV PYTHONPATH /workspace
 
