@@ -1,4 +1,3 @@
-import numpy as np
 import torch
 from tqdm import tqdm
 
@@ -7,10 +6,11 @@ from src.spider.example_builder import build_example
 
 def train(global_step,
           tb_writer,
-          sql_data,
+          train_dataloader,
           table_data,
           model,
           optimizer,
+          scheduler,
           clip_grad,
           sketch_loss_weight=1,
           lf_loss_weight=1):
@@ -18,20 +18,13 @@ def train(global_step,
     tr_loss, logging_loss = 0.0, 0.0
     model.zero_grad()
 
-    perm=np.random.permutation(len(sql_data))
-    cum_loss = 0.0
-    st = 0
-
-    # for step, batch in enumerate(tqdm(train_dataloader, desc="Training")):
-    while st < len(sql_data):
+    for step, batch in enumerate(tqdm(train_dataloader, desc="Training")):
         model.train()
 
-        ed = st + 64 if st + 64 < len(perm) else len(perm)
-
         examples = []
-        for idx in range(st, ed):
+        for data_row in batch:
             try:
-                example = build_example(sql_data[perm[idx]], table_data)
+                example = build_example(data_row, table_data)
                 examples.append(example)
             except RuntimeError as e:
                 print(str(e))
@@ -51,14 +44,13 @@ def train(global_step,
         tr_loss += loss.item()
 
         optimizer.step()
+        scheduler.step()  # Update learning rate schedule
         model.zero_grad()  # after we optimized the weights, we set the gradient back to zero.
 
         global_step += 1
 
+        tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
         tb_writer.add_scalar('loss', (tr_loss - logging_loss), global_step)
         logging_loss = tr_loss
-
-        cum_loss += loss.data.cpu().numpy()*(ed - st)
-        st = ed
 
     return global_step
