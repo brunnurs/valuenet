@@ -12,15 +12,20 @@ def get_key(value, dic):
             return key
 
 
-def evaluate(model, dev_loader, table_data, beam_size):
+def evaluate(model, sql_data, table_data, beam_size):
     sketch_correct, rule_label_correct, total = 0, 0, 0
 
-    for batch in tqdm(dev_loader, desc="Evaluating"):
+    perm = list(range(len(sql_data)))
+    st = 0
+
+    while st < len(sql_data):
         model.eval()
 
-        for data_row in batch:
+        ed = st + 64 if st + 64 < len(perm) else len(perm)
+
+        for i in range(st, ed):
             try:
-                example = build_example(data_row, table_data)
+                example = build_example(sql_data[perm[i]], table_data)
             except Exception as e:
                 print(str(e))
                 continue
@@ -54,5 +59,7 @@ def evaluate(model, dev_loader, table_data, beam_size):
             if truth_rule_label == simple_json['model_result']:
                 rule_label_correct += 1
             total += 1
+
+        st = ed
 
     return float(sketch_correct) / float(total), float(rule_label_correct) / float(total)
