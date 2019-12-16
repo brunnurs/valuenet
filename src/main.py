@@ -90,4 +90,6 @@ if __name__ == '__main__':
         tb_writer.add_scalar("sketch-accuracy", sketch_acc, global_step)
         tb_writer.add_scalar("accuracy", acc, global_step)
 
+        scheduler.step()  # Update learning rate schedule
+
     tb_writer.close()

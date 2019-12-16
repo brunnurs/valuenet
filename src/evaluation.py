@@ -14,9 +14,9 @@ def get_key(value, dic):
 
 def evaluate(model, dev_loader, table_data, beam_size):
     sketch_correct, rule_label_correct, total = 0, 0, 0
+    model.eval()
 
     for batch in tqdm(dev_loader, desc="Evaluating"):
-        model.eval()
 
         for data_row in batch:
             try:

@@ -17,10 +17,9 @@ def train(global_step,
 
     tr_loss, logging_loss = 0.0, 0.0
     model.zero_grad()
+    model.train()
 
     for step, batch in enumerate(tqdm(train_dataloader, desc="Training")):
-        model.train()
-
         examples = []
         for data_row in batch:
             try:
@@ -44,12 +43,10 @@ def train(global_step,
         tr_loss += loss.item()
 
         optimizer.step()
-        scheduler.step()  # Update learning rate schedule
         model.zero_grad()  # after we optimized the weights, we set the gradient back to zero.
 
         global_step += 1
 
-        tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
         tb_writer.add_scalar('loss', (tr_loss - logging_loss), global_step)
         logging_loss = tr_loss
 
