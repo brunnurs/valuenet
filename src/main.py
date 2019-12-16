@@ -62,14 +62,14 @@ if __name__ == '__main__':
     for epoch in tqdm(range(int(args.num_epochs))):
         sketch_loss_weight = 1 if epoch < args.loss_epoch_threshold else args.sketch_loss_weight
 
+        scheduler.step()
         t.tic()
         global_step = train(global_step,
                             tb_writer,
-                            train_loader,
+                            sql_data,
                             table_data,
                             model,
                             optimizer,
-                            scheduler,
                             args.clip_grad,
                             sketch_loss_weight=sketch_loss_weight)
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
         tqdm.write("Training of epoch {0} finished after {1:.2f} seconds. Evaluate now on the dev-set".format(epoch, train_time))
         sketch_acc, acc = evaluate(model,
-                                   dev_loader,
+                                   val_sql_data,
                                    table_data,
                                    args.beam_size)
 
