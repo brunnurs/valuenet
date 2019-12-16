@@ -1,19 +1,13 @@
-from transformers import AdamW
-from transformers.optimization import get_linear_schedule_with_warmup
+from torch.optim import Adam
+from torch.optim.lr_scheduler import MultiStepLR
 
 
-def build_optimizer_encoder(model, num_train_steps, learning_rate, adam_eps, warmup_steps, weight_decay):
+def build_optimizer_encoder(model, num_train_steps, learning_rate, scheduler_gamma):
     print("Build optimizer and warmup scheduler. Total training steps: {}".format(num_train_steps))
-    no_decay = ['bias', 'LayerNorm.weight']
-    optimizer_grouped_parameters = [
-        {'params': [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)], 'weight_decay': weight_decay},
-        {'params': [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
-    ]
+    optimizer = Adam(model.parameters(), lr=learning_rate)
 
-    optimizer = AdamW(optimizer_grouped_parameters, lr=learning_rate, eps=adam_eps)
-
-    scheduler = get_linear_schedule_with_warmup(optimizer,
-                                                num_warmup_steps=warmup_steps,
-                                                num_training_steps=num_train_steps)
+    # This milestones look a bit random to me, have taken it over from the IRNet paper. Maybe we need to adapt the schedule
+    # once we use transformers again.
+    scheduler = MultiStepLR(optimizer, milestones=[21, 41], gamma=scheduler_gamma)
 
     return optimizer, scheduler

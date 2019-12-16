@@ -20,10 +20,10 @@ from src.utils import setup_device, set_seed_everywhere
 from pytictoc import TicToc
 
 
-def create_experiment_folder(model_output_dir):
+def create_experiment_folder(model_output_dir, name):
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    exp = "{}__{}".format("Spider", timestamp)
+    exp = "{}__{}".format(name, timestamp)
 
     out_path = os.path.join(model_output_dir, exp)
     os.makedirs(out_path, exist_ok=True)
@@ -33,7 +33,7 @@ def create_experiment_folder(model_output_dir):
 
 if __name__ == '__main__':
     args = read_arguments_train()
-    experiment_name, output_path = create_experiment_folder(args.model_output_dir)
+    experiment_name, output_path = create_experiment_folder(args.model_output_dir, args.exp_name)
     write_config_to_file(args, args.model_output_dir, experiment_name)
 
     device, n_gpu = setup_device()
@@ -52,9 +52,7 @@ if __name__ == '__main__':
     optimizer, scheduler = build_optimizer_encoder(model,
                                                    num_train_steps,
                                                    args.learning_rate,
-                                                   args.adam_eps,
-                                                   args.warmup_steps,
-                                                   args.weight_decay)
+                                                   args.scheduler_gamma)
 
     tb_writer = SummaryWriter(output_path)
     global_step = 0
@@ -77,7 +75,7 @@ if __name__ == '__main__':
 
         train_time = t.tocvalue()
 
-        tqdm.write("Training of epoch {} finished after {} seconds. Evaluate now on the dev-set".format(epoch, train_time))
+        tqdm.write("Training of epoch {0} finished after {1:.2f} seconds. Evaluate now on the dev-set".format(epoch, train_time))
         sketch_acc, acc = evaluate(model,
                                    dev_loader,
                                    table_data,
@@ -86,7 +84,7 @@ if __name__ == '__main__':
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch, sketch_acc, acc)
         tqdm.write(eval_results_string)
 
-        with open(os.path.join(output_path, "eval_results.txt"), "a+") as writer:
+        with open(os.path.join(output_path, "eval_results.log"), "a+") as writer:
             writer.write(eval_results_string + "\n")
 
         tb_writer.add_scalar("sketch-accuracy", sketch_acc, global_step)

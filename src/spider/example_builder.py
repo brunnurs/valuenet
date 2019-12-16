@@ -33,7 +33,7 @@ def build_example(sql, table_data):
 
     rule_label = None
     if 'rule_label' in sql:
-        # eval("Root1(3)") will dynamically create an instance of class Root1 with the constructor argument 3.
+        # Example: eval("Root1(3)") will dynamically create an instance of class Root1 with the constructor argument 3.
         rule_label = [eval(x) for x in sql['rule_label'].strip().split(' ')]
 
         if is_valid(rule_label, col_table_dict=col_table_dict, sql=sql) is False:

@@ -5,7 +5,7 @@ import torch
 
 
 def set_seed_everywhere(seed, n_gpu):
-    random.seed(seed)
+    random.seed(int(seed * 13 / 7))
     np.random.seed(seed)
     torch.manual_seed(seed)
     if n_gpu > 0:
