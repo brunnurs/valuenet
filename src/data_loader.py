@@ -6,7 +6,6 @@ def get_data_loader(data_train, data_dev, batch_size, shuffle_train=True, shuffl
         batch_size=batch_size,
         dataset=data_train,
         shuffle=shuffle_train,
-        num_workers=4,
         collate_fn=lambda x: x  # now dictionary values are not merged!
     )
 
@@ -14,7 +13,6 @@ def get_data_loader(data_train, data_dev, batch_size, shuffle_train=True, shuffl
         batch_size=batch_size,
         dataset=data_dev,
         shuffle=shuffle_dev,
-        num_workers=4,
         collate_fn=lambda x: x  # now dictionary values are not merged!
     )
 

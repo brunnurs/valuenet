@@ -19,7 +19,11 @@ def evaluate(model, dev_loader, table_data, beam_size):
         model.eval()
 
         for data_row in batch:
-            example = build_example(data_row, table_data)
+            try:
+                example = build_example(data_row, table_data)
+            except Exception as e:
+                print(str(e))
+                continue
 
             with torch.no_grad():
                 results_all = model.parse(example, beam_size=beam_size)

@@ -19,10 +19,11 @@ def read_arguments_train():
     parser = argparse.ArgumentParser(description="Run training with following arguments")
 
     # general configuration
-    parser.add_argument('--seed', default=42, type=int)
+    parser.add_argument('--exp_name', default='exp', type=str)
+    parser.add_argument('--seed', default=90, type=int)
     parser.add_argument('--toy', default=False, action='store_true')
     parser.add_argument('--data_set', default='spider', type=str)
-    parser.add_argument('--batch_size', default=32, type=int)
+    parser.add_argument('--batch_size', default=64, type=int)
     parser.add_argument('--glove_embed_path', default="pretrained_models/glove.42B.300d.txt", type=str)
     parser.add_argument('--cuda', default=True, action='store_true')  # TODO: is this really necessary?!
     # parser.add_argument('--encoder_pretrained_model', default='bert-base-uncased', type=str)
@@ -31,14 +32,13 @@ def read_arguments_train():
     parser.add_argument('--num_epochs', default=5.0, type=float)
 
     # training & optimizer configuration
-    parser.add_argument('--learning_rate', default=2e-5, type=float)
-    parser.add_argument('--adam_eps', default=1e-8, type=float)
-    parser.add_argument('--warmup_steps', default=0, type=int)
+    parser.add_argument('--learning_rate', default=0.001, type=float)  # TODO: for BERT we used a 2e-5 lr, so quite a bit lower.
+    # parser.add_argument('--adam_eps', default=1e-8, type=float)
+    parser.add_argument('--scheduler_gamma', default=0.5, type=int)
     parser.add_argument('--max_grad_norm', default=1.0, type=float)
     parser.add_argument('--clip_grad', default=5., type=float)
-    parser.add_argument('--weight_decay', default=0.0, type=float)
-    parser.add_argument('--loss_epoch_threshold', default=20, type=int)
-    parser.add_argument('--sketch_loss_weight', default=0.2, type=float)
+    parser.add_argument('--loss_epoch_threshold', default=50, type=int)
+    parser.add_argument('--sketch_loss_weight', default=1.0, type=float)
 
     # model configuration
     parser.add_argument('--column_pointer', action='store_true', default=True)
