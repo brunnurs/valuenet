@@ -1,6 +1,7 @@
 # manuell
 pre_trained_models/
 experiments/
+data/spider/original/
 
 #intellij
 .idea/

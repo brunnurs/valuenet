@@ -170,7 +170,8 @@ class N(Action):
 
 class C(Action):
     """
-    Column
+    Column.
+    Ursin: A column, in contrary to a sketch-actions, has no grammar. The id_c will be the index of the column.
     """
 
     def __init__(self, id_c, parent=None):

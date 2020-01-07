@@ -5,17 +5,33 @@ import src.neural_network_utils as nn_utils
 
 
 class Example:
-    """
-    Contains a full sample with
-    """
-
     def __init__(self, src_sent, tgt_actions=None, vis_seq=None, tab_cols=None, col_num=None, sql=None,
                  one_hot_type=None, col_hot_type=None, schema_len=None, tab_ids=None,
                  table_names=None, table_len=None, col_table_dict=None, cols=None,
                  table_col_name=None, table_col_len=None,
                  col_pred=None, tokenized_src_sent=None,
                  ):
+        """
 
+        @param src_sent: [['what'], ['are'], ['column', 'name'], ['of'], ['state'], ['where'], ['at'], ['least'], ['value', '3'], ['table', 'head'], ['were'], ['born'], ['?']]
+        @param tgt_actions: [Root1(3), Root(3), Sel(0), N(0), A(none), C(8), T(1), Filter(Filter >= A), A(count), C(0), T(1)]
+        @param vis_seq: a tripe of the unprocessed question, a list of columns and the raw query. Does not seem to be used anywhere.
+        @param tab_cols: [['count', 'number', 'many'], ['department', 'id'], ['name'], ['creation'], ['ranking'], ['budget', 'in', 'billion'], ['num', 'employee'], ['head', 'id'], ['born', 'state'], ['age'], ['temporary', 'acting']]
+        @param col_num:  11
+        @param sql: 'SELECT born_state FROM head GROUP BY born_state HAVING count(*)  >=  3'
+        @param one_hot_type: The one_hot_type has the same length as src_sent (tokenized question after standard NLP-pre-processing). It contains a one-hot-encoded vector of length 6 to represent information like 0:"table", 1:"column", 2:"agg" 3:"MORE", 4:"MOST", 5:"value". Tokens with NONE will not be represented in this array.
+        @param col_hot_type: Has the same length as tab_cols (columns) and is indicating the type of this column, meaning if it is a partial match (#0) or an exact match (#1) of a column. An exact match (a 5 in #1) often also has some values in #1, so it's not one hot encoding. Not sure what #2 and #3 is used for, as it's never used with all spider data. This data will later be used for schema encoding, as the 3rd part (the "phi") in the paper
+        @param schema_len: ---- not used in constructor ----
+        @param tab_ids: ---- not used in constructor ----
+        @param table_names: [['department'], ['head'], ['management']]. Multi-word tables would be split.
+        @param table_len: 3
+        @param col_table_dict: this dict is telling for each column in what table it appears. So the key is the idx of the column, the values the idx of the tables.
+        @param cols: ['*', 'department id', 'name', 'creation', 'ranking', 'budget in billions', 'num employees', 'head id', 'name', 'born state', 'age', 'department id', 'head id', 'temporary acting']
+        @param table_col_name: [['department', 'id', 'name', 'creation', 'ranking', 'budget', 'in', 'billion', 'num', 'employee'], ['head', 'id', 'name', 'born', 'state', 'age'], ['department', 'id', 'head', 'id', 'temporary', 'acting']]
+        @param table_col_len: 3
+        @param col_pred: ---- not used in constructor ----
+        @param tokenized_src_sent: # no idea why we use this here again... its "col_set_type" from above.
+        """
         self.src_sent = src_sent
         self.tokenized_src_sent = tokenized_src_sent
         self.vis_seq = vis_seq
