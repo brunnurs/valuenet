@@ -21,16 +21,25 @@ def build_example(sql, table_data):
     for c_id, col_ in enumerate(process_dict['col_set_iter']):
         for q_id, ori in enumerate(process_dict['q_iter_small']):
             if ori in col_:
+                # if we have a match between a partial column token (e.g. "horse id") and a token in the question (e.g. "horse")
+                # we will increase the counter for this column
                 process_dict['col_set_type'][c_id][0] += 1
 
     _schema_linking(process_dict['question_arg'], process_dict['question_arg_type'],
                     process_dict['one_hot_type'], process_dict['col_set_type'], process_dict['col_set_iter'], sql)
 
+    # this dict is telling for each column in what table it appears. So the key is the idx of the column, the values the idx of the tables.
+    # example: the key 0 will appear in all tables (e.g. [1,2,3,4,5]) as it's the special column "*".
+    # Most others will only appear one, but the id's (which are used as primary key / foreign key) will appear also multiple times.
     col_table_dict = _get_col_table_dict(process_dict['tab_cols'], process_dict['tab_ids'], sql)
+    # a simple list with sublists for each table, containing all the columns in that table.
     table_col_name = _get_table_colNames(process_dict['tab_ids'], process_dict['col_iter'])
 
+    # this field contains the special column "*", referring to all columns in all tables. Not sure yet why we replace it with this special content.
     process_dict['col_set_iter'][0] = ['count', 'number', 'many']
 
+    # in the pre-processing (see sql2SemQL.py) we parse the sql for each example to the SemQL-AST language. We then serialize it to a string.
+    # Here we do the opposite: we deserialize the SemQL-Query by dynamically create the right objects based on the string.
     rule_label = None
     if 'rule_label' in sql:
         # Example: eval("Root1(3)") will dynamically create an instance of class Root1 with the constructor argument 3.
@@ -39,6 +48,7 @@ def build_example(sql, table_data):
         if is_valid(rule_label, col_table_dict=col_table_dict, sql=sql) is False:
             raise RuntimeError("Invalid rule_label: {}. We don't use this sample".format(sql['rule_label']))
 
+    # For details about the following values, see the constructor documentation of the "Example" class.
     example = Example(
         src_sent=process_dict['question_arg'],
         col_num=len(process_dict['col_set_iter']),
@@ -62,6 +72,10 @@ def build_example(sql, table_data):
 
 
 def _process(sql, table):
+    """
+    In this method we further pre-process the data. We for example split colum names in single words. and create new
+    one-hot-encoded vectors for the question token types (one_hot_type)
+    """
     process_dict = {}
 
     origin_sql = sql['question_toks']
@@ -96,18 +110,36 @@ def _process(sql, table):
 
 
 def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type, col_set_iter, sql):
+    """
+    Schema linking. Be aware that a large part of the job is done in  the pre-processing. What we do here is mostly putting all information together in the "one_hot_type" array,
+    to use this later to learn from. All this heuristic information are basically used to bootstrap the deep learning approach, where the model gets this encoded information and can
+    decide what to learn from it.
+
+    The arguments bellow are from a real question.
+    @param question_arg: [['what'], ['is'], ['official', 'name'], ['and'], ['status'], ['of'], ['city'], ['with'], ['most'], ['resident'], ['?']]
+    @param question_arg_type: [['NONE'], ['NONE'], ['col'], ['NONE'], ['col'], ['NONE'], ['table'], ['NONE'], ['agg'], ['NONE'], ['NONE']]
+    @param one_hot_type: this array we fill in this method. It will contain for each question token a one-hot-encoded "type", which can e.g. be "column", "table", "MORE", etc.
+    @param col_set_type:
+    @param col_set_iter: [['*'], ['city', 'id'], ['official', 'name'], ['status'], ['area', 'km', '2'], ['population'], ['census', 'ranking'], ['farm', 'id'], ['year'], ['total', 'horse'], ['working', 'horse'], ['total', 'cattle'], ['ox'], ['bull'], ['cow'], ['pig'], ['sheep', 'and', 'goat'], ['competition', 'id'], ['theme'], ['host', 'city', 'id'], ['host'], ['rank']]
+    @param sql:
+    """
     for count_q, t_q in enumerate(question_arg_type):
         t = t_q[0]
+
+        # go to the pre-processing (data_process.py) to understand the types ('col', 'table', 'MORE', etc.) better
         if t == 'NONE':
             continue
         elif t == 'table':
             one_hot_type[count_q][0] = 1
-            question_arg[count_q] = ['table'] + question_arg[count_q]
+            question_arg[count_q] = ['table'] + question_arg[
+                count_q]  # we also add the information straight before the question token (e.g. [['in'],['table', 'horse']])
         elif t == 'col':
             one_hot_type[count_q][1] = 1
             try:
+                # to my understanding we want to indicate with this that there is an exact match with a column. The col_set_type at #0 contains a value for partial matches (+1 for every matching token)
+                # so the +5 at #1 will most probably be more weight than a partial match can be. The exact reason for +5 is though unknown to me.
                 col_set_type[col_set_iter.index(question_arg[count_q])][1] = 5
-                question_arg[count_q] = ['column'] + question_arg[count_q]
+                question_arg[count_q] = ['column'] + question_arg[count_q]  # we also add the information straight before the question token (e.g. [['are'],['column', 'name']])
             except:
                 print(col_set_iter, question_arg[count_q])
                 raise RuntimeError("not in col set")
@@ -119,8 +151,10 @@ def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type,
             one_hot_type[count_q][4] = 1
         elif t == 'value':
             one_hot_type[count_q][5] = 1
-            question_arg[count_q] = ['value'] + question_arg[count_q]
+            question_arg[count_q] = ['value'] + question_arg[
+                count_q]  # we also add the information straight before the question token (e.g. [['then'],['value', '5000']])
         else:
+            # this code is never called for all the spider-samples (also in non-toy mode). Not sure it's really necessary...
             if len(t_q) == 1:
                 for col_probase in t_q:
                     if col_probase == 'asd':
@@ -167,7 +201,7 @@ def _get_table_colNames(tab_ids, tab_cols):
 
 def is_valid(rule_label, col_table_dict, sql):
     try:
-        lf.build_tree(copy.copy(rule_label))
+        lf.build_tree(copy.copy(rule_label))  # here we rebuild a tree from the ist with rules
     except:
         print(rule_label)
 
