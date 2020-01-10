@@ -32,7 +32,7 @@ class Beams(object):
 
     def get_availableClass(self):
         """
-        return the available action class
+        return next possible action class.
         :return:
         """
 

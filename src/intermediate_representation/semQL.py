@@ -191,6 +191,7 @@ class C(Action):
 class T(Action):
     """
     Table
+    Ursin: A table, in contrary to a sketch-actions, has no grammar. The id_c will be the index of the table.
     """
 
     def __init__(self, id_c, parent=None):
