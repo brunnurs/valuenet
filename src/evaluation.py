@@ -31,7 +31,7 @@ def evaluate(model, dev_loader, table_data, beam_size):
             results = results_all[0]
             list_preds = []
             try:
-
+                # here we set assemble the predicted actions (including leaf-nodes) as string
                 pred = " ".join([str(x) for x in results[0].actions])
                 for x in results:
                     list_preds.append(" ".join(str(x.actions)))
@@ -43,12 +43,15 @@ def evaluate(model, dev_loader, table_data, beam_size):
 
             simple_json = example.sql_json['pre_sql']
 
+            # here we set assemble the predicted sketch actions as string
             simple_json['sketch_result'] = " ".join(str(x) for x in results_all[1])
             simple_json['model_result'] = pred
 
             truth_sketch = " ".join([str(x) for x in example.sketch])
             truth_rule_label = " ".join([str(x) for x in example.tgt_actions])
 
+            # with a simple string comparison to the ground truth we figure out if the sketch/prediction is correct. There is
+            # clearly room for improvement here.
             if truth_sketch == simple_json['sketch_result']:
                 sketch_correct += 1
             if truth_rule_label == simple_json['model_result']:

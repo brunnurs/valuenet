@@ -62,7 +62,7 @@ class BasicModel(nn.Module):
         # src_encodings = src_encodings.permute(1, 0, 2)
         # (batch_size, hidden_size * 2)
 
-        # To my knowledge this concatenation is because we have two cell state (it's a bi-directional LSTM)
+        # This concatenation is because we have two cell state (it's a bi-directional LSTM). Both, last_state[0,1] have a size of 150 before the concatenation.
         last_state = torch.cat([last_state[0], last_state[1]], -1)
         last_cell = torch.cat([last_cell[0], last_cell[1]], -1)
 
@@ -86,6 +86,12 @@ class BasicModel(nn.Module):
         return val_inp_var
 
     def padding_sketch(self, sketch):
+        """
+        Padding the sketch with leaf actions (A, C and T) where necessary.
+        While we still don't know the id_c of the leaf actions, we know based on the grammar exactly, where to insert one.
+        @param sketch:
+        @return:
+        """
         padding_result = []
         for action in sketch:
             padding_result.append(action)
