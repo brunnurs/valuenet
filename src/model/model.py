@@ -318,7 +318,7 @@ class IRNet(BasicModel):
                                 a_tm1_embed = self.column_rnn_input(table_embedding[e_id, action_tm1.id_c])
                             # previous action T is a leaf-node, so we wanna feed in the right table-embedding. We select the table by using the ground truth "id_c".
                             elif isinstance(action_tm1, semQL.T):
-                                a_tm1_embed = self.column_rnn_input(schema_embedding[e_id, action_tm1.id_c])    # TODO: is this a mistake? Shouldn't it be "table_rnn_input"?
+                                a_tm1_embed = self.table_rnn_input(schema_embedding[e_id, action_tm1.id_c])
                             # action A is handled like a normal sketch-action.
                             elif isinstance(action_tm1, semQL.A):
                                 a_tm1_embed = self.production_embed.weight[self.grammar.prod2id[action_tm1.production]]
@@ -706,7 +706,7 @@ class IRNet(BasicModel):
                     elif isinstance(action_tm1, semQL.C):
                         a_tm1_embed = self.column_rnn_input(table_embedding[0, action_tm1.id_c])    # the id_c is to select the right column-embedding, based on the column index we selected in the last step. The 0 is only necessary because the table_embedding has 2 dimensions (first is batch, which we don't use in inference).
                     elif isinstance(action_tm1, semQL.T):
-                        a_tm1_embed = self.column_rnn_input(schema_embedding[0, action_tm1.id_c])  # TODO: is this a mistake? Shouldn't it be "table_rnn_input"?
+                        a_tm1_embed = self.table_rnn_input(schema_embedding[0, action_tm1.id_c])
                     elif isinstance(action_tm1, semQL.A):
                         a_tm1_embed = self.production_embed.weight[self.grammar.prod2id[action_tm1.production]]     # A behaves similar to the sketch actions.
                     else:
