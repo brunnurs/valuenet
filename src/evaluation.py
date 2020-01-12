@@ -11,6 +11,7 @@ from src.intermediate_representation import semQL
 from src.intermediate_representation.sem2SQL import transform_semQL_to_sql
 from src.model.model import IRNet
 from src.spider import spider_utils
+from src.spider.evaluation.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
 from src.spider.example_builder import build_example
 from src.utils import setup_device, set_seed_everywhere
 
@@ -95,7 +96,12 @@ if __name__ == '__main__':
 
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)
 
-    print("Transformed {} samples successful to SQL. {} samples failed. Generated the files a 'ground_truth.txt' and a 'output.txt' file. Next step: use the official Spider evaluation script to evaluate the generated output-files. ".format(count_success, count_failed))
+    print("Transformed {} samples successful to SQL. {} samples failed. Generated the files a 'ground_truth.txt' "
+          "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(count_success, count_failed))
 
+    kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'tables.json'))
 
-
+    spider_evaluation(os.path.join(args.prediction_dir, 'ground_truth.txt'),
+                      os.path.join(args.prediction_dir, 'output.txt'),
+                      os.path.join(args.data_dir, "original", "database"),
+                      "match", kmaps)
