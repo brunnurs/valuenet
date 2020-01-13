@@ -27,7 +27,7 @@ def evaluate(model, dev_loader, table_data, beam_size):
             try:
                 example = build_example(data_row, table_data)
             except Exception as e:
-                print(str(e))
+                print("Exception while building example (evaluation): {}".format(e))
                 continue
 
             with torch.no_grad():
@@ -68,6 +68,22 @@ def evaluate(model, dev_loader, table_data, beam_size):
     return float(sketch_correct) / float(total), float(rule_label_correct) / float(total), predictions
 
 
+def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir, experiment_dir, tb_writer, training_step):
+    succ_transform, fail_transform = transform_semQL_to_sql(table_data, predictions, experiment_dir)
+
+    kmaps = build_foreign_key_map_from_json(os.path.join(data_dir, 'tables.json'))
+
+    spider_eval_results = spider_evaluation(os.path.join(experiment_dir, 'ground_truth.txt'),
+                                            os.path.join(experiment_dir, 'output.txt'),
+                                            os.path.join(data_dir, "original", "database"),
+                                            "match",
+                                            kmaps,
+                                            tb_writer,
+                                            training_step, print_stdout=False)
+
+    return succ_transform, fail_transform, spider_eval_results
+
+
 if __name__ == '__main__':
     args = read_arguments_evaluation()
 
@@ -92,12 +108,14 @@ if __name__ == '__main__':
                                             table_data,
                                             args.beam_size)
 
-    eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(len(dev_loader), sketch_acc, acc)
+    eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
+        len(dev_loader), sketch_acc, acc)
 
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)
 
     print("Transformed {} samples successful to SQL. {} samples failed. Generated the files a 'ground_truth.txt' "
-          "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(count_success, count_failed))
+          "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
+        count_success, count_failed))
 
     kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'tables.json'))
 
