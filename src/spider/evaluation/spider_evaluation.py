@@ -440,41 +440,50 @@ def isValidSQL(sql, db):
     return True
 
 
-def print_scores(scores, etype):
+def print_scores(scores, etype, tb_writer, training_step, print_stdout):
     levels = ['easy', 'medium', 'hard', 'extra', 'all']
     partial_types = ['select', 'select(no AGG)', 'where', 'where(no OP)', 'group(no Having)',
                      'group', 'order', 'and/or', 'IUEN', 'keywords']
 
-    print("{:20} {:20} {:20} {:20} {:20} {:20}".format("", *levels))
-    counts = [scores[level]['count'] for level in levels]
-    print("{:20} {:<20d} {:<20d} {:<20d} {:<20d} {:<20d}".format("count", *counts))
+    execution_accuracy_with_counts = {level: "{} ({})".format(scores[level]['exec'], scores[level]['count']) for level in levels}
+    execution_accuracy = {level: scores[level]['exec'] for level in levels}
 
-    if etype in ["all", "exec"]:
-        print('=====================   EXECUTION ACCURACY     =====================')
-        this_scores = [scores[level]['exec'] for level in levels]
-        print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format("execution", *this_scores))
+    if tb_writer:
+        tb_writer.add_scalars('spider_evaluation_execution_acc', execution_accuracy, training_step)
 
-    if etype in ["all", "match"]:
-        print('\n====================== EXACT MATCHING ACCURACY =====================')
-        exact_scores = [scores[level]['exact'] for level in levels]
-        print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format("exact match", *exact_scores))
-        print('\n---------------------PARTIAL MATCHING ACCURACY----------------------')
-        for type_ in partial_types:
-            this_scores = [scores[level]['partial'][type_]['acc'] for level in levels]
-            print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format(type_, *this_scores))
+    if print_stdout:
+        print("{:20} {:20} {:20} {:20} {:20} {:20}".format("", *levels))
+        counts = [scores[level]['count'] for level in levels]
+        print("{:20} {:<20d} {:<20d} {:<20d} {:<20d} {:<20d}".format("count", *counts))
 
-        print('---------------------- PARTIAL MATCHING RECALL ----------------------')
-        for type_ in partial_types:
-            this_scores = [scores[level]['partial'][type_]['rec'] for level in levels]
-            print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format(type_, *this_scores))
+        if etype in ["all", "exec"]:
+            print('=====================   EXECUTION ACCURACY     =====================')
+            this_scores = [scores[level]['exec'] for level in levels]
+            print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format("execution", *this_scores))
 
-        print('---------------------- PARTIAL MATCHING F1 --------------------------')
-        for type_ in partial_types:
-            this_scores = [scores[level]['partial'][type_]['f1'] for level in levels]
-            print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format(type_, *this_scores))
+        if etype in ["all", "match"]:
+            print('\n====================== EXACT MATCHING ACCURACY =====================')
+            exact_scores = [scores[level]['exact'] for level in levels]
+            print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format("exact match", *exact_scores))
+            print('\n---------------------PARTIAL MATCHING ACCURACY----------------------')
+            for type_ in partial_types:
+                this_scores = [scores[level]['partial'][type_]['acc'] for level in levels]
+                print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format(type_, *this_scores))
+
+            print('---------------------- PARTIAL MATCHING RECALL ----------------------')
+            for type_ in partial_types:
+                this_scores = [scores[level]['partial'][type_]['rec'] for level in levels]
+                print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format(type_, *this_scores))
+
+            print('---------------------- PARTIAL MATCHING F1 --------------------------')
+            for type_ in partial_types:
+                this_scores = [scores[level]['partial'][type_]['f1'] for level in levels]
+                print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format(type_, *this_scores))
+
+    return execution_accuracy_with_counts
 
 
-def spider_evaluation(gold, predict, db_dir, etype, kmaps):
+def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, training_step=None, print_stdout=True):
     with open(gold) as f:
         glist = [l.strip().split('\t') for l in f.readlines() if len(l.strip()) > 0]
 
@@ -551,9 +560,10 @@ def spider_evaluation(gold, predict, db_dir, etype, kmaps):
             exact_score = evaluator.eval_exact_match(p_sql, g_sql)
             partial_scores = evaluator.partial_scores
             if exact_score == 0:
-                print("{} pred: {}".format(hardness,p_str))
-                print("{} gold: {}".format(hardness,g_str))
-                print("")
+                if print_stdout:
+                    print("{} pred: {}".format(hardness,p_str))
+                    print("{} gold: {}".format(hardness,g_str))
+                    print("")
             scores[hardness]['exact'] += exact_score
             scores['all']['exact'] += exact_score
             for type_ in partial_types:
@@ -606,7 +616,7 @@ def spider_evaluation(gold, predict, db_dir, etype, kmaps):
                         2.0 * scores[level]['partial'][type_]['acc'] * scores[level]['partial'][type_]['rec'] / (
                         scores[level]['partial'][type_]['rec'] + scores[level]['partial'][type_]['acc'])
 
-    print_scores(scores, etype)
+    return print_scores(scores, etype, tb_writer, training_step, print_stdout)
 
 
 def eval_exec_match(db, p_str, g_str, pred, gold):

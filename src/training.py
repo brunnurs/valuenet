@@ -26,7 +26,7 @@ def train(global_step,
                 example = build_example(data_row, table_data)
                 examples.append(example)
             except RuntimeError as e:
-                print(str(e))
+                print("Exception while building example (training): {}".format(e))
 
         examples.sort(key=lambda e: -len(e.src_sent))
 

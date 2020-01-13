@@ -7,7 +7,7 @@ from tqdm import tqdm
 from src import utils
 from src.config import read_arguments_train, write_config_to_file
 from src.data_loader import get_data_loader
-from src.evaluation import evaluate
+from src.evaluation import evaluate, transform_to_sql_and_evaluate_with_spider
 from src.intermediate_representation import semQL
 from src.model.model import IRNet
 from src.optimizer import build_optimizer_encoder
@@ -61,13 +61,25 @@ if __name__ == '__main__':
         train_time = t.tocvalue()
 
         tqdm.write("Training of epoch {0} finished after {1:.2f} seconds. Evaluate now on the dev-set".format(epoch, train_time))
-        sketch_acc, acc, _ = evaluate(model,
-                                      dev_loader,
-                                      table_data,
-                                      args.beam_size)
+        sketch_acc, acc, predictions = evaluate(model,
+                                                dev_loader,
+                                                table_data,
+                                                args.beam_size)
 
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch, sketch_acc, acc)
         tqdm.write(eval_results_string)
+
+        succ_transform, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
+                                                                                                        table_data,
+                                                                                                        args.data_dir,
+                                                                                                        output_path,
+                                                                                                        tb_writer,
+                                                                                                        global_step)
+
+        tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(succ_transform, succ_transform + fail_transform))
+        tqdm.write("Results from Spider-Evaluation:")
+        for key, value in spider_eval_results.items():
+            tqdm.write("{}: {}".format(key, value))
 
         if acc > best_acc:
             save_model(model, os.path.join(output_path))
