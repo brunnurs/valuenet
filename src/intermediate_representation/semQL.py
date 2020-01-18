@@ -334,6 +334,9 @@ class Filter(Action):
 class Sup(Action):
     """
     Superlative
+    Ursin: to my understanding, what the Authors call "Superlative" is a non-sql construct which translates to "ORDER BY x [desc/asc] LIMIT 1".
+    The goal is to handle those superlative cases where someone is asking e.g. "Find the weight of the youngest dog.". Here the youngest dog is the superlative,
+    which translates to "ORDER BY pet_age LIMIT 1".
     """
 
     def __init__(self, id_c, parent=None):
@@ -347,7 +350,7 @@ class Sup(Action):
     @classmethod
     def _init_grammar(self):
         self.grammar_dict = {
-            0: 'Sup des A',
+            0: 'Sup des A',     # this is different to the paper, where the rules are called "most A" or "least A". That would make a bit more sense I think.
             1: 'Sup asc A',
         }
         self.production_id = {}
