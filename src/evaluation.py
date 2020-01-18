@@ -41,9 +41,7 @@ def evaluate(model, dev_loader, table_data, beam_size):
                 for x in results:
                     list_preds.append(" ".join(str(x.actions)))
             except Exception as e:
-                # print('Epoch Acc: ', e)
-                # print(results)
-                # print(results_all)
+                # print(e)
                 full_prediction = ""
 
             prediction = example.sql_json['pre_sql']

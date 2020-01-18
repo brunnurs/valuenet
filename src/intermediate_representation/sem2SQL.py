@@ -678,12 +678,12 @@ def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
                 d.write(result[0] + '\n')
                 g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
                 count += 1
-                print(e)
-                print('Exception')
-                print(traceback.format_exc())
-                print(sem_ql_prediction[i]['question'])
-                print(sem_ql_prediction[i]['query'])
-                print(sem_ql_prediction[i]['db_id'])
-                print('===\n\n')
+                # print(e)
+                # print('Exception')
+                # print(traceback.format_exc())
+                # print(sem_ql_prediction[i]['question'])
+                # print(sem_ql_prediction[i]['query'])
+                # print(sem_ql_prediction[i]['db_id'])
+                # print('===\n\n')
 
     return count, exception_count
