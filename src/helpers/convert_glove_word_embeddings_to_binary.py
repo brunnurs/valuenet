@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    print("Convert embedding file '{}.txt' to the binary file '{0}.npy' and the vocab-file '{0}.vocab'", format(args.embedding_text_file))
+    print("Convert embedding file '{0}.txt' to the binary file '{0}.npy' and the vocab-file '{0}.vocab'".format(args.embedding_text_file))
     convert_to_binary(args.embedding_text_file)
 
     print("Converting done! Try to reload.")
