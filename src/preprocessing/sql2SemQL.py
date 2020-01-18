@@ -71,7 +71,15 @@ class Parser:
         :return: T(table_id)
         """
         if len(sql['sql']['from']['table_units']) == 1:
-            return T(sql['sql']['from']['table_units'][0][1])
+            if sql['sql']['from']['table_units'][0][0] != 'sql':
+                return T(sql['sql']['from']['table_units'][0][1])
+            else:
+                # here we select from a sub-query, therefore finding the "table" for the special column * is not so easy.
+                # All the queries in spider with sub-queries do an aggregation over the "*", so it basically doesn't matter which one we choose.
+                # To make it as correct as possible, we take the first table from the sub-query.
+                # Example query: SELECT count(*) FROM (SELECT * FROM endowment WHERE amount  >  8.5 GROUP BY school_id HAVING count(*)  >  1)
+                # print(sql['query'])
+                return T(sql['sql']['from']['table_units'][0][1]['from']['table_units'][0][1])
         else:
             table_list = []
             for tmp_t in sql['sql']['from']['table_units']:
