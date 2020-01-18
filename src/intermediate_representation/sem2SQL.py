@@ -402,11 +402,18 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
                         where_value = '1 AND 2'
                     filters.append('%s %s %s' % (subject, op, where_value))
                 else:
-                    if op == 'in' and len(value['select']) == 1 and value['select'][0][0] == 'none' \
-                            and 'where' not in value and 'order' not in value and 'sup' not in value:
+                    # This is kind of a style-change: instead of "xy IN (SELECT z FROM a)" one can also rewrite the query to a simple JOIN (this is done with adding the table).
+                    # Most probably is it necessary so the Exact Matching will recognize the query to be right (would not be necessary for Execution Accuracy)
+                    if op == 'in' and len(value['select']) == 1 and value['select'][0][0] == 'none' and 'where' not in value and 'order' not in value and 'sup' not in value:
                             # and value['select'][0][2] not in table_names:
                         if value['select'][0][2] not in table_names:
                             table_names[value['select'][0][2]] = 'T' + str(len(table_names) + N_T)
+
+                        # This is necessary to avoid incorrect queries: if there is an "and/or" conjunction at the end of the filter, we need to put a next filter to avoid an invalid query.
+                        # If we though apply a join instead of an "IN ()" statement, we need to remove that conjunction.
+                        if len(filters) > 0 and (filters[-1] == 'and' or filters[-1] == 'or'):
+                            filters.pop(-1)
+
                         filters.append(None)
 
                     else:
@@ -665,6 +672,7 @@ def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
                 g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
                 count += 1
             except Exception as e:
+                # This origin seems to be the fallback-query. Not sure how we come up with it, most probably it's just a dummy query to fill in a result for each example.
                 result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']], origin='Root1(3) Root(5) Sel(0) N(0) A(3) C(0) T(0)')
                 exception_count += 1
                 d.write(result[0] + '\n')
@@ -673,6 +681,9 @@ def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
                 print(e)
                 print('Exception')
                 print(traceback.format_exc())
+                print(sem_ql_prediction[i]['question'])
+                print(sem_ql_prediction[i]['query'])
+                print(sem_ql_prediction[i]['db_id'])
                 print('===\n\n')
 
     return count, exception_count
