@@ -36,10 +36,9 @@ class TransformerEncoder(nn.Module):
         # But we still wanna do the wordpiece-tokenizing.
         self.tokenizer.do_basic_tokenize = False
 
+        self.linear_layer_dimension_reduction = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
         self.column_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
         self.table_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
-
-        self.linear_layer_dimension_reduction = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
 
     def forward(self, question_tokens, column_names, table_names):
         input_ids_tensor, attention_mask_tensor, segment_ids_tensor, input_lengths = encode_input(question_tokens,
@@ -51,7 +50,10 @@ class TransformerEncoder(nn.Module):
 
         # while the "last_hidden-states" is one hidden state per input token, the pooler_output is the hidden state of the [CLS]-token, further processed.
         # See e.g. "BertModel" documentation for more information.
-        last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, segment_ids_tensor)
+
+        # TODO: this should be more accurate than the achronferry-implementation. But as we get a different output, we leave it for now
+        # last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, segment_ids_tensor)
+        last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor)
 
         (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths) = input_lengths
 
@@ -152,7 +154,7 @@ class TransformerEncoder(nn.Module):
         lengths = torch.tensor(lengths).to(self.device)
 
         # we need to sort the inputs by length due to the use of "pack_padded_sequence" which expects a sorted input.
-        sorted_lens, sort_key = torch.sort(torch.tensor(lengths), descending=True)
+        sorted_lens, sort_key = torch.sort(lengths, descending=True)
         # we remove temporally remove empty inputs
         nonzero_index = torch.sum(sorted_lens > 0).item()
         sorted_inputs = torch.index_select(inputs, dim=0, index=sort_key[:nonzero_index])
@@ -210,7 +212,7 @@ class TransformerEncoder(nn.Module):
         hiddens = hiddens.contiguous()
         cells = cells.contiguous()
 
-        # here we concat the two hiddeen states/cell states of the Bi-directional LSTM
+        # here we concat the two hidden states/cell states of the Bi-directional LSTM
         hiddens_concated = torch.cat([hiddens[0], hiddens[1]], -1)
         cells_concated = torch.cat([cells[0], cells[1]], -1)
 
@@ -230,9 +232,6 @@ class TransformerEncoder(nn.Module):
         assert elements_to_split.shape[0] == current_idx
 
         return original_split
-
-
-
 
     @staticmethod
     def _assert_all_elements_processed(all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, last_pointers, len_last_hidden_states):

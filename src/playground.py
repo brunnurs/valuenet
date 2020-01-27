@@ -1,7 +1,7 @@
+import torch
 from transformers import BertConfig, BertModel, BertTokenizer
 
 from src.model.encoder.encoder import TransformerEncoder
-from src.model.encoder.input_features import encode_input
 from src.utils import setup_device, set_seed_everywhere
 
 config_class, model_class, tokenizer_class = (BertConfig, BertModel, BertTokenizer)
@@ -27,9 +27,10 @@ columns2 = [['count', 'number', 'many'], ['college', 'name'], ['state'], ['enrol
 # # print(encoded)
 device, n_gpu = setup_device()
 set_seed_everywhere(42, n_gpu)
-#
+
 encoder = TransformerEncoder('bert-base-uncased', device, 512, 300, 300)
 encoder.to(device)
 
 last_layer = encoder([question, question2], [columns, columns2], [tables, tables2])
+
 print(last_layer)
