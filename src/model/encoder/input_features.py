@@ -28,7 +28,7 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
                len(question_tokens) + len(columns_tokens) + len(table_tokens)
 
         tokens = question_tokens + columns_tokens + table_tokens
-        print(tokens)
+        # print(tokens)
 
         segment_ids = question_segment_ids + columns_segment_ids + table_segment_ids
         # not sure here if "tokenizer.mask_token_id" or just a simple 1...

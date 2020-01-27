@@ -32,6 +32,8 @@ class TransformerEncoder(nn.Module):
         self.tokenizer = tokenizer_class.from_pretrained(pretrained_model)
         self.transformer_model = model_class.from_pretrained(pretrained_model, config=transformer_config)
 
+        self.encoder_hidden_size = transformer_config.hidden_size
+
         # We don't wanna do basic tokenizing (so splitting up a sentence into tokens) as this is already done in pre-processing.
         # But we still wanna do the wordpiece-tokenizing.
         self.tokenizer.do_basic_tokenize = False
@@ -39,6 +41,8 @@ class TransformerEncoder(nn.Module):
         self.linear_layer_dimension_reduction = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
         self.column_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
         self.table_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
+
+        print("Successfully loaded pre-trained transformer '{}'".format(pretrained_model))
 
     def forward(self, question_tokens, column_names, table_names):
         input_ids_tensor, attention_mask_tensor, segment_ids_tensor, input_lengths = encode_input(question_tokens,

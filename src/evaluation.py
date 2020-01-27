@@ -92,7 +92,7 @@ if __name__ == '__main__':
     _, dev_loader = get_data_loader(sql_data, val_sql_data, args.batch_size, True, False)
 
     grammar = semQL.Grammar()
-    model = IRNet(args, grammar)
+    model = IRNet(args, device, grammar)
     model.to(device)
 
     # load the pre-trained parameters

@@ -23,17 +23,19 @@ def read_arguments_train():
     parser.add_argument('--seed', default=90, type=int)
     parser.add_argument('--toy', default=False, action='store_true')
     parser.add_argument('--data_set', default='spider', type=str)
-    parser.add_argument('--batch_size', default=64, type=int)
-    parser.add_argument('--glove_embed_path', default="pretrained_models/glove.42B.300d.txt", type=str)
+    parser.add_argument('--batch_size', default=1, type=int)
     parser.add_argument('--cuda', default=True, action='store_true')  # TODO: is this really necessary?!
-    # parser.add_argument('--encoder_pretrained_model', default='bert-base-uncased', type=str)
-    # parser.add_argument('--max_seq_length', default=222, type=int)
+
+    # encoder configuration
+    parser.add_argument('--encoder_pretrained_model', default='bert-base-uncased', type=str)
+    parser.add_argument('--max_seq_length', default=512, type=int)
 
     parser.add_argument('--num_epochs', default=5.0, type=float)
 
     # training & optimizer configuration
-    parser.add_argument('--learning_rate', default=0.001,
-                        type=float)  # TODO: for BERT we used a 2e-5 lr, so quite a bit lower.
+    parser.add_argument('--lr_base', default=1e-3, type=float)
+    parser.add_argument('--lr_connection', default=1e-4, type=float)
+    parser.add_argument('--lr_transformer', default=2e-5, type=float)
     # parser.add_argument('--adam_eps', default=1e-8, type=float)
     parser.add_argument('--scheduler_gamma', default=0.5, type=int)
     parser.add_argument('--max_grad_norm', default=1.0, type=float)
