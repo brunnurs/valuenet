@@ -1,5 +1,6 @@
 import os
 
+import torch
 from pytictoc import TicToc
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
@@ -27,15 +28,13 @@ if __name__ == '__main__':
     train_loader, dev_loader = get_data_loader(sql_data, val_sql_data, args.batch_size, True, False)
 
     grammar = semQL.Grammar()
-    model = IRNet(args, grammar)
+    model = IRNet(args, device, grammar)
     model.to(device)
-
-    model.word_emb = utils.load_word_emb_binary(args.glove_embed_path)
 
     num_train_steps = len(train_loader) * args.num_epochs
     optimizer, scheduler = build_optimizer_encoder(model,
                                                    num_train_steps,
-                                                   args.learning_rate,
+                                                   args.lr_transformer, args.lr_connection, args.lr_base,
                                                    args.scheduler_gamma)
 
     tb_writer = SummaryWriter(output_path)
@@ -61,10 +60,11 @@ if __name__ == '__main__':
         train_time = t.tocvalue()
 
         tqdm.write("Training of epoch {0} finished after {1:.2f} seconds. Evaluate now on the dev-set".format(epoch, train_time))
-        sketch_acc, acc, predictions = evaluate(model,
-                                                dev_loader,
-                                                table_data,
-                                                args.beam_size)
+        with torch.no_grad():
+            sketch_acc, acc, predictions = evaluate(model,
+                                                    dev_loader,
+                                                    table_data,
+                                                    args.beam_size)
 
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch, sketch_acc, acc)
         tqdm.write(eval_results_string)
