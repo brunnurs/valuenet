@@ -28,7 +28,10 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
                len(question_tokens) + len(columns_tokens) + len(table_tokens)
 
         tokens = question_tokens + columns_tokens + table_tokens
-        # print(tokens)
+        if len(tokens) > max_length_model:
+            print("################### ATTENTION! Example too long ({})".format(len(tokens)))
+            print(question)
+            print(tokens)
 
         segment_ids = question_segment_ids + columns_segment_ids + table_segment_ids
         # not sure here if "tokenizer.mask_token_id" or just a simple 1...
@@ -40,9 +43,7 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
         all_segment_ids.append(segment_ids)
         all_attention_mask.append(attention_mask)
 
-    max_length_data = max(map(lambda input_ids: len(input_ids), all_input_ids))
-    # we don't want to truncate the input - throw error in case it is too long
-    assert max_length_data <= max_length_model
+    max_length_data = max(map(lambda ids: len(ids), all_input_ids))
 
     for input_ids, segment_ids, attention_mask in zip(all_input_ids, all_segment_ids, all_attention_mask):
         _padd_input(input_ids, segment_ids, attention_mask, max_length_data, tokenizer)
@@ -67,7 +68,7 @@ def _tokenize_question(question, tokenizer):
     all_sub_token = []
 
     for question_span in question:
-        # remember: question-span can consist of multipe words. Example: ['column', 'state']
+        # remember: question-span can consist of multiple words. Example: ['column', 'state']
         sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
         all_sub_token.extend(sub_token)
         question_span_lengths.append(len(sub_token))
@@ -86,8 +87,10 @@ def _tokenize_column_names(column_names, tokenizer):
     all_column_tokens = []
 
     for column in column_names:
+        # TODO: re-apply subwords tokenization. Right now, we have the issue that it ends up with > 512 token lengths (not much more, around 550)
         # columns most often consists of multiple words. Here, we further tokenize them into sub-words if necessary.
-        column_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), column)))
+        # column_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), column)))
+        column_sub_tokens = column
         # the SEP_TOKEN needs to be packed in a list as python can only concat two lists to a new list.
         column_sub_tokens += [tokenizer.sep_token]
 
@@ -104,7 +107,9 @@ def _tokenize_table_names(table_names, tokenizer):
     all_table_tokens = []
 
     for table in table_names:
-        table_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), table)))
+        # TODO: re-apply subwords tokenization. Right now, we have the issue that it ends up with > 512 token lengths (not much more, around 550)
+        # table_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), table)))
+        table_sub_tokens = table
         table_sub_tokens += [tokenizer.sep_token]
 
         all_table_tokens.extend(table_sub_tokens)
