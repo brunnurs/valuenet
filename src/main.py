@@ -15,6 +15,11 @@ from spider import spider_utils
 from training import train
 from utils import setup_device, set_seed_everywhere, save_model, create_experiment_folder
 
+# initialize experiment tracking @ Weights & Biases
+import wandb
+wandb.init(project="proton")
+
+
 if __name__ == '__main__':
     args = read_arguments_train()
     experiment_name, output_path = create_experiment_folder(args.model_output_dir, args.exp_name)
@@ -29,6 +34,9 @@ if __name__ == '__main__':
     grammar = semQL.Grammar()
     model = IRNet(args, device, grammar)
     model.to(device)
+
+    # track the model
+    wandb.watch(model)
 
     num_train_steps = len(train_loader) * args.num_epochs
     optimizer, scheduler = build_optimizer_encoder(model,
@@ -82,11 +90,13 @@ if __name__ == '__main__':
 
         if acc > best_acc:
             save_model(model, os.path.join(output_path))
-            best_acc = acc
             tqdm.write("Accuracy of this epoch ({}) is higher then the so far best accuracy ({}). Save model.".format(acc, best_acc))
+            best_acc = acc
 
         with open(os.path.join(output_path, "eval_results.log"), "a+") as writer:
             writer.write(eval_results_string + "\n")
+
+        wandb.log({"Sketch-accuracy": sketch_acc, "accuracy": acc}, step=global_step)
 
         tb_writer.add_scalar("sketch-accuracy", sketch_acc, global_step)
         tb_writer.add_scalar("accuracy", acc, global_step)
