@@ -4,16 +4,15 @@ import torch
 from tqdm import tqdm
 import json
 
-from src import utils
-from src.config import read_arguments_evaluation
-from src.data_loader import get_data_loader
-from src.intermediate_representation import semQL
-from src.intermediate_representation.sem2SQL import transform_semQL_to_sql
-from src.model.model import IRNet
-from src.spider import spider_utils
-from src.spider.evaluation.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
-from src.spider.example_builder import build_example
-from src.utils import setup_device, set_seed_everywhere
+from config import read_arguments_evaluation
+from data_loader import get_data_loader
+from intermediate_representation import semQL
+from intermediate_representation.sem2SQL import transform_semQL_to_sql
+from model.model import IRNet
+from spider import spider_utils
+from spider.evaluation.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
+from spider.example_builder import build_example
+from utils import setup_device, set_seed_everywhere
 
 
 def evaluate(model, dev_loader, table_data, beam_size):

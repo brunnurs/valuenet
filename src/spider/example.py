@@ -1,7 +1,7 @@
 import copy
 
-from src.intermediate_representation.semQL import C, T, A
-import src.neural_network_utils as nn_utils
+from intermediate_representation.semQL import C, T, A
+import neural_network_utils as nn_utils
 
 
 class Example:

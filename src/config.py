@@ -45,7 +45,6 @@ def read_arguments_train():
 
     # model configuration
     parser.add_argument('--column_pointer', action='store_true', default=True)
-    parser.add_argument('--sentence_features', action='store_true', default=True)
     parser.add_argument('--embed_size', default=300, type=int, help='size of word embeddings')
     parser.add_argument('--hidden_size', default=300, type=int, help='size of LSTM hidden states')
     parser.add_argument('--action_embed_size', default=128, type=int, help='size of word embeddings')
@@ -87,12 +86,13 @@ def read_arguments_evaluation():
     parser.add_argument('--batch_size', default=64, type=int)
     parser.add_argument('--glove_embed_path', default="pretrained_models/glove.42B.300d.txt", type=str)
     parser.add_argument('--cuda', default=True, action='store_true')  # TODO: is this really necessary?!
-    # parser.add_argument('--encoder_pretrained_model', default='bert-base-uncased', type=str)
-    # parser.add_argument('--max_seq_length', default=222, type=int)
+
+    # encoder configuration
+    parser.add_argument('--encoder_pretrained_model', default='bert-base-uncased', type=str)
+    parser.add_argument('--max_seq_length', default=512, type=int)
 
     # model configuration
     parser.add_argument('--column_pointer', action='store_true', default=True)
-    parser.add_argument('--sentence_features', action='store_true', default=True)
     parser.add_argument('--embed_size', default=300, type=int, help='size of word embeddings')
     parser.add_argument('--hidden_size', default=300, type=int, help='size of LSTM hidden states')
     parser.add_argument('--action_embed_size', default=128, type=int, help='size of word embeddings')

@@ -15,8 +15,8 @@ import sys
 
 import copy
 
-from src.preprocessing.utils import load_dataSets
-from src.intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order
+from preprocessing.utils import load_dataSets
+from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order
 
 sys.path.append("..")
 

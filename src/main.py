@@ -1,20 +1,26 @@
 import os
 
+
+try:
+    user_paths = os.environ['PYTHONPATH'].split(os.pathsep)
+    print(user_paths)
+except KeyError:
+    print("asdfasdf")
+
 import torch
 from pytictoc import TicToc
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from src import utils
-from src.config import read_arguments_train, write_config_to_file
-from src.data_loader import get_data_loader
-from src.evaluation import evaluate, transform_to_sql_and_evaluate_with_spider
-from src.intermediate_representation import semQL
-from src.model.model import IRNet
-from src.optimizer import build_optimizer_encoder
-from src.spider import spider_utils
-from src.training import train
-from src.utils import setup_device, set_seed_everywhere, save_model, create_experiment_folder
+from model.model import IRNet
+from config import read_arguments_train, write_config_to_file
+from data_loader import get_data_loader
+from evaluation import evaluate, transform_to_sql_and_evaluate_with_spider
+from intermediate_representation import semQL
+from optimizer import build_optimizer_encoder
+from spider import spider_utils
+from training import train
+from utils import setup_device, set_seed_everywhere, save_model, create_experiment_folder
 
 if __name__ == '__main__':
     args = read_arguments_train()
