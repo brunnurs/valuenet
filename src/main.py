@@ -1,12 +1,5 @@
 import os
 
-
-try:
-    user_paths = os.environ['PYTHONPATH'].split(os.pathsep)
-    print(user_paths)
-except KeyError:
-    print("asdfasdf")
-
 import torch
 from pytictoc import TicToc
 from torch.utils.tensorboard import SummaryWriter
