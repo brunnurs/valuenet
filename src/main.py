@@ -22,6 +22,10 @@ wandb.init(project="proton")
 
 if __name__ == '__main__':
     args = read_arguments_train()
+
+    # log hyperparameters to Weights & Biases
+    wandb.config.update(args)
+
     experiment_name, output_path = create_experiment_folder(args.model_output_dir, args.exp_name)
     write_config_to_file(args, output_path)
 
