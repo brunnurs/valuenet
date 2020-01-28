@@ -13,9 +13,9 @@ import argparse
 import nltk
 import os
 import pickle
-from src.preprocessing.utils import symbol_filter, re_lemma, fully_part_header, group_header, partial_header, num2year, group_symbol, group_values, group_digital
-from src.preprocessing.utils import AGG, wordnet_lemmatizer
-from src.preprocessing.utils import load_dataSets
+from preprocessing.utils import symbol_filter, re_lemma, fully_part_header, group_header, partial_header, num2year, group_symbol, group_values, group_digital
+from preprocessing.utils import AGG, wordnet_lemmatizer
+from preprocessing.utils import load_dataSets
 
 
 def process_datas(datas, args):

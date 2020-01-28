@@ -5,13 +5,13 @@ import torch.nn.functional as F
 import torch.nn.utils
 from torch.autograd import Variable
 
-from src.intermediate_representation.beam import Beams, ActionInfo
-from src.model.encoder.encoder import TransformerEncoder
-from src.spider.example import Batch
-from src import neural_network_utils as nn_utils
-from src.model.basic_model import BasicModel
-from src.model.pointer_net import PointerNet
-from src.intermediate_representation import semQL as semQL
+from intermediate_representation.beam import Beams, ActionInfo
+from model.encoder.encoder import TransformerEncoder
+from spider.example import Batch
+import neural_network_utils as nn_utils
+from model.basic_model import BasicModel
+from model.pointer_net import PointerNet
+from intermediate_representation import semQL as semQL
 
 
 class IRNet(BasicModel):
@@ -21,7 +21,6 @@ class IRNet(BasicModel):
         self.args = args
         self.grammar = grammar
         self.use_column_pointer = args.column_pointer
-        self.use_sentence_features = args.sentence_features
 
         if args.cuda:
             self.new_long_tensor = torch.cuda.LongTensor

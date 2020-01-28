@@ -1,9 +1,9 @@
 import torch
 from transformers import BertConfig, BertModel, BertTokenizer
 
-from src.model.encoder.temporary.bert_enc import Bert_Layer
-from src.model.encoder.encoder import TransformerEncoder
-from src.utils import setup_device, set_seed_everywhere
+from model.encoder.temporary.bert_enc import Bert_Layer
+from model.encoder.encoder import TransformerEncoder
+from utils import setup_device, set_seed_everywhere
 
 ############### NOTES TO REPRODUCE SAME OUTPUT AS Achronferry-implementation ###########################
 # 1. make sure there are no words in the inputs which gets splitted into subwords (e.g. "goalie") ---> achronferry is not using subwords.

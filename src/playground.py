@@ -1,8 +1,8 @@
 import torch
 from transformers import BertConfig, BertModel, BertTokenizer
 
-from src.model.encoder.encoder import TransformerEncoder
-from src.utils import setup_device, set_seed_everywhere
+from model.encoder.encoder import TransformerEncoder
+from utils import setup_device, set_seed_everywhere
 
 config_class, model_class, tokenizer_class = (BertConfig, BertModel, BertTokenizer)
 config = config_class.from_pretrained("bert-base-uncased")

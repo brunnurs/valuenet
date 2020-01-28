@@ -1,7 +1,7 @@
 import torch
 from tqdm import tqdm
 
-from src.spider.example_builder import build_example
+from spider.example_builder import build_example
 
 
 def train(global_step,

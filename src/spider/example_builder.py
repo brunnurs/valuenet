@@ -2,11 +2,11 @@ import copy
 import numpy as np
 from nltk import WordNetLemmatizer
 
-from src.intermediate_representation import lf
-from src.spider.example import Example
+from intermediate_representation import lf
+from spider.example import Example
 
 # Take care, this imports are necessary due to the dynamic "eval()" command further down
-from src.intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
+from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
 
 wordnet_lemmatizer = WordNetLemmatizer()
 

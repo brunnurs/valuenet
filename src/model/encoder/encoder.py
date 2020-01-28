@@ -5,7 +5,7 @@ from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_se
 from transformers import BertConfig, BertModel, BertTokenizer
 
 
-from src.model.encoder.input_features import encode_input
+from model.encoder.input_features import encode_input
 
 
 def get_encoder_model(pretrained_model):
