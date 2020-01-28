@@ -77,7 +77,7 @@ if __name__ == '__main__':
                                                     table_data,
                                                     args.beam_size)
 
-        eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch, sketch_acc, acc)
+        eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
         tqdm.write(eval_results_string)
 
         succ_transform, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
@@ -85,7 +85,7 @@ if __name__ == '__main__':
                                                                                                         args.data_dir,
                                                                                                         output_path,
                                                                                                         tb_writer,
-                                                                                                        global_step)
+                                                                                                        epoch + 1)
 
         tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(succ_transform, succ_transform + fail_transform))
         tqdm.write("Results from Spider-Evaluation:")
@@ -100,10 +100,10 @@ if __name__ == '__main__':
         with open(os.path.join(output_path, "eval_results.log"), "a+") as writer:
             writer.write(eval_results_string + "\n")
 
-        wandb.log({"Sketch-accuracy": sketch_acc, "accuracy": acc}, step=global_step)
+        wandb.log({"Sketch-accuracy": sketch_acc, "accuracy": acc}, step=epoch + 1)
 
-        tb_writer.add_scalar("sketch-accuracy", sketch_acc, global_step)
-        tb_writer.add_scalar("accuracy", acc, global_step)
+        tb_writer.add_scalar("sketch-accuracy", sketch_acc, epoch + 1)
+        tb_writer.add_scalar("accuracy", acc, epoch + 1)
 
         scheduler.step()  # Update learning rate schedule
 
