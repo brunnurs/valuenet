@@ -19,6 +19,11 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
         all_question_span_lengths.append(question_span_lengths)
 
         columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer)
+        # TODO: this is an exception case (db-id: "baseball_1") which leads to too many tokens. Therefore we don't sub-tokenize it
+        if len(columns_tokens) == 433:
+            columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
+            print("Found a 'baseball_1' case!")
+
         all_column_token_lengths.append(column_token_lengths)
 
         table_tokens, table_token_lengths, table_segment_ids = _tokenize_table_names(tables, tokenizer)
@@ -29,9 +34,10 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
 
         tokens = question_tokens + columns_tokens + table_tokens
         if len(tokens) > max_length_model:
-            print("################### ATTENTION! Example too long ({})".format(len(tokens)))
+            print("################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {} ".format(len(tokens), len(question_tokens), len(columns_tokens), len(table_tokens)))
             print(question)
-            print(tokens)
+            print(columns)
+            print(tables)
 
         segment_ids = question_segment_ids + columns_segment_ids + table_segment_ids
         # not sure here if "tokenizer.mask_token_id" or just a simple 1...
@@ -69,9 +75,7 @@ def _tokenize_question(question, tokenizer):
 
     for question_span in question:
         # remember: question-span can consist of multiple words. Example: ['column', 'state']
-        # TODO: re-apply subwords tokenization. Right now, we have the issue that it ends up with > 512 token lengths (not much more, around 550)
-        # sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
-        sub_token = question_span
+        sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
         all_sub_token.extend(sub_token)
         question_span_lengths.append(len(sub_token))
 
@@ -84,15 +88,17 @@ def _tokenize_question(question, tokenizer):
     return question_tokens_with_special_chars, question_span_lengths, segment_ids
 
 
-def _tokenize_column_names(column_names, tokenizer):
+def _tokenize_column_names(column_names, tokenizer, do_sub_tokenizing=True):
     column_token_lengths = []
     all_column_tokens = []
 
     for column in column_names:
-        # TODO: re-apply subwords tokenization. Right now, we have the issue that it ends up with > 512 token lengths (not much more, around 550)
-        # columns most often consists of multiple words. Here, we further tokenize them into sub-words if necessary.
-        # column_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), column)))
-        column_sub_tokens = column
+        if do_sub_tokenizing:
+            # columns most often consists of multiple words. Here, we further tokenize them into sub-words if necessary.
+            column_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), column)))
+        else:
+            column_sub_tokens = column
+
         # the SEP_TOKEN needs to be packed in a list as python can only concat two lists to a new list.
         column_sub_tokens += [tokenizer.sep_token]
 
@@ -109,9 +115,7 @@ def _tokenize_table_names(table_names, tokenizer):
     all_table_tokens = []
 
     for table in table_names:
-        # TODO: re-apply subwords tokenization. Right now, we have the issue that it ends up with > 512 token lengths (not much more, around 550)
-        # table_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), table)))
-        table_sub_tokens = table
+        table_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), table)))
         table_sub_tokens += [tokenizer.sep_token]
 
         all_table_tokens.extend(table_sub_tokens)
