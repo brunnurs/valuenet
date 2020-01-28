@@ -69,7 +69,9 @@ def _tokenize_question(question, tokenizer):
 
     for question_span in question:
         # remember: question-span can consist of multiple words. Example: ['column', 'state']
-        sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
+        # TODO: re-apply subwords tokenization. Right now, we have the issue that it ends up with > 512 token lengths (not much more, around 550)
+        # sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
+        sub_token = question_span
         all_sub_token.extend(sub_token)
         question_span_lengths.append(len(sub_token))
 
