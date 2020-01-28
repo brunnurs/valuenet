@@ -55,9 +55,9 @@ class TransformerEncoder(nn.Module):
         # while the "last_hidden-states" is one hidden state per input token, the pooler_output is the hidden state of the [CLS]-token, further processed.
         # See e.g. "BertModel" documentation for more information.
 
+        last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, segment_ids_tensor)
         # TODO: this should be more accurate than the achronferry-implementation. But as we get a different output, we leave it for now
-        # last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, segment_ids_tensor)
-        last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor)
+        # last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor)
 
         (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths) = input_lengths
 
