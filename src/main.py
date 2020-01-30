@@ -64,7 +64,6 @@ if __name__ == '__main__':
                             table_data,
                             model,
                             optimizer,
-                            scheduler,
                             args.clip_grad,
                             sketch_loss_weight=sketch_loss_weight)
 
