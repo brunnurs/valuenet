@@ -10,7 +10,6 @@ def train(global_step,
           table_data,
           model,
           optimizer,
-          scheduler,
           clip_grad,
           sketch_loss_weight=1,
           lf_loss_weight=1):

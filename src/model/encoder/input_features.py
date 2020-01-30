@@ -22,7 +22,7 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
         # TODO: this is an exception case (db-id: "baseball_1") which leads to too many tokens. Therefore we don't sub-tokenize it
         if len(columns_tokens) == 433:
             columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
-            print("Found a 'baseball_1' case!")
+            # print("Found a 'baseball_1' case!")
 
         all_column_token_lengths.append(column_token_lengths)
 
