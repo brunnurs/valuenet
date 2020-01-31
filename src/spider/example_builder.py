@@ -131,15 +131,14 @@ def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type,
             continue
         elif t == 'table':
             one_hot_type[count_q][0] = 1
-            question_arg[count_q] = ['table'] + question_arg[
-                count_q]  # we also add the information straight before the question token (e.g. [['in'],['table', 'horse']])
+            # question_arg[count_q] = ['table'] + question_arg[count_q]  # we also add the information straight before the question token (e.g. [['in'],['table', 'horse']])
         elif t == 'col':
             one_hot_type[count_q][1] = 1
             try:
                 # to my understanding we want to indicate with this that there is an exact match with a column. The col_set_type at #0 contains a value for partial matches (+1 for every matching token)
                 # so the +5 at #1 will most probably be more weight than a partial match can be. The exact reason for +5 is though unknown to me.
                 col_set_type[col_set_iter.index(question_arg[count_q])][1] = 5
-                question_arg[count_q] = ['column'] + question_arg[count_q]  # we also add the information straight before the question token (e.g. [['are'],['column', 'name']])
+                # question_arg[count_q] = ['column'] + question_arg[count_q]  # we also add the information straight before the question token (e.g. [['are'],['column', 'name']])
             except:
                 print(col_set_iter, question_arg[count_q])
                 raise RuntimeError("not in col set")
@@ -151,8 +150,7 @@ def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type,
             one_hot_type[count_q][4] = 1
         elif t == 'value':
             one_hot_type[count_q][5] = 1
-            question_arg[count_q] = ['value'] + question_arg[
-                count_q]  # we also add the information straight before the question token (e.g. [['then'],['value', '5000']])
+            # question_arg[count_q] = ['value'] + question_arg[count_q]  # we also add the information straight before the question token (e.g. [['then'],['value', '5000']])
         else:
             # this code is never called for all the spider-samples (also in non-toy mode). Not sure it's really necessary...
             if len(t_q) == 1:
