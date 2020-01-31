@@ -15,10 +15,19 @@ from src.spider import spider_utils
 from src.training import train
 from src.utils import setup_device, set_seed_everywhere, save_model, create_experiment_folder
 
+# initialize experiment tracking @ Weights & Biases
+import wandb
+wandb.init(project="proton")
+
 if __name__ == '__main__':
     args = read_arguments_train()
+
+    # log hyperparameters to Weights & Biases
+    wandb.config.update(args)
+
     experiment_name, output_path = create_experiment_folder(args.model_output_dir, args.exp_name)
     write_config_to_file(args, output_path)
+
 
     device, n_gpu = setup_device()
     set_seed_everywhere(args.seed, n_gpu)
@@ -29,6 +38,9 @@ if __name__ == '__main__':
     grammar = semQL.Grammar()
     model = IRNet(args, grammar)
     model.to(device)
+
+    # track the model
+    wandb.watch(model)
 
     model.word_emb = utils.load_word_emb_binary(args.glove_embed_path)
 
@@ -74,7 +86,7 @@ if __name__ == '__main__':
                                                                                                         args.data_dir,
                                                                                                         output_path,
                                                                                                         tb_writer,
-                                                                                                        global_step)
+                                                                                                        epoch + 1)
 
         tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(succ_transform, succ_transform + fail_transform))
         tqdm.write("Results from Spider-Evaluation:")
@@ -89,8 +101,10 @@ if __name__ == '__main__':
         with open(os.path.join(output_path, "eval_results.log"), "a+") as writer:
             writer.write(eval_results_string + "\n")
 
-        tb_writer.add_scalar("sketch-accuracy", sketch_acc, global_step)
-        tb_writer.add_scalar("accuracy", acc, global_step)
+        wandb.log({"Sketch-accuracy": sketch_acc, "accuracy": acc}, step=epoch + 1)
+
+        tb_writer.add_scalar("sketch-accuracy", sketch_acc, epoch + 1)
+        tb_writer.add_scalar("accuracy", acc, epoch + 1)
 
         scheduler.step()  # Update learning rate schedule
 

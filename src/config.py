@@ -24,7 +24,7 @@ def read_arguments_train():
     parser.add_argument('--toy', default=False, action='store_true')
     parser.add_argument('--data_set', default='spider', type=str)
     parser.add_argument('--batch_size', default=64, type=int)
-    parser.add_argument('--glove_embed_path', default="pretrained_models/glove.42B.300d.txt", type=str)
+    parser.add_argument('--glove_embed_path', default="pretrained_models/glove.42B.300d", type=str)
     parser.add_argument('--cuda', default=True, action='store_true')  # TODO: is this really necessary?!
     # parser.add_argument('--encoder_pretrained_model', default='bert-base-uncased', type=str)
     # parser.add_argument('--max_seq_length', default=222, type=int)

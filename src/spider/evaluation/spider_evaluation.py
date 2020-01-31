@@ -25,6 +25,8 @@ import sqlite3
 import traceback
 import argparse
 
+import wandb
+
 from src.spider.evaluation.process_sql import tokenize, get_schema, get_tables_with_alias, Schema, get_sql
 
 # Flag to disable value evaluation
@@ -450,6 +452,7 @@ def print_scores(scores, etype, tb_writer, training_step, print_stdout):
 
     if tb_writer:
         tb_writer.add_scalars('spider_evaluation_execution_acc', exact_matching_accuracy, training_step)
+        wandb.log(exact_matching_accuracy, step=training_step)
 
     if print_stdout:
         print("{:20} {:20} {:20} {:20} {:20} {:20}".format("", *levels))
