@@ -75,7 +75,7 @@ def _tokenize_question(question, tokenizer):
 
     for question_span in question:
         # remember: question-span can consist of multiple words. Example: ['column', 'state']
-        sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
+        sub_token = question_span
         all_sub_token.extend(sub_token)
         question_span_lengths.append(len(sub_token))
 
@@ -95,7 +95,7 @@ def _tokenize_column_names(column_names, tokenizer, do_sub_tokenizing=True):
     for column in column_names:
         if do_sub_tokenizing:
             # columns most often consists of multiple words. Here, we further tokenize them into sub-words if necessary.
-            column_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), column)))
+            column_sub_tokens = column
         else:
             column_sub_tokens = column
 
@@ -115,7 +115,7 @@ def _tokenize_table_names(table_names, tokenizer):
     all_table_tokens = []
 
     for table in table_names:
-        table_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), table)))
+        table_sub_tokens = table
         table_sub_tokens += [tokenizer.sep_token]
 
         all_table_tokens.extend(table_sub_tokens)
