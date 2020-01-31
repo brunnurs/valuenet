@@ -233,7 +233,10 @@ class IRNet(BasicModel):
         ####################### PART 2: Create Schema (Column & Table) Embeddings ###########################################
         # What we see here in the next few lines is actually the schema encoder as described in IRNet
         # 2.3 "Schema Encoder".
+        # IMPORTANT: by using the transformer encoder, this here simplifies quite a bit!
 
+        # here we just create a tensor from "col_hot_type". Keep in mind: the col_hot_type is the type of matching ("exact" vs. "partial"). It basically states how well
+        # a word matched with a column.
         col_type = self.input_type(batch.col_hot_type)
 
         # we create a linear layer around the col_type tensor.
