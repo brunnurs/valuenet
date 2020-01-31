@@ -152,14 +152,13 @@ def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type,
             one_hot_type[count_q][5] = 1
             # question_arg[count_q] = ['value'] + question_arg[count_q]  # we also add the information straight before the question token (e.g. [['then'],['value', '5000']])
         else:
-            # this code is never called for all the spider-samples (also in non-toy mode). Not sure it's really necessary...
             if len(t_q) == 1:
                 for col_probase in t_q:
                     if col_probase == 'asd':
                         continue
                     try:
                         col_set_type[sql['col_set'].index(col_probase)][2] = 5
-                        question_arg[count_q] = ['value'] + question_arg[count_q]
+                        # question_arg[count_q] = ['value'] + question_arg[count_q]
                     except:
                         print(sql['col_set'], col_probase)
                         raise RuntimeError('not in col')
