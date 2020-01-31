@@ -237,14 +237,15 @@ class IRNet(BasicModel):
 
         # here we just create a tensor from "col_hot_type". Keep in mind: the col_hot_type is the type of matching ("exact" vs. "partial"). It basically states how well
         # a word matched with a column.
-        col_type = self.input_type(batch.col_hot_type)
+        # col_type = self.input_type(batch.col_hot_type)
+        #
+        # # we create a linear layer around the col_type tensor.
+        # col_type_var = self.col_type(col_type)
+        #
+        # # We then also add an additional vector for the column type (the "phi" in the third equation of the schema encoder)
+        # table_embedding = column_encodings + col_type_var
 
-        # we create a linear layer around the col_type tensor.
-        col_type_var = self.col_type(col_type)
-
-        # We then also add an additional vector for the column type (the "phi" in the third equation of the schema encoder)
-        table_embedding = column_encodings + col_type_var
-
+        table_embedding = column_encodings
         schema_embedding = table_encodings
 
         batch_table_dict = batch.col_table_dict
