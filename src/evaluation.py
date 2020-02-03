@@ -98,8 +98,6 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(args.model_to_load))
     print("Load pre-trained model from '{}'".format(args.model_to_load))
 
-    model.word_emb = utils.load_word_emb_binary(args.glove_embed_path)
-
     sketch_acc, acc, predictions = evaluate(model,
                                             dev_loader,
                                             table_data,
@@ -107,6 +105,9 @@ if __name__ == '__main__':
 
     eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
         len(dev_loader), sketch_acc, acc)
+
+    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w') as f:
+        json.dump(predictions, f)
 
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)
 
