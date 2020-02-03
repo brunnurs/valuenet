@@ -27,6 +27,8 @@ if __name__ == '__main__':
     wandb.config.update(args)
 
     experiment_name, output_path = create_experiment_folder(args.model_output_dir, args.exp_name)
+    print("Run experiment '{}'".format(experiment_name))
+
     write_config_to_file(args, output_path)
 
     device, n_gpu = setup_device()
