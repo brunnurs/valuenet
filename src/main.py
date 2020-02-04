@@ -1,3 +1,4 @@
+import json
 import os
 
 import torch
@@ -78,6 +79,9 @@ if __name__ == '__main__':
 
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
         tqdm.write(eval_results_string)
+
+        with open(os.path.join(output_path, 'predictions_sem_ql.json'), 'w') as f:
+            json.dump(predictions, f)
 
         succ_transform, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
                                                                                                         table_data,
