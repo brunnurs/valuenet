@@ -6,13 +6,10 @@ import json
 
 from config import read_arguments_evaluation
 from data_loader import get_data_loader
-from intermediate_representation import semQL
-from intermediate_representation.sem2SQL import transform_semQL_to_sql
-from model.model import IRNet
+from intermediate_representation.sem2sql.sem2SQL import transform_semQL_to_sql
 from spider import spider_utils
 from spider.evaluation.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
 from spider.example_builder import build_example
-from utils import setup_device, set_seed_everywhere
 
 
 def evaluate(model, dev_loader, table_data, beam_size):
@@ -84,40 +81,43 @@ def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir,
 if __name__ == '__main__':
     args = read_arguments_evaluation()
 
-    device, n_gpu = setup_device()
-    set_seed_everywhere(args.seed, n_gpu)
+    # device, n_gpu = setup_device()
+    # set_seed_everywhere(args.seed, n_gpu)
 
     sql_data, table_data, val_sql_data, val_table_data = spider_utils.load_dataset(args.data_dir, use_small=False)
     _, dev_loader = get_data_loader(sql_data, val_sql_data, args.batch_size, True, False)
 
-    grammar = semQL.Grammar()
-    model = IRNet(args, device, grammar)
-    model.to(device)
-
-    # load the pre-trained parameters
-    model.load_state_dict(torch.load(args.model_to_load))
-    print("Load pre-trained model from '{}'".format(args.model_to_load))
-
-    sketch_acc, acc, predictions = evaluate(model,
-                                            dev_loader,
-                                            table_data,
-                                            args.beam_size)
-
-    eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
-        len(dev_loader), sketch_acc, acc)
-
-    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w') as f:
-        json.dump(predictions, f)
+    # grammar = semQL.Grammar()
+    # model = IRNet(args, device, grammar)
+    # model.to(device)
+    #
+    # # load the pre-trained parameters
+    # model.load_state_dict(torch.load(args.model_to_load))
+    # print("Load pre-trained model from '{}'".format(args.model_to_load))
+    #
+    # sketch_acc, acc, predictions = evaluate(model,
+    #                                         dev_loader,
+    #                                         table_data,
+    #                                         args.beam_size)
+    #
+    # eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
+    #     len(dev_loader), sketch_acc, acc)
+    #
+    # with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w') as f:
+    #     json.dump(predictions, f)
+    #
+    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'r') as json_file:
+        predictions = json.load(json_file)
 
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)
 
-    print("Transformed {} samples successful to SQL. {} samples failed. Generated the files a 'ground_truth.txt' "
-          "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
-        count_success, count_failed))
-
-    kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'tables.json'))
-
-    spider_evaluation(os.path.join(args.prediction_dir, 'ground_truth.txt'),
-                      os.path.join(args.prediction_dir, 'output.txt'),
-                      os.path.join(args.data_dir, "original", "database"),
-                      "match", kmaps)
+    # print("Transformed {} samples successful to SQL. {} samples failed. Generated the files a 'ground_truth.txt' "
+    #       "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
+    #     count_success, count_failed))
+    #
+    # kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'tables.json'))
+    #
+    # spider_evaluation(os.path.join(args.prediction_dir, 'ground_truth.txt'),
+    #                   os.path.join(args.prediction_dir, 'output.txt'),
+    #                   os.path.join(args.data_dir, "original", "database"),
+    #                   "exec", kmaps)

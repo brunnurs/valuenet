@@ -26,6 +26,7 @@ import traceback
 import argparse
 
 import wandb
+from tqdm import tqdm
 
 from spider.evaluation.process_sql import tokenize, get_schema, get_tables_with_alias, Schema, get_sql
 
@@ -509,7 +510,7 @@ def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, train
             scores[level]['partial'][type_] = {'acc': 0., 'rec': 0., 'f1': 0.,'acc_count':0,'rec_count':0}
 
     eval_err_num = 0
-    for p, g in zip(plist, glist):
+    for p, g in zip(tqdm(plist), tqdm(glist)):
         p_str = p[0]
         g_str, db, _ = g
         db_name = db
@@ -627,18 +628,27 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
     return 1 if the values between prediction and gold are matching
     in the corresponding index. Currently not support multiple col_unit(pairs).
     """
+    print("db: {}           sql-pred: {}            sql-gold: {}".format(db, p_str, g_str))
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
     try:
         cursor.execute(p_str)
         p_res = cursor.fetchall()
-    except:
+    except Exception as e:
+        print("could not execute query '{}'. Exception: {}. Database: {}".format(p_str, e, db))
         return False
 
     cursor.execute(g_str)
     q_res = cursor.fetchall()
 
+    conn.close()
+
     def res_map(res, val_units):
+        """
+        Notes Ursin: The val_units are the columns in the select and "res" is the results from the select, one tuple per row.
+        What we do now is building up a map with columns as key and a list of values from the sql-select.
+        Then we simply compare the two maps. That way we don't care about the selection-order.
+        """
         rmap = {}
         for idx, val_unit in enumerate(val_units):
             key = tuple(val_unit[1]) if not val_unit[2] else (val_unit[0], tuple(val_unit[1]), tuple(val_unit[2]))
@@ -647,6 +657,8 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
 
     p_val_units = [unit[1] for unit in pred['select'][1]]
     q_val_units = [unit[1] for unit in gold['select'][1]]
+
+    # it's important to remember that when comparing two maps, the order of the keys doesn't matter
     return res_map(p_res, p_val_units) == res_map(q_res, q_val_units)
 
 
