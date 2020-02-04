@@ -3,6 +3,7 @@ import os
 import traceback
 
 from intermediate_representation.graph import Graph
+from intermediate_representation.sem2sql.infer_from_clause import infer_from_clause
 from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
 from intermediate_representation.sem_utils import alter_inter, alter_not_in, alter_column0
 
@@ -244,68 +245,6 @@ def col_to_str(agg, col, tab, table_names, N=1):
             table_alias = table_names[tab]
             return '%s(%s.%s)' % (agg, table_alias, _col)
 
-
-def infer_from_clause(table_names, schema, columns):
-    tables = list(table_names.keys())
-    # print(table_names)
-    start_table = None
-    end_table = None
-    join_clause = list()
-    if len(tables) == 1:
-        join_clause.append((tables[0], table_names[tables[0]]))
-    elif len(tables) == 2:
-        use_graph = True
-        # print(schema['graph'].vertices)
-        for t in tables:
-            if t not in schema['graph'].vertices:
-                use_graph = False
-                break
-        if use_graph:
-            start_table = tables[0]
-            end_table = tables[1]
-            _tables = list(schema['graph'].dijkstra(tables[0], tables[1]))
-            # print('Two tables: ', _tables)
-            max_key = 1
-            for t, k in table_names.items():
-                _k = int(k[1:])
-                if _k > max_key:
-                    max_key = _k
-            for t in _tables:
-                if t not in table_names:
-                    table_names[t] = 'T' + str(max_key + 1)
-                    max_key += 1
-                join_clause.append((t, table_names[t],))
-        else:
-            join_clause = list()
-            for t in tables:
-                join_clause.append((t, table_names[t],))
-    else:
-        # > 2
-        # print('More than 2 table')
-        for t in tables:
-            join_clause.append((t, table_names[t],))
-
-    if len(join_clause) >= 3:
-        star_table = None
-        for agg, col, tab in columns:
-            if col == '*':
-                star_table = tab
-                break
-        if star_table is not None:
-            star_table_count = 0
-            for agg, col, tab in columns:
-                if tab == star_table and col != '*':
-                    star_table_count += 1
-            if star_table_count == 0 and ((end_table is None or end_table == star_table) or (start_table is None or start_table == star_table)):
-                # Remove the table the rest tables still can join without star_table
-                new_join_clause = list()
-                for t in join_clause:
-                    if t[0] != star_table:
-                        new_join_clause.append(t)
-                join_clause = new_join_clause
-
-    join_clause = ' JOIN '.join(['%s AS %s' % (jc[0], jc[1]) for jc in join_clause])
-    return 'FROM ' + join_clause
 
 def replace_col_with_original_col(query, col, current_table):
     # print(query, col)
