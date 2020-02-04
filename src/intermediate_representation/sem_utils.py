@@ -105,6 +105,10 @@ def find_table(cur_table, origin_table_names, question_arg_type, question_arg):
 
 
 def alter_not_in(datas, schemas):
+    """
+    I have no idea what this code is exactly for... it tries to do changes in case of an "NOT IN ()" statement (Filter (19)).
+    Might be some necessary adaptions due to the way "Spider" is calculating execution accurracy. Not sure though.
+    """
     for d in datas:
         if 'Filter(19)' in d['model_result']:
             current_table = schemas[d['db_id']]
@@ -120,8 +124,15 @@ def alter_not_in(datas, schemas):
             cur_table = None
             for label_id, label_val in enumerate(pred_label):
                 if label_val in ['Filter(19)']:
-                    cur_table = int(pred_label[label_id - 1][2:-1])
+                    try:
+                        cur_table = int(pred_label[label_id - 1][2:-1])
+                    except Exception as e:
+                        print("An error in the 'alter_not_in' routine happened. prediction: {}".format(pred_label))
+
                     break
+
+            if cur_table is None:
+                continue
 
             h_table = find_table(cur_table, origin_table_names, question_arg_type, question_arg)
 
