@@ -273,9 +273,14 @@ def build_graph(schema):
     foreign_keys = schema['foreign_keys']
     for (fkey, pkey) in foreign_keys:
         fkey_table = schema['table_names_original'][schema['column_names'][fkey][0]]
+        fkey_original_name = schema['column_names_original'][fkey][1]
+
         pkey_table = schema['table_names_original'][schema['column_names'][pkey][0]]
-        relations.append((fkey_table, pkey_table))
-        relations.append((pkey_table, fkey_table))
+        pkey_original_name = schema['column_names_original'][pkey][1]
+
+        relations.append((fkey_table, fkey_original_name, pkey_table, pkey_original_name))
+        relations.append((pkey_table, pkey_original_name, fkey_table, fkey_original_name))
+
     return Graph(relations)
 
 
@@ -618,11 +623,11 @@ def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
                 g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
                 count += 1
                 # print(e)
-                # print('Exception')
-                # print(traceback.format_exc())
-                # print(sem_ql_prediction[i]['question'])
-                # print(sem_ql_prediction[i]['query'])
-                # print(sem_ql_prediction[i]['db_id'])
-                # print('===\n\n')
+                print('Exception')
+                print(traceback.format_exc())
+                print(sem_ql_prediction[i]['question'])
+                print(sem_ql_prediction[i]['query'])
+                print(sem_ql_prediction[i]['db_id'])
+                print('===\n\n')
 
     return count, exception_count
