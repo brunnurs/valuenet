@@ -444,7 +444,10 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
             if is_agg_flag is False and len(group_by_clause) > 5:
                 group_by_clause = "GROUP BY"
                 for (agg, col, tab) in sql_json['select']:
-                    group_by_clause = group_by_clause + ' ' + col_to_str(agg, col, tab, table_names, N_T)
+                    group_by_clause = group_by_clause + ' ' + col_to_str(agg, col, tab, table_names, N_T) + ','
+
+                # remove the last comma
+                group_by_clause = group_by_clause[:-1]
 
             if len(group_by_clause) < 5:
                 if 'count(*)' in select_clause_str:
