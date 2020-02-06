@@ -559,6 +559,7 @@ def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, train
             exec_score = eval_exec_match(db, p_str, g_str, p_sql, g_sql)
             if exec_score:
                 scores[hardness]['exec'] += 1
+                scores['all']['exec'] += 1
 
         if etype in ["all", "match"]:
             exact_score = evaluator.eval_exact_match(p_sql, g_sql)
@@ -628,7 +629,7 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
     return 1 if the values between prediction and gold are matching
     in the corresponding index. Currently not support multiple col_unit(pairs).
     """
-    print("db: {}           sql-pred: {}            sql-gold: {}".format(db, p_str, g_str))
+    # print("db: {}           sql-pred: {}            sql-gold: {}".format(db, p_str, g_str))
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
     try:
