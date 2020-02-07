@@ -58,6 +58,9 @@ class IRNet(BasicModel):
         self.prob_len = nn.Linear(1, 1)
 
         self.col_type = nn.Linear(4, args.col_embed_size)
+
+        self.token_type = nn.Linear(6, args.hidden_size)
+
         self.sketch_encoder = nn.LSTM(args.action_embed_size, args.action_embed_size // 2, bidirectional=True,
                                       batch_first=True)
 
@@ -108,6 +111,14 @@ class IRNet(BasicModel):
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
         question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
+
+        token_type_one_hot_encoded = self.input_type(batch.src_type)
+
+        # we create a linear layer around the token_type_one_hot_encoded tensor to scale it to the right size.
+        token_type = self.token_type(token_type_one_hot_encoded)
+
+        question_encodings = question_encodings + token_type
+
         question_encodings = self.dropout(question_encodings)
 
         # Source encodings to create the sketch (the AST without the leaf-nodes)

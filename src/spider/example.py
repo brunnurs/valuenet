@@ -96,7 +96,6 @@ class Batch(object):
 
         self.schema_sents_word = [[" ".join(x) for x in e.table_names] for e in self.examples]
 
-        # TODO seems that the "src_type" (or "one_hot_type" as it is called before) is not used at all. This makes sense as it is anway part of "src_sents" (the "table"/"column"/etc.) prefix. Remove it if time.
         self.src_type = [e.one_hot_type for e in self.examples]
         self.col_hot_type = [e.col_hot_type for e in self.examples]
         self.table_sents = [e.tab_cols for e in self.examples]
