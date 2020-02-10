@@ -91,7 +91,7 @@ def _process(sql, table):
     q_iter_small = [wordnet_lemmatizer.lemmatize(x).lower() for x in origin_sql]
     question_arg = copy.deepcopy(sql['question_arg'])
     question_arg_type = sql['question_arg_type']
-    one_hot_type = np.zeros((len(question_arg_type), 6))
+    one_hot_type = [-1] * len(question_arg_type)
 
     col_set_type = np.zeros((len(col_set_iter), 4))
 
@@ -128,11 +128,12 @@ def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type,
 
         # go to the pre-processing (data_process.py) to understand the types ('col', 'table', 'MORE', etc.) better
         if t == 'NONE':
+            one_hot_type[count_q] = 1
             continue
         elif t == 'table':
-            one_hot_type[count_q][0] = 1
+            one_hot_type[count_q] = 2
         elif t == 'col':
-            one_hot_type[count_q][1] = 1
+            one_hot_type[count_q] = 3
             try:
                 # to my understanding we want to indicate with this that there is an exact match with a column. The col_set_type at #0 contains a value for partial matches (+1 for every matching token)
                 # so the +5 at #1 will most probably be more weight than a partial match can be. The exact reason for +5 is though unknown to me.
@@ -141,13 +142,13 @@ def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type,
                 print(col_set_iter, question_arg[count_q])
                 raise RuntimeError("not in col set")
         elif t == 'agg':
-            one_hot_type[count_q][2] = 1
+            one_hot_type[count_q] = 4
         elif t == 'MORE':
-            one_hot_type[count_q][3] = 1
+            one_hot_type[count_q] = 5
         elif t == 'MOST':
-            one_hot_type[count_q][4] = 1
+            one_hot_type[count_q] = 6
         elif t == 'value':
-            one_hot_type[count_q][5] = 1
+            one_hot_type[count_q] = 7
         else:
             # this are special cases, where "col_probase" is a value we found with ConeceptNet. So "col_probase" could for example be "time of day" or "city"
             if len(t_q) == 1:
@@ -162,7 +163,7 @@ def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type,
                     except:
                         print(sql['col_set'], col_probase)
                         raise RuntimeError('not in col')
-                    one_hot_type[count_q][5] = 1  # it is a "value" as well.
+                    one_hot_type[count_q] = 7  # it is a "value" as well.
             else:
                 for col_probase in t_q:  # if there are multiple types, we try to give partial matches to the according columns. Not sure there is such cases with this pre-processing though...
                     if col_probase == 'asd':

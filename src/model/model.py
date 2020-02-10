@@ -59,7 +59,15 @@ class IRNet(BasicModel):
 
         self.col_type = nn.Linear(4, args.col_embed_size)
 
-        self.token_type = nn.Linear(6, args.hidden_size)
+        # we use seven possible embeddings for each token type: 6 for the actual types (COLUMN, TABLE, VALUE, etc.) and one if there is no type specified.
+        # the padding idx is 0 (this embedding will always stay 0)
+        # TODO: this 100 is quite random - pick a better size
+        self.type_token_embedding_size = 128
+        self.token_type_embedding = nn.Embedding(self.type_token_embedding_size, self.type_token_embedding_size, padding_idx=0)
+
+        self.encoder_dimensionality_reduction = nn.Linear(self.encoder.encoder_hidden_size + self.type_token_embedding_size, args.hidden_size)
+
+        # self.token_type = nn.Linear(6, args.hidden_size)
 
         self.sketch_encoder = nn.LSTM(args.action_embed_size, args.action_embed_size // 2, bidirectional=True,
                                       batch_first=True)
@@ -98,6 +106,7 @@ class IRNet(BasicModel):
         # initial the embedding layers
         nn.init.xavier_normal_(self.production_embed.weight.data)
         nn.init.xavier_normal_(self.type_embed.weight.data)
+        nn.init.xavier_normal_(self.token_type_embedding.weight.data)
         nn.init.xavier_normal_(self.N_embed.weight.data)
         print('Use Column Pointer: ', True if self.use_column_pointer else False)
 
@@ -112,12 +121,12 @@ class IRNet(BasicModel):
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
         question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
 
-        token_type_one_hot_encoded = self.input_type(batch.src_type)
+        token_type_embedding = self.idx_to_embedding_with_padding(batch.src_type, self.token_type_embedding)
 
-        # we create a linear layer around the token_type_one_hot_encoded tensor to scale it to the right size.
-        token_type = self.token_type(token_type_one_hot_encoded)
+        assert len(token_type_embedding) == len(question_encodings)
 
-        question_encodings = question_encodings + token_type
+        question_encoding_with_token_type_embedding = torch.cat((question_encodings, token_type_embedding), dim=-1)
+        question_encodings = self.encoder_dimensionality_reduction(question_encoding_with_token_type_embedding)
 
         question_encodings = self.dropout(question_encodings)
 
@@ -432,7 +441,13 @@ class IRNet(BasicModel):
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
         question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
-        question_encodings = self.dropout(question_encodings)
+
+        token_type_embedding = self.idx_to_embedding_with_padding(batch.src_type, self.token_type_embedding)
+
+        assert len(token_type_embedding) == len(question_encodings)
+
+        question_encoding_with_token_type_embedding = torch.cat((question_encodings, token_type_embedding), dim=-1)
+        question_encodings = self.encoder_dimensionality_reduction(question_encoding_with_token_type_embedding)
 
         utterance_encodings_sketch_linear = self.att_sketch_linear(question_encodings)
         utterance_encodings_lf_linear = self.att_lf_linear(question_encodings)

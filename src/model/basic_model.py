@@ -68,6 +68,25 @@ class BasicModel(nn.Module):
 
         return src_encodings, (last_state, last_cell)
 
+    def idx_to_embedding_with_padding(self, idx_list, embeddings):
+        max_length_in_batch = 0
+        for sub_idx_list in idx_list:
+            max_length_in_batch = max(max_length_in_batch, len(sub_idx_list))
+
+        for sub_idx_list in idx_list:
+            # padd the missing tokens to the max-token length with 0. We afterwards make sure, this zeros end up in a padding-embedding
+            sub_idx_list.extend([0] * (max_length_in_batch - len(sub_idx_list)))
+
+        if self.args.cuda:
+            idx_as_tensor = torch.LongTensor(idx_list).cuda()
+        else:
+            idx_as_tensor = torch.LongTensor(idx_list)
+
+        # we can look up a tensor of embeddings in multiple dimensions. So here we will look up (batch_size * max_token_length)
+        embeddings_after_lookup = embeddings(idx_as_tensor)
+        return embeddings_after_lookup
+
+
     def input_type(self, values_list):
         """
         Notes Ursin: this is only creating a pytorch tensor from the "col_hot_type" array. Nothing fancy here.

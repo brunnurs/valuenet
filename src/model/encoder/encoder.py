@@ -38,7 +38,7 @@ class TransformerEncoder(nn.Module):
         # But we still wanna do the wordpiece-tokenizing.
         self.tokenizer.do_basic_tokenize = False
 
-        self.linear_layer_dimension_reduction = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
+        # self.linear_layer_dimension_reduction = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
         self.column_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
         self.table_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
 
@@ -64,8 +64,9 @@ class TransformerEncoder(nn.Module):
         # we get the relevant hidden states for the question-tokens and average, if there are multiple token per word (e.g ['table', 'college'])
         averaged_hidden_states_question, pointers_after_question = self._average_hidden_states_question(last_hidden_states, all_question_span_lengths)
         question_out = pad_sequence(averaged_hidden_states_question, batch_first=True)  # (batch_size * max_question_tokens_per_batch * hidden_size)
-        # as the transformer uses normally a size of 768 and the decoder only 300 per vector, we need to reduce dimensionality here with a linear layer.
-        question_out = self.linear_layer_dimension_reduction(question_out)
+
+        # # as the transformer uses normally a size of 768 and the decoder only 300 per vector, we need to reduce dimensionality here with a linear layer.
+        # question_out = self.linear_layer_dimension_reduction(question_out)
 
         column_hidden_states, pointers_after_columns = self._get_schema_hidden_states(last_hidden_states, all_column_token_lengths, pointers_after_question)
         table_hidden_states, pointers_after_tables = self._get_schema_hidden_states(last_hidden_states, all_table_token_lengths, pointers_after_columns)

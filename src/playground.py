@@ -1,36 +1,22 @@
 import torch
-from transformers import BertConfig, BertModel, BertTokenizer
+import torch.nn as nn
+import random
 
-from model.encoder.encoder import TransformerEncoder
-from utils import setup_device, set_seed_everywhere
+vocab_size = 7
+embedding_dim_2 = 3
 
-config_class, model_class, tokenizer_class = (BertConfig, BertModel, BertTokenizer)
-config = config_class.from_pretrained("bert-base-uncased")
-tokenizer = tokenizer_class.from_pretrained("bert-base-uncased")
+embedding_1 = nn.Embedding(8, 2, padding_idx=0)
+embedding_2 = nn.Embedding(8, 5, padding_idx=0)
 
-question = [['what'], ['are'], ['name'], ['of'], ['all'], ['column', 'state'], ['with'], ['table', 'college'], ['student'], ['playing'], ['in'], ['mid'], ['position'], ['but'], ['no'], ['goalie'], ['?']]
-question2 = [['what'], ['are'], ['name'], ['of'], ['all'], ['column', 'state'], ['with'], ['table', 'college'], ['student'], ['playing'], ['in'], ['mid'], ['position'], ['?']]
-tables = [['college'], ['player'], ['tryout']]
-tables2 = [['college'], ['player']]
-columns = [['count', 'number', 'many'], ['college', 'name'], ['state'], ['enrollment'], ['player', 'id'], ['player', 'name'], ['yes', 'card'], ['training', 'hour']]
-columns2 = [['count', 'number', 'many'], ['college', 'name'], ['state'], ['enrollment'], ['player', 'id'], ['player', 'name'], ['yes', 'card'], ['training', 'hour'], ['player', 'position'], ['decision']]
+# Random vector of length 15 consisting of indices 0, ..., 9
+x = torch.LongTensor([random.randint(0, 7) for _ in range(15)])
+# Adding batch dimension
+x = x[None, :]
 
-# tokenized = tokenizer.encode_plus(text=question,
-#                               text_pair=columns + tables,
-#                               add_special_tokens=True,
-#                               max_length=100,
-#                               truncation_strategy='do_not_truncate',
-#                               pad_to_max_length=True)
-
-# encoded = encode_input([question, question2], [columns, columns], [tables, tables], tokenizer, 551, 'cpu')
-#
-# # print(encoded)
-device, n_gpu = setup_device()
-set_seed_everywhere(42, n_gpu)
-
-encoder = TransformerEncoder('bert-base-uncased', device, 512, 300, 300)
-encoder.to(device)
-
-last_layer = encoder([question, question2], [columns, columns2], [tables, tables2])
-
-print(last_layer)
+emb_1 = embedding_1(x)
+print(emb_1)
+emb_2 = embedding_2(x)
+print(emb_2)
+# Concatenating embeddings along dimension 2
+emb = torch.cat([emb_1, emb_2], dim=2)
+print(emb)
