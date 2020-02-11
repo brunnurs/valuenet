@@ -25,11 +25,9 @@ class Parser:
     def __init__(self):
         self.copy_selec = None
         self.sel_result = []
-        self.colSet = set()
 
     def _init_rule(self):
         self.copy_selec = None
-        self.colSet = set()
 
     def _parse_root(self, sql):
         """
@@ -124,7 +122,6 @@ class Parser:
 
         for sel in select:
             result.append(A(sel[0])) # A() represents an aggregator. e.g. #0 is 'none', #3 is 'count'
-            self.colSet.add(sql['col_set'].index(sql['names'][sel[1][1][1]]))
             result.append(C(sql['col_set'].index(sql['names'][sel[1][1][1]])))
             # now check for the situation with *
             if sel[1][1][1] == 0:
@@ -153,7 +150,6 @@ class Parser:
             result.append(Sup(1))
 
         result.append(A(sql['sql']['orderBy'][1][0][1][0]))
-        self.colSet.add(sql['col_set'].index(sql['names'][sql['sql']['orderBy'][1][0][1][1]]))
         result.append(C(sql['col_set'].index(sql['names'][sql['sql']['orderBy'][1][0][1][1]])))
         if sql['sql']['orderBy'][1][0][1][1] == 0:
             result.append(self._parser_column0(sql, select))
@@ -238,7 +234,6 @@ class Parser:
                 else:
                     result.append(Order(1))
                 result.append(A(sql['sql']['orderBy'][1][0][1][0]))
-                self.colSet.add(sql['col_set'].index(sql['names'][sql['sql']['orderBy'][1][0][1][1]]))
                 result.append(C(sql['col_set'].index(sql['names'][sql['sql']['orderBy'][1][0][1][1]])))
                 if sql['sql']['orderBy'][1][0][1][1] == 0:
                     result.append(self._parser_column0(sql, select))
@@ -282,7 +277,6 @@ class Parser:
 
         result.append(fil)
         result.append(A(sql_condit[2][1][0]))
-        self.colSet.add(sql['col_set'].index(sql['names'][sql_condit[2][1][1]]))
         result.append(C(sql['col_set'].index(sql['names'][sql_condit[2][1][1]])))
         if sql_condit[2][1][1] == 0:
             select = sql['sql']['select'][1]
