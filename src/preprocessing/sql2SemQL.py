@@ -23,6 +23,10 @@ sys.path.append("..")
 
 class Parser:
 
+    def __init__(self) -> None:
+        # this list will contain all the values in the filter statements. It will be part of the pre-processed data afterwards.
+        self.values = []
+
     def _parse_root(self, sql):
         """
         parsing the sql by the grammar
@@ -316,6 +320,7 @@ class Parser:
         """
 
         sql = query['sql']
+
         nest_query = {}
         nest_query['names'] = query['names']
         nest_query['query_toks_no_value'] = ""
@@ -374,7 +379,6 @@ if __name__ == '__main__':
     arg_parser.add_argument('--output', type=str, help='output data', required=True)
     args = arg_parser.parse_args()
 
-    parser = Parser()
 
     # loading dataSets
     datas, table = load_dataSets(args)
@@ -385,10 +389,15 @@ if __name__ == '__main__':
             continue
 
         # here is where the magic happens: we parse the SQL from the spider-examples and create a SemQL-AST fro it.
-        r = parser.full_parse(datas[i])
+        parser = Parser()
+        semql_result = parser.full_parse(datas[i])
+
         # here we simply serialize it to a string. Keep in mind that the SemQL-Classes (e.g. "Root") override the string method, so we get not only the class
         # but also all attributes (especially the idx of the production rule)
-        datas[i]['rule_label'] = " ".join([str(x) for x in r])
+        datas[i]['rule_label'] = " ".join([str(x) for x in semql_result])
+
+        # during the transformation to semQL we also gather all values (e.g. "USA", 12.55). They will now be part of the preprocessed data, similar to e.g. the col_set for columns.
+        datas[i]['values'] = parser.values
         processed_data.append(datas[i])
 
     print('Finished %s datas and failed %s datas' % (len(processed_data), len(datas) - len(processed_data)))
