@@ -22,12 +22,6 @@ sys.path.append("..")
 
 
 class Parser:
-    def __init__(self):
-        self.copy_selec = None
-        self.sel_result = []
-
-    def _init_rule(self):
-        self.copy_selec = None
 
     def _parse_root(self, sql):
         """
@@ -104,8 +98,7 @@ class Parser:
                 return T(sql['col_table'][sql['sql']['groupBy'][0][1]])
             else:
                 question = sql['question']
-                self.sel_result.append(question)
-                print('column * table error')
+                print('column * table error. Question: {}'.format(question))
                 return T(sql['sql']['from']['table_units'][0][1])
 
     def _parse_select(self, sql):
@@ -128,8 +121,6 @@ class Parser:
                 result.append(self._parser_column0(sql, select))  # The "*" needs an extra handling, as it belongs not to a "normal" table.
             else:
                 result.append(T(sql['col_table'][sel[1][1][1]]))  # for every other column, we can simply add a T() with the table this column belongs to.
-            if not self.copy_selec:
-                self.copy_selec = [copy.deepcopy(result[-2]), copy.deepcopy(result[-1])]
 
         return result, None
 
