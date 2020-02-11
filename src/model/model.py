@@ -62,7 +62,7 @@ class IRNet(BasicModel):
         # we use seven possible embeddings for each token type: 6 for the actual types (COLUMN, TABLE, VALUE, etc.) and one if there is no type specified.
         # the padding idx is 0 (this embedding will always stay 0)
         # TODO: this 100 is quite random - pick a better size
-        self.type_token_embedding_size = 128
+        self.type_token_embedding_size = 32
         self.token_type_embedding = nn.Embedding(self.type_token_embedding_size, self.type_token_embedding_size, padding_idx=0)
 
         self.encoder_dimensionality_reduction = nn.Linear(self.encoder.encoder_hidden_size + self.type_token_embedding_size, args.hidden_size)
