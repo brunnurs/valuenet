@@ -209,6 +209,27 @@ class T(Action):
         return 'T(' + str(self.id_c) + ')'
 
 
+class V(Action):
+    """
+    This class represents a Value. It can be be numeric (e.g. 15.25), a string "USA" or a Date "14.11.2020".
+    id_c is referring to the index of the value in the list of all possible values.
+    """
+
+    def __init__(self, id_c, parent=None):
+        super(V, self).__init__()
+
+        self.parent = parent
+        self.id_c = id_c
+        self.production = ''
+        self.table = None
+
+    def __str__(self):
+        return 'V(' + str(self.id_c) + ')'
+
+    def __repr__(self):
+        return 'V(' + str(self.id_c) + ')'
+
+
 class A(Action):
     """
     Aggregator
@@ -296,15 +317,15 @@ class Filter(Action):
             # 0: "Filter 1"
             0: 'Filter and Filter Filter',
             1: 'Filter or Filter Filter',
-            2: 'Filter = A',
-            3: 'Filter != A',
-            4: 'Filter < A',
-            5: 'Filter > A',
-            6: 'Filter <= A',
-            7: 'Filter >= A',
-            8: 'Filter between A',
-            9: 'Filter like A',
-            10: 'Filter not_like A',
+            2: 'Filter V = A',
+            3: 'Filter V != A',
+            4: 'Filter V < A',
+            5: 'Filter V > A',
+            6: 'Filter V <= A',
+            7: 'Filter V >= A',
+            8: 'Filter V V between A',
+            9: 'Filter V like A',
+            10: 'Filter V not_like A',
             # now begin root
             11: 'Filter = A Root',
             12: 'Filter < A Root',

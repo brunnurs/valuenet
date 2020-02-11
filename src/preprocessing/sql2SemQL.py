@@ -16,7 +16,7 @@ import sys
 import copy
 
 from preprocessing.utils import load_dataSets
-from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order
+from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order, V
 
 sys.path.append("..")
 
@@ -255,6 +255,10 @@ class Parser:
                 raise NotImplementedError("not implement for the others FIL")
         else:
             # check for Filter (<,=,>,!=,between, >=,  <=, ...)
+            # Ursin: This map is a mapping between the index of the WHERE_OPS in spider and the Filter() index in SemQL:
+            # WHERE_OPS = ('not', 'between', '=', '>', '<', '>=', '<=', '!=', 'in', 'like', 'is', 'exists')
+            # Filter --> see Filter-class
+            # Example: 1:8 --> the filter type "between" is a 1 in the spider notation, but a 8 in SemQL.
             single_map = {1: 8, 2: 2, 3: 5, 4: 4, 5: 7, 6: 6, 7: 3}
             nested_map = {1: 15, 2: 11, 3: 13, 4: 12, 5: 16, 6: 17, 7: 14}
             if sql_condit[1] in [1, 2, 3, 4, 5, 6, 7]:
@@ -271,6 +275,19 @@ class Parser:
                 raise NotImplementedError("not implement for the others FIL")
 
         result.append(fil)
+
+        # This are filter statements which contain Values - we build up a value list and extend the SemQL AST with a "V" action.
+        if 2 <= fil.id_c <= 10:
+            val = sql_condit[3]
+            self.values.append(val)
+            result.append((V(self.values.index(val))))
+
+            # Filter(8) is the "X.Y BETWEEN A AND B" case - here we have to store an additional value.
+            if fil.id_c == 8:
+                val = sql_condit[4]
+                self.values.append(val)
+                result.append((V(self.values.index(val))))
+
         result.append(A(sql_condit[2][1][0]))
         result.append(C(sql['col_set'].index(sql['names'][sql_condit[2][1][1]])))
         if sql_condit[2][1][1] == 0:
