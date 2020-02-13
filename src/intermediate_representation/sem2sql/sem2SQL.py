@@ -4,7 +4,7 @@ import traceback
 
 from intermediate_representation.graph import Graph
 from intermediate_representation.sem2sql.infer_from_clause import infer_from_clause
-from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
+from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1, V
 from intermediate_representation.sem_utils import alter_inter, alter_not_in, alter_column0
 
 
@@ -21,6 +21,12 @@ def pop_front(array):
     if len(array) == 0:
         return 'None'
     return array.pop(0)
+
+
+def peek_front(array):
+    if len(array) == 0:
+        return 'None'
+    return array[0]
 
 
 def is_end(components, transformed_sql, is_root_processed):
@@ -61,7 +67,7 @@ def is_end(components, transformed_sql, is_root_processed):
     return end
 
 
-def _transform(components, transformed_sql, col_set, table_names, schema):
+def _transform(components, transformed_sql, col_set, table_names, values, schema):
     processed_root = False
     current_table = schema
 
@@ -143,7 +149,7 @@ def _transform(components, transformed_sql, col_set, table_names, schema):
             if op == 'and' or op == 'or':
                 transformed_sql['where'].append(op)
             else:
-                # No Supquery
+                # No sub-query
                 agg = eval(pop_front(components))
                 column = eval(pop_front(components))
                 _table = pop_front(components)
@@ -152,21 +158,38 @@ def _transform(components, transformed_sql, col_set, table_names, schema):
                     table = None
                     components.insert(0, _table)
                 assert isinstance(agg, A) and isinstance(column, C)
-                if len(c_instance.production.split()) == 3:
+
+                # here we verify if there is a sub- query
+                component = peek_front(components)
+                if isinstance(eval(component), V):
+                    second_value = None
+
+                    # now we handle the values - we don't care about data-types, as sqlite can work with string comparison for any datatype.
+                    # TODO: implement proper datatype handling. This can be done by schema['column_types'][column_idx].
+                    value_obj = eval(pop_front(components))
+                    value = "'{}'".format(values[value_obj.id_c])
+
+                    # there is a few special cases where we have to deal with multiple values - e.g. in the "X BETWEEN Y AND Z" case.
+                    if isinstance(eval(peek_front(components)), V):
+                        second_value_obj = eval(pop_front(components))
+                        second_value = "'{}'".format(values[second_value_obj.id_c])
+
                     if table:
                         fix_col_id = replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table)
                     else:
                         fix_col_id = col_set[column.id_c]
                         raise RuntimeError('not found table !!!!')
+
                     transformed_sql['where'].append((
                         op,
                         agg.production.split()[1],
                         fix_col_id,
                         table_names[table.id_c] if table is not None else table,
-                        None
+                        value,
+                        second_value,
                     ))
                 else:
-                    # Subquery
+                    # sub-query
                     new_dict = dict()
                     new_dict['sql'] = transformed_sql['sql']
                     transformed_sql['where'].append((
@@ -174,7 +197,8 @@ def _transform(components, transformed_sql, col_set, table_names, schema):
                         agg.production.split()[1],
                         replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table),
                         table_names[table.id_c] if table is not None else table,
-                        _transform(components, new_dict, col_set, table_names, schema)
+                        _transform(components, new_dict, col_set, table_names, values, schema),
+                        None
                     ))
 
     return transformed_sql
@@ -189,6 +213,7 @@ def transform(query, schema, origin=None):
     # lf = query['rule_label']
     col_set = query['col_set']
     table_names = query['table_names']
+    values = query['values']
     current_table = schema
 
     current_table['schema_content_clean'] = [x[1] for x in current_table['column_names']]
@@ -205,20 +230,20 @@ def transform(query, schema, origin=None):
         transformed_sql['intersect'] = dict()
         transformed_sql['intersect']['sql'] = query
 
-        _transform(components, transformed_sql, col_set, table_names, schema)
-        _transform(components, transformed_sql['intersect'], col_set, table_names, schema)
+        _transform(components, transformed_sql, col_set, table_names, values, schema)
+        _transform(components, transformed_sql['intersect'], col_set, table_names, values, schema)
     elif c_instance.id_c == 1:
         transformed_sql['union'] = dict()
         transformed_sql['union']['sql'] = query
-        _transform(components, transformed_sql, col_set, table_names, schema)
-        _transform(components, transformed_sql['union'], col_set, table_names, schema)
+        _transform(components, transformed_sql, col_set, table_names, values, schema)
+        _transform(components, transformed_sql['union'], col_set, table_names, values, schema)
     elif c_instance.id_c == 2:
         transformed_sql['except'] = dict()
         transformed_sql['except']['sql'] = query
-        _transform(components, transformed_sql, col_set, table_names, schema)
-        _transform(components, transformed_sql['except'], col_set, table_names, schema)
+        _transform(components, transformed_sql, col_set, table_names, values, schema)
+        _transform(components, transformed_sql['except'], col_set, table_names, values, schema)
     else:
-        _transform(components, transformed_sql, col_set, table_names, schema)
+        _transform(components, transformed_sql, col_set, table_names, values, schema)
 
     parse_result = to_str(transformed_sql, 1, schema)
 
@@ -335,17 +360,22 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
             if isinstance(f, str):
                 conjunctions.append(f)
             else:
-                op, agg, col, tab, value = f
-                if value:
-                    value['sql'] = sql_json['sql']
+                op, agg, col, tab, value, value2 = f
+
                 all_columns.append((agg, col, tab))
                 subject = col_to_str(agg, col, tab, table_names, N_T)
-                if value is None:
-                    where_value = '1'
-                    if op == 'between':
-                        where_value = '1 AND 2'
-                    filters.append('%s %s %s' % (subject, op, where_value))
+
+                # here we detect the difference between a simple value or a value which refers to a subquery
+                if not isinstance(value, dict):
+                    values_combined = value
+                    if value2 is not None:
+                        # right now the only case where two values are allowed is a BETWEEN X AND Y statement.
+                        values_combined = "{} AND {}".format(value, value2)
+
+                    filters.append('%s %s %s' % (subject, op, values_combined))
                 else:
+                    value['sql'] = sql_json['sql']
+
                     # This is kind of a style-change: instead of "xy IN (SELECT z FROM a)" one can also rewrite the query to a simple JOIN (this is done with adding the table).
                     # Most probably is it necessary so the Exact Matching will recognize the query to be right (would not be necessary for Execution Accuracy)
                     if op == 'in' and len(value['select']) == 1 and value['select'][0][0] == 'none' and 'where' not in value and 'order' not in value and 'sup' not in value:
@@ -604,7 +634,8 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
 
 def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
 
-    alter_not_in(sem_ql_prediction, schemas=schemas)
+    # TODO: find out if this adds any benefit for the trained models. If we run it with the ground truth (so no prediction, just SQL -> SemQL -> SQL) it is even slightly better without it.
+    # alter_not_in(sem_ql_prediction, schemas=schemas)
     alter_inter(sem_ql_prediction)
     alter_column0(sem_ql_prediction)
 
