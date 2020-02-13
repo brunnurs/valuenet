@@ -276,18 +276,6 @@ class Parser:
 
         result.append(fil)
 
-        # This are filter statements which contain Values - we build up a value list and extend the SemQL AST with a "V" action.
-        if 2 <= fil.id_c <= 10:
-            val = sql_condit[3]
-            self.values.append(val)
-            result.append((V(self.values.index(val))))
-
-            # Filter(8) is the "X.Y BETWEEN A AND B" case - here we have to store an additional value.
-            if fil.id_c == 8:
-                val = sql_condit[4]
-                self.values.append(val)
-                result.append((V(self.values.index(val))))
-
         result.append(A(sql_condit[2][1][0]))
         result.append(C(sql['col_set'].index(sql['names'][sql_condit[2][1][1]])))
         if sql_condit[2][1][1] == 0:
@@ -295,6 +283,22 @@ class Parser:
             result.append(self._parser_column0(sql, select))
         else:
             result.append(T(sql['col_table'][sql_condit[2][1][1]]))
+
+        # This are filter statements which contain Values - we build up a value list and extend the SemQL AST with a "V" action.
+        if 2 <= fil.id_c <= 10:
+            val = sql_condit[3]
+            if isinstance(val, str):
+                val = val.strip('\'\"')   # remove string quotes, as we will add them later anyway.
+            self.values.append(val)
+            result.append((V(self.values.index(val))))
+
+            # Filter(8) is the "X.Y BETWEEN A AND B" case - here we have to store an additional value.
+            if fil.id_c == 8:
+                val = sql_condit[4]
+                if isinstance(val, str):
+                    val = val.strip('\'\"')   # remove string quotes, as we will add them later anyway.
+                self.values.append(val)
+                result.append((V(self.values.index(val))))
 
         # check for the nested value
         if type(sql_condit[3]) == dict:
@@ -401,21 +405,21 @@ if __name__ == '__main__':
     datas, table = load_dataSets(args)
     processed_data = []
 
-    for i, d in enumerate(datas):
-        if len(datas[i]['sql']['select'][1]) > 5:
+    for idx, d in enumerate(datas):
+        if len(datas[idx]['sql']['select'][1]) > 5:
             continue
 
         # here is where the magic happens: we parse the SQL from the spider-examples and create a SemQL-AST fro it.
         parser = Parser()
-        semql_result = parser.full_parse(datas[i])
+        semql_result = parser.full_parse(datas[idx])
 
         # here we simply serialize it to a string. Keep in mind that the SemQL-Classes (e.g. "Root") override the string method, so we get not only the class
         # but also all attributes (especially the idx of the production rule)
-        datas[i]['rule_label'] = " ".join([str(x) for x in semql_result])
+        datas[idx]['rule_label'] = " ".join([str(x) for x in semql_result])
 
         # during the transformation to semQL we also gather all values (e.g. "USA", 12.55). They will now be part of the preprocessed data, similar to e.g. the col_set for columns.
-        datas[i]['values'] = parser.values
-        processed_data.append(datas[i])
+        datas[idx]['values'] = parser.values
+        processed_data.append(datas[idx])
 
     print('Finished %s datas and failed %s datas' % (len(processed_data), len(datas) - len(processed_data)))
     with open(args.output, 'w', encoding='utf8') as f:
