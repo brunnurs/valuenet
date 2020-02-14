@@ -79,7 +79,11 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
         c_instance = eval(c)
         if isinstance(c_instance, Root):
             processed_root = True
-            transformed_sql['select'] = list()
+
+            # a list with only 2 elements - similar to the spider data structure
+            # [0] is used for distinct true/false. [1] contains the array with selection columns
+            transformed_sql['select'] = [False, list()]
+
             if c_instance.id_c == 0:
                 transformed_sql['where'] = list()
                 transformed_sql['sup'] = list()
@@ -93,7 +97,9 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
             elif c_instance.id_c == 4:
                 transformed_sql['order'] = list()
         elif isinstance(c_instance, Sel):
-            continue
+            if c_instance.id_c == 1:
+                # The statement is distinct
+                transformed_sql['select'][0] = True
         elif isinstance(c_instance, N):
             for i in range(c_instance.id_c + 1):
                 agg = eval(pop_front(components))
@@ -110,10 +116,18 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                 else:
                     col = col_set[column.id_c]
 
-                transformed_sql['select'].append((
+                # if we have an aggregation (e.g. COUNT(xy)) and the query as a whole is a distinct, we also use distinct
+                # inside the aggregation (e.g. COUNT(DISTINCT xy)). While this is an oversimplification, it works for most cases
+                # as it is hard to formulate a question in a way that some things are distinct and some are not.
+                use_distinct = False
+                if agg.id_c != 0 and transformed_sql['select'][0]:
+                    use_distinct = True
+
+                transformed_sql['select'][1].append((
                     agg.production.split()[1],
                     col,
-                    table_names[table.id_c] if table is not None else table
+                    table_names[table.id_c] if table is not None else table,
+                    use_distinct
                 ))
 
         elif isinstance(c_instance, Sup):
@@ -174,7 +188,6 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                         column_final = col_set[column.id_c]
                         raise RuntimeError('Table not found!')
 
-
                     second_value = None
                     # now we handle the values - we also handle data types properly.
                     value_obj = eval(pop_front(components))
@@ -207,6 +220,7 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                     ))
 
     return transformed_sql
+
 
 def transform(query, schema, origin=None):
     preprocess_schema(schema)
@@ -254,8 +268,10 @@ def transform(query, schema, origin=None):
     parse_result = parse_result.replace('\t', '')
     return [parse_result]
 
-def col_to_str(agg, col, tab, table_names, N=1):
+
+def col_to_str(agg, col, tab, table_names, N=1, is_distinct=False):
     _col = col.replace(' ', '_')
+    distinct_str = 'DISTINCT' if is_distinct else ''
     if agg == 'none':
         if tab not in table_names:
             table_names[tab] = 'T' + str(len(table_names) + N)
@@ -267,12 +283,12 @@ def col_to_str(agg, col, tab, table_names, N=1):
         if col == '*':
             if tab is not None and tab not in table_names:
                 table_names[tab] = 'T' + str(len(table_names) + N)
-            return '%s(%s)' % (agg, _col)
+            return '%s(%s %s)' % (agg, distinct_str, _col)
         else:
             if tab not in table_names:
                 table_names[tab] = 'T' + str(len(table_names) + N)
             table_alias = table_names[tab]
-            return '%s(%s.%s)' % (agg, table_alias, _col)
+            return '%s(%s %s.%s)' % (agg, distinct_str, table_alias, _col)
 
 
 def replace_col_with_original_col(query, col, current_table):
@@ -355,11 +371,13 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
     select_clause = list()
     table_names = dict()
     current_table = schema
-    for (agg, col, tab) in sql_json['select']:
-        all_columns.append((agg, col, tab))
-        select_clause.append(col_to_str(agg, col, tab, table_names, N_T))
 
-    select_clause_str = 'SELECT ' + ', '.join(select_clause).strip()
+    whole_select_distinct = 'DISTINCT ' if sql_json['select'][0] else ''
+    for (agg, col, tab, distinct) in sql_json['select'][1]:
+        all_columns.append((agg, col, tab))
+        select_clause.append(col_to_str(agg, col, tab, table_names, N_T, distinct))
+
+    select_clause_str = 'SELECT ' + whole_select_distinct + ', '.join(select_clause).strip()
 
     sup_clause = ''
     order_clause = ''
@@ -405,10 +423,10 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
 
                     # This is kind of a style-change: instead of "xy IN (SELECT z FROM a)" one can also rewrite the query to a simple JOIN (this is done with adding the table).
                     # Most probably is it necessary so the Exact Matching will recognize the query to be right (would not be necessary for Execution Accuracy)
-                    if op == 'in' and len(value['select']) == 1 and value['select'][0][0] == 'none' and 'where' not in value and 'order' not in value and 'sup' not in value:
+                    if op == 'in' and len(value['select'][1]) == 1 and value['select'][1][0][0] == 'none' and 'where' not in value and 'order' not in value and 'sup' not in value:
                             # and value['select'][0][2] not in table_names:
-                        if value['select'][0][2] not in table_names:
-                            table_names[value['select'][0][2]] = 'T' + str(len(table_names) + N_T)
+                        if value['select'][1][0][2] not in table_names:
+                            table_names[value['select'][1][0][2]] = 'T' + str(len(table_names) + N_T)
 
                         # This is necessary to avoid incorrect queries: if there is an "and/or" conjunction at the end of the filter, we need to put a next filter to avoid an invalid query.
                         # If we though apply a join instead of an "IN ()" statement, we need to remove that conjunction.
@@ -481,7 +499,7 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
             has_group_by = True
 
     for agg in ['count(', 'avg(', 'min(', 'max(', 'sum(']:
-        if (len(sql_json['select']) > 1 and agg in select_clause_str)\
+        if (len(sql_json['select'][1]) > 1 and agg in select_clause_str)\
                 or agg in sup_clause or agg in order_clause:
             has_group_by = True
             break
@@ -491,7 +509,7 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
         if len(table_names) == 1:
             # check none agg
             is_agg_flag = False
-            for (agg, col, tab) in sql_json['select']:
+            for (agg, col, tab, _) in sql_json['select'][1]:
 
                 if agg == 'none':
                     group_by_clause = 'GROUP BY ' + col_to_str(agg, col, tab, table_names, N_T)
@@ -500,7 +518,7 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
 
             if is_agg_flag is False and len(group_by_clause) > 5:
                 group_by_clause = "GROUP BY"
-                for (agg, col, tab) in sql_json['select']:
+                for (agg, col, tab, _) in sql_json['select'][1]:
                     group_by_clause = group_by_clause + ' ' + col_to_str(agg, col, tab, table_names, N_T) + ','
 
                 # remove the last comma
@@ -517,8 +535,8 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
                                                                        table_names, N_T)
         else:
             # if only one select
-            if len(sql_json['select']) == 1:
-                agg, col, tab = sql_json['select'][0]
+            if len(sql_json['select'][1]) == 1:
+                agg, col, tab, _ = sql_json['select'][1][0]
                 non_lists = [tab]
                 fix_flag = False
                 # add tab from other part
@@ -547,14 +565,14 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
                             break
 
                 if fix_flag is False:
-                    agg, col, tab = sql_json['select'][0]
+                    agg, col, tab, _ = sql_json['select'][1][0]
                     group_by_clause = 'GROUP BY ' + col_to_str(agg, col, tab, table_names, N_T)
 
             else:
                 # check if there are only one non agg
                 non_agg, non_agg_count = None, 0
                 non_lists = []
-                for (agg, col, tab) in sql_json['select']:
+                for (agg, col, tab, _) in sql_json['select'][1]:
                     if agg == 'none':
                         non_agg = (agg, col, tab)
                         non_lists.append(tab)
@@ -617,7 +635,7 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
                                     find_flag = True
                                     break
                             if find_flag is False:
-                                for (agg, col, tab) in sql_json['select']:
+                                for (agg, col, tab, _, sql_json['select'][1]) in sql_json['select'][1]:
                                     if 'id' in col.lower():
                                         group_by_clause = 'GROUP BY ' + col_to_str(agg, col, tab, table_names, N_T)
                                         break
