@@ -113,8 +113,20 @@ class Parser:
         :return: [Sel(), states]
         """
         result = []
+        is_distinct = sql['sql']['select'][0]  # is distinct on the whole select.
         select = sql['sql']['select'][1]
-        result.append(Sel(0))
+
+        # as a simplification we assume that if any of the columns is distinct, the whole query is distinct. This might be oversimplified, but
+        # it is actually hard to find a way to phrase a real question where some columns are distinct and others not. And in the DEV set, there is also no such example, so we
+        # simplified the SemQL language to that.
+        if not is_distinct:
+            is_distinct = any(sel[1][1][2] for sel in select)
+
+        if is_distinct:
+            result.append(Sel(1))
+        else:
+            result.append(Sel(0))
+
         result.append(N(len(select) - 1))  # N() encapsulates the number of columns. The -1 is used in case there is only one column to select: in that case, #0 of grammar_dict is used, which is 'N A'.
 
         for sel in select:

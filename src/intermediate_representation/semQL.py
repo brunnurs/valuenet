@@ -283,7 +283,8 @@ class Sel(Action):
     @classmethod
     def _init_grammar(self):
         self.grammar_dict = {
-            0: 'Sel N',
+            0: 'Sel none N',
+            1: 'Sel distinct N',
         }
         self.production_id = {}
         for id_x, value in enumerate(self.grammar_dict.values()):
