@@ -1,6 +1,7 @@
 import argparse
 import os
 import traceback
+import numbers
 
 from intermediate_representation.graph import Graph
 from intermediate_representation.sem2sql.infer_from_clause import infer_from_clause
@@ -104,9 +105,14 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                     components.insert(0, _table)
                 assert isinstance(agg, A) and isinstance(column, C)
 
+                if table is not None:
+                    col, _ = replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table)
+                else:
+                    col = col_set[column.id_c]
+
                 transformed_sql['select'].append((
                     agg.production.split()[1],
-                    replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table) if table is not None else col_set[column.id_c],
+                    col,
                     table_names[table.id_c] if table is not None else table
                 ))
 
@@ -123,11 +129,11 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
 
             transformed_sql['sup'].append(agg.production.split()[1])
             if table:
-                fix_col_id = replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table)
+                column_final, _ = replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table)
             else:
-                fix_col_id = col_set[column.id_c]
+                column_final = col_set[column.id_c]
                 raise RuntimeError('not found table !!!!')
-            transformed_sql['sup'].append(fix_col_id)
+            transformed_sql['sup'].append(column_final)
             transformed_sql['sup'].append(table_names[table.id_c] if table is not None else table)
 
         elif isinstance(c_instance, Order):
@@ -141,7 +147,7 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                 components.insert(0, _table)
             assert isinstance(agg, A) and isinstance(column, C)
             transformed_sql['order'].append(agg.production.split()[1])
-            transformed_sql['order'].append(replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table))
+            transformed_sql['order'].append(replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table)[0])
             transformed_sql['order'].append(table_names[table.id_c] if table is not None else table)
 
         elif isinstance(c_instance, Filter):
@@ -162,28 +168,27 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                 # here we verify if there is a sub- query
                 component = peek_front(components)
                 if isinstance(eval(component), V):
-                    second_value = None
+                    if table:
+                        column_final, column_final_idx = replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table)
+                    else:
+                        column_final = col_set[column.id_c]
+                        raise RuntimeError('Table not found!')
 
-                    # now we handle the values - we don't care about data-types, as sqlite can work with string comparison for any datatype.
-                    # TODO: implement proper datatype handling. This can be done by schema['column_types'][column_idx].
+
+                    second_value = None
+                    # now we handle the values - we also handle data types properly.
                     value_obj = eval(pop_front(components))
-                    value = "'{}'".format(values[value_obj.id_c])
+                    value = format_value_given_datatype(column_final_idx, schema, values[value_obj.id_c])
 
                     # there is a few special cases where we have to deal with multiple values - e.g. in the "X BETWEEN Y AND Z" case.
                     if isinstance(eval(peek_front(components)), V):
                         second_value_obj = eval(pop_front(components))
-                        second_value = "'{}'".format(values[second_value_obj.id_c])
-
-                    if table:
-                        fix_col_id = replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table)
-                    else:
-                        fix_col_id = col_set[column.id_c]
-                        raise RuntimeError('not found table !!!!')
+                        second_value = format_value_given_datatype(column_final_idx, schema, values[second_value_obj.id_c])
 
                     transformed_sql['where'].append((
                         op,
                         agg.production.split()[1],
-                        fix_col_id,
+                        column_final,
                         table_names[table.id_c] if table is not None else table,
                         value,
                         second_value,
@@ -195,14 +200,13 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                     transformed_sql['where'].append((
                         op,
                         agg.production.split()[1],
-                        replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table),
+                        replace_col_with_original_col(col_set[column.id_c], table_names[table.id_c], current_table)[0],
                         table_names[table.id_c] if table is not None else table,
                         _transform(components, new_dict, col_set, table_names, values, schema),
                         None
                     ))
 
     return transformed_sql
-
 
 def transform(query, schema, origin=None):
     preprocess_schema(schema)
@@ -274,23 +278,25 @@ def col_to_str(agg, col, tab, table_names, N=1):
 def replace_col_with_original_col(query, col, current_table):
     # print(query, col)
     if query == '*':
-        return query
+        return query, None
 
     cur_table = col
     cur_col = query
     single_final_col = None
+    single_final_col_idx = None
     # print(query, col)
     for col_ind, col_name in enumerate(current_table['schema_content_clean']):
         if col_name == cur_col:
             assert cur_table in current_table['table_names']
             if current_table['table_names'][current_table['col_table'][col_ind]] == cur_table:
                 single_final_col = current_table['column_names_original'][col_ind][1]
+                single_final_col_idx = col_ind
                 break
 
     assert single_final_col
     # if query != single_final_col:
     #     print(query, single_final_col)
-    return single_final_col
+    return single_final_col, single_final_col_idx
 
 
 def build_graph(schema):
@@ -322,6 +328,26 @@ def preprocess_schema(schema):
     schema['graph'] = graph
 
 
+def format_value_given_datatype(column_final_idx, schema, value):
+    # before we handle the values, we wanna find out what data-type the value has (based on the schema)
+    if column_final_idx is not None:
+        data_type = schema['column_types'][column_final_idx]
+        if data_type == 'text':
+            use_quotes = True
+        else:
+            use_quotes = False
+    else:
+        # this means we are comparing the value with an aggregation - e.g. a COUNT(*). So it must be a number.
+        use_quotes = False
+
+    # sometimes a column is text, but the value in it is a number. We then have to remove the floating point, as
+    # otherwise, the comparison is wrong. Example: a boolean column (as VARCHAR(1), you have compare 1 with '1' and not with '1.0'
+    # for every other numeric comparison, the float/int difference is handled properly by SQL.
+    if use_quotes and isinstance(value, numbers.Number):
+        value = int(value)
+
+    value_formatted = "'{}'".format(value) if use_quotes else value
+    return value_formatted
 
 
 def to_str(sql_json, N_T, schema, pre_table_names=None):
@@ -332,6 +358,7 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
     for (agg, col, tab) in sql_json['select']:
         all_columns.append((agg, col, tab))
         select_clause.append(col_to_str(agg, col, tab, table_names, N_T))
+
     select_clause_str = 'SELECT ' + ', '.join(select_clause).strip()
 
     sup_clause = ''

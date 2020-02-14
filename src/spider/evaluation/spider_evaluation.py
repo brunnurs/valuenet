@@ -560,14 +560,19 @@ def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, train
             if exec_score:
                 scores[hardness]['exec'] += 1
                 scores['all']['exec'] += 1
+            else:
+                if print_stdout:
+                    print("{} pred: {}".format(hardness, p_str))
+                    print("{} gold: {}".format(hardness, g_str))
+                    print("")
 
         if etype in ["all", "match"]:
             exact_score = evaluator.eval_exact_match(p_sql, g_sql)
             partial_scores = evaluator.partial_scores
             if exact_score == 0:
                 if print_stdout:
-                    print("{} pred: {}".format(hardness,p_str))
-                    print("{} gold: {}".format(hardness,g_str))
+                    print("{} pred: {}".format(hardness, p_str))
+                    print("{} gold: {}".format(hardness, g_str))
                     print("")
             scores[hardness]['exact'] += exact_score
             scores['all']['exact'] += exact_score
