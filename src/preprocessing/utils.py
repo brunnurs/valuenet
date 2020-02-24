@@ -60,6 +60,50 @@ def load_dataSets(args):
     return datas, tables
 
 
+def find_table_of_star_column(sql, select):
+    """
+    Find table of column '*'
+    """
+    if len(sql['sql']['from']['table_units']) == 1:
+        if sql['sql']['from']['table_units'][0][0] != 'sql':
+            return sql['sql']['from']['table_units'][0][1]
+        else:
+            # here we select from a sub-query, therefore finding the "table" for the special column * is not so easy.
+            # All the queries in spider with sub-queries do an aggregation over the "*", so it basically doesn't matter which one we choose.
+            # To make it as correct as possible, we take the first table from the sub-query.
+            # Example query: SELECT count(*) FROM (SELECT * FROM endowment WHERE amount  >  8.5 GROUP BY school_id HAVING count(*)  >  1)
+            # print(sql['query'])
+            return sql['sql']['from']['table_units'][0][1]['from']['table_units'][0][1]
+    else:
+        table_list = []
+        for tmp_t in sql['sql']['from']['table_units']:
+            if type(tmp_t[1]) == int:
+                table_list.append(tmp_t[1])
+        table_set, other_set = set(table_list), set()
+        for sel_p in select:
+            if sel_p[1][1][1] != 0:
+                other_set.add(sql['col_table'][sel_p[1][1][1]])
+
+        if len(sql['sql']['where']) == 1:
+            other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
+        elif len(sql['sql']['where']) == 3:
+            other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
+            other_set.add(sql['col_table'][sql['sql']['where'][2][2][1][1]])
+        elif len(sql['sql']['where']) == 5:
+            other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
+            other_set.add(sql['col_table'][sql['sql']['where'][2][2][1][1]])
+            other_set.add(sql['col_table'][sql['sql']['where'][4][2][1][1]])
+        table_set = table_set - other_set
+        if len(table_set) == 1:
+            return list(table_set)[0]
+        elif len(table_set) == 0 and sql['sql']['groupBy'] != []:
+            return sql['col_table'][sql['sql']['groupBy'][0][1]]
+        else:
+            question = sql['question']
+            print('column * table error. Question: {}'.format(question))
+            return sql['sql']['from']['table_units'][0][1]
+
+
 def group_header(toks, idx, num_toks, header_toks):
     for endIdx in reversed(range(idx + 1, num_toks + 1)):
         sub_toks = toks[idx: endIdx]
