@@ -82,8 +82,16 @@ def _model_joins_as_filter(sql, entry):
 
 def _model_join_as_subquery(column_to_model, table_to_model, column_connect):
     return (False, 8, (0, (0, column_connect, False), None),
-                                                                {'from': {'table_units': [('table_unit', table_to_model)], 'conds': []},
-                                                                 'select': (False, [(0, (0, (0, column_to_model, False), None))])}
+                                                                {'select': (False, [(0, (0, (0, column_to_model, False), None))]),
+                                                                 'from': {'table_units': [('table_unit', table_to_model)], 'conds': []},
+                                                                 'where': [],
+                                                                 'groupBy': [],
+                                                                 'orderBy': [],
+                                                                 'having': [],
+                                                                 'limit': None,
+                                                                 'intersect': None,
+                                                                 'except': None,
+                                                                 'union': None}
             , None)
 
 
@@ -162,12 +170,13 @@ def _tables_in_ORDER_BY(order_by_clause, column_tables_mapping):
 
 
 def _add_filter_to_WHERE_clause(join_modeled_as_filter, sql):
-    # in case there exist already other filters, we need to add an AND concat.
-    if sql['where']:
-        sql['where'].append('and')
 
-    sql['where'].append(join_modeled_as_filter)
+    # it's important to insert the new filter in the beginning of all filters, as it needs to be a top-level filter.
+    sql['where'].insert(0, join_modeled_as_filter)
 
+    # if there have been other filters before, we need to concatenate the other filter with an AND.
+    if len(sql['where']) > 1:
+        sql['where'].insert(1, 'and')
 
 
 if __name__ == '__main__':

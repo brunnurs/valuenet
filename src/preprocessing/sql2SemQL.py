@@ -15,7 +15,7 @@ import sys
 
 import copy
 
-from preprocessing.utils import load_dataSets
+from preprocessing.utils import load_dataSets, find_table_of_star_column
 from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order, V
 
 sys.path.append("..")
@@ -61,49 +61,10 @@ class Parser:
         else:
             return [Root(5)], ['SEL']
 
-    def _parser_column0(self, sql, select):
-        """
-        Find table of column '*'
-        :return: T(table_id)
-        """
-        if len(sql['sql']['from']['table_units']) == 1:
-            if sql['sql']['from']['table_units'][0][0] != 'sql':
-                return T(sql['sql']['from']['table_units'][0][1])
-            else:
-                # here we select from a sub-query, therefore finding the "table" for the special column * is not so easy.
-                # All the queries in spider with sub-queries do an aggregation over the "*", so it basically doesn't matter which one we choose.
-                # To make it as correct as possible, we take the first table from the sub-query.
-                # Example query: SELECT count(*) FROM (SELECT * FROM endowment WHERE amount  >  8.5 GROUP BY school_id HAVING count(*)  >  1)
-                # print(sql['query'])
-                return T(sql['sql']['from']['table_units'][0][1]['from']['table_units'][0][1])
-        else:
-            table_list = []
-            for tmp_t in sql['sql']['from']['table_units']:
-                if type(tmp_t[1]) == int:
-                    table_list.append(tmp_t[1])
-            table_set, other_set = set(table_list), set()
-            for sel_p in select:
-                if sel_p[1][1][1] != 0:
-                    other_set.add(sql['col_table'][sel_p[1][1][1]])
-
-            if len(sql['sql']['where']) == 1:
-                other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
-            elif len(sql['sql']['where']) == 3:
-                other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
-                other_set.add(sql['col_table'][sql['sql']['where'][2][2][1][1]])
-            elif len(sql['sql']['where']) == 5:
-                other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
-                other_set.add(sql['col_table'][sql['sql']['where'][2][2][1][1]])
-                other_set.add(sql['col_table'][sql['sql']['where'][4][2][1][1]])
-            table_set = table_set - other_set
-            if len(table_set) == 1:
-                return T(list(table_set)[0])
-            elif len(table_set) == 0 and sql['sql']['groupBy'] != []:
-                return T(sql['col_table'][sql['sql']['groupBy'][0][1]])
-            else:
-                question = sql['question']
-                print('column * table error. Question: {}'.format(question))
-                return T(sql['sql']['from']['table_units'][0][1])
+    @staticmethod
+    def _parser_column0(sql, select):
+        table_idx = find_table_of_star_column(sql, select)
+        return T(table_idx)
 
     def _parse_select(self, sql):
         """
@@ -195,23 +156,27 @@ class Parser:
                     result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
                 elif sql['sql']['where'][1] == 'and' and sql['sql']['where'][3] == 'or':
-                    result.append(Filter(1))
                     result.append(Filter(0))
                     result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
+                    result.append(Filter(1))
                     result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
                 elif sql['sql']['where'][1] == 'or' and sql['sql']['where'][3] == 'and':
                     result.append(Filter(1))
+                    result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
                     result.append(Filter(0))
                     result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
                 else:
                     result.append(Filter(1))
                     result.append(Filter(1))
                     result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
+
+                # TODO: right now we don't handle queries which have more than 3 filters (so 3 filters and 2 AND/OR combinations).
+                # The code above should be written in a more dynamic way
+
 
         # check having
         if sql['sql']['having'] != []:
@@ -411,7 +376,6 @@ if __name__ == '__main__':
     arg_parser.add_argument('--table_path', type=str, help='table dataset', required=True)
     arg_parser.add_argument('--output', type=str, help='output data', required=True)
     args = arg_parser.parse_args()
-
 
     # loading dataSets
     datas, table = load_dataSets(args)
