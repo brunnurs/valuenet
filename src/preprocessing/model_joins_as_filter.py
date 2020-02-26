@@ -57,23 +57,25 @@ def _model_joins_as_filter(sql, entry):
     for table_to_model in joins_to_model:
         table_found = False
         for condition in sql['from']['conds']:
+            if type(condition) == list:
+                assert condition[1] == 2, "the operator for the join is not a '='! Not implemented."
 
-            assert condition[1] == 2, "the operator for the join is not a '='! Not implemented."
+                column_first_idx = condition[2][1][1]
+                column_second_idx = condition[3][1]
+                table_first = entry['col_table'][column_first_idx]
+                table_second = entry['col_table'][column_second_idx]
 
-            column_first_idx = condition[2][1][1]
-            column_second_idx = condition[3][1]
-            table_first = entry['col_table'][column_first_idx]
-            table_second = entry['col_table'][column_second_idx]
+                if table_first == table_to_model:
+                    join_modeled_as_filter = _model_join_as_subquery(column_first_idx, table_first, column_second_idx)
+                    _add_filter_to_WHERE_clause(join_modeled_as_filter, sql)
+                    table_found = True
 
-            if table_first == table_to_model:
-                join_modeled_as_filter = _model_join_as_subquery(column_first_idx, table_first, column_second_idx)
-                _add_filter_to_WHERE_clause(join_modeled_as_filter, sql)
-                table_found = True
-
-            if table_second == table_to_model:
-                join_modeled_as_filter = _model_join_as_subquery(column_second_idx, table_second, column_first_idx)
-                _add_filter_to_WHERE_clause(join_modeled_as_filter, sql)
-                table_found = True
+                if table_second == table_to_model:
+                    join_modeled_as_filter = _model_join_as_subquery(column_second_idx, table_second, column_first_idx)
+                    _add_filter_to_WHERE_clause(join_modeled_as_filter, sql)
+                    table_found = True
+            else:
+                print("Condition is not a list... looks like wrong data: {}".format(condition))
 
         if not table_found:
             print("Modeling a join failed, table could not get found in conditions. Most probably a data-issue, as e.g. in some network_1 queries.")
