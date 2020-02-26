@@ -422,21 +422,35 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
                     value['sql'] = sql_json['sql']
 
                     # This is kind of a style-change: instead of "xy IN (SELECT z FROM a)" one can also rewrite the query to a simple JOIN (this is done with adding the table).
-                    # Most probably is it necessary so the Exact Matching will recognize the query to be right (would not be necessary for Execution Accuracy)
-                    if op == 'in' and len(value['select'][1]) == 1 and value['select'][1][0][0] == 'none' and 'where' not in value and 'order' not in value and 'sup' not in value:
-                            # and value['select'][0][2] not in table_names:
+                    # While it is critical for Exact Matching (where joins are checked), it is also necessary for Execution Accuracy. The reason is simply that a "EXISTS (SELECT ID FROM ...)" or a "IN (SELECT ID FROM ...)"
+                    # behave slightly different than a JOIN, especially when it comes to their shortcut-behaviour and therefore also the natural order by (read more here) https://blog.jooq.org/2016/03/09/sql-join-or-exists-chances-are-youre-doing-it-wrong/
+
+                    # as we choose to model simple joins (see model_simple_joins_as_filter.py) with a filter, we use the opportunity here to change the filter back to a normal join - as in the ground truth expected.
+                    # Obviously this would be an issue if a query tries to exactly use "IN (SELECT ID FROM XY)". There is a few examples where this is the case, e.g.
+                    # SELECT avg(age) FROM Dogs WHERE dog_id IN ( SELECT dog_id FROM Treatments ) (look for this in ground truth)
+
+                    number_of_selects = len(value['select'][1])
+                    first_select_aggregation = value['select'][1][0][0]
+
+                    if op == 'in' and number_of_selects == 1 \
+                            and first_select_aggregation == 'none' \
+                            and 'where' not in value \
+                            and 'order' not in value \
+                            and 'sup' not in value:
+
                         if value['select'][1][0][2] not in table_names:
                             table_names[value['select'][1][0][2]] = 'T' + str(len(table_names) + N_T)
 
                         # This is necessary to avoid incorrect queries: if there is an "and/or" conjunction at the end of the filter, we need to put a next filter to avoid an invalid query.
                         # If we though apply a join instead of an "IN ()" statement, we need to remove that conjunction.
-                        if len(filters) > 0 and (filters[-1] == 'and' or filters[-1] == 'or'):
-                            filters.pop(-1)
+                        if len(conjunctions) > 0:
+                            conjunctions.pop()
 
                         filters.append(None)
 
                     else:
-                        filters.append('%s %s %s' % (subject, op, '(' + to_str(value, len(table_names) + 1, schema) + ')'))
+                        # for every other sub-query we use a recursion to transform it to a string. By using a high NT-value we avoid conflicts with table-aliases.
+                        filters.append('%s %s %s' % (subject, op, '(' + to_str(value, len(table_names) + N_T + 20, schema) + ')'))
                 if len(conjunctions):
                     filters.append(conjunctions.pop())
 
@@ -681,7 +695,7 @@ def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
 
     # TODO: find out if this adds any benefit for the trained models. If we run it with the ground truth (so no prediction, just SQL -> SemQL -> SQL) it is even slightly better without it.
     # alter_not_in(sem_ql_prediction, schemas=schemas)
-    alter_inter(sem_ql_prediction)
+    # alter_inter(sem_ql_prediction)
     alter_column0(sem_ql_prediction)
 
     index = range(len(sem_ql_prediction))
@@ -689,24 +703,24 @@ def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
     exception_count = 0
     with open(os.path.join(output_dir, 'output.txt'), 'w', encoding='utf8') as d, open(os.path.join(output_dir, 'ground_truth.txt'), 'w', encoding='utf8') as g:
         for i in index:
-            try:
-                result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']])
-                d.write(result[0] + '\n')
-                g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
-                count += 1
-            except Exception as e:
-                # This origin seems to be the fallback-query. Not sure how we come up with it, most probably it's just a dummy query to fill in a result for each example.
-                result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']], origin='Root1(3) Root(5) Sel(0) N(0) A(3) C(0) T(0)')
-                exception_count += 1
-                d.write(result[0] + '\n')
-                g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
-                count += 1
-                # print(e)
-                print('Exception')
-                print(traceback.format_exc())
-                print(sem_ql_prediction[i]['question'])
-                print(sem_ql_prediction[i]['query'])
-                print(sem_ql_prediction[i]['db_id'])
-                print('===\n\n')
+            # try:
+            result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']])
+            d.write(result[0] + '\n')
+            g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
+            count += 1
+            # except Exception as e:
+            #     # This origin seems to be the fallback-query. Not sure how we come up with it, most probably it's just a dummy query to fill in a result for each example.
+            #     result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']], origin='Root1(3) Root(5) Sel(0) N(0) A(3) C(0) T(0)')
+            #     exception_count += 1
+            #     d.write(result[0] + '\n')
+            #     g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
+            #     count += 1
+            #     # print(e)
+            #     print('Exception')
+            #     print(traceback.format_exc())
+            #     print(sem_ql_prediction[i]['question'])
+            #     print(sem_ql_prediction[i]['query'])
+            #     print(sem_ql_prediction[i]['db_id'])
+            #     print('===\n\n')
 
     return count, exception_count
