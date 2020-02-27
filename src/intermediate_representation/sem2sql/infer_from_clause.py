@@ -136,6 +136,9 @@ def _find_and_remove_star_table(columns, join_clause):
     # unfortunately auto tuple unpacking doesn't work anymore in python 3, therefore this comment: a "column" contains the 3 elements "aggregator, "column name", "table".
     star_tables = list(map(lambda column: column[2], filter(lambda column: column[1] == '*', columns)))
 
+    # remove duplicates
+    star_tables = list(set(star_tables))
+
     assert len(star_tables) <= 1, "The case of having multiple star-joins is currently not supported (and not part of the spider-dataset)"
 
     if len(star_tables) == 1:
