@@ -345,10 +345,17 @@ def preprocess_schema(schema):
 
 
 def format_value_given_datatype(column_final_idx, schema, value):
+    # there is some special cases on the training set where the user asks for an "empty" history or
+    # similar. In that case, we need to really add an empty string.
+    if value == '':
+        return "\'\'"
+
     # before we handle the values, we wanna find out what data-type the value has (based on the schema)
     if column_final_idx is not None:
         data_type = schema['column_types'][column_final_idx]
         if data_type == 'text':
+            use_quotes = True
+        elif data_type == 'time':
             use_quotes = True
         else:
             use_quotes = False
@@ -649,7 +656,7 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
                                     find_flag = True
                                     break
                             if find_flag is False:
-                                for (agg, col, tab, _, sql_json['select'][1]) in sql_json['select'][1]:
+                                for (agg, col, tab, _) in sql_json['select'][1]:
                                     if 'id' in col.lower():
                                         group_by_clause = 'GROUP BY ' + col_to_str(agg, col, tab, table_names, N_T)
                                         break
@@ -703,24 +710,24 @@ def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
     exception_count = 0
     with open(os.path.join(output_dir, 'output.txt'), 'w', encoding='utf8') as d, open(os.path.join(output_dir, 'ground_truth.txt'), 'w', encoding='utf8') as g:
         for i in index:
-            # try:
-            result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']])
-            d.write(result[0] + '\n')
-            g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
-            count += 1
-            # except Exception as e:
-            #     # This origin seems to be the fallback-query. Not sure how we come up with it, most probably it's just a dummy query to fill in a result for each example.
-            #     result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']], origin='Root1(3) Root(5) Sel(0) N(0) A(3) C(0) T(0)')
-            #     exception_count += 1
-            #     d.write(result[0] + '\n')
-            #     g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
-            #     count += 1
-            #     # print(e)
-            #     print('Exception')
-            #     print(traceback.format_exc())
-            #     print(sem_ql_prediction[i]['question'])
-            #     print(sem_ql_prediction[i]['query'])
-            #     print(sem_ql_prediction[i]['db_id'])
-            #     print('===\n\n')
+            try:
+                result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']])
+                d.write(result[0] + '\n')
+                g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
+                count += 1
+            except Exception as e:
+                # This origin seems to be the fallback-query. Not sure how we come up with it, most probably it's just a dummy query to fill in a result for each example.
+                result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']], origin='Root1(3) Root(5) Sel(0) N(0) A(3) C(0) T(0)')
+                exception_count += 1
+                d.write(result[0] + '\n')
+                g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
+                count += 1
+                # print(e)
+                print('Exception')
+                print(traceback.format_exc())
+                print(sem_ql_prediction[i]['question'])
+                print(sem_ql_prediction[i]['query'])
+                print(sem_ql_prediction[i]['db_id'])
+                print('===\n\n')
 
     return count, exception_count
