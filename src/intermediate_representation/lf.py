@@ -3,7 +3,7 @@ import json
 
 import numpy as np
 
-from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
+from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, V, Root1
 
 
 def _build_single_filter(lf, f):
@@ -18,7 +18,10 @@ def _build_single_filter(lf, f):
             lf.insert(0, table)
             table = None
     assert isinstance(agg, A) and isinstance(column, C)
-    if len(f.production.split()) == 3:
+
+    # This subset includes all "normal" filter, so no concatenation (AND/OR)
+    # or subqueries. See Filter() grammar
+    if 2 <= f.id_c <= 10:
         f.add_children(agg)
         agg.set_parent(f)
         agg.add_children(column)
@@ -26,6 +29,17 @@ def _build_single_filter(lf, f):
         if table is not None:
             column.add_children(table)
             table.set_parent(column)
+
+        value1 = lf.pop(0)
+        value1.set_parent(f)
+        f.add_children(value1)
+
+        # there is currently one filter type (8, BETWEEN) which contains two values.
+        if len(lf) > 0 and isinstance(lf[0], V):
+            value2 = lf.pop(0)
+            value2.set_parent(f)
+            f.add_children(value2)
+
     else:
         # Subquery
         f.add_children(agg)
@@ -172,8 +186,13 @@ def verify(node):
         if op == 'and' or op == 'or':
             assert children_num == 2
         else:
-            if len(node.production.split()) == 3:
-                assert children_num == 1
+            # This subset includes all "normal" filter, so no concatenation (AND/OR)
+            # or subqueries. See Filter() grammar
+            if 2 <= node.id_c <= 10:
+                if node.id_c == 8:
+                    assert children_num == 3
+                else:
+                    assert children_num == 2
             else:
                 assert children_num == 2
     for child in node.children:
@@ -206,7 +225,7 @@ def build_adjacency_matrix(lf, symmetry=False):
 
 
 if __name__ == '__main__':
-    with open(r'data/train.json', 'r') as file_handle:
+    with open(r'data/spider/train.json', 'r') as file_handle:
         data = json.load(file_handle)
     for d in data:
         rule_label = [eval(x) for x in d['rule_label'].strip().split(' ')]
