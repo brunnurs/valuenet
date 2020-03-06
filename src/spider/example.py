@@ -1,6 +1,6 @@
 import copy
 
-from intermediate_representation.semQL import C, T, A
+from intermediate_representation.semQL import C, T, A, V
 import neural_network_utils as nn_utils
 
 
@@ -10,6 +10,7 @@ class Example:
                  table_names=None, table_len=None, col_table_dict=None, cols=None,
                  table_col_name=None, table_col_len=None,
                  col_pred=None, tokenized_src_sent=None,
+                 values=None
                  ):
         """
 
@@ -31,6 +32,7 @@ class Example:
         @param table_col_len: 3
         @param col_pred: ---- not used in constructor ----
         @param tokenized_src_sent: # no idea why we use this here again... its "col_set_type" from above.
+        @param values: The query-values used in this example. Can be a string (e.g."USA"), a numerical value (e.g. 1.2), a data ('31-03-2019') or even more exotic formats.
         """
         self.src_sent = src_sent
         self.tokenized_src_sent = tokenized_src_sent
@@ -49,13 +51,14 @@ class Example:
         self.table_col_name = table_col_name
         self.table_col_len = table_col_len
         self.col_pred = col_pred
+        self.values = values
         self.tgt_actions = tgt_actions
         self.truth_actions = copy.deepcopy(tgt_actions)
 
         self.sketch = list()
         if self.truth_actions:
             for ta in self.truth_actions:
-                if isinstance(ta, C) or isinstance(ta, T) or isinstance(ta, A):
+                if isinstance(ta, C) or isinstance(ta, T) or isinstance(ta, A) or isinstance(ta, V):
                     continue
                 self.sketch.append(ta)
 
@@ -108,6 +111,7 @@ class Batch(object):
         self.table_col_name = [e.table_col_name for e in examples]
         self.table_col_len = [e.table_col_len for e in examples]
         self.col_pred = [e.col_pred for e in examples]
+        self.values = [e.values for e in examples]
 
         self.grammar = grammar
         self.cuda = cuda

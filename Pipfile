@@ -17,6 +17,7 @@ pytictoc = "*"
 pattern = "*"
 wandb = "*"
 pyyaml = "*"
+word2number = "*"
 
 [requires]
 python_version = "3.6"

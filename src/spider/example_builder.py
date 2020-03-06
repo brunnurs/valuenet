@@ -6,7 +6,7 @@ from intermediate_representation import lf
 from spider.example import Example
 
 # Take care, this imports are necessary due to the dynamic "eval()" command further down
-from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
+from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1, V
 
 wordnet_lemmatizer = WordNetLemmatizer()
 
@@ -64,7 +64,8 @@ def build_example(sql, table_data):
         table_col_name=table_col_name,
         table_col_len=len(table_col_name),
         tokenized_src_sent=process_dict['col_set_type'],
-        tgt_actions=rule_label
+        tgt_actions=rule_label,
+        values=sql['values']
     )
     example.sql_json = copy.deepcopy(sql)
 

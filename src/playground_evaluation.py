@@ -12,10 +12,10 @@ args = read_arguments_evaluation()
 
 sql_data, table_data, val_sql_data, val_table_data = spider_utils.load_dataset(args.data_dir, use_small=False)
 
-for d in sql_data:
+for d in val_sql_data:
     d['model_result'] = d['rule_label']
 
-count_success, count_failed = transform_semQL_to_sql(table_data, sql_data, args.prediction_dir)
+count_success, count_failed = transform_semQL_to_sql(val_table_data, val_sql_data, args.prediction_dir)
 
 print("Transformed {} samples successful to SQL. {} samples failed. Generated the files a 'ground_truth.txt' "
       "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
