@@ -85,12 +85,16 @@ class IRNet(BasicModel):
 
         self.column_rnn_input = nn.Linear(args.col_embed_size, args.action_embed_size, bias=False)
         self.table_rnn_input = nn.Linear(args.col_embed_size, args.action_embed_size, bias=False)
+        self.value_rnn_input = nn.Linear(args.col_embed_size, args.action_embed_size, bias=False)
+
 
         self.dropout = nn.Dropout(args.dropout)
 
         self.column_pointer_net = PointerNet(args.hidden_size, args.col_embed_size, attention_type=args.column_att)
 
         self.table_pointer_net = PointerNet(args.hidden_size, args.col_embed_size, attention_type=args.column_att)
+
+        self.value_pointer_net = PointerNet(args.hidden_size, args.col_embed_size, attention_type=args.column_att)
 
         # initial the embedding layers
         nn.init.xavier_normal_(self.production_embed.weight.data)
@@ -107,7 +111,10 @@ class IRNet(BasicModel):
         table_appear_mask = batch.table_appear_mask
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
-        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
+        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output = self.encoder(batch.src_sents,
+                                                                                                                          batch.table_sents,
+                                                                                                                          batch.table_names,
+                                                                                                                          batch.values)
         question_encodings = self.dropout(question_encodings)
 
         # Source encodings to create the sketch (the AST without the leaf-nodes)
@@ -247,6 +254,8 @@ class IRNet(BasicModel):
 
         schema_embedding = table_encodings
 
+        value_embedding = value_encodings
+
         batch_table_dict = batch.col_table_dict
         table_enable = np.zeros(shape=(len(examples)))
         action_probs = [[] for _ in examples]
@@ -285,12 +294,15 @@ class IRNet(BasicModel):
 
                             a_tm1_embed = self.production_embed.weight[self.grammar.prod2id[action_tm1.production]]     # for sketch actions, we can just feed in the action (or exact: the production rule) embedding.
                         else:
-                            # previous action C is a leaf-node, so we wanna feed in the right column-embedding. We select the column idx by using the ground truth "id_c".
+                            # previous action C is a leaf-node, so we wanna feed in the right Column-embedding. We select the column idx by using the ground truth "id_c".
                             if isinstance(action_tm1, semQL.C):
                                 a_tm1_embed = self.column_rnn_input(table_embedding[e_id, action_tm1.id_c])
-                            # previous action T is a leaf-node, so we wanna feed in the right table-embedding. We select the table by using the ground truth "id_c".
+                            # previous action T is a leaf-node, so we wanna feed in the right Table-embedding. We select the table by using the ground truth "id_c".
                             elif isinstance(action_tm1, semQL.T):
                                 a_tm1_embed = self.table_rnn_input(schema_embedding[e_id, action_tm1.id_c])
+                            # previous action V is a leaf-node, so we wanna feed in the right Value-embedding. We select the Value by using the ground truth "id_c".
+                            elif isinstance(action_tm1, semQL.V):
+                                a_tm1_embed = self.value_rnn_input(value_embedding[e_id, action_tm1.id_c])
                             # action A is handled like a normal sketch-action.
                             elif isinstance(action_tm1, semQL.A):
                                 a_tm1_embed = self.production_embed.weight[self.grammar.prod2id[action_tm1.production]]

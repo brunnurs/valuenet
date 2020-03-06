@@ -6,6 +6,7 @@ from transformers import BertConfig, BertModel, BertTokenizer
 
 
 from model.encoder.input_features import encode_input
+from model.encoder.value_encodings import create_value_encodings_from_question_tokens
 
 
 def get_encoder_model(pretrained_model):
@@ -38,13 +39,15 @@ class TransformerEncoder(nn.Module):
         # But we still wanna do the wordpiece-tokenizing.
         self.tokenizer.do_basic_tokenize = False
 
-        self.linear_layer_dimension_reduction = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
+        self.linear_layer_dimension_reduction_question = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
+        self.linear_layer_dimension_reduction_values = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
+
         self.column_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
         self.table_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
 
         print("Successfully loaded pre-trained transformer '{}'".format(pretrained_model))
 
-    def forward(self, question_tokens, column_names, table_names):
+    def forward(self, question_tokens, column_names, table_names, values):
         input_ids_tensor, attention_mask_tensor, segment_ids_tensor, input_lengths = encode_input(question_tokens,
                                                                                                   column_names,
                                                                                                   table_names,
@@ -56,16 +59,20 @@ class TransformerEncoder(nn.Module):
         # See e.g. "BertModel" documentation for more information.
 
         last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, segment_ids_tensor)
-        # TODO: this should be more accurate than the achronferry-implementation. But as we get a different output, we leave it for now
-        # last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor)
 
         (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths) = input_lengths
 
-        # we get the relevant hidden states for the question-tokens and average, if there are multiple token per word (e.g ['table', 'college'])
+        # we get the relevant hidden states for the question-tokens and average, if there are multiple token per  word (e.g ['table', 'college'])
         averaged_hidden_states_question, pointers_after_question = self._average_hidden_states_question(last_hidden_states, all_question_span_lengths)
         question_out = pad_sequence(averaged_hidden_states_question, batch_first=True)  # (batch_size * max_question_tokens_per_batch * hidden_size)
         # as the transformer uses normally a size of 768 and the decoder only 300 per vector, we need to reduce dimensionality here with a linear layer.
-        question_out = self.linear_layer_dimension_reduction(question_out)
+        question_out = self.linear_layer_dimension_reduction_question(question_out)
+
+        # For simplicity, we assume that all values ar mentioned in the question this might not be true for each value, but it's a good starting assumption.
+        # We therefore select the hidden states of the encoded value token by knowing all values (this again is a simplification and not true in a real world scenario)
+        values_hidden_states = create_value_encodings_from_question_tokens(last_hidden_states, all_question_span_lengths, question_tokens, values, self.device)
+        values_out = pad_sequence(values_hidden_states, batch_first=True)
+        values_out = self.linear_layer_dimension_reduction_values(values_out)
 
         column_hidden_states, pointers_after_columns = self._get_schema_hidden_states(last_hidden_states, all_column_token_lengths, pointers_after_question)
         table_hidden_states, pointers_after_tables = self._get_schema_hidden_states(last_hidden_states, all_table_token_lengths, pointers_after_columns)
@@ -101,7 +108,7 @@ class TransformerEncoder(nn.Module):
         table_out = self._back_to_original_size(table_last_states, table_hidden_states)
         table_out_padded = pad_sequence(table_out, batch_first=True)
 
-        return question_out, column_out_padded, table_out_padded, pooling_output
+        return question_out, column_out_padded, table_out_padded, values_out, pooling_output
 
     @staticmethod
     def _average_hidden_states_question(last_hidden_states, all_question_span_lengths):
@@ -245,4 +252,3 @@ class TransformerEncoder(nn.Module):
 
         for question_span_lengths, column_token_lengths, table_token_lengths, last_pointer in zip(all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, last_pointers):
             assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) == last_pointer
-
