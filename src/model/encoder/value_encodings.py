@@ -5,11 +5,15 @@ import torch
 from word2number import w2n
 
 
+################## NOTE URSIN #############################
+# This code is currently not used, but an idea which might need to be followed up at a later point.
+###########################################################
+
 def create_value_encodings_from_question_tokens(all_last_hidden_states, all_question_span_lengths, all_question_tokens, all_values, device):
     """
     Create encodings for all values in the question. Values can be strings (e.g. "USA"), numbers (e.g. 4.5) or more
     specific formats (e.g. "%partialvalue% if use the fuzzy SQL "LIKE" logic). This method is trying to find given values in the question tokens
-    and then averages over all token of a value with an RNN (or with averaging).
+    and then averages over all token of a value with an RNN (or with simple averaging).
     Where the values come from (ground truth, NER, using the data of the database, etc.) is not part of this method but need to be done in a pre-processing step.
     @param all_last_hidden_states: the hidden states after transformer encoding. Be aware that one question token can be tokenized in wordpieces.
     @param all_question_span_lengths:
