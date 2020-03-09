@@ -24,6 +24,8 @@ class Grammar(object):
         self.type2id[C] = self.type_id
         self.type_id += 1
         self.type2id[T] = self.type_id
+        self.type_id += 1
+        self.type2id[V] = self.type_id
 
     def _init_grammar(self, Cls):
         """
@@ -421,4 +423,14 @@ class Order(Action):
 
 
 if __name__ == '__main__':
-    print(list(Root._init_grammar()))
+    g = Grammar()
+    print("Actions:")
+    for key, value in g.type2id.items():
+        print("Action: {}, id: {}".format(key, value))
+
+    print()
+    print()
+    print("Production Rules:")
+
+    for key, value in g.prod2id.items():
+        print("Production Rule: {}, id: {}".format(key, value))
