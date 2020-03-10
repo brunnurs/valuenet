@@ -1,3 +1,4 @@
+import json
 import os
 
 import torch
@@ -77,6 +78,9 @@ if __name__ == '__main__':
                                                     dev_loader,
                                                     table_data,
                                                     args.beam_size)
+
+        with open(os.path.join(output_path, 'predictions_sem_ql.json'), 'w') as f:
+            json.dump(predictions, f)
 
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
         tqdm.write(eval_results_string)
