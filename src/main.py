@@ -42,7 +42,7 @@ if __name__ == '__main__':
     model.to(device)
 
     # track the model
-    wandb.watch(model)
+    wandb.watch(model, log='parameters')
 
     num_train_steps = len(train_loader) * args.num_epochs
     optimizer, scheduler = build_optimizer_encoder(model,
