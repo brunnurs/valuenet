@@ -128,6 +128,9 @@ class BasicModel(nn.Module):
                     filter_paddings.append(T(0))
                 elif e == 'V':
                     filter_paddings.append(V(0))
+                elif e == 'Root':
+                    # we don't need to do anything for 'Root' -> it will be padded later.
+                    continue
                 else:
                     raise ValueError("Unknown Action: " + e)
 
