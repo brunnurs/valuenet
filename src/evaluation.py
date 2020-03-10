@@ -66,7 +66,7 @@ def evaluate(model, dev_loader, table_data, beam_size):
 
 
 def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir, experiment_dir, tb_writer, training_step):
-    succ_transform, fail_transform = transform_semQL_to_sql(table_data, predictions, experiment_dir)
+    total_count, failure_count = transform_semQL_to_sql(table_data, predictions, experiment_dir)
 
     kmaps = build_foreign_key_map_from_json(os.path.join(data_dir, 'tables.json'))
 
@@ -78,7 +78,7 @@ def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir,
                                             tb_writer,
                                             training_step, print_stdout=False)
 
-    return succ_transform, fail_transform, spider_eval_results
+    return total_count, failure_count, spider_eval_results
 
 
 if __name__ == '__main__':
