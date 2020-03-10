@@ -135,9 +135,7 @@ def _tokenize_values(values, tokenizer):
     all_value_tokens = []
 
     for value in values:
-        # at this point, a value needs to be a string to use the transformers tokenizing magic.
-        # Any logic using numbers, needs to happen before.
-        value = str(value)
+        value = format_value(value)
         value_sub_tokens = tokenizer.tokenize(value)
         value_sub_tokens += [tokenizer.sep_token]
 
@@ -159,3 +157,21 @@ def _padd_input(input_ids, segment_ids, attention_mask, max_length, tokenizer):
     assert len(input_ids) == max_length
     assert len(attention_mask) == max_length
     assert len(segment_ids) == max_length
+
+
+def format_value(value):
+    """
+    This function contains heuristics to improve results, e.g. by transforming an empty string value ('') to the word empty.
+    The goal is to input known values into the (transformer)-encoder, so he can learn the attention to the question.
+    The heuristic in this method should stay as little as possible.
+    """
+    # at this point, a value needs to be a string to use the transformers tokenizing magic.
+    # Any logic using numbers, needs to happen before.
+    value = str(value)
+
+    # convert empty strings to the word "empty", as the model can't handle them otherwise.
+    if "".__eq__(value):
+        value = 'empty'
+
+    return value
+
