@@ -40,10 +40,10 @@ class TransformerEncoder(nn.Module):
         self.tokenizer.do_basic_tokenize = False
 
         self.linear_layer_dimension_reduction_question = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
-        self.linear_layer_dimension_reduction_values = nn.Linear(transformer_config.hidden_size, decoder_hidden_size)
 
         self.column_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
         self.table_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
+        self.value_encoder = nn.LSTM(transformer_config.hidden_size, schema_embedding_size // 2, bidirectional=True, batch_first=True)
 
         print("Successfully loaded pre-trained transformer '{}'".format(pretrained_model))
 
@@ -51,6 +51,7 @@ class TransformerEncoder(nn.Module):
         input_ids_tensor, attention_mask_tensor, segment_ids_tensor, input_lengths = encode_input(question_tokens,
                                                                                                   column_names,
                                                                                                   table_names,
+                                                                                                  values,
                                                                                                   self.tokenizer,
                                                                                                   self.max_sequence_length,
                                                                                                   self.device)
@@ -60,7 +61,7 @@ class TransformerEncoder(nn.Module):
 
         last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, segment_ids_tensor)
 
-        (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths) = input_lengths
+        (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_value_token_lengths) = input_lengths
 
         # we get the relevant hidden states for the question-tokens and average, if there are multiple token per  word (e.g ['table', 'college'])
         averaged_hidden_states_question, pointers_after_question = self._average_hidden_states_question(last_hidden_states, all_question_span_lengths)
@@ -68,23 +69,21 @@ class TransformerEncoder(nn.Module):
         # as the transformer uses normally a size of 768 and the decoder only 300 per vector, we need to reduce dimensionality here with a linear layer.
         question_out = self.linear_layer_dimension_reduction_question(question_out)
 
-        # For simplicity, we assume that all values ar mentioned in the question this might not be true for each value, but it's a good starting assumption.
-        # We therefore select the hidden states of the encoded value token by knowing all values (this again is a simplification and not true in a real world scenario)
-        values_hidden_states = create_value_encodings_from_question_tokens(last_hidden_states, all_question_span_lengths, question_tokens, values, self.device)
-        values_out = pad_sequence(values_hidden_states, batch_first=True)
-        values_out = self.linear_layer_dimension_reduction_values(values_out)
-
         column_hidden_states, pointers_after_columns = self._get_schema_hidden_states(last_hidden_states, all_column_token_lengths, pointers_after_question)
         table_hidden_states, pointers_after_tables = self._get_schema_hidden_states(last_hidden_states, all_table_token_lengths, pointers_after_columns)
+
+        # in this scenario, we know the values upfront and encode them similar to tables/columns. This is different as soon as we don't know the values but have to extract them from the question.
+        value_hidden_states, pointers_after_values = self._get_schema_hidden_states(last_hidden_states, all_value_token_lengths, pointers_after_tables)
 
         # This is simply to make sure the rather complex token-concatenation happens correctly. Can get removed at some point.
         self._assert_all_elements_processed(all_question_span_lengths,
                                             all_column_token_lengths,
                                             all_table_token_lengths,
-                                            pointers_after_tables,
+                                            all_value_token_lengths,
+                                            pointers_after_values,
                                             last_hidden_states.shape[1])
 
-        # "column_hidden_states" (and table_hidden_states) is here a list of examples, with each example a list of tensors (one tensor for each column). As a column can have multiple words, the tensor consists of multiple columns (e.g. 3 * 768)
+        # "column_hidden_states" (and table_hidden_states/value_hidden_states) is here a list of examples, with each example a list of tensors (one tensor for each column). As a column can have multiple words, the tensor consists of multiple columns (e.g. 3 * 768)
         # With this line we first concat all examples to one huge list of tensors, independent of the example. Remember: we don't wanna use an RNN over a full example - but only over the tokens of ONE column! Therefore we can just build up a batch of each column - tensor.
         # With "pad_sequence" we pay attention to the fact that each column can have a different amount of tokens (e.g. a 3-word column vs. a 1 word column), so we have to pad the shorter inputs.
         column_hidden_states_padded = pad_sequence(list(flatten(column_hidden_states)), batch_first=True)
@@ -108,7 +107,22 @@ class TransformerEncoder(nn.Module):
         table_out = self._back_to_original_size(table_last_states, table_hidden_states)
         table_out_padded = pad_sequence(table_out, batch_first=True)
 
-        return question_out, column_out_padded, table_out_padded, values_out, pooling_output
+        # in contrary to columns/tables there can be no values in a batch. In that case, return an empty tensor.
+        if list(flatten(value_hidden_states)):
+            value_hidden_states_padded = pad_sequence(list(flatten(value_hidden_states)), batch_first=True)
+            value_lengths = [len(t) for t in flatten(value_hidden_states)]
+
+            # create one embedding for each value by using an RNN.
+            _, value_last_states, _ = self._rnn_wrapper(self.value_encoder, value_hidden_states_padded, value_lengths)
+
+            assert value_last_states.shape[0] == sum(map(lambda l: len(l), value_hidden_states))
+
+            value_out = self._back_to_original_size(value_last_states, value_hidden_states)
+            value_out_padded = pad_sequence(value_out, batch_first=True)
+        else:
+            value_out_padded = torch.empty(table_out_padded.shape[0], 0, table_out_padded.shape[2]).to(self.device)
+
+        return question_out, column_out_padded, table_out_padded, value_out_padded, pooling_output
 
     @staticmethod
     def _average_hidden_states_question(last_hidden_states, all_question_span_lengths):
@@ -245,10 +259,10 @@ class TransformerEncoder(nn.Module):
         return original_split
 
     @staticmethod
-    def _assert_all_elements_processed(all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, last_pointers, len_last_hidden_states):
+    def _assert_all_elements_processed(all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_value_token_lengths, last_pointers, len_last_hidden_states):
 
         # the longest element in the batch will decide how large the sequence is - therefore the max. pointer is the size of the hidden states.
         assert max(last_pointers) == len_last_hidden_states
 
-        for question_span_lengths, column_token_lengths, table_token_lengths, last_pointer in zip(all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, last_pointers):
-            assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) == last_pointer
+        for question_span_lengths, column_token_lengths, table_token_lengths, value_token_length, last_pointer in zip(all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_value_token_lengths, last_pointers):
+            assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) + sum(value_token_length) == last_pointer

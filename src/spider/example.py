@@ -112,6 +112,7 @@ class Batch(object):
         self.table_col_len = [e.table_col_len for e in examples]
         self.col_pred = [e.col_pred for e in examples]
         self.values = [e.values for e in examples]
+        self.n_values = [len(e.values) for e in examples]
 
         self.grammar = grammar
         self.cuda = cuda
@@ -133,6 +134,10 @@ class Batch(object):
     @cached_property
     def table_token_mask(self):
         return nn_utils.length_array_to_mask_tensor(self.col_num, cuda=self.cuda)
+
+    @cached_property
+    def value_token_mask(self):
+        return nn_utils.length_array_to_mask_tensor(self.n_values, cuda=self.cuda)
 
     @cached_property
     def table_appear_mask(self):

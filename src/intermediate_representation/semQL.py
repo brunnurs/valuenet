@@ -1,5 +1,5 @@
 Keywords = ['des', 'asc', 'and', 'or', 'sum', 'min', 'max', 'avg', 'none', '=', '!=', '<', '>', '<=', '>=', 'between', 'like', 'not_like'] + \
-           ['in', 'not_in', 'count', 'intersect', 'union', 'except']
+           ['in', 'not_in', 'count', 'intersect', 'union', 'except', 'distinct']
 
 
 class Grammar(object):
@@ -61,7 +61,8 @@ class Action(object):
             if x not in Keywords:
                 rule_type = eval(x)
                 if is_sketch:
-                    if rule_type is not A:
+                    # it's sufficient to restrict A and V, as T and C are anyway subnodes of A and will therefore never be reached by this logic if we avoid A.
+                    if rule_type not in [A, V]:
                         actions.append(rule_type)
                 else:
                     actions.append(rule_type)
