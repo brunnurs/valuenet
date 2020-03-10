@@ -5,7 +5,7 @@ SEGMENT_ID_QUESTION = 0
 SEGMENT_ID_SCHEMA = 1
 
 
-def encode_input(question_spans, column_names, table_names, tokenizer, max_length_model, device):
+def encode_input(question_spans, column_names, table_names, values, tokenizer, max_length_model, device):
     all_input_ids = []
     all_attention_mask = []
     all_segment_ids = []
@@ -13,8 +13,9 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
     all_question_span_lengths = []
     all_column_token_lengths = []
     all_table_token_lengths = []
+    all_values_lengths = []
 
-    for question, columns, tables in zip(question_spans, column_names, table_names):
+    for question, columns, tables, val in zip(question_spans, column_names, table_names, values):
         question_tokens, question_span_lengths, question_segment_ids = _tokenize_question(question, tokenizer)
         all_question_span_lengths.append(question_span_lengths)
 
@@ -29,17 +30,20 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
         table_tokens, table_token_lengths, table_segment_ids = _tokenize_table_names(tables, tokenizer)
         all_table_token_lengths.append(table_token_lengths)
 
-        assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) == \
-               len(question_tokens) + len(columns_tokens) + len(table_tokens)
+        value_tokens, value_token_lengths, value_segment_ids = _tokenize_values(val, tokenizer)
+        all_values_lengths.append(value_token_lengths)
 
-        tokens = question_tokens + columns_tokens + table_tokens
+        assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) + sum(value_token_lengths) == \
+               len(question_tokens) + len(columns_tokens) + len(table_tokens) + len(value_tokens)
+
+        tokens = question_tokens + columns_tokens + table_tokens + value_tokens
         if len(tokens) > max_length_model:
             print("################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {} ".format(len(tokens), len(question_tokens), len(columns_tokens), len(table_tokens)))
             print(question)
             print(columns)
             print(tables)
 
-        segment_ids = question_segment_ids + columns_segment_ids + table_segment_ids
+        segment_ids = question_segment_ids + columns_segment_ids + table_segment_ids + value_segment_ids
         # not sure here if "tokenizer.mask_token_id" or just a simple 1...
         attention_mask = [1] * len(tokens)
 
@@ -58,7 +62,7 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
     segment_ids_tensor = torch.tensor(all_segment_ids, dtype=torch.long).to(device)
     attention_mask_tensor = torch.tensor(all_attention_mask, dtype=torch.long).to(device)
 
-    return input_ids_tensor, attention_mask_tensor, segment_ids_tensor, (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths)
+    return input_ids_tensor, attention_mask_tensor, segment_ids_tensor, (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_values_lengths)
 
 
 def _tokenize_question(question, tokenizer):
@@ -124,6 +128,25 @@ def _tokenize_table_names(table_names, tokenizer):
     segment_ids = [SEGMENT_ID_QUESTION if tok == tokenizer.sep_token else SEGMENT_ID_SCHEMA for tok in all_table_tokens]
 
     return all_table_tokens, table_token_lengths, segment_ids
+
+
+def _tokenize_values(values, tokenizer):
+    value_token_lengths = []
+    all_value_tokens = []
+
+    for value in values:
+        # at this point, a value needs to be a string to use the transformers tokenizing magic.
+        # Any logic using numbers, needs to happen before.
+        value = str(value)
+        value_sub_tokens = tokenizer.tokenize(value)
+        value_sub_tokens += [tokenizer.sep_token]
+
+        all_value_tokens.extend(value_sub_tokens)
+        value_token_lengths.append(len(value_sub_tokens))
+
+    segment_ids = [SEGMENT_ID_QUESTION if tok == tokenizer.sep_token else SEGMENT_ID_SCHEMA for tok in all_value_tokens]
+
+    return all_value_tokens, value_token_lengths, segment_ids
 
 
 def _padd_input(input_ids, segment_ids, attention_mask, max_length, tokenizer):
