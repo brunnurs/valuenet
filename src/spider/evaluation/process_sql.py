@@ -101,7 +101,7 @@ def get_schema(db):
 
 
 def get_schema_from_json(fpath):
-    with open(fpath) as f:
+    with open(fpath, encoding='utf-8') as f:
         data = json.load(f)
 
     schema = {}
@@ -542,7 +542,7 @@ def parse_sql(toks, start_idx, tables_with_alias, schema):
 
 
 def load_data(fpath):
-    with open(fpath) as f:
+    with open(fpath, encoding='utf-8') as f:
         data = json.load(f)
     return data
 

@@ -147,7 +147,7 @@ def load_data_new(sql_path, table_data, use_small=False):
     # more details on this structure see the example in
     # https://github.com/taoyds/spider/blob/master/preprocess/parsed_sql_examples.sql
 
-    with open(sql_path) as inf:
+    with open(sql_path, encoding='utf-8') as inf:
         data = json.load(inf)
         # resize before lower_keys() to reduce computation effort
         if use_small:
@@ -168,7 +168,7 @@ def load_dataset(dataset_dir, use_small=False):
     table_path = os.path.join(dataset_dir, "tables.json")
     train_path = os.path.join(dataset_dir, "train.json")
     dev_path = os.path.join(dataset_dir, "dev.json")
-    with open(table_path) as inf:
+    with open(table_path, encoding='utf-8') as inf:
         # table_data is basically a dict with all the 200 (in train ca. 166) datasets of spider.
         # Each sub-dict contains the name of all tables, as well as relations between them (foreign keys, primary keys)
         table_data = json.load(inf)

@@ -187,11 +187,11 @@ if __name__ == '__main__':
     arg_parser.add_argument('--output', type=str, help='output data')
     args = arg_parser.parse_args()
 
-    with open(args.data_path, 'r') as json_file:
+    with open(args.data_path, 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
 
     for d in data:
         model_simple_joins_as_filter(d)
 
-    with open(args.output, 'w') as f:
+    with open(args.output, 'w', encoding='utf-8') as f:
         json.dump(data, f)

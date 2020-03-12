@@ -79,7 +79,7 @@ if __name__ == '__main__':
                                                     table_data,
                                                     args.beam_size)
 
-        with open(os.path.join(output_path, 'predictions_sem_ql.json'), 'w') as f:
+        with open(os.path.join(output_path, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
             json.dump(predictions, f)
 
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
@@ -102,7 +102,7 @@ if __name__ == '__main__':
             tqdm.write("Accuracy of this epoch ({}) is higher then the so far best accuracy ({}). Save model.".format(acc, best_acc))
             best_acc = acc
 
-        with open(os.path.join(output_path, "eval_results.log"), "a+") as writer:
+        with open(os.path.join(output_path, "eval_results.log"), "a+", encoding='utf-8') as writer:
             writer.write(eval_results_string + "\n")
 
         wandb.log({"Sketch-accuracy": sketch_acc, "accuracy": acc}, step=epoch + 1)

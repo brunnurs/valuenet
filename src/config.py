@@ -11,7 +11,7 @@ class Config:
 def write_config_to_file(args, output_path):
     config_path = os.path.join(output_path, "args.json")
 
-    with open(config_path, 'w') as f:
+    with open(config_path, 'w', encoding='utf-8') as f:
         json.dump(args.__dict__, f, indent=2)
 
 
