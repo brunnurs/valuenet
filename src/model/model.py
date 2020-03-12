@@ -402,8 +402,8 @@ class IRNet(BasicModel):
             # As not every question in the batch has the same number of values, we need to mask out the unused values before using the softmax.
             # The "masked_fill_" function fills every position with a "True"  with the given value (minus infinity).
             # So the remaining columns (the M in the beginning) is the actual columns.
-            # TODO: remember already "used" values and mask them out
-            value_weights.data.masked_fill_(batch.value_token_mask.bool(), -float('inf'))
+            # TODO: remember already "used" values and mask them out. We might also avoid masking if there is only one value per row.
+            value_weights.data.masked_fill_(batch.value_token_mask.bool(), -99999)
 
             # Calculate the probabilities for the selected values.
             value_weights = F.softmax(value_weights, dim=-1)
