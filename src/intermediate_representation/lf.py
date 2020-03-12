@@ -225,7 +225,7 @@ def build_adjacency_matrix(lf, symmetry=False):
 
 
 if __name__ == '__main__':
-    with open(r'data/spider/train.json', 'r') as file_handle:
+    with open(r'data/spider/train.json', 'r', encoding='utf-8') as file_handle:
         data = json.load(file_handle)
     for d in data:
         rule_label = [eval(x) for x in d['rule_label'].strip().split(' ')]

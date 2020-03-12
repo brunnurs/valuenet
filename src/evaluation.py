@@ -106,10 +106,10 @@ if __name__ == '__main__':
     eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
         len(dev_loader), sketch_acc, acc)
 
-    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w') as f:
+    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
         json.dump(predictions, f)
 
-    # with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'r') as json_file:
+    # with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'r', encoding='utf-8') as json_file:
     #     predictions = json.load(json_file)
 
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)

@@ -488,10 +488,10 @@ def print_scores(scores, etype, tb_writer, training_step, print_stdout):
 
 
 def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, training_step=None, print_stdout=True):
-    with open(gold) as f:
+    with open(gold, encoding='utf-8') as f:
         glist = [l.strip().split('\t') for l in f.readlines() if len(l.strip()) > 0]
 
-    with open(predict) as f:
+    with open(predict, encoding='utf-8') as f:
         plist = [l.strip().split('\t') for l in f.readlines() if len(l.strip()) > 0]
     # plist = [("select max(Share),min(Share) from performance where Type != 'terminal'", "orchestra")]
     # glist = [("SELECT max(SHARE) ,  min(SHARE) FROM performance WHERE TYPE != 'Live final'", "orchestra")]
@@ -867,7 +867,7 @@ def build_foreign_key_map(entry):
 
 
 def build_foreign_key_map_from_json(table):
-    with open(table) as f:
+    with open(table, encoding='utf-8') as f:
         data = json.load(f)
     tables = {}
     for entry in data:
