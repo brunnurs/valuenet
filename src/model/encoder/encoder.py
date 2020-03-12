@@ -4,9 +4,7 @@ from torch import nn
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_sequence
 from transformers import BertConfig, BertModel, BertTokenizer
 
-
 from model.encoder.input_features import encode_input
-from model.encoder.value_encodings import create_value_encodings_from_question_tokens
 
 
 def get_encoder_model(pretrained_model):
@@ -120,7 +118,7 @@ class TransformerEncoder(nn.Module):
             value_out = self._back_to_original_size(value_last_states, value_hidden_states)
             value_out_padded = pad_sequence(value_out, batch_first=True)
         else:
-            value_out_padded = torch.empty(table_out_padded.shape[0], 0, table_out_padded.shape[2]).to(self.device)
+            value_out_padded = torch.zeros(table_out_padded.shape[0], 0, table_out_padded.shape[2]).to(self.device)
 
         return question_out, column_out_padded, table_out_padded, value_out_padded, pooling_output
 
