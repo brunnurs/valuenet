@@ -73,7 +73,7 @@ def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir,
     spider_eval_results = spider_evaluation(os.path.join(experiment_dir, 'ground_truth.txt'),
                                             os.path.join(experiment_dir, 'output.txt'),
                                             os.path.join(data_dir, "original", "database"),
-                                            "match",
+                                            "exec",
                                             kmaps,
                                             tb_writer,
                                             training_step, print_stdout=False)
