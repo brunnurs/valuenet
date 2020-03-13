@@ -448,12 +448,16 @@ def print_scores(scores, etype, tb_writer, training_step, print_stdout):
     partial_types = ['select', 'select(no AGG)', 'where', 'where(no OP)', 'group(no Having)',
                      'group', 'order', 'and/or', 'IUEN', 'keywords']
 
-    exact_matching_accuracy_with_counts = {level: "{} ({})".format(scores[level]['exact'], scores[level]['count']) for level in levels}
-    exact_matching_accuracy = {level: scores[level]['exact'] for level in levels}
+    if etype in ["all", "match"]:
+        matching_accuracy_with_counts = {level: "{} ({})".format(scores[level]['exact'], scores[level]['count']) for level in levels}
+        matching_accuracy = {level: scores[level]['exact'] for level in levels}
+    else:
+        matching_accuracy_with_counts = {level: "{} ({})".format(scores[level]['exec'], scores[level]['count']) for level in levels}
+        matching_accuracy = {level: scores[level]['exec'] for level in levels}
 
     if tb_writer:
-        tb_writer.add_scalars('spider_evaluation_execution_acc', exact_matching_accuracy, training_step)
-        wandb.log(exact_matching_accuracy, step=training_step)
+        tb_writer.add_scalars('spider_evaluation_acc', matching_accuracy, training_step)
+        wandb.log(matching_accuracy, step=training_step)
 
     if print_stdout:
         print("{:20} {:20} {:20} {:20} {:20} {:20}".format("", *levels))
@@ -484,7 +488,7 @@ def print_scores(scores, etype, tb_writer, training_step, print_stdout):
                 this_scores = [scores[level]['partial'][type_]['f1'] for level in levels]
                 print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format(type_, *this_scores))
 
-    return exact_matching_accuracy_with_counts
+    return matching_accuracy_with_counts
 
 
 def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, training_step=None, print_stdout=True):
