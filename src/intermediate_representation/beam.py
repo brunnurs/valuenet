@@ -1,6 +1,6 @@
 import copy
 
-from src.intermediate_representation.semQL import Root1, Filter, N, Root, T, C, A, Sel
+from intermediate_representation.semQL import Root1, Filter, N, Root, T, C, A, Sel
 
 
 class ActionInfo(object):

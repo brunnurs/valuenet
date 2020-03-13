@@ -2,11 +2,11 @@ import copy
 import numpy as np
 from nltk import WordNetLemmatizer
 
-from src.intermediate_representation import lf
-from src.spider.example import Example
+from intermediate_representation import lf
+from spider.example import Example
 
 # Take care, this imports are necessary due to the dynamic "eval()" command further down
-from src.intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
+from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
 
 wordnet_lemmatizer = WordNetLemmatizer()
 
@@ -154,20 +154,24 @@ def _schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type,
             question_arg[count_q] = ['value'] + question_arg[
                 count_q]  # we also add the information straight before the question token (e.g. [['then'],['value', '5000']])
         else:
-            # this code is never called for all the spider-samples (also in non-toy mode). Not sure it's really necessary...
+            # this are special cases, where "col_probase" is a value we found with ConeceptNet. So "col_probase" could for example be "time of day" or "city"
             if len(t_q) == 1:
                 for col_probase in t_q:
                     if col_probase == 'asd':
                         continue
                     try:
+                        # if the token type (col_probase) is e.g. "time of day" (because the word was "night" and we found with ConceptNet it is a "time of day")
+                        # we try to find a column with this name. If we find it --> we have an "Exact match", so we mark the matching column with a 5 (in the "col_set_type" array)
+                        # NOTE: we could do this much smarter by using the table values.
                         col_set_type[sql['col_set'].index(col_probase)][2] = 5
+                        # we also know the token is a "value"
                         question_arg[count_q] = ['value'] + question_arg[count_q]
                     except:
                         print(sql['col_set'], col_probase)
                         raise RuntimeError('not in col')
-                    one_hot_type[count_q][5] = 1
+                    one_hot_type[count_q][5] = 1  # it is a "value" as well.
             else:
-                for col_probase in t_q:
+                for col_probase in t_q:  # if there are multiple types, we try to give partial matches to the according columns. Not sure there is such cases with this pre-processing though...
                     if col_probase == 'asd':
                         continue
                     col_set_type[sql['col_set'].index(col_probase)][3] += 1

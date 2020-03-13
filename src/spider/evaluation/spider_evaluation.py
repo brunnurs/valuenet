@@ -27,7 +27,7 @@ import argparse
 
 import wandb
 
-from src.spider.evaluation.process_sql import tokenize, get_schema, get_tables_with_alias, Schema, get_sql
+from spider.evaluation.process_sql import tokenize, get_schema, get_tables_with_alias, Schema, get_sql
 
 # Flag to disable value evaluation
 DISABLE_VALUE = True

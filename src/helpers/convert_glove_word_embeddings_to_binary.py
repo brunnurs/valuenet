@@ -4,7 +4,7 @@ import codecs
 import numpy as np
 from pytictoc import TicToc
 
-from src.utils import load_word_emb_binary, load_word_emb
+from utils import load_word_emb_binary, load_word_emb
 
 
 def convert_to_binary(embedding_path):

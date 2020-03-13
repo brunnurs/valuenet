@@ -7,7 +7,7 @@ import torch.nn.utils
 from torch.autograd import Variable
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence
 
-from src.intermediate_representation.semQL import N, A, C, T, Filter, Order, Sup
+from intermediate_representation.semQL import N, A, C, T, Filter, Order, Sup
 
 
 class BasicModel(nn.Module):
@@ -69,6 +69,11 @@ class BasicModel(nn.Module):
         return src_encodings, (last_state, last_cell)
 
     def input_type(self, values_list):
+        """
+        Notes Ursin: this is only creating a pytorch tensor from the "col_hot_type" array. Nothing fancy here.
+        @param values_list:
+        @return:
+        """
         B = len(values_list)
         val_len = []
         for value in values_list:

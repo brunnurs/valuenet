@@ -1,7 +1,7 @@
 import torch
 from tqdm import tqdm
 
-from src.spider.example_builder import build_example
+from spider.example_builder import build_example
 
 
 def train(global_step,
@@ -10,7 +10,6 @@ def train(global_step,
           table_data,
           model,
           optimizer,
-          scheduler,
           clip_grad,
           sketch_loss_weight=1,
           lf_loss_weight=1):

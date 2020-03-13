@@ -66,6 +66,5 @@ def load_word_emb_binary(embedding_file_name_w_o_suffix):
 
 def save_model(model, model_save_path, model_name="best_model.pt"):
     torch.save(model.state_dict(), os.path.join(model_save_path, model_name))
-
     # also save the model to "Weights & Biases"
     torch.save(model.state_dict(), os.path.join(wandb.run.dir, 'best_model.pt'))
