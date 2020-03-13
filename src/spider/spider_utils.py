@@ -18,9 +18,9 @@ import os
 import torch
 from nltk.stem import WordNetLemmatizer
 
-# from src.dataset import Example
-# from src.rule import lf
-# from src.rule.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
+# from dataset import Example
+# from rule import lf
+# from rule.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
 
 wordnet_lemmatizer = WordNetLemmatizer()
 

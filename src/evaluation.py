@@ -4,16 +4,15 @@ import torch
 from tqdm import tqdm
 import json
 
-from src import utils
-from src.config import read_arguments_evaluation
-from src.data_loader import get_data_loader
-from src.intermediate_representation import semQL
-from src.intermediate_representation.sem2SQL import transform_semQL_to_sql
-from src.model.model import IRNet
-from src.spider import spider_utils
-from src.spider.evaluation.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
-from src.spider.example_builder import build_example
-from src.utils import setup_device, set_seed_everywhere
+from config import read_arguments_evaluation
+from data_loader import get_data_loader
+from intermediate_representation import semQL
+from intermediate_representation.sem2SQL import transform_semQL_to_sql
+from model.model import IRNet
+from spider import spider_utils
+from spider.evaluation.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
+from spider.example_builder import build_example
+from utils import setup_device, set_seed_everywhere
 
 
 def evaluate(model, dev_loader, table_data, beam_size):
@@ -92,14 +91,12 @@ if __name__ == '__main__':
     _, dev_loader = get_data_loader(sql_data, val_sql_data, args.batch_size, True, False)
 
     grammar = semQL.Grammar()
-    model = IRNet(args, grammar)
+    model = IRNet(args, device, grammar)
     model.to(device)
 
     # load the pre-trained parameters
     model.load_state_dict(torch.load(args.model_to_load))
     print("Load pre-trained model from '{}'".format(args.model_to_load))
-
-    model.word_emb = utils.load_word_emb_binary(args.glove_embed_path)
 
     sketch_acc, acc, predictions = evaluate(model,
                                             dev_loader,
@@ -108,6 +105,9 @@ if __name__ == '__main__':
 
     eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
         len(dev_loader), sketch_acc, acc)
+
+    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w') as f:
+        json.dump(predictions, f)
 
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)
 

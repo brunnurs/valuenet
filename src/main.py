@@ -1,23 +1,24 @@
 import os
 
+import torch
 from pytictoc import TicToc
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from src import utils
-from src.config import read_arguments_train, write_config_to_file
-from src.data_loader import get_data_loader
-from src.evaluation import evaluate, transform_to_sql_and_evaluate_with_spider
-from src.intermediate_representation import semQL
-from src.model.model import IRNet
-from src.optimizer import build_optimizer_encoder
-from src.spider import spider_utils
-from src.training import train
-from src.utils import setup_device, set_seed_everywhere, save_model, create_experiment_folder
+from model.model import IRNet
+from config import read_arguments_train, write_config_to_file
+from data_loader import get_data_loader
+from evaluation import evaluate, transform_to_sql_and_evaluate_with_spider
+from intermediate_representation import semQL
+from optimizer import build_optimizer_encoder
+from spider import spider_utils
+from training import train
+from utils import setup_device, set_seed_everywhere, save_model, create_experiment_folder
 
 # initialize experiment tracking @ Weights & Biases
 import wandb
 wandb.init(project="proton")
+
 
 if __name__ == '__main__':
     args = read_arguments_train()
@@ -26,8 +27,9 @@ if __name__ == '__main__':
     wandb.config.update(args)
 
     experiment_name, output_path = create_experiment_folder(args.model_output_dir, args.exp_name)
-    write_config_to_file(args, output_path)
+    print("Run experiment '{}'".format(experiment_name))
 
+    write_config_to_file(args, output_path)
 
     device, n_gpu = setup_device()
     set_seed_everywhere(args.seed, n_gpu)
@@ -36,18 +38,16 @@ if __name__ == '__main__':
     train_loader, dev_loader = get_data_loader(sql_data, val_sql_data, args.batch_size, True, False)
 
     grammar = semQL.Grammar()
-    model = IRNet(args, grammar)
+    model = IRNet(args, device, grammar)
     model.to(device)
 
     # track the model
     wandb.watch(model)
 
-    model.word_emb = utils.load_word_emb_binary(args.glove_embed_path)
-
     num_train_steps = len(train_loader) * args.num_epochs
     optimizer, scheduler = build_optimizer_encoder(model,
                                                    num_train_steps,
-                                                   args.learning_rate,
+                                                   args.lr_transformer, args.lr_connection, args.lr_base,
                                                    args.scheduler_gamma)
 
     tb_writer = SummaryWriter(output_path)
@@ -66,19 +66,19 @@ if __name__ == '__main__':
                             table_data,
                             model,
                             optimizer,
-                            scheduler,
                             args.clip_grad,
                             sketch_loss_weight=sketch_loss_weight)
 
         train_time = t.tocvalue()
 
         tqdm.write("Training of epoch {0} finished after {1:.2f} seconds. Evaluate now on the dev-set".format(epoch, train_time))
-        sketch_acc, acc, predictions = evaluate(model,
-                                                dev_loader,
-                                                table_data,
-                                                args.beam_size)
+        with torch.no_grad():
+            sketch_acc, acc, predictions = evaluate(model,
+                                                    dev_loader,
+                                                    table_data,
+                                                    args.beam_size)
 
-        eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch, sketch_acc, acc)
+        eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
         tqdm.write(eval_results_string)
 
         succ_transform, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
@@ -95,8 +95,8 @@ if __name__ == '__main__':
 
         if acc > best_acc:
             save_model(model, os.path.join(output_path))
-            best_acc = acc
             tqdm.write("Accuracy of this epoch ({}) is higher then the so far best accuracy ({}). Save model.".format(acc, best_acc))
+            best_acc = acc
 
         with open(os.path.join(output_path, "eval_results.log"), "a+") as writer:
             writer.write(eval_results_string + "\n")

@@ -5,22 +5,22 @@ import torch.nn.functional as F
 import torch.nn.utils
 from torch.autograd import Variable
 
-from src.intermediate_representation.beam import Beams, ActionInfo
-from src.spider.example import Batch
-from src import neural_network_utils as nn_utils
-from src.model.basic_model import BasicModel
-from src.model.pointer_net import PointerNet
-from src.intermediate_representation import semQL as semQL
+from intermediate_representation.beam import Beams, ActionInfo
+from model.encoder.encoder import TransformerEncoder
+from spider.example import Batch
+import neural_network_utils as nn_utils
+from model.basic_model import BasicModel
+from model.pointer_net import PointerNet
+from intermediate_representation import semQL as semQL
 
 
 class IRNet(BasicModel):
 
-    def __init__(self, args, grammar):
+    def __init__(self, args, device, grammar):
         super(IRNet, self).__init__()
         self.args = args
         self.grammar = grammar
         self.use_column_pointer = args.column_pointer
-        self.use_sentence_features = args.sentence_features
 
         if args.cuda:
             self.new_long_tensor = torch.cuda.LongTensor
@@ -29,11 +29,13 @@ class IRNet(BasicModel):
             self.new_long_tensor = torch.LongTensor
             self.new_tensor = torch.FloatTensor
 
-        self.encoder_lstm = nn.LSTM(args.embed_size, args.hidden_size // 2, bidirectional=True,
-                                    batch_first=True)
+        self.encoder = TransformerEncoder(args.encoder_pretrained_model,
+                                          device, args.max_seq_length,
+                                          args.embed_size,
+                                          args.hidden_size)
 
         input_dim = args.action_embed_size + \
-                    args.att_vec_size  + \
+                    args.att_vec_size + \
                     args.type_embed_size
         # previous action
         # input feeding
@@ -44,7 +46,7 @@ class IRNet(BasicModel):
         self.sketch_decoder_lstm = nn.LSTMCell(input_dim, args.hidden_size)
 
         # initialize the decoder's state and cells with encoder hidden states
-        self.decoder_cell_init = nn.Linear(args.hidden_size, args.hidden_size)
+        self.decoder_cell_init = nn.Linear(self.encoder.encoder_hidden_size, args.hidden_size)
 
         self.att_sketch_linear = nn.Linear(args.hidden_size, args.hidden_size, bias=False)
         self.att_lf_linear = nn.Linear(args.hidden_size, args.hidden_size, bias=False)
@@ -81,8 +83,6 @@ class IRNet(BasicModel):
         self.production_readout = lambda q: F.linear(self.read_out_act(self.query_vec_to_action_embed(q)),
                                                      self.production_embed.weight, self.production_readout_b)
 
-        self.q_att = nn.Linear(args.hidden_size, args.embed_size)
-
         self.column_rnn_input = nn.Linear(args.col_embed_size, args.action_embed_size, bias=False)
         self.table_rnn_input = nn.Linear(args.col_embed_size, args.action_embed_size, bias=False)
 
@@ -106,17 +106,16 @@ class IRNet(BasicModel):
 
         table_appear_mask = batch.table_appear_mask
 
-
-        src_encodings, (last_state, last_cell) = self.encode(batch.src_sents, batch.src_sents_len, None)
-
-        src_encodings = self.dropout(src_encodings)
+        # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
+        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
+        question_encodings = self.dropout(question_encodings)
 
         # Source encodings to create the sketch (the AST without the leaf-nodes)
-        utterance_encodings_sketch_linear = self.att_sketch_linear(src_encodings)
+        utterance_encodings_sketch_linear = self.att_sketch_linear(question_encodings)
         # Source encodings to create the leaf-nodes
-        utterance_encodings_lf_linear = self.att_lf_linear(src_encodings)
+        utterance_encodings_lf_linear = self.att_lf_linear(question_encodings)
 
-        dec_init_vec = self.init_decoder_state(last_cell)
+        dec_init_vec = self.init_decoder_state(transformer_pooling_output)
         h_tm1 = dec_init_vec
         action_probs = [[] for _ in examples]
 
@@ -192,7 +191,7 @@ class IRNet(BasicModel):
 
             # in here we do get the next step of the sketch_decoder_lstm, together with an attention mechanism, as described in TranX, 2.3
             # we only use (h_t, cell_t) only for the next step, to predict the sketch we use only att_t (keep in mind that h_t has already been used to calculate att_t)
-            (h_t, cell_t), att_t, aw = self.step(x, h_tm1, src_encodings,
+            (h_t, cell_t), att_t, aw = self.step(x, h_tm1, question_encodings,
                                                  utterance_encodings_sketch_linear, self.sketch_decoder_lstm,
                                                  self.sketch_att_vec_linear,
                                                  src_token_mask=src_mask, return_att_weight=True)
@@ -234,46 +233,19 @@ class IRNet(BasicModel):
         ####################### PART 2: Create Schema (Column & Table) Embeddings ###########################################
         # What we see here in the next few lines is actually the schema encoder as described in IRNet
         # 2.3 "Schema Encoder".
+        # IMPORTANT: by using the transformer encoder, this here simplifies quite a bit!
 
-        # Look up word embeddings for the columns of each sample. "table_sents" contains the columns,
-        # splitted by word, for this sample: [['count', 'number', 'many'], ['department', 'id'], ['name'], ['creation']...]
-        table_embedding = self.gen_x_batch(batch.table_sents)
-        # encode the source, so the question tokens, again (exactly the same as in "BasicModel.encode()")
-        src_embedding = self.gen_x_batch(batch.src_sents)
-        # encode the table names.
-        schema_embedding = self.gen_x_batch(batch.table_names)
-
-        # get emb differ
-        # "embedding_cosine" calculates the cosine similarity between the source embeddings and the column embeddings.
-        # This follows the first Equation (g_k_i) in the "Schema Encoder", chapter 2.3
-        embedding_differ = self.embedding_cosine(src_embedding=src_embedding, table_embedding=table_embedding,
-                                                 table_unk_mask=batch.table_unk_mask)
-
-        # and the same again for the tables
-        schema_differ = self.embedding_cosine(src_embedding=src_embedding, table_embedding=schema_embedding,
-                                              table_unk_mask=batch.schema_token_mask)
-
-        # source_encodings * column_difference = attention. This is the second equation (the sum) in Chapter 2.3
-        tab_ctx = (src_encodings.unsqueeze(1) * embedding_differ.unsqueeze(3)).sum(2)
-
-        # and the same again with the tables. Be aware that we also sum up over the 3rd dimension, which is the number
-        # over words in the source encodings. So we still have one value per Column, but this is the attention over the
-        # question (so all words)
-        schema_ctx = (src_encodings.unsqueeze(1) * schema_differ.unsqueeze(3)).sum(2)
-
-        # Then we concat the initial embedding (so the average embedding over the column words) and the context vector,
-        # as seen in the third equation of the schema encoder.
-        table_embedding = table_embedding + tab_ctx
-
-        schema_embedding = schema_embedding + schema_ctx
-
+        # here we just create a tensor from "col_hot_type". Keep in mind: the col_hot_type is the type of matching ("exact" vs. "partial"). It basically states how well
+        # a word matched with a column.
         col_type = self.input_type(batch.col_hot_type)
 
-        # we create a linear layer around the col_type tensor. What is the reason for this? To learn something here as well?
+        # we create a linear layer around the col_type tensor.
         col_type_var = self.col_type(col_type)
 
         # We then also add an additional vector for the column type (the "phi" in the third equation of the schema encoder)
-        table_embedding = table_embedding + col_type_var
+        table_embedding = column_encodings + col_type_var
+
+        schema_embedding = table_encodings
 
         batch_table_dict = batch.col_table_dict
         table_enable = np.zeros(shape=(len(examples)))
@@ -357,7 +329,7 @@ class IRNet(BasicModel):
             src_mask = batch.src_token_mask
 
             # we use a second RNN to predict the next actions for the leaf-nodes. Everything else stays the same as above
-            (h_t, cell_t), att_t, aw = self.step(x, h_tm1, src_encodings,
+            (h_t, cell_t), att_t, aw = self.step(x, h_tm1, question_encodings,
                                                  utterance_encodings_lf_linear, self.lf_decoder_lstm,
                                                  self.lf_att_vec_linear,
                                                  src_token_mask=src_mask, return_att_weight=True)
@@ -445,14 +417,16 @@ class IRNet(BasicModel):
         # Seems we use the same Batch class to keep the implementation similar to the training case
         batch = Batch([examples], self.grammar, cuda=self.args.cuda)
 
-        # next 8 lines is exactly the same as in the training case. Encode the source sentence.
-        src_encodings, (last_state, last_cell) = self.encode(batch.src_sents, batch.src_sents_len, None)
-        src_encodings = self.dropout(src_encodings)
+        # next lines is exactly the same as in the training case. Encode the source sentence.
 
-        utterance_encodings_sketch_linear = self.att_sketch_linear(src_encodings)
-        utterance_encodings_lf_linear = self.att_lf_linear(src_encodings)
+        # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
+        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
+        question_encodings = self.dropout(question_encodings)
 
-        dec_init_vec = self.init_decoder_state(last_cell)
+        utterance_encodings_sketch_linear = self.att_sketch_linear(question_encodings)
+        utterance_encodings_lf_linear = self.att_lf_linear(question_encodings)
+
+        dec_init_vec = self.init_decoder_state(transformer_pooling_output)
         h_tm1 = dec_init_vec
 
         t = 0
@@ -469,7 +443,7 @@ class IRNet(BasicModel):
         while len(completed_beams) < beam_size and t < self.args.decode_max_time_step:
             hyp_num = len(beams)
             # we always keep n-beams in parallel - so we create here the data structure for it.
-            exp_src_enconding = src_encodings.expand(hyp_num, src_encodings.size(1), src_encodings.size(2))
+            exp_src_enconding = question_encodings.expand(hyp_num, question_encodings.size(1), question_encodings.size(2))
             exp_src_encodings_sketch_linear = utterance_encodings_sketch_linear.expand(hyp_num, utterance_encodings_sketch_linear.size(1),
                                                                                        utterance_encodings_sketch_linear.size(2))
             if t == 0:
@@ -615,29 +589,12 @@ class IRNet(BasicModel):
 
         ####################### PART 2: Create Schema (Column & Table) Embeddings ###########################################
         # this part is exacty the same as Part 2 in training. It is further independent of chosen sketch in Part 1
-        table_embedding = self.gen_x_batch(batch.table_sents)
-        src_embedding = self.gen_x_batch(batch.src_sents)
-        schema_embedding = self.gen_x_batch(batch.table_names)
-
-        # get emb differ
-        embedding_differ = self.embedding_cosine(src_embedding=src_embedding, table_embedding=table_embedding,
-                                                 table_unk_mask=batch.table_unk_mask)
-
-        schema_differ = self.embedding_cosine(src_embedding=src_embedding, table_embedding=schema_embedding,
-                                              table_unk_mask=batch.schema_token_mask)
-
-        tab_ctx = (src_encodings.unsqueeze(1) * embedding_differ.unsqueeze(3)).sum(2)
-        schema_ctx = (src_encodings.unsqueeze(1) * schema_differ.unsqueeze(3)).sum(2)
-
-        table_embedding = table_embedding + tab_ctx
-
-        schema_embedding = schema_embedding + schema_ctx
-
         col_type = self.input_type(batch.col_hot_type)
 
         col_type_var = self.col_type(col_type)
 
-        table_embedding = table_embedding + col_type_var
+        table_embedding = column_encodings + col_type_var
+        schema_embedding = table_encodings
 
         batch_table_dict = batch.col_table_dict
 
@@ -660,7 +617,7 @@ class IRNet(BasicModel):
             hyp_num = len(beams)
 
             # expand value. Similar to Part 1, but here we als expand the table/schema-embedding
-            exp_src_encodings = src_encodings.expand(hyp_num, src_encodings.size(1), src_encodings.size(2))
+            exp_src_encodings = question_encodings.expand(hyp_num, question_encodings.size(1), question_encodings.size(2))
             exp_utterance_encodings_lf_linear = utterance_encodings_lf_linear.expand(hyp_num, utterance_encodings_lf_linear.size(1),
                                                                                      utterance_encodings_lf_linear.size(2))
             exp_table_embedding = table_embedding.expand(hyp_num, table_embedding.size(1),
