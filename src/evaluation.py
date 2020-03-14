@@ -90,27 +90,27 @@ if __name__ == '__main__':
     sql_data, table_data, val_sql_data, val_table_data = spider_utils.load_dataset(args.data_dir, use_small=False)
     _, dev_loader = get_data_loader(sql_data, val_sql_data, args.batch_size, True, False)
 
-    grammar = semQL.Grammar()
-    model = IRNet(args, device, grammar)
-    model.to(device)
+    # grammar = semQL.Grammar()
+    # model = IRNet(args, device, grammar)
+    # model.to(device)
+    #
+    # # load the pre-trained parameters
+    # model.load_state_dict(torch.load(args.model_to_load))
+    # print("Load pre-trained model from '{}'".format(args.model_to_load))
+    #
+    # sketch_acc, acc, predictions = evaluate(model,
+    #                                         dev_loader,
+    #                                         table_data,
+    #                                         args.beam_size)
+    #
+    # eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
+    #     len(dev_loader), sketch_acc, acc)
+    #
+    # with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
+    #     json.dump(predictions, f)
 
-    # load the pre-trained parameters
-    model.load_state_dict(torch.load(args.model_to_load))
-    print("Load pre-trained model from '{}'".format(args.model_to_load))
-
-    sketch_acc, acc, predictions = evaluate(model,
-                                            dev_loader,
-                                            table_data,
-                                            args.beam_size)
-
-    eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
-        len(dev_loader), sketch_acc, acc)
-
-    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
-        json.dump(predictions, f)
-
-    # with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'r', encoding='utf-8') as json_file:
-    #     predictions = json.load(json_file)
+    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'r', encoding='utf-8') as json_file:
+        predictions = json.load(json_file)
 
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)
 

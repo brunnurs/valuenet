@@ -1,5 +1,6 @@
 import argparse
 import os
+import random
 import traceback
 import numbers
 
@@ -191,12 +192,21 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                     second_value = None
                     # now we handle the values - we also handle data types properly.
                     value_obj = eval(pop_front(components))
-                    value = format_value_given_datatype(column_final_idx, schema, values[value_obj.id_c])
+
+                    # TODO activate this to replace value with a random value from the list
+                    random_value = values[random.randrange(len(values))]
+                    value = format_value_given_datatype(column_final_idx, schema, random_value)
+                    # TODO activate this to replace each value with 1
+                    # value = 1
 
                     # there is a few special cases where we have to deal with multiple values - e.g. in the "X BETWEEN Y AND Z" case.
                     if isinstance(eval(peek_front(components)), V):
                         second_value_obj = eval(pop_front(components))
-                        second_value = format_value_given_datatype(column_final_idx, schema, values[second_value_obj.id_c])
+                        # TODO activate this to replace value with a random value from the list
+                        random_value2 = values[random.randrange(len(values))]
+                        second_value = format_value_given_datatype(column_final_idx, schema, random_value2)
+                        # TODO activate this to replace each value with 2
+                        # second_value = 2
 
                     transformed_sql['where'].append((
                         op,
