@@ -1,4 +1,6 @@
 import copy
+
+import numpy
 import numpy as np
 from nltk import WordNetLemmatizer
 
@@ -49,13 +51,16 @@ def build_example(sql, table_data):
             raise RuntimeError("Invalid rule_label: {}. We don't use this sample".format(sql['rule_label']))
 
     # For details about the following values, see the constructor documentation of the "Example" class.
+    original_question = [[token] for token in sql['origin_question_toks']]
+    empty_one_hot_type = numpy.zeros(process_dict['one_hot_type'].shape)
+
     example = Example(
-        src_sent=process_dict['question_arg'],
+        src_sent=original_question,
         col_num=len(process_dict['col_set_iter']),
         vis_seq=(sql['question'], process_dict['col_set_iter'], sql['query']),
         tab_cols=process_dict['col_set_iter'],
         sql=sql['query'],
-        one_hot_type=process_dict['one_hot_type'],
+        one_hot_type=empty_one_hot_type,
         col_hot_type=process_dict['col_set_type'],
         table_names=process_dict['table_names'],
         table_len=len(process_dict['table_names']),
