@@ -2,8 +2,7 @@ import torch
 from more_itertools import flatten
 from torch import nn
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_sequence
-from transformers import BertConfig, BertModel, BertTokenizer
-
+from transformers import BertConfig, BertModel, BertTokenizer, RobertaModel, RobertaTokenizer, RobertaConfig
 
 from model.encoder.input_features import encode_input
 
@@ -26,7 +25,8 @@ class TransformerEncoder(nn.Module):
         self.max_sequence_length = max_sequence_length
         self.device = device
 
-        config_class, model_class, tokenizer_class = (BertConfig, BertModel, BertTokenizer)
+        # config_class, model_class, tokenizer_class = (BertConfig, BertModel, BertTokenizer)
+        config_class, model_class, tokenizer_class = (RobertaConfig, RobertaModel, RobertaTokenizer)
 
         transformer_config = config_class.from_pretrained(pretrained_model)
         self.tokenizer = tokenizer_class.from_pretrained(pretrained_model)
