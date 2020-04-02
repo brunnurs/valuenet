@@ -2,14 +2,14 @@ import torch
 from more_itertools import flatten
 from torch import nn
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_sequence
-from transformers import BertConfig, BertModel, BertTokenizer, RobertaModel, RobertaTokenizer, RobertaConfig
+from transformers import RobertaModel, RobertaTokenizer, RobertaConfig
 
 from model.encoder.input_features import encode_input
 
 
 def get_encoder_model(pretrained_model):
     print("load pretrained model/tokenizer for '{}'".format(pretrained_model))
-    config_class, model_class, tokenizer_class = (BertConfig, BertModel, BertTokenizer)
+    config_class, model_class, tokenizer_class = (RobertaConfig, RobertaModel, RobertaTokenizer)
     config = config_class.from_pretrained(pretrained_model)
     tokenizer = tokenizer_class.from_pretrained(pretrained_model)
     model = model_class.from_pretrained(pretrained_model, config=config)
@@ -55,7 +55,8 @@ class TransformerEncoder(nn.Module):
         # while the "last_hidden-states" is one hidden state per input token, the pooler_output is the hidden state of the [CLS]-token, further processed.
         # See e.g. "BertModel" documentation for more information.
 
-        last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, segment_ids_tensor)
+        # Keep in mind that RoBERTa doesn't use token_type_ids! It needs to be None or it will crash later. "bert", "xlnet", "albert" will use it though.
+        last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, token_type_ids=None)
         # TODO: this should be more accurate than the achronferry-implementation. But as we get a different output, we leave it for now
         # last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor)
 
