@@ -34,3 +34,52 @@ encoder.to(device)
 last_layer = encoder([question, question2], [columns, columns2], [tables, tables2])
 
 print(last_layer)
+
+# import json
+#
+# table_names_baseball = [
+#     "all_star",
+#     "appearances",
+#     "manager_award",
+#     "player_award",
+#     "manager_award_vote",
+#     "player_award_vote",
+#     "batting",
+#     "batting_postseason",
+#     "player_college",
+#     "fielding",
+#     "fielding_outfield",
+#     "fielding_postseason",
+#     "hall_of_fame",
+#     "home_game",
+#     "manager",
+#     "manager_half",
+#     "player",
+#     "park",
+#     "pitching",
+#     "pitching_postseason",
+#     "salary",
+#     "college",
+#     "postseason",
+#     "team",
+#     "team_franchise",
+#     "team_half"
+# ]
+#
+# table_occurances = {key: 0 for key in table_names_baseball}
+#
+#
+# with open('data/spider/train.json', 'r', encoding='utf8') as f:
+#     train_samples = json.load(f)
+#
+#     for sample in train_samples:
+#         if sample["db_id"] == "baseball_1":
+#             print(sample["question"])
+#             print(sample["query"])
+#             print()
+#
+#             for token in sample["query_toks"]:
+#                 if token in table_occurances.keys():
+#                     table_occurances[token] = table_occurances[token] + 1
+#
+#     print(table_occurances)
