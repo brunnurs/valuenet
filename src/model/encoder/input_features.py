@@ -1,6 +1,8 @@
 import torch
 from more_itertools import flatten
 
+from model.encoder.prune_large_database_schemas import prune_large_database_schemas
+
 SEGMENT_ID_QUESTION = 0
 SEGMENT_ID_SCHEMA = 1
 
@@ -15,14 +17,12 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
     all_table_token_lengths = []
 
     for question, columns, tables in zip(question_spans, column_names, table_names):
+        columns, tables = prune_large_database_schemas(columns, tables)
+
         question_tokens, question_span_lengths, question_segment_ids = _tokenize_question(question, tokenizer)
         all_question_span_lengths.append(question_span_lengths)
 
         columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer)
-        # TODO: this is an exception case (db-id: "baseball_1") which leads to too many tokens. Therefore we don't sub-tokenize it
-        if len(columns_tokens) == 433:
-            columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
-            # print("Found a 'baseball_1' case!")
 
         all_column_token_lengths.append(column_token_lengths)
 
