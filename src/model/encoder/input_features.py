@@ -1,8 +1,6 @@
 import torch
 from more_itertools import flatten
 
-from model.encoder.prune_large_database_schemas import prune_large_database_schemas
-
 SEGMENT_ID_QUESTION = 0
 SEGMENT_ID_SCHEMA = 1
 
@@ -17,8 +15,6 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
     all_table_token_lengths = []
 
     for question, columns, tables in zip(question_spans, column_names, table_names):
-        columns, tables = prune_large_database_schemas(columns, tables)
-
         question_tokens, question_span_lengths, question_segment_ids = _tokenize_question(question, tokenizer)
         all_question_span_lengths.append(question_span_lengths)
 
