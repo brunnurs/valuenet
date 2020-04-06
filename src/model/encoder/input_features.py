@@ -20,6 +20,10 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
 
         columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer)
 
+        # due to it's size, we dont do sub tokenizing on the "baseball_1" schema.
+        if _is_baseball_1_schema(tables):
+            columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
+
         all_column_token_lengths.append(column_token_lengths)
 
         table_tokens, table_token_lengths, table_segment_ids = _tokenize_table_names(tables, tokenizer)
@@ -132,3 +136,15 @@ def _padd_input(input_ids, segment_ids, attention_mask, max_length, tokenizer):
     assert len(input_ids) == max_length
     assert len(attention_mask) == max_length
     assert len(segment_ids) == max_length
+
+
+def _is_baseball_1_schema(table_names):
+    return table_names == [['all', 'star'], ['appearance'], ['manager', 'award'], ['player', 'award'],
+                     ['manager', 'award', 'vote'],
+                     ['player', 'award', 'vote'], ['batting'], ['batting', 'postseason'], ['player', 'college'],
+                     ['fielding'],
+                     ['fielding', 'outfield'], ['fielding', 'postseason'], ['hall', 'of', 'fame'], ['home', 'game'],
+                     ['manager'],
+                     ['manager', 'half'], ['player'], ['park'], ['pitching'], ['pitching', 'postseason'], ['salary'],
+                     ['college'],
+                     ['postseason'], ['team'], ['team', 'franchise'], ['team', 'half']]
