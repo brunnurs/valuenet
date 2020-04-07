@@ -16,17 +16,17 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
 
     for question, columns, tables in zip(question_spans, column_names, table_names):
         question_tokens, question_span_lengths, question_segment_ids = _tokenize_question(question, tokenizer)
-        all_question_span_lengths.append(question_span_lengths)
-
         columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer)
-
-        # due to it's size, we dont do sub tokenizing on the "baseball_1" schema.
-        if _is_baseball_1_schema(tables):
-            columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
-
-        all_column_token_lengths.append(column_token_lengths)
-
         table_tokens, table_token_lengths, table_segment_ids = _tokenize_table_names(tables, tokenizer)
+
+        # due to it's size, we dont do sub tokenizing on the "baseball_1" schema & question.
+        if _is_baseball_1_schema(tables):
+            question_tokens, question_span_lengths, question_segment_ids = _tokenize_question(question, tokenizer, do_sub_tokenizing=False)
+            columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
+            table_tokens, table_token_lengths, table_segment_ids = _tokenize_table_names(tables, tokenizer, do_sub_tokenizing=False)
+
+        all_question_span_lengths.append(question_span_lengths)
+        all_column_token_lengths.append(column_token_lengths)
         all_table_token_lengths.append(table_token_lengths)
 
         assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) == \
@@ -61,7 +61,7 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
     return input_ids_tensor, attention_mask_tensor, segment_ids_tensor, (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths)
 
 
-def _tokenize_question(question, tokenizer):
+def _tokenize_question(question, tokenizer, do_sub_tokenizing=True):
     """
     How does a question look like? Example: [['what'], ['are'], ['name'], ['of'], ['all'], ['column', 'state'], ['playing'] ... ['?']]
     What we do here is Wordpiece tokenization and adding special tokens. We further return the segment ids for the question tokens.
@@ -75,7 +75,11 @@ def _tokenize_question(question, tokenizer):
 
     for question_span in question:
         # remember: question-span can consist of multiple words. Example: ['column', 'state']
-        sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
+        if do_sub_tokenizing:
+            sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
+        else:
+            sub_token = question_span
+
         all_sub_token.extend(sub_token)
         question_span_lengths.append(len(sub_token))
 
@@ -110,12 +114,16 @@ def _tokenize_column_names(column_names, tokenizer, do_sub_tokenizing=True):
     return all_column_tokens, column_token_lengths, segment_ids
 
 
-def _tokenize_table_names(table_names, tokenizer):
+def _tokenize_table_names(table_names, tokenizer, do_sub_tokenizing=True):
     table_token_lengths = []
     all_table_tokens = []
 
     for table in table_names:
-        table_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), table)))
+        if do_sub_tokenizing:
+            table_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), table)))
+        else:
+            table_sub_tokens = table
+
         table_sub_tokens += [tokenizer.sep_token]
 
         all_table_tokens.extend(table_sub_tokens)
