@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 
-from named_entity_recognition.google_api.extract_values_by_heuristics import find_values_in_quota, find_ordinals
+from named_entity_recognition.api_ner.extract_values_by_heuristics import find_values_in_quota, find_ordinals
 
 
 def pre_process(entry):
