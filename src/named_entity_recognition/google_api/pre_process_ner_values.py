@@ -2,8 +2,15 @@ import argparse
 import json
 import os
 
+from named_entity_recognition.google_api.extract_values_by_heuristics import find_values_in_quota, find_ordinals
+
 
 def pre_process(entry):
+
+    extracted_by_heuristic = []
+    extracted_by_heuristic.extend(find_values_in_quota(entry['question']))
+    extracted_by_heuristic.extend(find_ordinals(entry['question_toks']))
+
     pre_processed_values = []
     for entity in entry['ner_extracted_values']['entities']:
         # for all types see https://cloud.google.com/natural-language/docs/reference/rest/v1beta2/Entity#Type
@@ -15,11 +22,15 @@ def pre_process(entry):
         if entity['type'] == 'PRICE':
             pre_processed_values.append(_compose_price(entity))
         else:
-            # just take the extracted value - without any adaptions
-            pre_processed_values.append(entity['name'])
+            if len(entity['name'].split(' ')) == 1:
+                # just take the extracted value - without any adaptions
+                pre_processed_values.append(entity['name'])
+            else:
+                # there are multiple words in this value - create combinations out of it.
+                pre_processed_values.extend(_build_simplified_ngrams(entity['name']))
 
     # remove duplicates, which can appear due to the response from the google entities API
-    return list(set(pre_processed_values))
+    return list(set(pre_processed_values + extracted_by_heuristic))
 
 
 def _compose_number(entity):
@@ -67,7 +78,26 @@ def _compose_date(entity):
     return full_date
 
 
-def are_all_values_found(expected, actual):
+def _build_simplified_ngrams(multi_token_input):
+    """
+    TODO this is not yet good enough to handle different combinations - improve!
+    """
+    combinations = [multi_token_input]
+
+    # this is a rather simple splitt - might consider spaCy
+    tokens = multi_token_input.split(' ')
+
+    combinations.append(' '.join(tokens[1:]))
+    combinations.append(' '.join(tokens[:-1]))
+
+    if len(tokens) > 2:
+        combinations.append(' '.join(tokens[1:-1]))
+
+    return combinations
+
+
+
+def are_all_values_found(expected, actual, question):
     all_values_found = True
     for value in expected:
         found = False
@@ -78,7 +108,8 @@ def are_all_values_found(expected, actual):
 
         if not found:
             all_values_found = False
-            print('Could not find {} in extracted values {}'.format(value, actual))
+            print(
+                f"Could not find {value} in extracted values {actual}.                                                Question: {question}")
 
     return all_values_found, expected != []
 
@@ -107,14 +138,17 @@ if __name__ == '__main__':
     for entry in data:
         extracted_values = pre_process(entry)
         entry['ner_extracted_values_processed'] = extracted_values
-        all_values_found, has_values = are_all_values_found(entry['values'], entry['ner_extracted_values_processed'])
+        all_values_found, has_values = are_all_values_found(entry['values'], entry['ner_extracted_values_processed'],
+                                                            entry['question'])
 
         if not all_values_found:
             not_found_count += 1
         if has_values:
             entry_with_values += 1
-
-    print("Could find all values in {} of {} examples. {} entries contain values.".format(len(data) - not_found_count, len(data), entry_with_values))
+    print()
+    print()
+    print(
+        f"Could find all values in {len(data) - not_found_count} of {len(data)} examples. {entry_with_values} entries contain values, and in {not_found_count} we could't find them")
 
     with open(os.path.join(args.output_path, 'ner_pre_processed_values.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f)
