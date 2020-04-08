@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from named_entity_recognition.google_api.pre_process_ner_values import _compose_date, find_values_in_quota, \
+from named_entity_recognition.api_ner.pre_process_ner_values import _compose_date, find_values_in_quota, \
     _build_simplified_ngrams
 
 
