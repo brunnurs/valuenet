@@ -2,6 +2,9 @@ import json
 import sqlite3
 from functools import reduce
 from pathlib import Path
+import pytictoc
+
+from more_itertools import flatten
 from textdistance import DamerauLevenshtein
 import multiprocessing
 from joblib import Parallel, delayed
@@ -10,8 +13,8 @@ from joblib import Parallel, delayed
 # We currently use the Damerau-Levenshtein string distance (normalized).
 MINIMUM_SIMILARITY_THRESHOLD = 0.8
 
-# we use multiprocessing to parallelize the search over all data.
 NUM_CORES = multiprocessing.cpu_count()
+
 
 class DatabaseValueFinder:
     def __init__(self, database_folder, database_name, database_schema_path):
@@ -33,17 +36,41 @@ class DatabaseValueFinder:
 
                 data = self.fetch_data(query, cursor)
 
-                for column_idx, column in enumerate(columns):
-                    # as the index of the columns is equal to the way we built the query, we don't need row_factory to access the data.
-                    matching_value_in_database, _ = self._find_matches_by_similarity(data, column_idx, potential_values)
-                    for matching_value in matching_value_in_database:
-                        matching_values.add((matching_value, column, table))
+                # The overhead of parallelization only helps after a certain size of data. Example: a table with ~ 300k entries and 4 columns takes ~20s with a single core.
+                # By using all 12 virtual cores we get down to ~12s. But the table has only 60k entries and 4 columns, the overhead of parallelization is larger than calculating
+                # everything on a single core (~3.8s vs. ~4.1s)
+                if len(data) > 80000:
+                    matches = Parallel(n_jobs=NUM_CORES)(delayed(self._find_matches_in_column)(table, column, column_idx, data, potential_values) for column_idx, column in enumerate(columns))
+                    print(f'Parallelization activated as table has {len(data)} rows.')
+                else:
+                    matches = [self._find_matches_in_column(table, column, column_idx, data, potential_values) for column_idx, column in enumerate(columns)]
 
-                    # We can not remove the potential value here, as we might have multiple matches over the database.
+                matching_values.update(flatten(matches))
 
         conn.close()
 
         return list(matching_values)
+
+    def _find_matches_in_column(self, table, column, column_idx, data, potential_values):
+        # as the index of the columns is equal to the way we built the query, we don't need row_factory to access the data.
+        matching_value_in_database, _ = self._find_matches_by_similarity(data, column_idx, potential_values)
+
+        return list(map(lambda v: (v, column, table), matching_value_in_database))
+
+    def _find_matches_by_similarity(self, data, column_idx, potential_values):
+        matching_value_in_database = []
+        potential_values_found = []
+
+        for row in data:
+            cell_value = row[column_idx]
+            # avoid comparing None values
+            if cell_value:
+                for potential_value in potential_values:
+                    if self.similarity_algorithm.normalized_similarity(cell_value, potential_value) >= MINIMUM_SIMILARITY_THRESHOLD:
+                        matching_value_in_database.append(cell_value)
+                        potential_values_found.append(potential_value)
+
+        return matching_value_in_database, potential_values_found
 
     @staticmethod
     def fetch_data(query, cursor):
@@ -72,21 +99,6 @@ class DatabaseValueFinder:
                                f'{table}.{columns[0]}')
 
         return f'SELECT {select_clause} FROM {table}'
-
-    def _find_matches_by_similarity(self, data, column_idx, potential_values):
-        matching_value_in_database = []
-        potential_values_found = []
-
-        for row in data:
-            cell_value = row[column_idx]
-            # avoid comparing None values
-            if cell_value:
-                for potential_value in potential_values:
-                    if self.similarity_algorithm.normalized_similarity(cell_value, potential_value) >= MINIMUM_SIMILARITY_THRESHOLD:
-                        matching_value_in_database.append(cell_value)
-                        potential_values_found.append(potential_value)
-
-        return matching_value_in_database, potential_values_found
 
     @staticmethod
     def _load_schema(database_schema_path, database_name):
