@@ -23,7 +23,7 @@ def find_values_in_quota(question):
     We support a variaty of different quota ascii characters.
     """
     matches = re.findall(r" [\"'‘“](.+?)[\"'’”]", question) # Attention: the space in the start of the regex ist not a mistake, but necessary to avoid apostrophes in word (e.g. Jean d'Arc is 'french')
-    return [m for m in matches] + [f'%{m}%' for m in matches] + [f'%{m}' for m in matches] + [f'{m}%' for m in matches]
+    return [m for m in matches] + [f'%{m}%' for m in matches]
 
 
 def find_ordinals(question_tokens):
