@@ -2,7 +2,10 @@ import argparse
 import json
 import os
 
-from named_entity_recognition.api_ner.extract_values_by_heuristics import find_values_in_quota, find_ordinals
+from nltk import ngrams
+
+from named_entity_recognition.api_ner.extract_values_by_heuristics import find_values_in_quota, find_ordinals, \
+    find_emails
 
 
 def pre_process(entry):
@@ -10,6 +13,7 @@ def pre_process(entry):
     extracted_by_heuristic = []
     extracted_by_heuristic.extend(find_values_in_quota(entry['question']))
     extracted_by_heuristic.extend(find_ordinals(entry['question_toks']))
+    extracted_by_heuristic.extend(find_emails(entry['question']))
 
     pre_processed_values = []
     for entity in entry['ner_extracted_values']['entities']:
@@ -27,7 +31,7 @@ def pre_process(entry):
                 pre_processed_values.append(entity['name'])
             else:
                 # there are multiple words in this value - create combinations out of it.
-                pre_processed_values.extend(_build_simplified_ngrams(entity['name']))
+                pre_processed_values.extend(_build_ngrams(entity['name']))
 
     # remove duplicates, which can appear due to the response from the google entities API
     return list(set(pre_processed_values + extracted_by_heuristic))
@@ -78,26 +82,23 @@ def _compose_date(entity):
     return full_date
 
 
-def _build_simplified_ngrams(multi_token_input):
-    """
-    TODO this is not yet good enough to handle different combinations - improve!
-    """
+def _build_ngrams(multi_token_input):
     combinations = [multi_token_input]
 
     # this is a rather simple splitt - might consider spaCy
-    tokens = multi_token_input.split(' ')
+    tokens = multi_token_input.split()
 
-    combinations.append(' '.join(tokens[1:]))
-    combinations.append(' '.join(tokens[:-1]))
+    for n in range(1, len(tokens)):
+        # n-gram tuples can e.g. be ('John', 'Doe) and ('Doe', 'Smith')
+        ngramm_tuples = ngrams(tokens, n)
 
-    if len(tokens) > 2:
-        combinations.append(' '.join(tokens[1:-1]))
+        for t in ngramm_tuples:
+            combinations.append(' '.join(t))
 
     return combinations
 
 
-
-def are_all_values_found(expected, actual, question):
+def are_all_values_found(expected, actual, question, query):
     all_values_found = True
     for value in expected:
         found = False
@@ -109,7 +110,7 @@ def are_all_values_found(expected, actual, question):
         if not found:
             all_values_found = False
             print(
-                f"Could not find {value} in extracted values {actual}.                                                Question: {question}")
+                f"Could not find {value} in extracted values {actual}.                                                Question: {question}                                                              Query: {query}")
 
     return all_values_found, expected != []
 
@@ -139,7 +140,7 @@ if __name__ == '__main__':
         extracted_values = pre_process(entry)
         entry['ner_extracted_values_processed'] = extracted_values
         all_values_found, has_values = are_all_values_found(entry['values'], entry['ner_extracted_values_processed'],
-                                                            entry['question'])
+                                                            entry['question'], entry['query'])
 
         if not all_values_found:
             not_found_count += 1

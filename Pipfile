@@ -18,6 +18,7 @@ pattern = "*"
 wandb = "*"
 pyyaml = "*"
 word2number = "*"
+textdistance = {extras = ["extras"],version = "*"}
 
 [requires]
 python_version = "3.6"
