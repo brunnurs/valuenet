@@ -2,44 +2,78 @@ import argparse
 import json
 import os
 
+from pytictoc import TicToc
+
 from nltk import ngrams
 
 from named_entity_recognition.api_ner.extract_values_by_heuristics import find_values_in_quota, find_ordinals, \
     find_emails
+from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
+
+DB_FOLDER = 'data/spider/original/database'
+DB_SCHEMA = 'data/spider/tables.json'
+
+all_database_value_finder = {}
 
 
 def pre_process(entry):
+    db_value_finder = _get_or_create_value_finder(entry)
 
     extracted_by_heuristic = []
     extracted_by_heuristic.extend(find_values_in_quota(entry['question']))
     extracted_by_heuristic.extend(find_ordinals(entry['question_toks']))
     extracted_by_heuristic.extend(find_emails(entry['question']))
 
-    pre_processed_values = []
+    ner_dates = []
+    ner_numbers = []
+    ner_price = []
+    ner_remaining = []
     for entity in entry['ner_extracted_values']['entities']:
         # for all types see https://cloud.google.com/natural-language/docs/reference/rest/v1beta2/Entity#Type
         # TODO: extend this pre-processing for e.g. ADDRESSES, PHONE_NUMBERS - see the link above.
         if entity['type'] == 'NUMBER':
-            pre_processed_values.append(_compose_number(entity))
-        if entity['type'] == 'DATE':
-            pre_processed_values.append(_compose_date(entity))
-        if entity['type'] == 'PRICE':
-            pre_processed_values.append(_compose_price(entity))
+            ner_numbers.append(_compose_number(entity))
+        elif entity['type'] == 'DATE':
+            ner_dates.extend(_compose_date(entity))
+        elif entity['type'] == 'PRICE':
+            ner_price.append(_compose_price(entity))
         else:
             if len(entity['name'].split(' ')) == 1:
                 # just take the extracted value - without any adaptions
-                pre_processed_values.append(entity['name'])
+                ner_remaining.append(entity['name'])
             else:
                 # there are multiple words in this value - create combinations out of it.
-                pre_processed_values.extend(_build_ngrams(entity['name']))
+                ner_remaining.extend(_build_ngrams(entity['name']))
 
-    # remove duplicates, which can appear due to the response from the google entities API
-    return list(set(pre_processed_values + extracted_by_heuristic))
+    ner_remaining = _find_matches_in_database(db_value_finder, ner_remaining)
+
+    # remove duplicates
+    return list(set(extracted_by_heuristic + ner_dates + ner_numbers + ner_price + ner_remaining))
+
+
+def _find_matches_in_database(db_value_finder, ner_remaining):
+    tic_toc = TicToc()
+    tic_toc.tic()
+    print(f'Find potential candiates "{ner_remaining}" in database {db_value_finder.database}')
+    try:
+        matching_db_values = db_value_finder.find_similar_values_in_database(ner_remaining)
+        ner_remaining = list(map(lambda v: v[0], matching_db_values))
+    except Exception as e:
+        print(e)
+
+    tic_toc.toc()
+    return ner_remaining
 
 
 def _compose_number(entity):
     # NUMBER will also detect e.g. a "one" and transform it to a 1 in the metadata
-    return entity['metadata']['value']
+    value_as_string = entity['metadata']['value']
+
+    if '.' in value_as_string:
+        # Some floats from NER use trailing zeros - strip them away.
+        return value_as_string.rstrip('0').rstrip('.')
+    else:
+        return value_as_string
 
 
 def _compose_price(entity):
@@ -79,7 +113,8 @@ def _compose_date(entity):
         else:
             full_date = day
 
-    return full_date
+    # TODO: there is 4 cases where the database is a string instead of a date (e.g. "voter_2", "Voting_record" -->08/30/2015). Therefore we also deliver the value here. Fix the database.
+    return [full_date, entity['name']]
 
 
 def _build_ngrams(multi_token_input):
@@ -98,7 +133,7 @@ def _build_ngrams(multi_token_input):
     return combinations
 
 
-def are_all_values_found(expected, actual, question, query):
+def are_all_values_found(expected, actual, question, query, database):
     all_values_found = True
     for value in expected:
         found = False
@@ -110,7 +145,7 @@ def are_all_values_found(expected, actual, question, query):
         if not found:
             all_values_found = False
             print(
-                f"Could not find {value} in extracted values {actual}.                                                Question: {question}                                                              Query: {query}")
+                f"Could not find '{value}' in extracted values {actual}.                                                Question: {question}                DB: {database}    Query: {query}")
 
     return all_values_found, expected != []
 
@@ -122,6 +157,14 @@ def _is_value_equal(extracted_value, expected_value):
 
     expected_value = str(expected_value)
     return expected_value == extracted_value
+
+
+def _get_or_create_value_finder(entry):
+    database = entry['db_id']
+    if database not in all_database_value_finder:
+        all_database_value_finder[database] = DatabaseValueFinder(DB_FOLDER, database, DB_SCHEMA)
+    db_value_finder = all_database_value_finder[database]
+    return db_value_finder
 
 
 if __name__ == '__main__':
@@ -140,7 +183,7 @@ if __name__ == '__main__':
         extracted_values = pre_process(entry)
         entry['ner_extracted_values_processed'] = extracted_values
         all_values_found, has_values = are_all_values_found(entry['values'], entry['ner_extracted_values_processed'],
-                                                            entry['question'], entry['query'])
+                                                            entry['question'], entry['query'], entry['db_id'])
 
         if not all_values_found:
             not_found_count += 1
