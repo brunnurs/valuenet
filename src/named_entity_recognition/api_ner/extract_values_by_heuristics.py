@@ -22,7 +22,7 @@ def find_values_in_quota(question):
     We try find all values in quotas, as this are almost always values we need later.
     We support a variaty of different quota ascii characters.
     """
-    matches = re.findall(r" [\"'‘“](.+?)[\"'’”]", question) # Attention: the space in the start of the regex ist not a mistake, but necessary to avoid apostrophes in word (e.g. Jean d'Arc is 'french')
+    matches = re.findall(r" [\"'‘“’](.+?)[\"'’”]", question) # Attention: the space in the start of the regex ist not a mistake, but necessary to avoid apostrophes in word (e.g. Jean d'Arc is 'french')
     return [m for m in matches] + [f'%{m}%' for m in matches]
 
 
@@ -32,6 +32,14 @@ def find_ordinals(question_tokens):
     for token in question_tokens:
         if token in ORDINALS_AND_SIMILAR:
             values_from_ordinals.append(str(ORDINALS_AND_SIMILAR[token]))
+
+    # a special case as the tokenizing is not good enough (example: "fourth-grade")
+    for token in question_tokens:
+        if "-" in token:
+            sub_token = token.split('-')
+            for s in sub_token:
+                if s in ORDINALS_AND_SIMILAR:
+                    values_from_ordinals.append(str(ORDINALS_AND_SIMILAR[s]))
 
     return values_from_ordinals
 

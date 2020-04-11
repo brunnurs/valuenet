@@ -15,11 +15,7 @@ class Test(TestCase):
         self.assertEqual(['On Road',
                           'Shipped',
                           '%On Road%',
-                          '%Shipped%',
-                          '%On Road',
-                          '%Shipped',
-                          'On Road%',
-                          'Shipped%'], values)
+                          '%Shipped%'], values)
 
     def test__find_values_in_quota_apostroph_in_names(self):
         # GIVEN
@@ -28,7 +24,16 @@ class Test(TestCase):
         values = find_values_in_quota(question)
 
         # THEN
-        self.assertEqual(['Ha', '%Ha%', '%Ha', 'Ha%'], values)
+        self.assertEqual(['Ha', '%Ha%'], values)
+
+    def test__find_values_in_quota__another_weird_apostroph(self):
+        # GIVEN
+        question = "display the employee number and name( first name and last name ) for all employees who work in a department with any employee whose name contains a ’T’."
+        # WHEN
+        values = find_values_in_quota(question)
+
+        # THEN
+        self.assertEqual(['T', '%T%'], values)
 
     def test__find_ordinals(self):
         # GIVEN
@@ -39,6 +44,26 @@ class Test(TestCase):
 
         # THEN
         self.assertEqual(['3'], ordinals)
+
+    def test__find_ordinals_combined_tokens(self):
+        # GIVEN
+        question = ["Report",
+                    "the",
+                    "total",
+                    "number",
+                    "of",
+                    "students",
+                    "for",
+                    "each",
+                    "fourth-grade",
+                    "classroom",
+                    "."]
+
+        # WHEN
+        ordinals = find_ordinals(question)
+
+        # THEN
+        self.assertEqual(['4'], ordinals)
 
     def test__find_emails(self):
         # GIVEN
