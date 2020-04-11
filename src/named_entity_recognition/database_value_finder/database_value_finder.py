@@ -11,13 +11,14 @@ from joblib import Parallel, delayed
 
 # This parameter is critical and set by empirical experiments on the training set. Based on this value we decide between "match" and "no-match".
 # We currently use the Damerau-Levenshtein string distance (normalized).
-MINIMUM_SIMILARITY_THRESHOLD = 0.8
+MINIMUM_SIMILARITY_THRESHOLD = 0.7
 
 NUM_CORES = multiprocessing.cpu_count()
 
 
 class DatabaseValueFinder:
     def __init__(self, database_folder, database_name, database_schema_path):
+        self.database = database_name
         self.database_schema = self._load_schema(database_schema_path, database_name)
         self.database_path = Path(database_folder, database_name, database_name + '.sqlite')
         self.similarity_algorithm = DamerauLevenshtein()
@@ -64,9 +65,11 @@ class DatabaseValueFinder:
         for row in data:
             cell_value = row[column_idx]
             # avoid comparing None values
-            if cell_value:
+            if cell_value and isinstance(cell_value, str):
                 for potential_value in potential_values:
-                    if self.similarity_algorithm.normalized_similarity(cell_value, potential_value) >= MINIMUM_SIMILARITY_THRESHOLD:
+                    p = potential_value.lower()
+                    c = cell_value.lower()
+                    if self.similarity_algorithm.normalized_similarity(c, p) >= MINIMUM_SIMILARITY_THRESHOLD:
                         matching_value_in_database.append(cell_value)
                         potential_values_found.append(potential_value)
 
