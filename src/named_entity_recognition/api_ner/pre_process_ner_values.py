@@ -1,13 +1,16 @@
 import argparse
 import json
+import multiprocessing
 import os
 
+from joblib import Parallel, delayed
 from pytictoc import TicToc
 
 from nltk import ngrams
 
 from named_entity_recognition.api_ner.extract_values_by_heuristics import find_values_in_quota, find_ordinals, \
     find_emails
+from named_entity_recognition.api_ner.ner_extraction_data import NerExtractionData
 from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
 
 DB_FOLDER = 'data/spider/original/database'
@@ -17,52 +20,60 @@ all_database_value_finder = {}
 
 
 def pre_process(entry):
-    db_value_finder = _get_or_create_value_finder(entry)
 
-    extracted_by_heuristic = []
-    extracted_by_heuristic.extend(find_values_in_quota(entry['question']))
-    extracted_by_heuristic.extend(find_ordinals(entry['question_toks']))
-    extracted_by_heuristic.extend(find_emails(entry['question']))
+    extracted_data = NerExtractionData([], [], [], [], [], [], [])
 
-    ner_dates = []
-    ner_numbers = []
-    ner_price = []
-    ner_remaining = []
+    extracted_data.heuristic_values_in_quota.extend(find_values_in_quota(entry['question']))
+    extracted_data.heuristic_ordinals.extend(find_ordinals(entry['question_toks']))
+    extracted_data.heuristics_emails.extend(find_emails(entry['question']))
+
     for entity in entry['ner_extracted_values']['entities']:
         # for all types see https://cloud.google.com/natural-language/docs/reference/rest/v1beta2/Entity#Type
         # TODO: extend this pre-processing for e.g. ADDRESSES, PHONE_NUMBERS - see the link above.
         if entity['type'] == 'NUMBER':
-            ner_numbers.append(_compose_number(entity))
+            extracted_data.ner_numbers.append(_compose_number(entity))
         elif entity['type'] == 'DATE':
-            ner_dates.extend(_compose_date(entity))
+            extracted_data.ner_dates.extend(_compose_date(entity))
         elif entity['type'] == 'PRICE':
-            ner_price.append(_compose_price(entity))
+            extracted_data.ner_prices.append(_compose_price(entity))
         else:
             if len(entity['name'].split(' ')) == 1:
                 # just take the extracted value - without any adaptions
-                ner_remaining.append(entity['name'])
+                extracted_data.ner_remaining.append(entity['name'])
             else:
                 # there are multiple words in this value - create combinations out of it.
-                ner_remaining.extend(_build_ngrams(entity['name']))
+                extracted_data.ner_remaining.extend(_build_ngrams(entity['name']))
 
-    ner_remaining = _find_matches_in_database(db_value_finder, ner_remaining)
-
-    # remove duplicates
-    return list(set(extracted_by_heuristic + ner_dates + ner_numbers + ner_price + ner_remaining))
+    return extracted_data
 
 
-def _find_matches_in_database(db_value_finder, ner_remaining):
+def match_values_in_database(db_id: str, extracted_data: NerExtractionData):
+    db_value_finder = _get_or_create_value_finder(db_id)
+
+    ner_remaining_matched = _find_matches_in_database(db_value_finder, extracted_data.ner_remaining)
+
+    # remove duplicates.
+    return list(set(extracted_data.heuristic_values_in_quota +
+                    extracted_data.heuristic_ordinals +
+                    extracted_data.heuristics_emails +
+                    extracted_data.ner_dates +
+                    extracted_data.ner_numbers +
+                    extracted_data.ner_prices +
+                    ner_remaining_matched))
+
+
+def _find_matches_in_database(db_value_finder, potential_values):
     tic_toc = TicToc()
     tic_toc.tic()
-    print(f'Find potential candiates "{ner_remaining}" in database {db_value_finder.database}')
+    print(f'Find potential candiates "{potential_values}" in database {db_value_finder.database}')
     try:
-        matching_db_values = db_value_finder.find_similar_values_in_database(ner_remaining)
-        ner_remaining = list(map(lambda v: v[0], matching_db_values))
+        matching_db_values = db_value_finder.find_similar_values_in_database(potential_values)
+        potential_values = list(map(lambda v: v[0], matching_db_values))
     except Exception as e:
         print(e)
 
     tic_toc.toc()
-    return ner_remaining
+    return potential_values
 
 
 def _compose_number(entity):
@@ -147,7 +158,7 @@ def are_all_values_found(expected, actual, question, query, database):
             print(
                 f"Could not find '{value}' in extracted values {actual}.                                                Question: {question}                DB: {database}    Query: {query}")
 
-    return all_values_found, expected != []
+    return all_values_found, len(expected)
 
 
 def _is_value_equal(extracted_value, expected_value):
@@ -159,8 +170,7 @@ def _is_value_equal(extracted_value, expected_value):
     return expected_value == extracted_value
 
 
-def _get_or_create_value_finder(entry):
-    database = entry['db_id']
+def _get_or_create_value_finder(database):
     if database not in all_database_value_finder:
         all_database_value_finder[database] = DatabaseValueFinder(DB_FOLDER, database, DB_SCHEMA)
     db_value_finder = all_database_value_finder[database]
@@ -179,20 +189,41 @@ if __name__ == '__main__':
 
     entry_with_values = 0
     not_found_count = 0
-    for entry in data:
-        extracted_values = pre_process(entry)
-        entry['ner_extracted_values_processed'] = extracted_values
-        all_values_found, has_values = are_all_values_found(entry['values'], entry['ner_extracted_values_processed'],
-                                                            entry['question'], entry['query'], entry['db_id'])
+    total_expected_value_count = 0
+
+    # here we pre-process the NER results and add further values by handcrafted heuristics
+    extracted_values = [pre_process(row) for idx, row in enumerate(data)]
+    print("Preprocessed all NER values and applied handcrafted handcrafted heuristics. "
+          "Next Step: matching values in database. This might take a while.")
+    print()
+
+    # here we takes the pre-processed values and try to match them in the database. As this process is very time-consuming,
+    # we parallelize it. Important: Parallel() maintains the order of the input data!
+    n_cores = multiprocessing.cpu_count()
+    values_matched_with_database = Parallel(n_jobs=n_cores)(
+        delayed(match_values_in_database)(row['db_id'], extracted_value) for extracted_value, row
+        in zip(extracted_values, data))
+    print("Scanned all databases for matching values.")
+    print()
+
+    for row, value_candidates in zip(data, values_matched_with_database):
+        row['ner_extracted_values_processed'] = value_candidates
+        all_values_found, n_expected_values = are_all_values_found(row['values'], row['ner_extracted_values_processed'],
+                                                                   row['question'], row['query'], row['db_id'])
 
         if not all_values_found:
             not_found_count += 1
-        if has_values:
+
+        if n_expected_values > 0:
             entry_with_values += 1
+
+        total_expected_value_count += n_expected_values
+
     print()
     print()
     print(
-        f"Could find all values in {len(data) - not_found_count} of {len(data)} examples. {entry_with_values} entries contain values, and in {not_found_count} we could't find them")
+        f"Could find all values in {len(data) - not_found_count} of {len(data)} examples. {entry_with_values} entries "
+        f"contain values, and in {not_found_count} we could't find them. There is a total of {total_expected_value_count} values in this dataset")
 
     with open(os.path.join(args.output_path, 'ner_pre_processed_values.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f)
