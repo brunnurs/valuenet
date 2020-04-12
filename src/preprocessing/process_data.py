@@ -27,10 +27,10 @@ def process_datas(datas, args):
     :param args:
     :return:
     """
-    with open(os.path.join(args.conceptNet, 'english_RelatedTo.pkl'), 'rb', encoding='utf-8') as f:
+    with open(os.path.join(args.conceptNet, 'english_RelatedTo.pkl'), 'rb') as f:
         english_RelatedTo = pickle.load(f)
 
-    with open(os.path.join(args.conceptNet, 'english_IsA.pkl'), 'rb', encoding='utf-8') as f:
+    with open(os.path.join(args.conceptNet, 'english_IsA.pkl'), 'rb') as f:
         english_IsA = pickle.load(f)
 
     # copy of the origin question_toks

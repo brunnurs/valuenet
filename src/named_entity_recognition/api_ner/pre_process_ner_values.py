@@ -16,7 +16,7 @@ from named_entity_recognition.api_ner.ner_extraction_data_dto import NerExtracti
 from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
 
 DB_FOLDER = 'data/spider/original/database'
-DB_SCHEMA = 'data/spider/tables.json'
+DB_SCHEMA = 'data/spider/original/tables.json'
 
 all_database_value_finder = {}
 
@@ -37,7 +37,7 @@ def pre_process(entry):
     extracted_data.heuristics_months.extend(find_months(entry['question_toks']))
     extracted_data.heuristics_location_abbreviations.extend(find_location_abbreviations(entry['question']))
 
-    for entity in entry['ner_extracted_values']['entities']:
+    for entity in entry['ner_extracted_values']:
         # for all types see https://cloud.google.com/natural-language/docs/reference/rest/v1beta2/Entity#Type
         # TODO: extend this pre-processing for e.g. ADDRESSES, PHONE_NUMBERS - see the link above.
         if entity['type'] == 'NUMBER':
@@ -217,12 +217,19 @@ def _get_or_create_value_finder(database):
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--data_path', type=str, required=True)
+    arg_parser.add_argument('--ner_data_path', type=str, required=True)
     arg_parser.add_argument('--output_path', type=str, required=True)
 
     args = arg_parser.parse_args()
 
     with open(os.path.join(args.data_path), 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
+
+    with open(os.path.join(args.ner_data_path), 'r', encoding='utf-8') as json_file:
+        ner_data = json.load(json_file)
+
+    for row, ner_information in zip(data, ner_data):
+        row['ner_extracted_values'] = ner_information['entities']
 
     entry_with_values = 0
     not_found_count = 0
@@ -262,5 +269,5 @@ if __name__ == '__main__':
         f"Could find all values in {len(data) - not_found_count} of {len(data)} examples. {entry_with_values} entries "
         f"contain values, and in {not_found_count} we could't find them. There is a total of {total_expected_value_count} values in this dataset")
 
-    with open(os.path.join(args.output_path, 'ner_pre_processed_values.json'), 'w', encoding='utf-8') as f:
+    with open(os.path.join(args.output_path), 'w', encoding='utf-8') as f:
         json.dump(data, f)
