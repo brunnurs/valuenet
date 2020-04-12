@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from named_entity_recognition.api_ner.handcrafted_heuristics import find_values_in_quote, find_ordinals, \
+from named_entity_recognition.handcrafted_heuristics import find_values_in_quote, find_ordinals, \
     find_emails, find_genders, find_null_empty_values, find_variety_of_common_mentionings, find_special_codes, \
     find_single_letters, find_capitalized_words, find_months, find_location_abbreviations
 
