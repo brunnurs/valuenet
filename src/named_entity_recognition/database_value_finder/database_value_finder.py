@@ -9,10 +9,6 @@ from textdistance import DamerauLevenshtein
 import multiprocessing
 from joblib import Parallel, delayed
 
-# This parameter is critical and set by empirical experiments on the training set. Based on this value we decide between "match" and "no-match".
-# We currently use the Damerau-Levenshtein string distance (normalized).
-MINIMUM_SIMILARITY_THRESHOLD = 0.7
-
 NUM_CORES = multiprocessing.cpu_count()
 
 
@@ -66,14 +62,18 @@ class DatabaseValueFinder:
             cell_value = row[column_idx]
             # avoid comparing None values
             if cell_value and isinstance(cell_value, str):
-                for potential_value in potential_values:
-                    p = potential_value.lower()
-                    c = cell_value.lower()
-                    if self.similarity_algorithm.normalized_similarity(c, p) >= MINIMUM_SIMILARITY_THRESHOLD:
+                for potential_value, tolerance in potential_values:
+                    if self._is_similar_enough(cell_value, potential_value, tolerance):
                         matching_value_in_database.append(cell_value)
                         potential_values_found.append(potential_value)
 
         return matching_value_in_database, potential_values_found
+
+    def _is_similar_enough(self, cell_value, potential_value, tolerance):
+        p = potential_value.lower()
+        c = cell_value.lower()
+
+        return self.similarity_algorithm.normalized_similarity(c, p) >= tolerance
 
     @staticmethod
     def fetch_data(query, cursor):
