@@ -8,9 +8,11 @@ from pytictoc import TicToc
 
 from nltk import ngrams
 
-from named_entity_recognition.api_ner.extract_values_by_heuristics import find_values_in_quota, find_ordinals, \
-    find_emails
-from named_entity_recognition.api_ner.ner_extraction_data import NerExtractionData
+from named_entity_recognition.api_ner.extract_values_by_heuristics import find_values_in_quote, find_ordinals, \
+    find_emails, find_genders, find_null_empty_values, find_variety_of_common_mentionings, find_special_codes, \
+    find_single_letters, find_capitalized_words, find_months, find_location_abbreviations
+
+from named_entity_recognition.api_ner.ner_extraction_data_dto import NerExtractionData
 from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
 
 DB_FOLDER = 'data/spider/original/database'
@@ -21,11 +23,19 @@ all_database_value_finder = {}
 
 def pre_process(entry):
 
-    extracted_data = NerExtractionData([], [], [], [], [], [], [])
+    extracted_data = NerExtractionData([], [], [], [], [], [], [], [], [], [], [], [], [], [], [])
 
-    extracted_data.heuristic_values_in_quota.extend(find_values_in_quota(entry['question']))
+    extracted_data.heuristic_values_in_quote.extend(find_values_in_quote(entry['question']))
     extracted_data.heuristic_ordinals.extend(find_ordinals(entry['question_toks']))
     extracted_data.heuristics_emails.extend(find_emails(entry['question']))
+    extracted_data.heuristics_genders.extend(find_genders(entry['question_toks']))
+    extracted_data.heuristics_null_empty.extend(find_null_empty_values(entry['question_toks']))
+    extracted_data.heuristics_variety_common_mentionings.extend(find_variety_of_common_mentionings(entry['question_toks']))
+    extracted_data.heuristics_special_codes.extend(find_special_codes(entry['question']))
+    extracted_data.heuristics_single_letters.extend(find_single_letters(entry['question']))
+    extracted_data.heuristics_capitalized_words.extend(find_capitalized_words(entry['question']))
+    extracted_data.heuristics_months.extend(find_months(entry['question_toks']))
+    extracted_data.heuristics_location_abbreviations.extend(find_location_abbreviations(entry['question']))
 
     for entity in entry['ner_extracted_values']['entities']:
         # for all types see https://cloud.google.com/natural-language/docs/reference/rest/v1beta2/Entity#Type
@@ -50,30 +60,51 @@ def pre_process(entry):
 def match_values_in_database(db_id: str, extracted_data: NerExtractionData):
     db_value_finder = _get_or_create_value_finder(db_id)
 
-    ner_remaining_matched = _find_matches_in_database(db_value_finder, extracted_data.ner_remaining)
+    # depending on the candidate type we set a different tolerance value for similarity matching with db-values.
+    # Remember: 1.0 is looking for exact matches only. Also remember: we do lower-case only comparison, so 'Male' and 'male' will match with 1.0
+    candidates_to_be_boiled_down_by_database_search = []
+    # With values in quote we are a bit tolerant. Important: we keep this values anyway, as the are often used in fuzzy LIKE searches.
+    candidates_to_be_boiled_down_by_database_search += [(quote, 0.8) for quote in extracted_data.heuristic_values_in_quote]
+    # Gender values we only want exact matches.
+    candidates_to_be_boiled_down_by_database_search += [(gender, 1.0) for gender in extracted_data.heuristics_genders]
+    candidates_to_be_boiled_down_by_database_search += [(common_mentionings, 0.9) for common_mentionings in extracted_data.heuristics_variety_common_mentionings]
+    # a special code should match exactly
+    candidates_to_be_boiled_down_by_database_search += [(special_code, 1.0) for special_code in extracted_data.heuristics_special_codes]
+    candidates_to_be_boiled_down_by_database_search += [(capitalized_word, 0.8) for capitalized_word in extracted_data.heuristics_capitalized_words]
+    candidates_to_be_boiled_down_by_database_search += [(location, 0.9) for location in extracted_data.heuristics_location_abbreviations]
 
-    # remove duplicates.
-    return list(set(extracted_data.heuristic_values_in_quota +
+    # important: in addition to all the handcrafted features, also take all values from the NER which aren't known dates/numbers/prices
+    candidates_to_be_boiled_down_by_database_search += [(ner_value, 0.75) for ner_value in extracted_data.ner_remaining]
+
+    database_matches = _find_matches_in_database(db_value_finder, candidates_to_be_boiled_down_by_database_search)
+
+    # Here we put all the values to one happy list together: the ones we matched via database and the ones we got directly out of the question.
+    # The 'set' is to remove duplicates.
+    return list(set(extracted_data.heuristic_values_in_quote +  # we put in values in quote a second time as those values are often fuzzy strings.
                     extracted_data.heuristic_ordinals +
                     extracted_data.heuristics_emails +
+                    extracted_data.heuristics_null_empty +
+                    extracted_data.heuristics_single_letters +
+                    extracted_data.heuristics_months +
                     extracted_data.ner_dates +
                     extracted_data.ner_numbers +
                     extracted_data.ner_prices +
-                    ner_remaining_matched))
+                    database_matches))
 
 
 def _find_matches_in_database(db_value_finder, potential_values):
+    matches = []
     tic_toc = TicToc()
     tic_toc.tic()
     print(f'Find potential candiates "{potential_values}" in database {db_value_finder.database}')
     try:
         matching_db_values = db_value_finder.find_similar_values_in_database(potential_values)
-        potential_values = list(map(lambda v: v[0], matching_db_values))
+        matches = list(map(lambda v: v[0], matching_db_values))
     except Exception as e:
         print(e)
 
     tic_toc.toc()
-    return potential_values
+    return matches
 
 
 def _compose_number(entity):
@@ -167,6 +198,12 @@ def _is_value_equal(extracted_value, expected_value):
         expected_value = int(expected_value)
 
     expected_value = str(expected_value)
+
+    # this is necessary to remove fuzzy values (e.g. '%gold%') as we add the "fuzziness" later.
+    # as there are some values with '%' inside (e.g. '8/%' when searching for August) we need this check first.
+    if '%' in expected_value and '%' not in extracted_value:
+        expected_value = expected_value.replace('%', '')
+
     return expected_value == extracted_value
 
 
