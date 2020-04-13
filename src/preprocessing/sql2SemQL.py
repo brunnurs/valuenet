@@ -23,9 +23,9 @@ sys.path.append("..")
 
 class Parser:
 
-    def __init__(self) -> None:
+    def __init__(self, values: list) -> None:
         # this list will contain all the values in the filter statements. It will be part of the pre-processed data afterwards.
-        self.values = []
+        self.values = values
 
     def _parse_root(self, sql):
         """
@@ -375,28 +375,34 @@ if __name__ == '__main__':
     arg_parser.add_argument('--data_path', type=str, help='dataset', required=True)
     arg_parser.add_argument('--table_path', type=str, help='table dataset', required=True)
     arg_parser.add_argument('--output', type=str, help='output data', required=True)
+    arg_parser.add_argument('--use_ner_value_candidates', action='store_true', default=True, help="we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) "
+                                                                                                  "or we can instead let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)")
     args = arg_parser.parse_args()
 
     # loading dataSets
-    datas, table = load_dataSets(args)
+    data, table = load_dataSets(args)
     processed_data = []
 
-    for idx, d in enumerate(datas):
-        if len(datas[idx]['sql']['select'][1]) > 5:
+    for idx, row in enumerate(data):
+        if len(data[idx]['sql']['select'][1]) > 5:
             continue
 
+        # we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) or we can instead
+        # let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)
+        if args.use_ner_value_candidates:
+            parser = Parser(row['ner_extracted_values_processed'])
+        else:
+            parser = Parser(row['values'])
+
         # here is where the magic happens: we parse the SQL from the spider-examples and create a SemQL-AST fro it.
-        parser = Parser()
-        semql_result = parser.full_parse(datas[idx])
+        semql_result = parser.full_parse(data[idx])
 
         # here we simply serialize it to a string. Keep in mind that the SemQL-Classes (e.g. "Root") override the string method, so we get not only the class
         # but also all attributes (especially the idx of the production rule)
-        datas[idx]['rule_label'] = " ".join([str(x) for x in semql_result])
+        data[idx]['rule_label'] = " ".join([str(x) for x in semql_result])
 
-        # during the transformation to semQL we also gather all values (e.g. "USA", 12.55). They will now be part of the preprocessed data, similar to e.g. the col_set for columns.
-        datas[idx]['values'] = parser.values
-        processed_data.append(datas[idx])
+        processed_data.append(data[idx])
 
-    print('Finished %s datas and failed %s datas' % (len(processed_data), len(datas) - len(processed_data)))
+    print('Finished %s datas and failed %s datas' % (len(processed_data), len(data) - len(processed_data)))
     with open(args.output, 'w', encoding='utf8') as f:
         f.write(json.dumps(processed_data, indent=2))
