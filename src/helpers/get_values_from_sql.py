@@ -360,6 +360,23 @@ class Parser:
         return result
 
 
+def format_groundtruth_value(val):
+    if isinstance(val, str):
+        val = val.strip('\'\"')  # remove string quotes, as we will add them later anyway.
+
+        # if it is a fuzzy string (e.g. '%hello%') we wan't to remove the wildcards, as they get in later as part of the post-processing.
+        if val.startswith('%') or val.endswith('%'):
+            val = val.replace('%', '')
+
+    # the ground truth values are all floats, even if there is no decimals (e.g. 56.0 instead of 56). But to make the
+    # .index() work, we need exact matches!
+    if isinstance(val, float) and val.is_integer():
+        val = int(val)
+
+    # results from NER will only be strings - therefore we need to make sure the values we use here are also string only!
+    return str(val)
+
+
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--data_path', type=str, help='dataset', required=True)
@@ -382,8 +399,7 @@ if __name__ == '__main__':
         parser = Parser()
         _ = parser.full_parse(row)
 
-        # during the transformation to semQL we also gather all values (e.g. "USA", 12.55). They will now be part of the preprocessed data, similar to e.g. the col_set for columns.
-        ner_row['values'] = parser.values
+        ner_row['values'] = [format_groundtruth_value(val) for val in parser.values]
 
         question = row['question']
         print(f'Found values {parser.values} for question: "{question}"')
