@@ -175,21 +175,21 @@ def _build_ngrams(multi_token_input):
     return combinations
 
 
-def are_all_values_found(expected, actual, question, query, database):
-    all_values_found = True
-    for value in expected:
+def add_not_found_values(expected_values, candidates, question, query, database):
+    all_found = True
+    for value in expected_values:
         found = False
-        for extracted_value in actual:
+        for extracted_value in candidates:
             if _is_value_equal(extracted_value, value):
                 found = True
                 break
 
         if not found:
-            all_values_found = False
-            print(
-                f"Could not find '{value}' in extracted values {actual}.                                                Question: {question}                DB: {database}    Query: {query}")
+            all_found = False
+            print(f"Could not find '{value}' in extracted values '{candidates}'. We add it from the ground truth.                                                Question: {question}                DB: {database}    Query: {query}")
+            candidates += value
 
-    return all_values_found, len(expected)
+    return candidates, all_found, len(expected_values)
 
 
 def _is_value_equal(extracted_value, expected_value):
@@ -228,8 +228,10 @@ if __name__ == '__main__':
     with open(os.path.join(args.ner_data_path), 'r', encoding='utf-8') as json_file:
         ner_data = json.load(json_file)
 
+    # add both, the ner-extracted values and the actual values (extracted from the SQL-ground truth) to the data file.
     for row, ner_information in zip(data, ner_data):
         row['ner_extracted_values'] = ner_information['entities']
+        row['values'] = ner_information['values']
 
     entry_with_values = 0
     not_found_count = 0
@@ -251,9 +253,15 @@ if __name__ == '__main__':
     print()
 
     for row, value_candidates in zip(data, values_matched_with_database):
-        row['ner_extracted_values_processed'] = value_candidates
-        all_values_found, n_expected_values = are_all_values_found(row['values'], row['ner_extracted_values_processed'],
-                                                                   row['question'], row['query'], row['db_id'])
+        # this method is basically cheating: if we don't find a value in the values candidates, we add it from the ground truth.
+        # this is ok für the training set, but will not work with new samples.
+        value_candidates_adjusted, all_values_found, n_expected_values = add_not_found_values(row['values'],
+                                                                                              value_candidates,
+                                                                                              row['question'],
+                                                                                              row['query'],
+                                                                                              row['db_id'])
+
+        row['ner_extracted_values_processed'] = value_candidates_adjusted
 
         if not all_values_found:
             not_found_count += 1
@@ -270,4 +278,4 @@ if __name__ == '__main__':
         f"contain values, and in {not_found_count} we could't find them. There is a total of {total_expected_value_count} values in this dataset")
 
     with open(os.path.join(args.output_path), 'w', encoding='utf-8') as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=2)
