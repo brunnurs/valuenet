@@ -80,7 +80,7 @@ if __name__ == '__main__':
                                                     args.beam_size)
 
         with open(os.path.join(output_path, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
-            json.dump(predictions, f)
+            json.dump(predictions, f, indent=2)
 
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
         tqdm.write(eval_results_string)

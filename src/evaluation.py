@@ -107,7 +107,7 @@ if __name__ == '__main__':
         len(dev_loader), sketch_acc, acc)
 
     with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
-        json.dump(predictions, f)
+        json.dump(predictions, f, indent=2)
 
     # with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'r', encoding='utf-8') as json_file:
     #     predictions = json.load(json_file)
