@@ -23,6 +23,6 @@ if __name__ == '__main__':
             error_count += 1
 
     with open(os.path.join(args.output_path, 'ner_extracted_values.json'), 'w', encoding='utf-8') as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=2)
 
     print("Extracted {} values. {} requests failed.".format(len(data), error_count))

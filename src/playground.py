@@ -10,4 +10,4 @@ for row in data:
     ner_values_only.append(ner_extracted_values)
 
 with open('data/spider/ner_dev.json', 'w', encoding='utf-8') as f:
-    json.dump(ner_values_only, f)
+    json.dump(ner_values_only, f, indent=2)

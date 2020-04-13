@@ -194,4 +194,4 @@ if __name__ == '__main__':
         model_simple_joins_as_filter(d)
 
     with open(args.output, 'w', encoding='utf-8') as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=2)
