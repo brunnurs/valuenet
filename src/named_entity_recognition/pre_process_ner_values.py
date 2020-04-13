@@ -187,7 +187,7 @@ def add_not_found_values(expected_values, candidates, question, query, database)
         if not found:
             all_found = False
             print(f"Could not find '{value}' in extracted values '{candidates}'. We add it from the ground truth.                                                Question: {question}                DB: {database}    Query: {query}")
-            candidates += value
+            candidates.append(value)
 
     return candidates, all_found, len(expected_values)
 
@@ -227,6 +227,8 @@ if __name__ == '__main__':
 
     with open(os.path.join(args.ner_data_path), 'r', encoding='utf-8') as json_file:
         ner_data = json.load(json_file)
+
+    assert len(data) == len(ner_data), 'Both, NER data and actual data (e.g. ner_train.json and preprocessed_train.json) need to have the same amount of rows!'
 
     # add both, the ner-extracted values and the actual values (extracted from the SQL-ground truth) to the data file.
     for row, ner_information in zip(data, ner_data):
