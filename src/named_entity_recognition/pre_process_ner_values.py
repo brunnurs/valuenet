@@ -199,11 +199,6 @@ def _is_value_equal(extracted_value, expected_value):
 
     expected_value = str(expected_value)
 
-    # this is necessary to remove fuzzy values (e.g. '%gold%') as we add the "fuzziness" later.
-    # as there are some values with '%' inside (e.g. '8/%' when searching for August) we need this check first.
-    if '%' in expected_value and '%' not in extracted_value:
-        expected_value = expected_value.replace('%', '')
-
     return expected_value == extracted_value
 
 
