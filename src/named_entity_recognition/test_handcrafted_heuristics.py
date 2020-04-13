@@ -14,9 +14,7 @@ class Test(TestCase):
 
         # THEN
         self.assertEqual(['On Road',
-                          'Shipped',
-                          '%On Road%',
-                          '%Shipped%'], values)
+                          'Shipped'], values)
 
     def test__find_values_in_quota_apostroph_in_names(self):
         # GIVEN
@@ -25,7 +23,7 @@ class Test(TestCase):
         values = find_values_in_quote(question)
 
         # THEN
-        self.assertEqual(['Ha', '%Ha%'], values)
+        self.assertEqual(['Ha'], values)
 
     def test__find_values_in_quota__another_weird_apostroph(self):
         # GIVEN
@@ -34,7 +32,7 @@ class Test(TestCase):
         values = find_values_in_quote(question)
 
         # THEN
-        self.assertEqual(['T', '%T%'], values)
+        self.assertEqual(['T'], values)
 
     def test__find_ordinals(self):
         # GIVEN
@@ -375,4 +373,4 @@ class Test(TestCase):
         months_fuzzy = find_months(question)
 
         # THEN
-        self.assertEqual(['8/%'], months_fuzzy)
+        self.assertEqual(['8/'], months_fuzzy)
