@@ -15,6 +15,7 @@ import sys
 
 import copy
 
+from helpers.get_values_from_sql import format_groundtruth_value
 from preprocessing.utils import load_dataSets, find_table_of_star_column
 from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order, V
 
@@ -24,7 +25,7 @@ sys.path.append("..")
 class Parser:
 
     def __init__(self, values: list) -> None:
-        # this list will contain all the values in the filter statements. It will be part of the pre-processed data afterwards.
+        # this values will get used to create the SemQL ground truth - for each value, the index to that value will be saved in the V-action (e.g. V(5))
         self.values = values
 
     def _parse_root(self, sql):
@@ -261,21 +262,18 @@ class Parser:
         else:
             result.append(T(sql['col_table'][sql_condit[2][1][1]]))
 
-        # This are filter statements which contain Values - we build up a value list and extend the SemQL AST with a "V" action.
+        # This are filter statements which contain Values - we extend the SemQL AST with a "V" action and use the index
+        # of the value based on the provided value list (important: the value needs to exist in the list!)
         if 2 <= fil.id_c <= 10:
             val = sql_condit[3]
-            if isinstance(val, str):
-                val = val.strip('\'\"')   # remove string quotes, as we will add them later anyway.
-            self.values.append(val)
-            result.append((V(self.values.index(val))))
+            value_action = self._build_value_action(val)
+            result.append(value_action)
 
             # Filter(8) is the "X.Y BETWEEN A AND B" case - here we have to store an additional value.
             if fil.id_c == 8:
                 val = sql_condit[4]
-                if isinstance(val, str):
-                    val = val.strip('\'\"')   # remove string quotes, as we will add them later anyway.
-                self.values.append(val)
-                result.append((V(self.values.index(val))))
+                value_action = self._build_value_action(val)
+                result.append(value_action)
 
         # check for the nested value
         if type(sql_condit[3]) == dict:
@@ -311,6 +309,19 @@ class Parser:
             return self._parse_order(sql)
         else:
             raise NotImplementedError("Not the right state")
+
+    def _build_value_action(self, val):
+        # the ground truth values are often in a weird format (e.g. 56.0 instead of 56) and as we anyway only deal with string here,
+        # we format every value as a simple string. This also simplifies comparison in the further code. When writing the query, we will
+        # adapt it again (see sem2SQL.py --> format_value_given_datatype()).
+        val = format_groundtruth_value(val)
+
+        try:
+            return V(self.values.index(val))
+        except:
+            print(
+                f'could not find value "{val}" in the provided list of values "{self.values}". Make sure all necessary values are provided!')
+            raise
 
     def full_parse(self, query):
         """
