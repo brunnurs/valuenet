@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/preprocessing/sql2SemQL.py" />
-    <option name="PARAMETERS" value="--data_path data/spider/preprocessed_with_joins_train.json --table_path data/spider/original/tables.json --output data/spider/train.json --use_ner_value_candidates" />
+    <option name="PARAMETERS" value="--data_path data/spider/preprocessed_with_joins_dev.json --table_path data/spider/original/tables.json --output data/spider/dev.json --use_ner_value_candidates" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

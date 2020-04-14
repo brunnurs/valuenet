@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/named_entity_recognition/pre_process_ner_values.py" />
-    <option name="PARAMETERS" value="--data_path=data/spider/preprocessed_train.json --ner_data_path=data/spider/ner_train.json --output_path=data/spider/preprocessed_with_values.json" />
+    <option name="PARAMETERS" value="--data_path=data/spider/preprocessed_dev.json --ner_data_path=data/spider/ner_dev.json --output_path=data/spider/preprocessed_with_values_dev.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
