@@ -1,4 +1,5 @@
 import json
+import operator
 import sqlite3
 from functools import reduce
 from pathlib import Path
@@ -13,11 +14,12 @@ NUM_CORES = multiprocessing.cpu_count()
 
 
 class DatabaseValueFinder:
-    def __init__(self, database_folder, database_name, database_schema_path):
+    def __init__(self, database_folder, database_name, database_schema_path, max_results=50):
         self.database = database_name
         self.database_schema = self._load_schema(database_schema_path, database_name)
         self.database_path = Path(database_folder, database_name, database_name + '.sqlite')
         self.similarity_algorithm = DamerauLevenshtein()
+        self.max_results = max_results
 
     def find_similar_values_in_database(self, potential_values):
         matching_values = set()
@@ -46,13 +48,13 @@ class DatabaseValueFinder:
 
         conn.close()
 
-        return list(matching_values)
+        return self._top_n_results(matching_values)
 
     def _find_matches_in_column(self, table, column, column_idx, data, potential_values):
         # as the index of the columns is equal to the way we built the query, we don't need row_factory to access the data.
         matching_value_in_database, _ = self._find_matches_by_similarity(data, column_idx, potential_values)
 
-        return list(map(lambda v: (v, column, table), matching_value_in_database))
+        return list(map(lambda value_similarity: (value_similarity[0], value_similarity[1], column, table), matching_value_in_database))
 
     def _find_matches_by_similarity(self, data, column_idx, potential_values):
         matching_value_in_database = []
@@ -63,8 +65,9 @@ class DatabaseValueFinder:
             # avoid comparing None values
             if cell_value and isinstance(cell_value, str):
                 for potential_value, tolerance in potential_values:
-                    if self._is_similar_enough(cell_value, potential_value, tolerance):
-                        matching_value_in_database.append(cell_value)
+                    is_similar_enough, similarity = self._is_similar_enough(cell_value, potential_value, tolerance)
+                    if is_similar_enough:
+                        matching_value_in_database.append((cell_value, similarity))
                         potential_values_found.append(potential_value)
 
         return matching_value_in_database, potential_values_found
@@ -73,7 +76,16 @@ class DatabaseValueFinder:
         p = potential_value.lower()
         c = cell_value.lower()
 
-        return self.similarity_algorithm.normalized_similarity(c, p) >= tolerance
+        similarity = self.similarity_algorithm.normalized_similarity(c, p)
+
+        return similarity >= tolerance, similarity
+
+    def _top_n_results(self, matching_values):
+        # remember: we were dealing with a list before to avoid duplicates
+        matching_values_list = list(matching_values)
+        # itemgetter(1) is referring to the first element of the tuple, which is the similarity
+        matching_values_list.sort(key=operator.itemgetter(1), reverse=True)
+        return [(value, column, table) for value, _, column, table in matching_values_list[:self.max_results]]
 
     @staticmethod
     def fetch_data(query, cursor):
