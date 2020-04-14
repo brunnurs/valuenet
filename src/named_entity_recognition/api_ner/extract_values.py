@@ -15,14 +15,19 @@ if __name__ == '__main__':
         data = json.load(json_file)
 
     error_count = 0
+    ner_data = []
     for doc in data:
         extracted_values = remote_named_entity_recognition(doc['question'])
         if extracted_values:
-            doc['ner_extracted_values'] = extracted_values
+            ner_data.append({
+                'entities': extracted_values['entities'],
+                'language': extracted_values['language'],
+                'question': doc['question']
+            })
         else:
             error_count += 1
 
-    with open(os.path.join(args.output_path, 'ner_extracted_values.json'), 'w', encoding='utf-8') as f:
+    with open(os.path.join(args.output_path), 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2)
 
     print("Extracted {} values. {} requests failed.".format(len(data), error_count))

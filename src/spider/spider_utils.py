@@ -165,7 +165,7 @@ def load_data_new(sql_path, table_data, use_small=False):
 def load_dataset(dataset_dir, use_small=False):
     print("Loading from datasets...")
 
-    table_path = os.path.join(dataset_dir, "tables.json")
+    table_path = os.path.join(dataset_dir, "original", "tables.json")
     train_path = os.path.join(dataset_dir, "train.json")
     dev_path = os.path.join(dataset_dir, "dev.json")
     with open(table_path, encoding='utf-8') as inf:

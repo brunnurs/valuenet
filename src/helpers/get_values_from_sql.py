@@ -396,13 +396,19 @@ if __name__ == '__main__':
 
     for row, ner_row in zip(data, ner_data):
 
+        if len(row['sql']['select'][1]) > 5:
+            ner_row['values'] = ['Cant handle this sample as it has more than 5 select columns']
+            continue
+
         parser = Parser()
         _ = parser.full_parse(row)
 
-        ner_row['values'] = [format_groundtruth_value(val) for val in parser.values]
+        values_formatted = [format_groundtruth_value(val) for val in parser.values]
+        ner_row['values'] = values_formatted
 
         question = row['question']
-        print(f'Found values {parser.values} for question: "{question}"')
+
+        print(f'Found values {values_formatted} for question: "{question}"')
 
     print(f'Read out values from {len(data)} questions and added it to NER-file {args.ner_path}')
     with open(args.ner_path, 'w', encoding='utf8') as f:
