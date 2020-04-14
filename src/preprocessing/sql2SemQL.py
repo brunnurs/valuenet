@@ -394,8 +394,8 @@ if __name__ == '__main__':
     data, table = load_dataSets(args)
     processed_data = []
 
-    for idx, row in enumerate(data):
-        if len(data[idx]['sql']['select'][1]) > 5:
+    for row in data:
+        if len(row['sql']['select'][1]) > 5:
             continue
 
         # we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) or we can instead
@@ -406,13 +406,20 @@ if __name__ == '__main__':
             parser = Parser(row['values'])
 
         # here is where the magic happens: we parse the SQL from the spider-examples and create a SemQL-AST fro it.
-        semql_result = parser.full_parse(data[idx])
+        semql_result = parser.full_parse(row)
 
         # here we simply serialize it to a string. Keep in mind that the SemQL-Classes (e.g. "Root") override the string method, so we get not only the class
         # but also all attributes (especially the idx of the production rule)
-        data[idx]['rule_label'] = " ".join([str(x) for x in semql_result])
+        row['rule_label'] = " ".join([str(x) for x in semql_result])
 
-        processed_data.append(data[idx])
+        # if we use the NER-values then we override here the ground truth values with it. That way the training/evaluation scripts stay
+        # exactly the same and using values/ner-extracted values is decided here. To make this clear we also remove all other value lists.
+        if args.use_ner_value_candidates:
+            row['values'] = row['ner_extracted_values_processed']
+            del row['ner_extracted_values_processed']
+            del row['ner_extracted_values']
+
+        processed_data.append(row)
 
     print('Finished %s datas and failed %s datas' % (len(processed_data), len(data) - len(processed_data)))
     with open(args.output, 'w', encoding='utf8') as f:
