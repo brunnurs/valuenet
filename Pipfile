@@ -19,6 +19,7 @@ wandb = "*"
 pyyaml = "*"
 word2number = "*"
 textdistance = {extras = ["extras"],version = "*"}
+matplotlib = "*"
 
 [requires]
 python_version = "3.6"
