@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/preprocessing/model_joins_as_filter.py" />
-    <option name="PARAMETERS" value="--data_path=data/spider/preprocessed_with_values.json --output=data/spider/preprocessed_with_joins_train.json" />
+    <option name="PARAMETERS" value="--data_path=data/spider/preprocessed_with_values_dev.json --output=data/spider/preprocessed_with_joins_dev.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
