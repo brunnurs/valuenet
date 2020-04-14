@@ -583,7 +583,7 @@
     "language": "en",
     "question": "What are all distinct countries where singers above age 20 are from?",
     "values": [
-      20.0
+      "20"
     ]
   },
   {
@@ -654,7 +654,7 @@
     "language": "en",
     "question": "What are  the different countries with singers above age 20?",
     "values": [
-      20.0
+      "20"
     ]
   },
   {
@@ -928,23 +928,6 @@
         ]
       },
       {
-        "name": "10000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "10000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "10000",
-              "beginOffset": 73
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "5000",
         "type": "NUMBER",
         "metadata": {
@@ -960,13 +943,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "10000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "10000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "10000",
+              "beginOffset": 73
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "Show location and name for all stadiums with a capacity between 5000 and 10000.",
     "values": [
-      5000.0,
-      10000.0
+      "5000",
+      "10000"
     ]
   },
   {
@@ -1069,8 +1069,8 @@
     "language": "en",
     "question": "What are the locations and names of all stations with capacity between 5000 and 10000?",
     "values": [
-      5000.0,
-      10000.0
+      "5000",
+      "10000"
     ]
   },
   {
@@ -1400,8 +1400,8 @@
     "language": "en",
     "question": "How many concerts are there in year 2014 or 2015?",
     "values": [
-      2014.0,
-      2015.0
+      "2014",
+      "2015"
     ]
   },
   {
@@ -1456,23 +1456,6 @@
         ]
       },
       {
-        "name": "2014",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2014"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2014",
-              "beginOffset": 30
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2015",
         "type": "NUMBER",
         "metadata": {
@@ -1488,13 +1471,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2014",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 30
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "How many concerts occurred in 2014 or 2015?",
     "values": [
-      2014.0,
-      2015.0
+      "2014",
+      "2015"
     ]
   },
   {
@@ -1701,7 +1701,7 @@
     "language": "en",
     "question": "Show the stadium name and capacity with most number of concerts in year 2014 or after.",
     "values": [
-      2014.0
+      "2014"
     ]
   },
   {
@@ -1804,7 +1804,7 @@
     "language": "en",
     "question": "What is the name and capacity of the stadium  with the most concerts after 2013?",
     "values": [
-      2014.0
+      "2014"
     ]
   },
   {
@@ -2055,8 +2055,8 @@
     "language": "en",
     "question": "Show countries where a singer above age 40 and a singer below 30 are from.",
     "values": [
-      40.0,
-      30.0
+      "40",
+      "30"
     ]
   },
   {
@@ -2159,7 +2159,7 @@
     "language": "en",
     "question": "Show names for all stadiums except for stadiums having a concert in year 2014.",
     "values": [
-      2014.0
+      "2014"
     ]
   },
   {
@@ -2247,7 +2247,7 @@
     "language": "en",
     "question": "What are the names of all stadiums that did not have a concert in 2014?",
     "values": [
-      2014.0
+      "2014"
     ]
   },
   {
@@ -2663,7 +2663,7 @@
     "language": "en",
     "question": "List all singer names in concerts in year 2014.",
     "values": [
-      2014.0
+      "2014"
     ]
   },
   {
@@ -2751,7 +2751,7 @@
     "language": "en",
     "question": "What are the names of the singers who performed in a concert in 2014?",
     "values": [
-      2014.0
+      "2014"
     ]
   },
   {
@@ -2850,7 +2850,7 @@
     "language": "en",
     "question": "what is the name and nation of the singer who have a song having 'Hey' in its name?",
     "values": [
-      "%Hey%"
+      "Hey"
     ]
   },
   {
@@ -2979,7 +2979,7 @@
     "language": "en",
     "question": "What is the name and country of origin of every singer who has a song with the word 'Hey' in its title?",
     "values": [
-      "%Hey%"
+      "Hey"
     ]
   },
   {
@@ -3079,23 +3079,6 @@
         ]
       },
       {
-        "name": "2014",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2014"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2014",
-              "beginOffset": 93
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2015",
         "type": "NUMBER",
         "metadata": {
@@ -3111,13 +3094,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2014",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 93
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "Find the name and location of the stadiums which some concerts happened in the years of both 2014 and 2015.",
     "values": [
-      2014.0,
-      2015.0
+      "2014",
+      "2015"
     ]
   },
   {
@@ -3217,23 +3217,6 @@
         ]
       },
       {
-        "name": "2015",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2015"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2015",
-              "beginOffset": 98
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2014",
         "type": "NUMBER",
         "metadata": {
@@ -3249,13 +3232,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2015",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2015"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2015",
+              "beginOffset": 98
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "What are the names and locations of the stadiums that had concerts that occurred in both 2014 and 2015?",
     "values": [
-      2014.0,
-      2015.0
+      "2014",
+      "2015"
     ]
   },
   {
@@ -3460,7 +3460,7 @@
     "language": "en",
     "question": "Find the number of pets whose weight is heavier than 10.",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -3516,7 +3516,7 @@
     "language": "en",
     "question": "How many pets have a greater weight than 10?",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -3795,7 +3795,7 @@
     "language": "en",
     "question": "Find number of pets owned by students who are older than 20.",
     "values": [
-      20.0
+      "20"
     ]
   },
   {
@@ -3866,7 +3866,7 @@
     "language": "en",
     "question": "How many pets are owned by students that have an age greater than 20?",
     "values": [
-      20.0
+      "20"
     ]
   },
   {
@@ -4996,7 +4996,7 @@
     "language": "en",
     "question": "Find the id and weight of all pets whose age is older than 1.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -5067,7 +5067,7 @@
     "language": "en",
     "question": "What is the id and weight of every pet who is older than 1?",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -5827,7 +5827,7 @@
     "language": "en",
     "question": "Find the first name and gender of student who have more than one pet.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -5913,7 +5913,7 @@
     "language": "en",
     "question": "What is the first name and gender of the all the students who have more than one pet?",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -5991,7 +5991,7 @@
     "language": "en",
     "question": "Find the last name of the student who has a cat that is age 3.",
     "values": [
-      3.0,
+      "3",
       "cat"
     ]
   },
@@ -6063,7 +6063,7 @@
     "language": "en",
     "question": "What is the last name of the student who has a cat that is 3 years old?",
     "values": [
-      3.0,
+      "3",
       "cat"
     ]
   },
@@ -7175,7 +7175,7 @@
     "language": "en",
     "question": "Which distinct car models are the produced after 1980?",
     "values": [
-      1980.0
+      "1980"
     ]
   },
   {
@@ -7248,7 +7248,7 @@
     "language": "en",
     "question": "What are the different models for the cards produced after 1980?",
     "values": [
-      1980.0
+      "1980"
     ]
   },
   {
@@ -8059,7 +8059,7 @@
     "language": "en",
     "question": "What is the average miles per gallon(mpg) of the cars with 4 cylinders?",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -8130,7 +8130,7 @@
     "language": "en",
     "question": "What is the average miles per gallon of all the cards with 4 cylinders?",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -8198,23 +8198,6 @@
         ]
       },
       {
-        "name": "8",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "8"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "8",
-              "beginOffset": 53
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "1974",
         "type": "NUMBER",
         "metadata": {
@@ -8230,13 +8213,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "8",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "8"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "8",
+              "beginOffset": 53
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "What is the smallest weight of the car produced with 8 cylinders on 1974?",
     "values": [
-      4.0,
-      1974.0
+      "4",
+      "1974"
     ]
   },
   {
@@ -8341,8 +8341,8 @@
     "language": "en",
     "question": "What is the minimu weight of the car with 8 cylinders produced in 1974?",
     "values": [
-      4.0,
-      1974.0
+      "4",
+      "1974"
     ]
   },
   {
@@ -8502,7 +8502,7 @@
     "language": "en",
     "question": "What are the countries having at least one car maker? List name and id.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -8588,7 +8588,7 @@
     "language": "en",
     "question": "What are the names and ids of all countries with at least one car maker?",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -8644,7 +8644,7 @@
     "language": "en",
     "question": "What is the number of the cars with horsepower more than 150?",
     "values": [
-      150.0
+      "150"
     ]
   },
   {
@@ -8715,7 +8715,7 @@
     "language": "en",
     "question": "What is the number of cars with a horsepower greater than 150?",
     "values": [
-      150.0
+      "150"
     ]
   },
   {
@@ -8813,8 +8813,8 @@
         "name": "europe",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe",
-          "mid": "/m/02j9z"
+          "mid": "/m/02j9z",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe"
         },
         "salience": 0.1507046,
         "mentions": [
@@ -8849,7 +8849,7 @@
     "question": "Which countries in europe have at least 3 car manufacturers?",
     "values": [
       "europe",
-      3.0
+      "3"
     ]
   },
   {
@@ -8939,7 +8939,7 @@
     "question": "What are the names of all European countries with at least 3 manufacturers?",
     "values": [
       "europe",
-      3.0
+      "3"
     ]
   },
   {
@@ -9025,7 +9025,7 @@
     "language": "en",
     "question": "What is the maximum horsepower and the make of the car models with 3 cylinders?",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -9126,7 +9126,7 @@
     "language": "en",
     "question": "What is the largest amount of horsepower for the models with 3 cylinders and what make is it?",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -9258,7 +9258,7 @@
     "language": "en",
     "question": "What is the average horsepower of the cars before 1980?",
     "values": [
-      1980.0
+      "1980"
     ]
   },
   {
@@ -9331,7 +9331,7 @@
     "language": "en",
     "question": "What is the average horsepower for all cards produced before 1980?",
     "values": [
-      1980.0
+      "1980"
     ]
   },
   {
@@ -9658,7 +9658,7 @@
     "language": "en",
     "question": "How many cars have more than 4 cylinders?",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -9729,7 +9729,7 @@
     "language": "en",
     "question": "What is the number of cars with more than 4 cylinders?",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -9787,7 +9787,7 @@
     "language": "en",
     "question": "how many cars were produced in 1980?",
     "values": [
-      1980.0
+      "1980"
     ]
   },
   {
@@ -9845,7 +9845,7 @@
     "language": "en",
     "question": "In 1980, how many cars were made?",
     "values": [
-      1980.0
+      "1980"
     ]
   },
   {
@@ -10067,7 +10067,7 @@
     "language": "en",
     "question": "Which makers designed more than 3 car models? List full name and the id.",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -10153,7 +10153,7 @@
     "language": "en",
     "question": "What are the names and ids of all makers with more than 3 models?",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -10243,7 +10243,7 @@
     "question": "Which distinctive models are produced by maker with the full name General Motors or weighing more than 3500?",
     "values": [
       "General Motors",
-      3500.0
+      "3500"
     ]
   },
   {
@@ -10310,7 +10310,7 @@
     "question": "What are the different models created by either the car maker General Motors or weighed more than 3500?",
     "values": [
       "General Motors",
-      3500.0
+      "3500"
     ]
   },
   {
@@ -10331,23 +10331,6 @@
         ]
       },
       {
-        "name": "3000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "3000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "3000",
-              "beginOffset": 56
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "4000",
         "type": "NUMBER",
         "metadata": {
@@ -10363,13 +10346,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "3000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "3000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "3000",
+              "beginOffset": 56
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "In which years cars were produced weighing no less than 3000 and no more than 4000?",
     "values": [
-      3000.0,
-      4000.0
+      "3000",
+      "4000"
     ]
   },
   {
@@ -10442,8 +10442,8 @@
     "language": "en",
     "question": "What are the different years in which there were cars produced that weighed less than 4000 and also cars that weighted more than 3000?",
     "values": [
-      3000.0,
-      4000.0
+      "3000",
+      "4000"
     ]
   },
   {
@@ -11000,7 +11000,7 @@
     "language": "en",
     "question": "How many cars has over 6 cylinders?",
     "values": [
-      6.0
+      "6"
     ]
   },
   {
@@ -11071,7 +11071,7 @@
     "language": "en",
     "question": "What is the number of carsw ith over 6 cylinders?",
     "values": [
-      6.0
+      "6"
     ]
   },
   {
@@ -11157,7 +11157,7 @@
     "language": "en",
     "question": "For the cars with 4 cylinders, which model has the largest horsepower?",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -11243,7 +11243,7 @@
     "language": "en",
     "question": "For all of the 4 cylinder cars, which model has the most horsepower?",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -11359,7 +11359,7 @@
     "language": "en",
     "question": "Among the cars with more than lowest horsepower, which ones do not have more than 3 cylinders? List the car makeid and make name.",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -11460,7 +11460,7 @@
     "language": "en",
     "question": "Among the cars that do not have the minimum horsepower, what are the make ids and names of al those with less than 4 cylinders?",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -11565,8 +11565,8 @@
     "language": "en",
     "question": "What is the maximum miles per gallon of the car with 8 cylinders or produced before 1980?",
     "values": [
-      8.0,
-      1980.0
+      "8",
+      "1980"
     ]
   },
   {
@@ -11671,8 +11671,8 @@
     "language": "en",
     "question": "What is the maximum mpg of the cars that had 8 cylinders or that were produced before 1980?",
     "values": [
-      8.0,
-      1980.0
+      "8",
+      "1980"
     ]
   },
   {
@@ -11731,7 +11731,7 @@
     "language": "en",
     "question": "Which models are lighter than 3500 but not built by the 'Ford Motor Company'?",
     "values": [
-      3500.0,
+      "3500",
       "Ford Motor Company"
     ]
   },
@@ -11791,7 +11791,7 @@
     "language": "en",
     "question": "What are the different models wthat are lighter than 3500 but were not built by the Ford Motor Company?",
     "values": [
-      3500.0,
+      "3500",
       "Ford Motor Company"
     ]
   },
@@ -12014,8 +12014,8 @@
     "language": "en",
     "question": "Which are the car makers which produce at least 2 models and more than 3 car makes? List the id and the maker.",
     "values": [
-      2.0,
-      3.0
+      "2",
+      "3"
     ]
   },
   {
@@ -12133,8 +12133,8 @@
     "language": "en",
     "question": "What are the ids and makers of all car makers that produce at least 2 models and make more than 3 cars?",
     "values": [
-      2.0,
-      3.0
+      "2",
+      "3"
     ]
   },
   {
@@ -12250,7 +12250,7 @@
     "language": "en",
     "question": "What are the id and names of the countries which have more than 3 car makers or produce the 'fiat' model?",
     "values": [
-      3.0,
+      "3",
       "fiat"
     ]
   },
@@ -12352,7 +12352,7 @@
     "language": "en",
     "question": "What are the ids and names of all countries that either have more than 3 car makers or produce fiats?",
     "values": [
-      3.0,
+      "3",
       "fiat"
     ]
   },
@@ -12646,8 +12646,8 @@
         "name": "USA",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.12513171,
         "mentions": [
@@ -13930,10 +13930,7 @@
       {
         "name": "Aberdeen",
         "type": "LOCATION",
-        "metadata": {
-          "mid": "/m/0rng",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen"
-        },
+        "metadata": {},
         "salience": 0.18413581,
         "mentions": [
           {
@@ -14455,8 +14452,8 @@
         "name": "AHD Airport",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/03_t0x",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Sardar_Vallabhbhai_Patel_International_Airport"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sardar_Vallabhbhai_Patel_International_Airport",
+          "mid": "/m/03_t0x"
         },
         "salience": 0.14454149,
         "mentions": [
@@ -14586,8 +14583,8 @@
         "name": "United Airlines",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/07y2s",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_Airlines"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_Airlines",
+          "mid": "/m/07y2s"
         },
         "salience": 0.13262066,
         "mentions": [
@@ -15901,7 +15898,7 @@
     "language": "en",
     "question": "Find all airlines that have at least 10 flights.",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -15957,7 +15954,7 @@
     "language": "en",
     "question": "Which airlines have at least 10 flights?",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -16013,7 +16010,7 @@
     "language": "en",
     "question": "Find all airlines that have fewer than 200 flights.",
     "values": [
-      200.0
+      "200"
     ]
   },
   {
@@ -16069,7 +16066,7 @@
     "language": "en",
     "question": "Which airlines have less than 200 flights?",
     "values": [
-      200.0
+      "200"
     ]
   },
   {
@@ -16624,10 +16621,7 @@
       {
         "name": "Aberdeen",
         "type": "LOCATION",
-        "metadata": {
-          "mid": "/m/0rng",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen"
-        },
+        "metadata": {},
         "salience": 0.18895161,
         "mentions": [
           {
@@ -17251,8 +17245,8 @@
     "language": "en",
     "question": "Which cities do more than one employee under age 30 come from?",
     "values": [
-      30.0,
-      1.0
+      "30",
+      "1"
     ]
   },
   {
@@ -17340,8 +17334,8 @@
     "language": "en",
     "question": "Find the cities that have more than one employee under age 30.",
     "values": [
-      30.0,
-      1.0
+      "30",
+      "1"
     ]
   },
   {
@@ -19038,23 +19032,6 @@
         ]
       },
       {
-        "name": "10000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "10000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "10000",
-              "beginOffset": 86
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "3000",
         "type": "NUMBER",
         "metadata": {
@@ -19070,13 +19047,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "10000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "10000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "10000",
+              "beginOffset": 86
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "Which district has both stores with less than 3000 products and stores with more than 10000 products?",
     "values": [
-      3000.0,
-      10000.0
+      "3000",
+      "10000"
     ]
   },
   {
@@ -19157,23 +19151,6 @@
         ]
       },
       {
-        "name": "3000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "3000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "3000",
-              "beginOffset": 67
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "10000",
         "type": "NUMBER",
         "metadata": {
@@ -19189,13 +19166,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "3000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "3000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "3000",
+              "beginOffset": 67
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "Find the districts in which there are both shops selling less than 3000 products and shops selling more than 10000 products.",
     "values": [
-      3000.0,
-      10000.0
+      "3000",
+      "10000"
     ]
   },
   {
@@ -19546,7 +19540,7 @@
     "language": "en",
     "question": "What is the document name and template id for document with description with the letter 'w' in it?",
     "values": [
-      "%w%"
+      "w"
     ]
   },
   {
@@ -19630,7 +19624,7 @@
     "language": "en",
     "question": "Return the names and template ids for documents that contain the letter w in their description.",
     "values": [
-      "%w%"
+      "w"
     ]
   },
   {
@@ -20389,7 +20383,7 @@
     "language": "en",
     "question": "Show ids for all templates that are used by more than one document.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -20443,7 +20437,7 @@
     "language": "en",
     "question": "What are the template ids of any templates used in more than a single document?",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -21148,7 +21142,7 @@
     "language": "en",
     "question": "What is the version number and template type code for the template with version number later than 5?",
     "values": [
-      5.0
+      "5"
     ]
   },
   {
@@ -21234,7 +21228,7 @@
     "language": "en",
     "question": "Return the version numbers and template type codes of templates with a version number greater than 5.",
     "values": [
-      5.0
+      "5"
     ]
   },
   {
@@ -21498,7 +21492,7 @@
     "language": "en",
     "question": "Show all template type codes with less than three templates.",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -21569,7 +21563,7 @@
     "language": "en",
     "question": "What are the codes of template types that have fewer than 3 templates?",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -23055,7 +23049,10 @@
       {
         "name": "Korea",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "mid": "/m/048fz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Korea"
+        },
         "salience": 0.05385595,
         "mentions": [
           {
@@ -23211,7 +23208,10 @@
       {
         "name": "NY",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_City",
+          "mid": "/m/02_286"
+        },
         "salience": 0.09914141,
         "mentions": [
           {
@@ -23310,7 +23310,10 @@
       {
         "name": "NY",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "mid": "/m/02_286",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_City"
+        },
         "salience": 0.090347104,
         "mentions": [
           {
@@ -23848,7 +23851,7 @@
     "language": "en",
     "question": "List all document ids with at least two paragraphs.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -23919,7 +23922,7 @@
     "language": "en",
     "question": "What are the ids of documents that have 2 or more paragraphs?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -24230,8 +24233,8 @@
     "language": "en",
     "question": "What is the document id with 1 to 2 paragraphs?",
     "values": [
-      1.0,
-      2.0
+      "1",
+      "2"
     ]
   },
   {
@@ -24282,23 +24285,6 @@
         ]
       },
       {
-        "name": "two",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "two",
-              "beginOffset": 52
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "one",
         "type": "NUMBER",
         "metadata": {
@@ -24314,13 +24300,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "two",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "two",
+              "beginOffset": 52
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "Give the ids of documents that have between one and two paragraphs.",
     "values": [
-      1.0,
-      2.0
+      "1",
+      "2"
     ]
   },
   {
@@ -24359,8 +24362,8 @@
         "name": "Brazil",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Brazil",
-          "mid": "/m/015fr"
+          "mid": "/m/015fr",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Brazil"
         },
         "salience": 0.2042228,
         "mentions": [
@@ -24949,23 +24952,6 @@
         ]
       },
       {
-        "name": "32",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "32"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "32",
-              "beginOffset": 38
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "33",
         "type": "NUMBER",
         "metadata": {
@@ -24981,13 +24967,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "32",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "32"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "32",
+              "beginOffset": 38
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "Show the name of teachers aged either 32 or 33?",
     "values": [
-      32.0,
-      33.0
+      "32",
+      "33"
     ]
   },
   {
@@ -25023,23 +25026,6 @@
         ]
       },
       {
-        "name": "32",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "32"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "32",
-              "beginOffset": 55
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "33",
         "type": "NUMBER",
         "metadata": {
@@ -25055,13 +25041,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "32",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "32"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "32",
+              "beginOffset": 55
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "What are the names of the teachers who are aged either 32 or 33?",
     "values": [
-      32.0,
-      33.0
+      "32",
+      "33"
     ]
   },
   {
@@ -25369,7 +25372,7 @@
     "language": "en",
     "question": "Show the hometowns shared by at least two teachers.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -25425,7 +25428,7 @@
     "language": "en",
     "question": "What are the towns from which at least two teachers come from?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -26021,7 +26024,7 @@
     "language": "en",
     "question": "Show names of teachers that teach at least two courses.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -26092,7 +26095,7 @@
     "language": "en",
     "question": "What are the names of the teachers who teach at least two courses?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -26252,7 +26255,7 @@
     "language": "en",
     "question": "How many visitors below age 30 are there?",
     "values": [
-      30.0
+      "30"
     ]
   },
   {
@@ -26353,7 +26356,7 @@
     "language": "en",
     "question": "Find the names of the visitors whose membership level is higher than 4, and order the results by the level from high to low.",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -26424,7 +26427,7 @@
     "language": "en",
     "question": "What is the average age of the visitors whose membership level is not higher than 4?",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -26540,7 +26543,7 @@
     "language": "en",
     "question": "Find the name and membership level of the visitors whose membership level is higher than 4, and sort by their age from old to young.",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -26695,7 +26698,7 @@
     "language": "en",
     "question": "Find the average number of staff working for the museums that were open before 2009.",
     "values": [
-      2009.0
+      "2009"
     ]
   },
   {
@@ -26884,7 +26887,7 @@
     "language": "en",
     "question": "find the names of museums which have more staff than the minimum staff number of all museums opened after 2010.",
     "values": [
-      2010.0
+      "2010"
     ]
   },
   {
@@ -26968,7 +26971,7 @@
     "language": "en",
     "question": "find the id, name and age for visitors who visited some museums more than once.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -27434,7 +27437,7 @@
     "language": "en",
     "question": "What is the total ticket expense of the visitors whose membership level is 1?",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -27571,8 +27574,8 @@
     "language": "en",
     "question": "What is the name of the visitor who visited both a museum opened before 2009 and a museum opened after 2011?",
     "values": [
-      2009.0,
-      2011.0
+      "2009",
+      "2011"
     ]
   },
   {
@@ -27660,7 +27663,7 @@
     "language": "en",
     "question": "Find the number of visitors who did not visit any museum opened after 2010.",
     "values": [
-      2010.0
+      "2010"
     ]
   },
   {
@@ -27715,23 +27718,6 @@
         ]
       },
       {
-        "name": "2013",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2013"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2013",
-              "beginOffset": 35
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2008",
         "type": "NUMBER",
         "metadata": {
@@ -27747,13 +27733,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2013",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2013"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2013",
+              "beginOffset": 35
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "How many museums were opened after 2013 or before 2008?",
     "values": [
-      2013.0,
-      2008.0
+      "2013",
+      "2008"
     ]
   },
   {
@@ -28636,7 +28639,7 @@
     "language": "en",
     "question": "Find the name of tourney that has more than 10 matches.",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -28707,7 +28710,7 @@
     "language": "en",
     "question": "What are the names of tournaments that have more than 10 matches?",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -28777,23 +28780,6 @@
         ]
       },
       {
-        "name": "2016",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2016"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2016",
-              "beginOffset": 58
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2013",
         "type": "NUMBER",
         "metadata": {
@@ -28809,13 +28795,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2016",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2016"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2016",
+              "beginOffset": 58
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "List the names of all winners who played in both 2013 and 2016.",
     "values": [
-      2013.0,
-      2016.0
+      "2013",
+      "2016"
     ]
   },
   {
@@ -28922,8 +28925,8 @@
     "language": "en",
     "question": "What are the names of players who won in both 2013 and 2016?",
     "values": [
-      2013.0,
-      2016.0
+      "2013",
+      "2016"
     ]
   },
   {
@@ -28993,23 +28996,6 @@
         ]
       },
       {
-        "name": "2013",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2013"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2013",
-              "beginOffset": 54
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2016",
         "type": "NUMBER",
         "metadata": {
@@ -29025,13 +29011,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2013",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2013"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2013",
+              "beginOffset": 54
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "List the number of all matches who played in years of 2013 or 2016.",
     "values": [
-      2013.0,
-      2016.0
+      "2013",
+      "2016"
     ]
   },
   {
@@ -29086,23 +29089,6 @@
         ]
       },
       {
-        "name": "2013",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2013"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2013",
-              "beginOffset": 32
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2016",
         "type": "NUMBER",
         "metadata": {
@@ -29118,13 +29104,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2013",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2013"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2013",
+              "beginOffset": 32
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "How many matches were played in 2013 or 2016?",
     "values": [
-      2013.0,
-      2016.0
+      "2013",
+      "2016"
     ]
   },
   {
@@ -30804,7 +30807,7 @@
     "language": "en",
     "question": "Find the codes of countries that have more than 50 players.",
     "values": [
-      50.0
+      "50"
     ]
   },
   {
@@ -30875,7 +30878,7 @@
     "language": "en",
     "question": "What are the codes of countries with more than 50 players?",
     "values": [
-      50.0
+      "50"
     ]
   },
   {
@@ -31185,8 +31188,8 @@
         "name": "WTA Championships",
         "type": "EVENT",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/WTA_Finals",
-          "mid": "/m/04wbkq"
+          "mid": "/m/04wbkq",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/WTA_Finals"
         },
         "salience": 0.3018833,
         "mentions": [
@@ -32085,7 +32088,7 @@
     "language": "en",
     "question": "What are the ids and names of the battles that led to more than 10 people killed in total.",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -32504,8 +32507,8 @@
         "name": "English Channel",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Channel",
-          "mid": "/m/02j7k"
+          "mid": "/m/02j7k",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Channel"
         },
         "salience": 0.05365725,
         "mentions": [
@@ -32576,7 +32579,7 @@
     "language": "en",
     "question": "What are the notes of the death events which has substring 'East'?",
     "values": [
-      "%East%"
+      "East"
     ]
   },
   {
@@ -33456,7 +33459,7 @@
     "language": "en",
     "question": "What are the names and id of courses having at most 2 sections?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -33542,7 +33545,7 @@
     "language": "en",
     "question": "What are the names and ids of every course with less than 2 sections?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -33866,7 +33869,7 @@
     "language": "en",
     "question": "What is the description of the department whose name has the substring the computer?",
     "values": [
-      "%computer%"
+      "computer"
     ]
   },
   {
@@ -33952,7 +33955,7 @@
     "language": "en",
     "question": "What is the department description for the one whose name has the word computer?",
     "values": [
-      "%computer%"
+      "computer"
     ]
   },
   {
@@ -34070,7 +34073,7 @@
     "language": "en",
     "question": "Who are enrolled in 2 degree programs in one semester? List the first name, middle name and last name and the id.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -34136,23 +34139,6 @@
         ]
       },
       {
-        "name": "2",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2",
-              "beginOffset": 96
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "one",
         "type": "NUMBER",
         "metadata": {
@@ -34168,12 +34154,29 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2",
+              "beginOffset": 96
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "What are the first, middle, and last names, along with the ids, of all students who enrolled in 2 degree programs in one semester?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -34583,6 +34586,279 @@
     "language": "en",
     "question": "What is the program id and the summary of the degree that has the most students enrolled?",
     "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "student",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.42107055,
+        "mentions": [
+          {
+            "text": {
+              "content": "student",
+              "beginOffset": 6
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "times",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.15827917,
+        "mentions": [
+          {
+            "text": {
+              "content": "times",
+              "beginOffset": 40
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "program",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.10905781,
+        "mentions": [
+          {
+            "text": {
+              "content": "program",
+              "beginOffset": 53
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.061869428,
+        "mentions": [
+          {
+            "text": {
+              "content": "name",
+              "beginOffset": 94
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.061869428,
+        "mentions": [
+          {
+            "text": {
+              "content": "name",
+              "beginOffset": 81
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "id",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.06151423,
+        "mentions": [
+          {
+            "text": {
+              "content": "id",
+              "beginOffset": 71
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "number",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.037712216,
+        "mentions": [
+          {
+            "text": {
+              "content": "number",
+              "beginOffset": 115
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "enrollments",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.037712216,
+        "mentions": [
+          {
+            "text": {
+              "content": "enrollments",
+              "beginOffset": 125
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "student id",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.030138867,
+        "mentions": [
+          {
+            "text": {
+              "content": "student id",
+              "beginOffset": 141
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.020776099,
+        "mentions": [
+          {
+            "text": {
+              "content": "name",
+              "beginOffset": 105
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Which student has enrolled for the most times in any program? List the id, first name, middle name, last name, the number of enrollments and student id.",
+    "values": [
+      "Cant handle this sample as it has more than 5 select columns"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "id",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.17204823,
+        "mentions": [
+          {
+            "text": {
+              "content": "id",
+              "beginOffset": 57
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.17004766,
+        "mentions": [
+          {
+            "text": {
+              "content": "name",
+              "beginOffset": 36
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "number",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.15849976,
+        "mentions": [
+          {
+            "text": {
+              "content": "number",
+              "beginOffset": 64
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "enrollments",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.15849976,
+        "mentions": [
+          {
+            "text": {
+              "content": "enrollments",
+              "beginOffset": 74
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "student",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.13469407,
+        "mentions": [
+          {
+            "text": {
+              "content": "student",
+              "beginOffset": 95
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "most",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.120789416,
+        "mentions": [
+          {
+            "text": {
+              "content": "most",
+              "beginOffset": 120
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "program",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.085421115,
+        "mentions": [
+          {
+            "text": {
+              "content": "program",
+              "beginOffset": 132
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "What is the first, middle, and last name, along with the id and number of enrollments, for the student who enrolled the most in any program?",
+    "values": [
+      "Cant handle this sample as it has more than 5 select columns"
+    ]
   },
   {
     "entities": [
@@ -35108,7 +35384,7 @@
     "language": "en",
     "question": "Show the date and id of the transcript with at least 2 course results.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -35179,7 +35455,7 @@
     "language": "en",
     "question": "What is the date and id of the transcript with at least 2 courses listed?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -35611,11 +35887,7 @@
     "language": "en",
     "question": "Whose permanent address is different from his or her current address? List his or her first name.",
     "values": [
-      [
-        0,
-        34,
-        false
-      ]
+      "[0, 34, False]"
     ]
   },
   {
@@ -35686,11 +35958,7 @@
     "language": "en",
     "question": "What is the first name of the student whose permanent address is different from his or her current one?",
     "values": [
-      [
-        0,
-        34,
-        false
-      ]
+      "[0, 34, False]"
     ]
   },
   {
@@ -35838,23 +36106,6 @@
         ]
       },
       {
-        "name": "2",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2",
-              "beginOffset": 33
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "1",
         "type": "NUMBER",
         "metadata": {
@@ -35866,6 +36117,23 @@
             "text": {
               "content": "1",
               "beginOffset": 21
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2",
+              "beginOffset": 33
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -36812,8 +37080,8 @@
         "name": "Haiti",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Haiti",
-          "mid": "/m/03gyl"
+          "mid": "/m/03gyl",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Haiti"
         },
         "salience": 0.27089024,
         "mentions": [
@@ -37455,8 +37723,8 @@
         "name": "Brandon Vietti",
         "type": "PERSON",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Brandon_Vietti",
-          "mid": "/m/02wl4rz"
+          "mid": "/m/02wl4rz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Brandon_Vietti"
         },
         "salience": 0.14333336,
         "mentions": [
@@ -38050,8 +38318,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
-          "mid": "/m/02h40lc"
+          "mid": "/m/02h40lc",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
         },
         "salience": 0.6040863,
         "mentions": [
@@ -38129,8 +38397,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
-          "mid": "/m/02h40lc"
+          "mid": "/m/02h40lc",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
         },
         "salience": 0.118395284,
         "mentions": [
@@ -38424,8 +38692,8 @@
         "name": "TV Channel",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/07c82",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Television_channel"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Television_channel",
+          "mid": "/m/07c82"
         },
         "salience": 0.84539247,
         "mentions": [
@@ -38449,8 +38717,8 @@
         "name": "The Rise of the Blue Beetle",
         "type": "WORK_OF_ART",
         "metadata": {
-          "mid": "/m/05dm2qc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/The_Rise_of_the_Blue_Beetle!"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/The_Rise_of_the_Blue_Beetle!",
+          "mid": "/m/05dm2qc"
         },
         "salience": 0.06790866,
         "mentions": [
@@ -40704,7 +40972,7 @@
     "language": "en",
     "question": "find id of the tv channels that from the countries where have more than two tv channels.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -40775,7 +41043,7 @@
     "language": "en",
     "question": "What are the ids of all tv channels that have more than 2 TV channels?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -41582,7 +41850,7 @@
     "language": "en",
     "question": "What is the maximum number of final tables made among poker players with earnings less than 200000?",
     "values": [
-      200000.0
+      "200000"
     ]
   },
   {
@@ -41653,7 +41921,7 @@
     "language": "en",
     "question": "Return the maximum final tables made across all poker players who have earnings below 200000.",
     "values": [
-      200000.0
+      "200000"
     ]
   },
   {
@@ -41798,7 +42066,7 @@
     "language": "en",
     "question": "What are the names of poker players whose earnings is higher than 300000?",
     "values": [
-      300000.0
+      "300000"
     ]
   },
   {
@@ -41869,7 +42137,7 @@
     "language": "en",
     "question": "Give the names of poker players who have earnings above 300000.",
     "values": [
-      300000.0
+      "300000"
     ]
   },
   {
@@ -42237,7 +42505,7 @@
     "language": "en",
     "question": "What is the average earnings of poker players with height higher than 200?",
     "values": [
-      200.0
+      "200"
     ]
   },
   {
@@ -42293,7 +42561,7 @@
     "language": "en",
     "question": "Give average earnings of poker players who are taller than 200.",
     "values": [
-      200.0
+      "200"
     ]
   },
   {
@@ -42661,7 +42929,7 @@
     "language": "en",
     "question": "What are the nationalities that are shared by at least two people?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -42717,7 +42985,7 @@
     "language": "en",
     "question": "Return the nationalities for which there are two or more people.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -43405,8 +43673,8 @@
         "name": "CA",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/01n7q",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/California"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/California",
+          "mid": "/m/01n7q"
         },
         "salience": 0.24690588,
         "mentions": [
@@ -43630,7 +43898,7 @@
     "language": "en",
     "question": "What are the contestant numbers and names of the contestants who had at least two votes?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -43766,8 +44034,8 @@
         "name": "NY",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02_286",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_City"
+          "mid": "/m/059rby",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_(state)"
         },
         "salience": 0.12857392,
         "mentions": [
@@ -44142,7 +44410,7 @@
     "language": "en",
     "question": "Return the names the contestants whose names contain the substring 'Al'.",
     "values": [
-      "%Al%"
+      "Al"
     ]
   },
   {
@@ -44215,7 +44483,7 @@
     "language": "en",
     "question": "What are the names of all the countries that became independent after 1950?",
     "values": [
-      1950.0
+      "1950"
     ]
   },
   {
@@ -44288,7 +44556,7 @@
     "language": "en",
     "question": "Give the names of the nations that were founded after 1950.",
     "values": [
-      1950.0
+      "1950"
     ]
   },
   {
@@ -44606,8 +44874,8 @@
         "name": "Anguilla",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0n3g",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Anguilla"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Anguilla",
+          "mid": "/m/0n3g"
         },
         "salience": 0.18347894,
         "mentions": [
@@ -44648,8 +44916,8 @@
         "name": "Kabul",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Kabul",
-          "mid": "/m/0494n"
+          "mid": "/m/0494n",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kabul"
         },
         "salience": 0.37067497,
         "mentions": [
@@ -45081,8 +45349,8 @@
         "name": "Central Africa",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02n0ld",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Central_Africa"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Central_Africa",
+          "mid": "/m/02n0ld"
         },
         "salience": 0.09846768,
         "mentions": [
@@ -45210,8 +45478,8 @@
         "name": "Asia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
         "salience": 0.074181244,
         "mentions": [
@@ -46272,8 +46540,8 @@
         "name": "Aruba",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Aruba",
-          "mid": "/m/0j11"
+          "mid": "/m/0j11",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aruba"
         },
         "salience": 0.17216548,
         "mentions": [
@@ -46814,8 +47082,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
-          "mid": "/m/02h40lc"
+          "mid": "/m/02h40lc",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
         },
         "salience": 0.064129405,
         "mentions": [
@@ -46890,8 +47158,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
-          "mid": "/m/02h40lc"
+          "mid": "/m/02h40lc",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
         },
         "salience": 0.042370997,
         "mentions": [
@@ -47685,7 +47953,7 @@
     "question": "Which languages are spoken by only one country in republic governments?",
     "values": [
       "Republic",
-      1.0
+      "1"
     ]
   },
   {
@@ -47740,7 +48008,7 @@
     "question": "What languages are only used by a single country with a republic government?",
     "values": [
       "Republic",
-      1.0
+      "1"
     ]
   },
   {
@@ -47821,8 +48089,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
-          "mid": "/m/02h40lc"
+          "mid": "/m/02h40lc",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
         },
         "salience": 0.15122284,
         "mentions": [
@@ -48025,8 +48293,8 @@
         "name": "Asian",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
-          "mid": "/m/0j0k"
+          "mid": "/m/0j0k",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
         },
         "salience": 0.039547555,
         "mentions": [
@@ -48300,8 +48568,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
-          "mid": "/m/02h40lc"
+          "mid": "/m/02h40lc",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
         },
         "salience": 0.10620326,
         "mentions": [
@@ -48561,7 +48829,7 @@
     "language": "en",
     "question": "What is the total number of unique official languages spoken in the countries that are founded before 1930?",
     "values": [
-      1930.0,
+      "1930",
       "T"
     ]
   },
@@ -48650,7 +48918,7 @@
     "language": "en",
     "question": "For the countries founded before 1930, what is the total number of distinct official languages?",
     "values": [
-      1930.0,
+      "1930",
       "T"
     ]
   },
@@ -49255,8 +49523,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
-          "mid": "/m/02h40lc"
+          "mid": "/m/02h40lc",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
         },
         "salience": 0.11377529,
         "mentions": [
@@ -49864,8 +50132,8 @@
         "name": "Chinese",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/01r2l",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language",
+          "mid": "/m/01r2l"
         },
         "salience": 0.11668067,
         "mentions": [
@@ -49974,8 +50242,8 @@
         "name": "Chinese",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language",
-          "mid": "/m/01r2l"
+          "mid": "/m/01r2l",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language"
         },
         "salience": 0.03901806,
         "mentions": [
@@ -50423,7 +50691,7 @@
     "language": "en",
     "question": "Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -50509,7 +50777,7 @@
     "language": "en",
     "question": "What are the names of countries that speak more than 2 languages, as well as how many languages they speak?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -50789,7 +51057,7 @@
     "language": "en",
     "question": "Find the government form name and total population for each government form whose average life expectancy is longer than 72.",
     "values": [
-      72.0
+      "72"
     ]
   },
   {
@@ -50875,7 +51143,7 @@
     "language": "en",
     "question": "What are the different government forms and what is the total population of each for government forms that have an average life expectancy greater than 72?",
     "values": [
-      72.0
+      "72"
     ]
   },
   {
@@ -50961,7 +51229,7 @@
     "language": "en",
     "question": "Find the average life expectancy and total population for each continent where the average life expectancy is shorter than 72?",
     "values": [
-      72.0
+      "72"
     ]
   },
   {
@@ -51062,7 +51330,7 @@
     "language": "en",
     "question": "What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?",
     "values": [
-      72.0
+      "72"
     ]
   },
   {
@@ -51890,7 +52158,7 @@
     "question": "What is the total population and average area of countries in the continent of North America whose area is bigger than 3000\uff1f",
     "values": [
       "North America",
-      3000.0
+      "3000"
     ]
   },
   {
@@ -51992,7 +52260,7 @@
     "question": "Give the total population and average surface area corresponding to countries in Noth America that have a surface area greater than 3000.",
     "values": [
       "North America",
-      3000.0
+      "3000"
     ]
   },
   {
@@ -52065,8 +52333,8 @@
     "language": "en",
     "question": "What are the cities whose population is between 160000 and 900000?",
     "values": [
-      160000.0,
-      900000.0
+      "160000",
+      "900000"
     ]
   },
   {
@@ -52154,8 +52422,8 @@
     "language": "en",
     "question": "Return the names of cities that have a population between 160000 and 900000.",
     "values": [
-      160000.0,
-      90000.0
+      "160000",
+      "90000"
     ]
   },
   {
@@ -53015,8 +53283,8 @@
         "name": "USA",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.095070966,
         "mentions": [
@@ -53836,7 +54104,7 @@
     "language": "en",
     "question": "Show the names of conductors that have conducted more than one orchestras.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -53907,7 +54175,7 @@
     "language": "en",
     "question": "What are the names of conductors who have conducted at more than one orchestra?",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -54114,7 +54382,7 @@
     "language": "en",
     "question": "Please show the name of the conductor that has conducted orchestras founded after 2008.",
     "values": [
-      2008.0
+      "2008"
     ]
   },
   {
@@ -54202,7 +54470,7 @@
     "language": "en",
     "question": "What are the names of conductors who have conducted orchestras founded after the year 2008?",
     "values": [
-      2008.0
+      "2008"
     ]
   },
   {
@@ -54710,8 +54978,8 @@
     "language": "en",
     "question": "Show the record companies shared by orchestras founded before 2003 and after 2003.",
     "values": [
-      2003.0,
-      2003.0
+      "2003",
+      "2003"
     ]
   },
   {
@@ -54791,7 +55059,7 @@
           {
             "text": {
               "content": "2003",
-              "beginOffset": 78
+              "beginOffset": 107
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -54808,7 +55076,7 @@
           {
             "text": {
               "content": "2003",
-              "beginOffset": 107
+              "beginOffset": 78
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -54818,8 +55086,8 @@
     "language": "en",
     "question": "What are the record companies that are used by both orchestras founded before 2003 and those founded after 2003?",
     "values": [
-      2003.0,
-      2003.0
+      "2003",
+      "2003"
     ]
   },
   {
@@ -55037,7 +55305,7 @@
     "language": "en",
     "question": "Show the years in which orchestras that have given more than one performance are founded.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -55076,7 +55344,7 @@
     "language": "en",
     "question": "What are years of founding for orchestras that have had more than a single performance?",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -55462,7 +55730,7 @@
     "language": "en",
     "question": "Show the names of all high schoolers in grade 10.",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -55518,7 +55786,7 @@
     "language": "en",
     "question": "What are the names of all high schoolers in grade 10?",
     "values": [
-      10.0
+      "10"
     ]
   },
   {
@@ -55669,8 +55937,8 @@
     "language": "en",
     "question": "How many high schoolers are there in grade 9 or 10?",
     "values": [
-      9.0,
-      10.0
+      "9",
+      "10"
     ]
   },
   {
@@ -55758,8 +56026,8 @@
     "language": "en",
     "question": "Count the number of high schoolers in grades 9 or 10.",
     "values": [
-      9.0,
-      10.0
+      "9",
+      "10"
     ]
   },
   {
@@ -55993,7 +56261,7 @@
     "language": "en",
     "question": "Show me all grades that have at least 4 students.",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -56049,7 +56317,7 @@
     "language": "en",
     "question": "Which grades have 4 or more high schoolers?",
     "values": [
-      4.0
+      "4"
     ]
   },
   {
@@ -56447,7 +56715,7 @@
     "language": "en",
     "question": "Show the names of high schoolers who have at least 3 friends.",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -56518,7 +56786,7 @@
     "language": "en",
     "question": "What are the names of high schoolers who have 3 or more friends?",
     "values": [
-      3.0
+      "3"
     ]
   },
   {
@@ -56678,7 +56946,10 @@
       {
         "name": "Kyle",
         "type": "PERSON",
-        "metadata": {},
+        "metadata": {
+          "mid": "/m/07998x",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kyle_Richards"
+        },
         "salience": 0.3318329,
         "mentions": [
           {
@@ -57644,7 +57915,7 @@
     "language": "en",
     "question": "Show the names of students who have at least 2 likes.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -57715,7 +57986,7 @@
     "language": "en",
     "question": "What are the names of students who have 2 or more likes?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -57818,8 +58089,8 @@
     "language": "en",
     "question": "Show the names of students who have a grade higher than 5 and have at least 2 friends.",
     "values": [
-      5.0,
-      2.0
+      "5",
+      "2"
     ]
   },
   {
@@ -57922,8 +58193,8 @@
     "language": "en",
     "question": "What are the names of high schoolers who have a grade of over 5 and have 2 or more friends?",
     "values": [
-      5.0,
-      2.0
+      "5",
+      "2"
     ]
   },
   {
@@ -58516,8 +58787,8 @@
         "name": "Indiana",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/03v1s",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Indiana"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Indiana",
+          "mid": "/m/03v1s"
         },
         "salience": 0.09931469,
         "mentions": [
@@ -58597,7 +58868,7 @@
     "question": "Which professionals live in the state of Indiana or have done treatment on more than 2 treatments? List his or her id, last name and cell phone.",
     "values": [
       "Indiana",
-      2.0
+      "2"
     ]
   },
   {
@@ -58732,7 +59003,7 @@
     "question": "Find the id, last name and cell phone of the professionals who live in the state of Indiana or have performed more than two treatments.",
     "values": [
       "Indiana",
-      2.0
+      "2"
     ]
   },
   {
@@ -58818,7 +59089,7 @@
     "language": "en",
     "question": "Which dogs have not cost their owner more than 1000 for treatment? List the dog names.",
     "values": [
-      1000.0
+      "1000"
     ]
   },
   {
@@ -58904,7 +59175,7 @@
     "language": "en",
     "question": "What are the names of the dogs for which the owner spent more than 1000 for treatment?",
     "values": [
-      1000.0
+      "1000"
     ]
   },
   {
@@ -59512,7 +59783,7 @@
     "language": "en",
     "question": "Which professionals have done at least two treatments? List the professional's id, role, and first name.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -59613,7 +59884,7 @@
     "language": "en",
     "question": "What are the id, role, and first name of the professionals who have performed two or more treatments?",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -60317,7 +60588,7 @@
     "language": "en",
     "question": "Which professionals have done at least two types of treatments? List the professional id and cell phone.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -60418,7 +60689,7 @@
     "language": "en",
     "question": "Find the id and cell phone of the professionals who operate two or more types of treatments.",
     "values": [
-      2.0
+      "2"
     ]
   },
   {
@@ -61706,8 +61977,8 @@
         "name": "Hawaii",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Hawaii",
-          "mid": "/m/03gh4"
+          "mid": "/m/03gh4",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hawaii"
         },
         "salience": 0.023601044,
         "mentions": [
@@ -62197,7 +62468,7 @@
     "language": "en",
     "question": "Which professionals live in a city containing the substring 'West'? List his or her role, street, city and state.",
     "values": [
-      "%West%"
+      "West"
     ]
   },
   {
@@ -62326,7 +62597,7 @@
     "language": "en",
     "question": "Find the role, street, city and state of the professionals living in a city that contains the substring 'West'.",
     "values": [
-      "%West%"
+      "West"
     ]
   },
   {
@@ -62455,7 +62726,7 @@
     "language": "en",
     "question": "Which owners live in the state whose name contains the substring 'North'? List his first name, last name and email.",
     "values": [
-      "%North%"
+      "North"
     ]
   },
   {
@@ -62584,7 +62855,7 @@
     "language": "en",
     "question": "Return the first name, last name and email of the owners living in a state whose name contains the substring 'North'.",
     "values": [
-      "%North%"
+      "North"
     ]
   },
   {
@@ -63125,23 +63396,6 @@
         ]
       },
       {
-        "name": "1",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "1"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "1",
-              "beginOffset": 71
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "0",
         "type": "NUMBER",
         "metadata": {
@@ -63157,12 +63411,29 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "1",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "1",
+              "beginOffset": 71
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "List the dog name, age and weight of the dogs who have been abandoned? 1 stands for yes, and 0 stands for no.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -63295,7 +63566,7 @@
     "language": "en",
     "question": "What are the dog name, age and weight of the dogs that were abandoned? Note that 1 stands for yes, and 0 stands for no in the tables.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -64456,23 +64727,6 @@
         ]
       },
       {
-        "name": "1949",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "1949"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "1949",
-              "beginOffset": 60
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "1948",
         "type": "NUMBER",
         "metadata": {
@@ -64488,13 +64742,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "1949",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1949"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "1949",
+              "beginOffset": 60
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "Show the name of singers whose birth year is either 1948 or 1949?",
     "values": [
-      1948.0,
-      1949.0
+      "1948",
+      "1949"
     ]
   },
   {
@@ -64564,23 +64835,6 @@
         ]
       },
       {
-        "name": "1949",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "1949"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "1949",
-              "beginOffset": 71
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "1948",
         "type": "NUMBER",
         "metadata": {
@@ -64596,13 +64850,30 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "1949",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1949"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "1949",
+              "beginOffset": 71
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
     "question": "What are the names of the singers whose birth years are either 1948 or 1949?",
     "values": [
-      1948.0,
-      1949.0
+      "1948",
+      "1949"
     ]
   },
   {
@@ -65193,7 +65464,7 @@
     "language": "en",
     "question": "Show distinct names of singers that have songs with sales more than 300000.",
     "values": [
-      300000.0
+      "300000"
     ]
   },
   {
@@ -65264,7 +65535,7 @@
     "language": "en",
     "question": "what are the different names of the singers that have sales more than 300000?",
     "values": [
-      300000.0
+      "300000"
     ]
   },
   {
@@ -65335,7 +65606,7 @@
     "language": "en",
     "question": "Show the names of singers that have more than one song.",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -65406,7 +65677,7 @@
     "language": "en",
     "question": "What are the names of the singers that have more than one songs?",
     "values": [
-      1.0
+      "1"
     ]
   },
   {
@@ -65736,8 +66007,8 @@
     "language": "en",
     "question": "Show the citizenship shared by singers with birth year before 1945 and after 1955.",
     "values": [
-      1945.0,
-      1955.0
+      "1945",
+      "1955"
     ]
   },
   {
@@ -65844,8 +66115,8 @@
     "language": "en",
     "question": "What are the citizenships that are shared by singers with a birth year before 1945 and after 1955?",
     "values": [
-      1945.0,
-      1955.0
+      "1945",
+      "1955"
     ]
   },
   {
@@ -66076,7 +66347,7 @@
     "values": [
       "House",
       "Apartment",
-      1.0
+      "1"
     ]
   }
 ]
