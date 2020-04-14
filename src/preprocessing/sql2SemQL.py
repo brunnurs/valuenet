@@ -15,7 +15,7 @@ import sys
 
 import copy
 
-from helpers.get_values_from_sql import format_groundtruth_value
+from tools.get_values_from_sql import format_groundtruth_value
 from preprocessing.utils import load_dataSets, find_table_of_star_column
 from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order, V
 
