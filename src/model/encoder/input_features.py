@@ -20,10 +20,9 @@ def encode_input(question_spans, column_names, table_names, values, tokenizer, m
         all_question_span_lengths.append(question_span_lengths)
 
         columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer)
-        # TODO: this is an exception case (db-id: "baseball_1") which leads to too many tokens. Therefore we don't sub-tokenize it
-        if len(columns_tokens) == 433:
+
+        if _is_baseball_1_schema(tables):
             columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
-            # print("Found a 'baseball_1' case!")
 
         all_column_token_lengths.append(column_token_lengths)
 
@@ -38,7 +37,13 @@ def encode_input(question_spans, column_names, table_names, values, tokenizer, m
 
         tokens = question_tokens + columns_tokens + table_tokens + value_tokens
         if len(tokens) > max_length_model:
-            print("################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {} ".format(len(tokens), len(question_tokens), len(columns_tokens), len(table_tokens)))
+            print(
+                "################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {}, values: {} ".format(
+                                                                                                                                            len(tokens),
+                                                                                                                                            len(question_tokens),
+                                                                                                                                            len(columns_tokens),
+                                                                                                                                            len(table_tokens),
+                                                                                                                                            len(value_tokens)))
             print(question)
             print(columns)
             print(tables)
@@ -175,3 +180,10 @@ def format_value(value):
 
     return value
 
+
+def _is_baseball_1_schema(table_names):
+    return table_names == [['all', 'star'], ['appearance'], ['manager', 'award'], ['player', 'award'],
+                           ['manager', 'award', 'vote'], ['player', 'award', 'vote'], ['batting'],
+                           ['batting', 'postseason'], ['player', 'college'], ['hall', 'of', 'fame'], ['home', 'game'],
+                           ['player'], ['park'], ['salary'], ['college'], ['postseason'], ['team'],
+                           ['team', 'franchise']]
