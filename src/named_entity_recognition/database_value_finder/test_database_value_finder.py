@@ -98,6 +98,21 @@ class TestDatabaseValueFinder(TestCase):
         print(similar_values_db)
         self.assertGreaterEqual(similar_values_db.index(('John F Kennedy International Airport', 'name', 'airports')), 0, 'Could not find "Paper" in database.')
 
+    def test_find_similar_values_in_database___yale_sample(self):
+        # GIVEN
+        potential_values = [('Yale University', 0.9), ('height', 0.75), ('players', 0.75), ('college', 0.75), ('Yale', 0.75), ('University', 0.75)]
+        db_name = 'baseball_1'
+        db_folder = 'data/spider/original/database'
+        db_schemas = 'data/spider/original/tables.json'
+
+        db_value_finder = DatabaseValueFinder(db_folder, db_name, db_schemas)
+
+        # WHEN
+        similar_values_db = db_value_finder.find_similar_values_in_database(potential_values)
+
+        # THEN
+        print(similar_values_db)
+        self.assertGreaterEqual(similar_values_db.index(('Yale University', 'name_full', 'college')), 0, 'Could not find "Yale University" in database.')
 
     def test__assemble_query(self):
         # GIVEN
