@@ -21,7 +21,7 @@ print("Transformed {} samples successful to SQL. {} samples failed. Generated th
       "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
     count_success, count_failed))
 
-kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'tables.json'))
+kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'original', 'tables.json'))
 
 spider_evaluation(os.path.join(args.prediction_dir, 'ground_truth.txt'),
                   os.path.join(args.prediction_dir, 'output.txt'),
