@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="#1 spider_dataset_preprocessing" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing">
+  <configuration default="false" name="#1 spider_dataset_preprocessing (train)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing TRAIN">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="#2 pre-process NER values" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing">
+  <configuration default="false" name="#2 pre-process NER values  (train)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing TRAIN">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
