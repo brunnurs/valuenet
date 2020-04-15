@@ -62,21 +62,21 @@ def match_values_in_database(db_id: str, extracted_data: NerExtractionData):
 
     # depending on the candidate type we set a different tolerance value for similarity matching with db-values.
     # Remember: 1.0 is looking for exact matches only. Also remember: we do lower-case only comparison, so 'Male' and 'male' will match with 1.0
-    candidates_to_be_boiled_down_by_database_search = []
+    candidates = []
     # With values in quote we are a bit tolerant. Important: we keep this values anyway, as the are often used in fuzzy LIKE searches.
-    candidates_to_be_boiled_down_by_database_search += [(quote, 0.8) for quote in extracted_data.heuristic_values_in_quote]
+    _add_without_duplicates([(quote, 0.9) for quote in extracted_data.heuristic_values_in_quote], candidates)
     # Gender values we only want exact matches.
-    candidates_to_be_boiled_down_by_database_search += [(gender, 1.0) for gender in extracted_data.heuristics_genders]
-    candidates_to_be_boiled_down_by_database_search += [(common_mentionings, 0.9) for common_mentionings in extracted_data.heuristics_variety_common_mentionings]
+    _add_without_duplicates([(gender, 1.0) for gender in extracted_data.heuristics_genders], candidates)
+    _add_without_duplicates([(common_mentionings, 0.9) for common_mentionings in extracted_data.heuristics_variety_common_mentionings], candidates)
     # a special code should match exactly
-    candidates_to_be_boiled_down_by_database_search += [(special_code, 1.0) for special_code in extracted_data.heuristics_special_codes]
-    candidates_to_be_boiled_down_by_database_search += [(capitalized_word, 0.8) for capitalized_word in extracted_data.heuristics_capitalized_words]
-    candidates_to_be_boiled_down_by_database_search += [(location, 0.9) for location in extracted_data.heuristics_location_abbreviations]
+    _add_without_duplicates([(special_code, 1.0) for special_code in extracted_data.heuristics_special_codes], candidates)
+    _add_without_duplicates([(capitalized_word, 0.8) for capitalized_word in extracted_data.heuristics_capitalized_words], candidates)
+    _add_without_duplicates([(location, 0.9) for location in extracted_data.heuristics_location_abbreviations], candidates)
 
     # important: in addition to all the handcrafted features, also take all values from the NER which aren't known dates/numbers/prices
-    candidates_to_be_boiled_down_by_database_search += [(ner_value, 0.75) for ner_value in extracted_data.ner_remaining]
+    _add_without_duplicates([(ner_value, 0.75) for ner_value in extracted_data.ner_remaining], candidates)
 
-    database_matches = _find_matches_in_database(db_value_finder, candidates_to_be_boiled_down_by_database_search)
+    database_matches = _find_matches_in_database(db_value_finder, candidates)
 
     # Here we put all the values to one happy list together: the ones we matched via database and the ones we got directly out of the question.
     # The 'set' is to remove duplicates.
@@ -105,6 +105,18 @@ def _find_matches_in_database(db_value_finder, potential_values):
 
     tic_toc.toc()
     return matches
+
+
+def _add_without_duplicates(new_candidates, candidates):
+    for value, tolerance in new_candidates:
+        existing_candidate = next(filter(lambda value_tolerance: value_tolerance[0] == value, candidates), None)
+        if existing_candidate:
+            existing_value, existing_tolerance = existing_candidate
+            if existing_tolerance < tolerance:
+                candidates.remove((existing_value, existing_tolerance))
+                candidates.append((value, tolerance))
+        else:
+            candidates.append((value, tolerance))
 
 
 def _compose_number(entity):
