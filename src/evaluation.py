@@ -68,7 +68,7 @@ def evaluate(model, dev_loader, table_data, beam_size):
 def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir, experiment_dir, tb_writer, training_step):
     total_count, failure_count = transform_semQL_to_sql(table_data, predictions, experiment_dir)
 
-    kmaps = build_foreign_key_map_from_json(os.path.join(data_dir, 'tables.json'))
+    kmaps = build_foreign_key_map_from_json(os.path.join(data_dir, 'original', 'tables.json'))
 
     spider_eval_results = spider_evaluation(os.path.join(experiment_dir, 'ground_truth.txt'),
                                             os.path.join(experiment_dir, 'output.txt'),
@@ -118,9 +118,9 @@ if __name__ == '__main__':
           "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
         count_success, count_failed))
 
-    kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'tables.json'))
+    kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'original', 'tables.json'))
 
     spider_evaluation(os.path.join(args.prediction_dir, 'ground_truth.txt'),
                       os.path.join(args.prediction_dir, 'output.txt'),
-                      os.path.join(args.data_dir, "original", "database"),
+                      os.path.join(args.data_dir, 'original', 'database'),
                       "exec", kmaps)
