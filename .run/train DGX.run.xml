@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
-    <option name="PARAMETERS" value="--exp_name roberta --cuda --batch_size 16 --num_epochs 100 --loss_epoch_threshold 70 --sketch_loss_weight 1.0 --beam_size 1 --seed 90 --encoder_pretrained_model=roberta-large" />
+    <option name="PARAMETERS" value="--exp_name ner_values --cuda --batch_size 20 --num_epochs 30 --loss_epoch_threshold 20 --sketch_loss_weight 1.0 --beam_size 1 --seed 90" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="true" />
     <option name="MODULE_MODE" value="false" />
