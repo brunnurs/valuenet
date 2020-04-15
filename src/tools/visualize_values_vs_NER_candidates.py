@@ -4,11 +4,16 @@ import matplotlib.pyplot as plt
 with open('data/spider/preprocessed_with_values_train.json', 'r', encoding='utf-8') as json_file:
     data = json.load(json_file)
 
+    all_candidates = []
     for row in data:
         values = row['values']
         if values:
             candidates = row['ner_extracted_values_processed']
-            print(f'Values: {values}          Candiates: {candidates}')
+            all_candidates.append(candidates)
+            print(f'Values ({len(values)}): {values}          Candiates ({len(candidates)}): {candidates}')
+
+    print('Number of candidates sorted (search in this output to find which query it is):')
+    print(sorted(map(lambda x: len(x), all_candidates), reverse=True))
 
     all_diff = []
     for row in data:
