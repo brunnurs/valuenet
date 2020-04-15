@@ -191,12 +191,12 @@ def _transform(components, transformed_sql, col_set, table_names, values, schema
                     second_value = None
                     # now we handle the values - we also handle data types properly.
                     value_obj = eval(pop_front(components))
-                    value = format_value_given_datatype(column_final_idx, schema, values[value_obj.id_c])
+                    value = format_value_given_datatype(column_final_idx, schema, values[value_obj.id_c], c_instance)
 
                     # there is a few special cases where we have to deal with multiple values - e.g. in the "X BETWEEN Y AND Z" case.
                     if isinstance(eval(peek_front(components)), V):
                         second_value_obj = eval(pop_front(components))
-                        second_value = format_value_given_datatype(column_final_idx, schema, values[second_value_obj.id_c])
+                        second_value = format_value_given_datatype(column_final_idx, schema, values[second_value_obj.id_c], c_instance)
 
                     transformed_sql['where'].append((
                         op,
@@ -344,7 +344,7 @@ def preprocess_schema(schema):
     schema['graph'] = graph
 
 
-def format_value_given_datatype(column_final_idx, schema, value):
+def format_value_given_datatype(column_final_idx, schema, value, filter_instance):
     # there is some special cases on the training set where the user asks for an "empty" history or
     # similar. In that case, we need to really add an empty string.
     if value == '':
@@ -369,7 +369,13 @@ def format_value_given_datatype(column_final_idx, schema, value):
     if use_quotes and isinstance(value, numbers.Number):
         value = int(value)
 
+    # filter 9 is 'LIKE' - we need to add the wildcards to the value.
+    # TODO: introduce new filter actions for LIKE_FUZZY_BEGINNING and LIKE_FUZZY_ENDING
+    if filter_instance.id_c == 9:
+        value = f'%{value}%'
+
     value_formatted = "'{}'".format(value) if use_quotes else value
+
     return value_formatted
 
 
