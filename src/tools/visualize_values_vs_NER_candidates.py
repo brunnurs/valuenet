@@ -1,7 +1,7 @@
 import json
 import matplotlib.pyplot as plt
 
-with open('data/spider/preprocessed_with_values_train.json', 'r', encoding='utf-8') as json_file:
+with open('data/spider/preprocessed_with_values_dev.json', 'r', encoding='utf-8') as json_file:
     data = json.load(json_file)
 
     all_candidates = []
@@ -10,7 +10,7 @@ with open('data/spider/preprocessed_with_values_train.json', 'r', encoding='utf-
         if values:
             candidates = row['ner_extracted_values_processed']
             all_candidates.append(candidates)
-            print(f'Values ({len(values)}): {values}          Candiates ({len(candidates)}): {candidates}')
+            print(f'Values ({len(values)}): {values}          Candidates ({len(candidates)}): {candidates}')
 
     print('Number of candidates sorted (search in this output to find which query it is):')
     print(sorted(map(lambda x: len(x), all_candidates), reverse=True))
