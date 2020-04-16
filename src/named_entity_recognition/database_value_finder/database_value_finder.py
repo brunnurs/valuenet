@@ -14,7 +14,7 @@ NUM_CORES = multiprocessing.cpu_count()
 
 
 class DatabaseValueFinder:
-    def __init__(self, database_folder, database_name, database_schema_path, max_results=50):
+    def __init__(self, database_folder, database_name, database_schema_path, max_results=10):
         self.database = database_name
         self.database_schema = self._load_schema(database_schema_path, database_name)
         self.database_path = Path(database_folder, database_name, database_name + '.sqlite')
