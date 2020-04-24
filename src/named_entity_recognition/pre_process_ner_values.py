@@ -263,7 +263,8 @@ if __name__ == '__main__':
 
     for row, value_candidates in zip(data, values_matched_with_database):
         # this method is basically cheating: if we don't find a value in the values candidates, we add it from the ground truth.
-        # this is ok für the training set, but will not work with new samples.
+        # This makes sense for training, as we don't want to reduce the training samples because of non-found values. We also mark
+        # the samples where not all values could get extracted, so we can manually fail them during evaluation.
         value_candidates_adjusted, all_values_found, n_expected_values = add_not_found_values(row['values'],
                                                                                               value_candidates,
                                                                                               row['question'],
@@ -271,6 +272,7 @@ if __name__ == '__main__':
                                                                                               row['db_id'])
 
         row['ner_extracted_values_processed'] = value_candidates_adjusted
+        row['all_values_found'] = all_values_found
 
         if not all_values_found:
             not_found_count += 1

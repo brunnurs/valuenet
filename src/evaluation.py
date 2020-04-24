@@ -52,12 +52,16 @@ def evaluate(model, dev_loader, table_data, beam_size):
             truth_sketch = " ".join([str(x) for x in example.sketch])
             truth_rule_label = " ".join([str(x) for x in example.tgt_actions])
 
-            # with a simple string comparison to the ground truth we figure out if the sketch/prediction is correct. There is
-            # clearly room for improvement here.
-            if truth_sketch == prediction['sketch_result']:
-                sketch_correct += 1
-            if truth_rule_label == prediction['model_result']:
-                rule_label_correct += 1
+            if prediction['all_values_found']:
+                if truth_sketch == prediction['sketch_result']:
+                    sketch_correct += 1
+                if truth_rule_label == prediction['model_result']:
+                    rule_label_correct += 1
+            else:
+                question = prediction['question']
+                print(f'Not all values found during pre-processing for question {question}. Replace values with dummy to make query fail')
+                prediction['values'] = [1] * len(prediction['values'])
+
             total += 1
 
             predictions.append(prediction)
