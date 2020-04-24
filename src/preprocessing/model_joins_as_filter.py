@@ -7,7 +7,7 @@ from preprocessing.utils import find_table_of_star_column
 def model_simple_joins_as_filter(entry):
     """
     as SemQL is not modeling any join, we need to find a way to model a situation where we join table A and B, but
-    have no filter/selection on table B. To do so, we model table B as a "WHERE A.B  = (SELECT B.ID...)" statement.
+    have no filter/selection on table B. To do so, we model table B as a "WHERE A.B  in = (SELECT B.ID...)" statement.
     If there are already filters, we do not only have to add one new filter for table B, but also an AND-filter on top.
     """
 
