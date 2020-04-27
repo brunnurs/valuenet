@@ -123,7 +123,21 @@ class TestDatabaseValueFinder(TestCase):
         query = DatabaseValueFinder._assemble_query(columns, table)
 
         # THEN
-        self.assertEqual('SELECT T.A, T.B, T.C FROM T', query)
+        self.assertEqual('SELECT T.[A], T.[B], T.[C] FROM T', query)
+
+    def test__assemble_query__put_table_starting_with_number_in_brackets(self):
+        """
+        https://stackoverflow.com/questions/44217821/why-sql-table-name-cannot-start-with-numeric
+        """
+        # GIVEN
+        columns = ['Rating', '18_49_Rating_Share']
+        table = 'TV_series'
+
+        # WHEN
+        query = DatabaseValueFinder._assemble_query(columns, table)
+
+        # THEN
+        self.assertEqual('SELECT TV_series.[Rating], TV_series.[18_49_Rating_Share] FROM TV_series', query)
 
     def test__is_similar_enough_lowercase_only(self):
         # GIVEN
