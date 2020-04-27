@@ -8215,16 +8215,16 @@
         ]
       },
       {
-        "name": "8",
+        "name": "4",
         "type": "NUMBER",
         "metadata": {
-          "value": "8"
+          "value": "4"
         },
         "salience": 0,
         "mentions": [
           {
             "text": {
-              "content": "8",
+              "content": "4",
               "beginOffset": 53
             },
             "type": "TYPE_UNKNOWN"
@@ -8233,7 +8233,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the smallest weight of the car produced with 8 cylinders on 1974?",
+    "question": "What is the smallest weight of the car produced with 4 cylinders on 1974?",
     "values": [
       "4",
       "1974"
@@ -8304,16 +8304,16 @@
         ]
       },
       {
-        "name": "8",
+        "name": "4",
         "type": "NUMBER",
         "metadata": {
-          "value": "8"
+          "value": "4"
         },
         "salience": 0,
         "mentions": [
           {
             "text": {
-              "content": "8",
+              "content": "4",
               "beginOffset": 42
             },
             "type": "TYPE_UNKNOWN"
@@ -8339,7 +8339,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the minimu weight of the car with 8 cylinders produced in 1974?",
+    "question": "What is the minimu weight of the car with 4 cylinders produced in 1974?",
     "values": [
       "4",
       "1974"
@@ -11460,7 +11460,7 @@
     "language": "en",
     "question": "Among the cars that do not have the minimum horsepower, what are the make ids and names of al those with less than 4 cylinders?",
     "values": [
-      "3"
+      "4"
     ]
   },
   {
@@ -24844,7 +24844,7 @@
     "language": "en",
     "question": "List the name of teachers whose hometown is not \"Little Lever Urban District\".",
     "values": [
-      "Little Lever Urban Distric"
+      "Little Lever Urban District"
     ]
   },
   {
@@ -24916,7 +24916,7 @@
     "language": "en",
     "question": "What are the names of the teachers whose hometown is not \"Little Lever Urban District\"?",
     "values": [
-      "Little Lever Urban Distric"
+      "Little Lever Urban District"
     ]
   },
   {
@@ -50691,7 +50691,7 @@
     "language": "en",
     "question": "Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.",
     "values": [
-      "2"
+      "3"
     ]
   },
   {
@@ -52423,7 +52423,7 @@
     "question": "Return the names of cities that have a population between 160000 and 900000.",
     "values": [
       "160000",
-      "90000"
+      "900000"
     ]
   },
   {
