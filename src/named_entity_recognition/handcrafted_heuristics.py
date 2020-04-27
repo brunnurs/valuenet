@@ -24,6 +24,10 @@ def find_ordinals(question_tokens):
         'twice': 2,
         'thrice': 3,
 
+        'single': 1,
+        'double': 2,
+        'triple': 3,
+
         'first': 1,
         'second': 2,
         'third': 3,
