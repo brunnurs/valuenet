@@ -110,8 +110,10 @@ class DatabaseValueFinder:
 
     @staticmethod
     def _assemble_query(columns, table):
-        select_clause = reduce(lambda current, next_column: current + f', {table}.{next_column}', columns[1:],
-                               f'{table}.{columns[0]}')
+        # you might ask why the brackets around the column: this is necessary if a column starts with a weird character
+        # like e.g. a number. And unfortunately there are some of them in the databases...
+        select_clause = reduce(lambda current, next_column: current + f', {table}.[{next_column}]', columns[1:],
+                               f'{table}.[{columns[0]}]')
 
         return f'SELECT {select_clause} FROM {table}'
 
