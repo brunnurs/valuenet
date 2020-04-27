@@ -3048,7 +3048,7 @@
             "limit",
             "value"
         ],
-        "question": "What is the name and capacity of the stadium  with the most concerts after 2013?",
+        "question": "What is the name and capacity of the stadium  with the most concerts after 2014?",
         "question_toks": [
             "What",
             "is",
@@ -3064,7 +3064,7 @@
             "most",
             "concerts",
             "after",
-            "2013",
+            "2014",
             "?"
         ],
         "sql": {
@@ -18409,7 +18409,7 @@
             "limit",
             "value"
         ],
-        "question": "What is the smallest weight of the car produced with 8 cylinders on 1974?",
+        "question": "What is the smallest weight of the car produced with 4 cylinders on 1974?",
         "question_toks": [
             "What",
             "is",
@@ -18421,7 +18421,7 @@
             "car",
             "produced",
             "with",
-            "8",
+            "4",
             "cylinders",
             "on",
             "1974",
@@ -18553,7 +18553,7 @@
             "limit",
             "value"
         ],
-        "question": "What is the minimu weight of the car with 8 cylinders produced in 1974?",
+        "question": "What is the minimu weight of the car with 4 cylinders produced in 1974?",
         "question_toks": [
             "What",
             "is",
@@ -18564,7 +18564,7 @@
             "the",
             "car",
             "with",
-            "8",
+            "4",
             "cylinders",
             "produced",
             "in",
@@ -25543,7 +25543,7 @@
     },
     {
         "db_id": "car_1",
-        "query": "SELECT T2.MakeId ,  T2.Make FROM CARS_DATA AS T1 JOIN CAR_NAMES AS T2 ON T1.Id  =  T2.MakeId WHERE T1.Horsepower  >  (SELECT min(Horsepower) FROM CARS_DATA) AND T1.Cylinders  <=  3;",
+        "query": "SELECT T2.MakeId ,  T2.Make FROM CARS_DATA AS T1 JOIN CAR_NAMES AS T2 ON T1.Id  =  T2.MakeId WHERE T1.Horsepower  >  (SELECT min(Horsepower) FROM CARS_DATA) AND T1.Cylinders  <  4;",
         "query_toks": [
             "SELECT",
             "T2.MakeId",
@@ -25576,8 +25576,7 @@
             "AND",
             "T1.Cylinders",
             "<",
-            "=",
-            "3",
+            "4",
             ";"
         ],
         "query_toks_no_value": [
@@ -25624,7 +25623,6 @@
             ".",
             "cylinders",
             "<",
-            "=",
             "value"
         ],
         "question": "Among the cars that do not have the minimum horsepower, what are the make ids and names of al those with less than 4 cylinders?",
@@ -25781,7 +25779,7 @@
                 "and",
                 [
                     false,
-                    6,
+                    4,
                     [
                         0,
                         [
@@ -25791,7 +25789,7 @@
                         ],
                         null
                     ],
-                    3.0,
+                    4.0,
                     null
                 ]
             ]
@@ -54610,7 +54608,7 @@
     },
     {
         "db_id": "course_teach",
-        "query": "SELECT Name FROM teacher WHERE Hometown != \"Little Lever Urban Distric\"",
+        "query": "SELECT Name FROM teacher WHERE Hometown != \"Little Lever Urban District\"",
         "query_toks": [
             "SELECT",
             "Name",
@@ -54624,7 +54622,7 @@
             "Little",
             "Lever",
             "Urban",
-            "Distric",
+            "District",
             "''"
         ],
         "query_toks_no_value": [
@@ -54704,7 +54702,7 @@
                         ],
                         null
                     ],
-                    "\"Little Lever Urban Distric\"",
+                    "\"Little Lever Urban District\"",
                     null
                 ]
             ]
@@ -54712,7 +54710,7 @@
     },
     {
         "db_id": "course_teach",
-        "query": "SELECT Name FROM teacher WHERE Hometown != \"Little Lever Urban Distric\"",
+        "query": "SELECT Name FROM teacher WHERE Hometown != \"Little Lever Urban District\"",
         "query_toks": [
             "SELECT",
             "Name",
@@ -54726,7 +54724,7 @@
             "Little",
             "Lever",
             "Urban",
-            "Distric",
+            "District",
             "''"
         ],
         "query_toks_no_value": [
@@ -54808,7 +54806,7 @@
                         ],
                         null
                     ],
-                    "\"Little Lever Urban Distric\"",
+                    "\"Little Lever Urban District\"",
                     null
                 ]
             ]
@@ -110422,7 +110420,7 @@
     },
     {
         "db_id": "world_1",
-        "query": "SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2",
+        "query": "SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >=  3",
         "query_toks": [
             "SELECT",
             "COUNT",
@@ -110451,8 +110449,8 @@
             "(",
             "*",
             ")",
-            ">",
-            "2"
+            ">=",
+            "3"
         ],
         "query_toks_no_value": [
             "select",
@@ -110492,7 +110490,7 @@
             "(",
             "*",
             ")",
-            ">",
+            ">=",
             "value"
         ],
         "question": "Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.",
@@ -110563,7 +110561,7 @@
             "having": [
                 [
                     false,
-                    3,
+                    5,
                     [
                         0,
                         [
@@ -110573,7 +110571,7 @@
                         ],
                         null
                     ],
-                    2.0,
+                    3.0,
                     null
                 ]
             ],
@@ -113229,7 +113227,7 @@
     },
     {
         "db_id": "world_1",
-        "query": "SELECT name FROM city WHERE Population BETWEEN 160000 AND 90000",
+        "query": "SELECT name FROM city WHERE Population BETWEEN 160000 AND 900000",
         "query_toks": [
             "SELECT",
             "name",
@@ -113240,7 +113238,7 @@
             "BETWEEN",
             "160000",
             "AND",
-            "90000"
+            "900000"
         ],
         "query_toks_no_value": [
             "select",
@@ -113319,7 +113317,7 @@
                         null
                     ],
                     160000.0,
-                    90000.0
+                    900000.0
                 ]
             ]
         }
