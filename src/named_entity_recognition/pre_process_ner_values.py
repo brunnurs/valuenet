@@ -76,7 +76,7 @@ def match_values_in_database(db_id: str, extracted_data: NerExtractionData):
     # important: in addition to all the handcrafted features, also take all values from the NER which aren't known dates/numbers/prices
     _add_without_duplicates([(ner_value, 0.75) for ner_value in extracted_data.ner_remaining], candidates)
 
-    database_matches = _find_matches_in_database(db_value_finder, candidates)
+    database_matches, additional_matching_information = _find_matches_in_database(db_value_finder, candidates)
 
     # Here we put all the values to one happy list together: the ones we matched via database and the ones we got directly out of the question.
     # The 'set' is to remove duplicates.
@@ -89,22 +89,25 @@ def match_values_in_database(db_id: str, extracted_data: NerExtractionData):
                     extracted_data.ner_dates +
                     extracted_data.ner_numbers +
                     extracted_data.ner_prices +
-                    database_matches))
+                    database_matches)), \
+           list(set(additional_matching_information))  # this list contains further information about where we found the db-matches. We will use that later in the neural network
 
 
 def _find_matches_in_database(db_value_finder, potential_values):
     matches = []
+    additional_matching_information = []
     tic_toc = TicToc()
     tic_toc.tic()
     print(f'Find potential candiates "{potential_values}" in database {db_value_finder.database}')
     try:
         matching_db_values = db_value_finder.find_similar_values_in_database(potential_values)
         matches = list(map(lambda v: v[0], matching_db_values))
+        additional_matching_information = matching_db_values
     except Exception as e:
         print(e)
 
     tic_toc.toc()
-    return matches
+    return matches, additional_matching_information
 
 
 def _add_without_duplicates(new_candidates, candidates):
@@ -258,10 +261,13 @@ if __name__ == '__main__':
     values_matched_with_database = Parallel(n_jobs=n_cores)(
         delayed(match_values_in_database)(row['db_id'], extracted_value) for extracted_value, row
         in zip(extracted_values, data))
+
+    values_matched, additional_information_about_values = zip(*values_matched_with_database)
+
     print("Scanned all databases for matching values.")
     print()
 
-    for row, value_candidates in zip(data, values_matched_with_database):
+    for row, value_candidates, additional_value_information in zip(data, values_matched, additional_information_about_values):
         # this method is basically cheating: if we don't find a value in the values candidates, we add it from the ground truth.
         # This makes sense for training, as we don't want to reduce the training samples because of non-found values. We also mark
         # the samples where not all values could get extracted, so we can manually fail them during evaluation.
@@ -273,6 +279,7 @@ if __name__ == '__main__':
 
         row['ner_extracted_values_processed'] = value_candidates_adjusted
         row['all_values_found'] = all_values_found
+        row['additional_value_information'] = additional_value_information
 
         if not all_values_found:
             not_found_count += 1

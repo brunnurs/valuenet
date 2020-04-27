@@ -416,6 +416,10 @@ if __name__ == '__main__':
         # exactly the same and using values/ner-extracted values is decided here. To make this clear we also remove all other value lists.
         if args.use_ner_value_candidates:
             row['values'] = row['ner_extracted_values_processed']
+        else:
+            # in case we work with the values from the ground truth, we dont use additional value information. We therefore reset this array which
+            # prevents the neural network encoder from getting any additional information.
+            row['additional_value_information'] = []
 
         del row['ner_extracted_values_processed']
         del row['ner_extracted_values']
