@@ -70,7 +70,7 @@ def match_values_in_database(db_id: str, extracted_data: NerExtractionData):
     _add_without_duplicates([(common_mentionings, 0.9) for common_mentionings in extracted_data.heuristics_variety_common_mentionings], candidates)
     # a special code should match exactly
     _add_without_duplicates([(special_code, 1.0) for special_code in extracted_data.heuristics_special_codes], candidates)
-    _add_without_duplicates([(capitalized_word, 0.8) for capitalized_word in extracted_data.heuristics_capitalized_words], candidates)
+    _add_without_duplicates([(capitalized_word, 0.75) for capitalized_word in extracted_data.heuristics_capitalized_words], candidates)
     _add_without_duplicates([(location, 0.9) for location in extracted_data.heuristics_location_abbreviations], candidates)
 
     # important: in addition to all the handcrafted features, also take all values from the NER which aren't known dates/numbers/prices
@@ -101,7 +101,7 @@ def _find_matches_in_database(db_value_finder, potential_values):
         matching_db_values = db_value_finder.find_similar_values_in_database(potential_values)
         matches = list(map(lambda v: v[0], matching_db_values))
     except Exception as e:
-        print(e)
+        print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Error executing a query by the database finder. Error: {e}")
 
     tic_toc.toc()
     return matches
