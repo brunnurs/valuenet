@@ -118,3 +118,51 @@ def read_arguments_evaluation():
         print("argument: {}={}".format(argument, getattr(args, argument)))
 
     return args
+
+
+def read_arguments_manual_inference():
+    parser = argparse.ArgumentParser(description="Run manual inference with following arguments")
+
+    # manual_inference
+    parser.add_argument('--model_to_load', type=str)
+    parser.add_argument('--database', default='concert_singer', type=str)
+
+    # general configuration
+    parser.add_argument('--seed', default=90, type=int)
+    parser.add_argument('--data_set', default='spider', type=str)
+    parser.add_argument('--batch_size', default=1, type=int)
+    parser.add_argument('--cuda', default=True, action='store_true')
+    parser.add_argument('--conceptNet', default="data/spider/conceptNet", type=str)
+
+    # encoder configuration
+    parser.add_argument('--encoder_pretrained_model', default='bert-base-uncased', type=str)
+    parser.add_argument('--max_seq_length', default=512, type=int)
+
+    # model configuration
+    parser.add_argument('--column_pointer', action='store_true', default=True)
+    parser.add_argument('--embed_size', default=300, type=int, help='size of word embeddings')
+    parser.add_argument('--hidden_size', default=300, type=int, help='size of LSTM hidden states')
+    parser.add_argument('--action_embed_size', default=128, type=int, help='size of word embeddings')
+    parser.add_argument('--att_vec_size', default=300, type=int, help='size of attentional vector')
+    parser.add_argument('--type_embed_size', default=128, type=int, help='size of word embeddings')
+    parser.add_argument('--col_embed_size', default=300, type=int, help='size of word embeddings')
+    parser.add_argument('--readout', default='identity', choices=['identity', 'non_linear'])
+    parser.add_argument('--column_att', choices=['dot_prod', 'affine'], default='affine')
+    parser.add_argument('--dropout', default=0.3, type=float, help='dropout rate')
+
+    # prediction configuration
+    parser.add_argument('--beam_size', default=1, type=int, help='beam size for beam search')
+    parser.add_argument('--decode_max_time_step', default=40, type=int,
+                        help='maximum number of time steps used in decoding and sampling')
+
+    args = parser.parse_args()
+
+    args.data_dir = os.path.join(Config.DATA_PREFIX, args.data_set)
+    args.database_path = os.path.join(args.data_dir, "original", "database", args.database, args.database + ".sqlite")
+
+    print("*** parsed configuration from command line and combine with constants ***")
+
+    for argument in vars(args):
+        print("argument: {}={}".format(argument, getattr(args, argument)))
+
+    return args

@@ -2,8 +2,8 @@
 import csv
 
 # with open('/home/ursin/Downloads/ValueNet_light.csv', "r", encoding='utf-8') as f:
-# with open('/home/ursin/Downloads/ValueNet.csv', "r", encoding='utf-8') as f:
-with open('/home/ursin/Downloads/ExactMatchingAccuracy.csv', "r", encoding='utf-8') as f:
+with open('/home/ursin/Downloads/ValueNet.csv', "r", encoding='utf-8') as f:
+# with open('/home/ursin/Downloads/ExactMatchingAccuracy.csv', "r", encoding='utf-8') as f:
     reader = csv.reader(f, delimiter=",")
     # skip header
     next(reader)

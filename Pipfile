@@ -20,6 +20,8 @@ pyyaml = "*"
 word2number = "*"
 textdistance = {extras = ["extras"],version = "*"}
 matplotlib = "*"
+spacy = "*"
+termcolor = "*"
 
 [requires]
 python_version = "3.6"

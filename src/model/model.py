@@ -69,7 +69,7 @@ class IRNet(BasicModel):
 
         self.N_embed = nn.Embedding(len(semQL.N._init_grammar()), args.action_embed_size)
 
-        self.read_out_act = F.tanh if args.readout == 'non_linear' else nn_utils.identity
+        self.read_out_act = torch.tanh if args.readout == 'non_linear' else nn_utils.identity
 
         self.query_vec_to_action_embed = nn.Linear(args.att_vec_size, args.action_embed_size,
                                                    bias=args.readout == 'non_linear')
@@ -359,7 +359,7 @@ class IRNet(BasicModel):
 
             # to my understanding the difference is not using pointer-networks or not, but using memory augmented pointer networks or just normal ones.
             if self.use_column_pointer:
-                gate = F.sigmoid(self.prob_att(att_t))
+                gate = torch.sigmoid(self.prob_att(att_t))
                 # this equation can be found in the IRNet-Paper, at the end of chapter 2. See the comments in the paper.
                 weights = self.column_pointer_net(src_encodings=table_embedding, query_vec=att_t.unsqueeze(0), src_token_mask=None) * table_appear_mask_val * gate + \
                           self.column_pointer_net(src_encodings=table_embedding, query_vec=att_t.unsqueeze(0), src_token_mask=None) * (1 - table_appear_mask_val) * (1 - gate)
@@ -745,7 +745,7 @@ class IRNet(BasicModel):
 
             # use the pointer network, similar to the training part.
             if self.use_column_pointer:
-                gate = F.sigmoid(self.prob_att(att_t))
+                gate = torch.sigmoid(self.prob_att(att_t))
                 weights = self.column_pointer_net(src_encodings=exp_table_embedding, query_vec=att_t.unsqueeze(0),
                                                   src_token_mask=None) * table_appear_mask_val * gate + self.column_pointer_net(
                     src_encodings=exp_table_embedding, query_vec=att_t.unsqueeze(0),
@@ -931,7 +931,7 @@ class IRNet(BasicModel):
         # we concat the hidden state and the context vector as input. Forget about the attention_function.
         # This is exactly as the described in TranX, 2.3 (equation with tanh)
         # this is just a linear function
-        att_t = F.tanh(attention_func(torch.cat([h_t, ctx_t], 1)))
+        att_t = torch.tanh(attention_func(torch.cat([h_t, ctx_t], 1)))
         att_t = self.dropout(att_t)
 
         if return_att_weight:
@@ -941,7 +941,7 @@ class IRNet(BasicModel):
 
     def init_decoder_state(self, enc_last_cell):
         h_0 = self.decoder_cell_init(enc_last_cell)
-        h_0 = F.tanh(h_0)
+        h_0 = torch.tanh(h_0)
 
         return h_0, Variable(self.new_tensor(h_0.size()).zero_())
 

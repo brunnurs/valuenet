@@ -60,7 +60,11 @@ def _generate_path_by_graph(schema, table_names, tables):
         end_table = tables_cleaned[idx + 1]
 
         edges_for_this_path = graph.dijkstra(start_table, end_table)
-        edges.extend(edges_for_this_path)
+        if edges_for_this_path:
+            edges.extend(edges_for_this_path)
+        else:
+            raise Exception(f"We could not find a path between table '${start_table}' and '${end_table}'. This query can"
+                            f"not work. Make sure you allow only questions in a fully connected schema!")
 
         idx += 1
 
