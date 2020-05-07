@@ -18,20 +18,12 @@ from preprocessing.utils import AGG, wordnet_lemmatizer
 from preprocessing.utils import load_dataSets
 
 
-def process_datas(datas, args):
+def process_datas(datas, related_to_concept, is_a_concept):
     """
     Ursin: what we do here is basically filling the "question_arg" and "question_arg_type" field of each data-row.
     The question_arg_type contains information if a word in the question refers to a column, a table or a value.
     This reflects the chaper 2.2 in the IRNet-paper.
-    :param datas:
-    :param args:
-    :return:
     """
-    with open(os.path.join(args.conceptNet, 'english_RelatedTo.pkl'), 'rb') as f:
-        english_RelatedTo = pickle.load(f)
-
-    with open(os.path.join(args.conceptNet, 'english_IsA.pkl'), 'rb') as f:
-        english_IsA = pickle.load(f)
 
     # copy of the origin question_toks
     for d in datas:
@@ -153,9 +145,9 @@ def process_datas(datas, args):
             if symbol:
                 tmp_toks = [x for x in question_toks[idx: end_idx]]
                 assert len(tmp_toks) > 0, print(symbol, question_toks)
-                pro_result = get_concept_result(tmp_toks, english_IsA)
+                pro_result = get_concept_result(tmp_toks, is_a_concept)
                 if pro_result is None:
-                    pro_result = get_concept_result(tmp_toks, english_RelatedTo)
+                    pro_result = get_concept_result(tmp_toks, related_to_concept)
                 if pro_result is None:
                     pro_result = "NONE"
                 for tmp in tmp_toks:
@@ -169,9 +161,9 @@ def process_datas(datas, args):
             if values and (len(values) > 1 or question_toks[idx - 1] not in ['?', '.']):
                 tmp_toks = [wordnet_lemmatizer.lemmatize(x) for x in question_toks[idx: end_idx] if x.isalnum() is True]
                 assert len(tmp_toks) > 0, print(question_toks[idx: end_idx], values, question_toks, idx, end_idx)
-                pro_result = get_concept_result(tmp_toks, english_IsA)
+                pro_result = get_concept_result(tmp_toks, is_a_concept)
                 if pro_result is None:
-                    pro_result = get_concept_result(tmp_toks, english_RelatedTo)
+                    pro_result = get_concept_result(tmp_toks, related_to_concept)
                 if pro_result is None:
                     pro_result = "NONE"
                 for tmp in tmp_toks:
@@ -210,11 +202,17 @@ if __name__ == '__main__':
     arg_parser.add_argument('--output', type=str, help='output data')
     args = arg_parser.parse_args()
 
+    with open(os.path.join(args.conceptNet, 'english_RelatedTo.pkl'), 'rb') as f:
+        english_RelatedTo = pickle.load(f)
+
+    with open(os.path.join(args.conceptNet, 'english_IsA.pkl'), 'rb') as f:
+        english_IsA = pickle.load(f)
+
     # loading dataSets
     datas, table = load_dataSets(args)
 
     # process datasets
-    process_result = process_datas(datas, args)
+    process_result = process_datas(datas, english_RelatedTo, english_IsA)
 
     with open(args.output, 'w', encoding='utf-8') as f:
         json.dump(datas, f, indent=2)

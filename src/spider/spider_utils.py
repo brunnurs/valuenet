@@ -178,3 +178,16 @@ def load_dataset(dataset_dir, use_small=False):
     val_sql_data, val_table_data = load_data_new(dev_path, table_data, use_small=use_small)
 
     return train_sql_data, train_table_data, val_sql_data, val_table_data
+
+
+def load_schema(dataset_dir):
+    table_path = os.path.join(dataset_dir, "original", "tables.json")
+
+    with open(table_path, encoding='utf-8') as inf:
+        # table_data is basically a dict with all the 200 (in train ca. 166) datasets of spider.
+        # Each sub-dict contains the name of all tables, as well as relations between them (foreign keys, primary keys)
+        table_data = json.load(inf)
+        print("Load data from {}. N={}".format(table_path, len(table_data)))
+
+    table_dict = {table['db_id']: table for table in table_data}
+    return table_data, table_dict

@@ -60,6 +60,43 @@ def load_dataSets(args):
     return datas, tables
 
 
+# todo: refactor this code with method above
+def merge_data_with_schema(schema, data):
+    output_tab = {}
+    tables = {}
+    tabel_name = set()
+    for i in range(len(schema)):
+        table = schema[i]
+        temp = {}
+        temp['col_map'] = table['column_names']
+        temp['table_names'] = table['table_names']
+        tmp_col = []
+        for cc in [x[1] for x in table['column_names']]:
+            if cc not in tmp_col:
+                tmp_col.append(cc)
+        table['col_set'] = tmp_col
+        db_name = table['db_id']
+        tabel_name.add(db_name)
+        table['schema_content'] = [col[1] for col in table['column_names']]
+        table['col_table'] = [col[0] for col in table['column_names']]
+        output_tab[db_name] = temp
+        tables[db_name] = table
+
+    for d in data:
+        d['names'] = tables[d['db_id']]['schema_content']
+        d['table_names'] = tables[d['db_id']]['table_names']
+        d['col_set'] = tables[d['db_id']]['col_set']
+        d['col_table'] = tables[d['db_id']]['col_table']
+        keys = {}
+        for kv in tables[d['db_id']]['foreign_keys']:
+            keys[kv[0]] = kv[1]
+            keys[kv[1]] = kv[0]
+        for id_k in tables[d['db_id']]['primary_keys']:
+            keys[id_k] = id_k
+        d['keys'] = keys
+    return data, tables
+
+
 def find_table_of_star_column(sql, select):
     """
     Find table of column '*'
