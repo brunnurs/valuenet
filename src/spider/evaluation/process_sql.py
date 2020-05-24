@@ -181,7 +181,7 @@ def parse_col(toks, start_idx, tables_with_alias, schema, default_tables=None):
 
     for alias in default_tables:
         table = tables_with_alias[alias]
-        if tok in schema.schemas[table]:
+        if tok in schema.schema[table]:
             key = table + "." + tok
             return start_idx+1, schema.idMap[key]
 
@@ -549,7 +549,7 @@ def load_data(fpath):
 
 def get_sql(schema, query):
     toks = tokenize(query)
-    tables_with_alias = get_tables_with_alias(schema.schemas, toks)
+    tables_with_alias = get_tables_with_alias(schema.schema, toks)
     _, sql = parse_sql(toks, 0, tables_with_alias, schema)
 
     return sql

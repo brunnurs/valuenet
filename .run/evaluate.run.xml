@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/evaluation.py" />
-    <option name="PARAMETERS" value="--model_to_load experiments/correct_segment_ids/best_model.pt --prediction_dir experiments/prediction --cuda --beam_size 1 --seed 90 --embed_size 300 --column_pointer --hidden_size 300 --att_vec_size 300" />
+    <option name="PARAMETERS" value="--model_to_load=experiments/ner_values_best/best_model.pt --prediction_dir experiments/prediction --cuda --beam_size 1 --seed 90 --embed_size 300 --column_pointer --hidden_size 300 --att_vec_size 300" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="true" />
     <option name="MODULE_MODE" value="false" />
