@@ -74,10 +74,10 @@ if __name__ == '__main__':
 
         tqdm.write("Training of epoch {0} finished after {1:.2f} seconds. Evaluate now on the dev-set".format(epoch, train_time))
         with torch.no_grad():
-            sketch_acc, acc, predictions = evaluate(model,
-                                                    dev_loader,
-                                                    table_data,
-                                                    args.beam_size)
+            sketch_acc, acc, _, predictions = evaluate(model,
+                                                       dev_loader,
+                                                       table_data,
+                                                       args.beam_size)
 
         with open(os.path.join(output_path, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
             json.dump(predictions, f, indent=2)
