@@ -1,6 +1,6 @@
 # ValueNet: A Neural Text-to-SQL Architecture Incorporating Values
 
-TODO: add link to arXiv
+[Paper](ValueNet.pdf)
 
 ## Abstract
 
