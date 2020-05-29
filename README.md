@@ -21,8 +21,12 @@ _Disclaimer_: this code is largely based on the IRNet (https://github.com/micros
 You can either install the script with pip (`pip install -r requirements.txt`) or with pipenv (`pipenv install`). After installing you can run the tasks either from the command line or in PyCharm. To run then im PyCharm, simply import the run configurations from the _.run_ folder.
 
 ### You just wanna play around?
-Use the manual inference mode, where you specify a database and you can just ask questions. Run `src/manual_inference/manual_inference.py --model_to_load=path/to/trained_model.pt --database=cre_Theme_park`. For all configuration see the `config.py` file. 
+Use the manual inference mode, where you specify a database and you can just ask questions. Run `src/manual_inference/manual_inference.py --model_to_load=path/to/trained_model.pt --database=cre_Theme_park`. For all configuration see the `config.py` file.
+
+![Image of Manual Inference](./screenshot_manual_inference.png)
 
 ### Training
 Simply run `python src/main.py`. For all configuration see the `config.py` file. You might wanna increase the batch_size for example.
+
+After each epoch the evaluation task is executed. Evaluation will use the Spider Evaluation script to execute SQL queries on the Spider databases.
 
