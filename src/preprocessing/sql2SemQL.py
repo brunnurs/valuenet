@@ -15,21 +15,18 @@ import sys
 
 import copy
 
-from preprocessing.utils import load_dataSets
-from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order
+from tools.get_values_from_sql import format_groundtruth_value
+from preprocessing.utils import load_dataSets, find_table_of_star_column
+from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order, V
 
 sys.path.append("..")
 
 
 class Parser:
-    def __init__(self):
-        self.copy_selec = None
-        self.sel_result = []
-        self.colSet = set()
 
-    def _init_rule(self):
-        self.copy_selec = None
-        self.colSet = set()
+    def __init__(self, values: list) -> None:
+        # this values will get used to create the SemQL ground truth - for each value, the index to that value will be saved in the V-action (e.g. V(5))
+        self.values = values
 
     def _parse_root(self, sql):
         """
@@ -65,50 +62,10 @@ class Parser:
         else:
             return [Root(5)], ['SEL']
 
-    def _parser_column0(self, sql, select):
-        """
-        Find table of column '*'
-        :return: T(table_id)
-        """
-        if len(sql['sql']['from']['table_units']) == 1:
-            if sql['sql']['from']['table_units'][0][0] != 'sql':
-                return T(sql['sql']['from']['table_units'][0][1])
-            else:
-                # here we select from a sub-query, therefore finding the "table" for the special column * is not so easy.
-                # All the queries in spider with sub-queries do an aggregation over the "*", so it basically doesn't matter which one we choose.
-                # To make it as correct as possible, we take the first table from the sub-query.
-                # Example query: SELECT count(*) FROM (SELECT * FROM endowment WHERE amount  >  8.5 GROUP BY school_id HAVING count(*)  >  1)
-                # print(sql['query'])
-                return T(sql['sql']['from']['table_units'][0][1]['from']['table_units'][0][1])
-        else:
-            table_list = []
-            for tmp_t in sql['sql']['from']['table_units']:
-                if type(tmp_t[1]) == int:
-                    table_list.append(tmp_t[1])
-            table_set, other_set = set(table_list), set()
-            for sel_p in select:
-                if sel_p[1][1][1] != 0:
-                    other_set.add(sql['col_table'][sel_p[1][1][1]])
-
-            if len(sql['sql']['where']) == 1:
-                other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
-            elif len(sql['sql']['where']) == 3:
-                other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
-                other_set.add(sql['col_table'][sql['sql']['where'][2][2][1][1]])
-            elif len(sql['sql']['where']) == 5:
-                other_set.add(sql['col_table'][sql['sql']['where'][0][2][1][1]])
-                other_set.add(sql['col_table'][sql['sql']['where'][2][2][1][1]])
-                other_set.add(sql['col_table'][sql['sql']['where'][4][2][1][1]])
-            table_set = table_set - other_set
-            if len(table_set) == 1:
-                return T(list(table_set)[0])
-            elif len(table_set) == 0 and sql['sql']['groupBy'] != []:
-                return T(sql['col_table'][sql['sql']['groupBy'][0][1]])
-            else:
-                question = sql['question']
-                self.sel_result.append(question)
-                print('column * table error')
-                return T(sql['sql']['from']['table_units'][0][1])
+    @staticmethod
+    def _parser_column0(sql, select):
+        table_idx = find_table_of_star_column(sql, select)
+        return T(table_idx)
 
     def _parse_select(self, sql):
         """
@@ -118,21 +75,30 @@ class Parser:
         :return: [Sel(), states]
         """
         result = []
+        is_distinct = sql['sql']['select'][0]  # is distinct on the whole select.
         select = sql['sql']['select'][1]
-        result.append(Sel(0))
+
+        # as a simplification we assume that if any of the columns is distinct, the whole query is distinct. This might be oversimplified, but
+        # it is actually hard to find a way to phrase a real question where some columns are distinct and others not. And in the DEV set, there is also no such example, so we
+        # simplified the SemQL language to that.
+        if not is_distinct:
+            is_distinct = any(sel[1][1][2] for sel in select)
+
+        if is_distinct:
+            result.append(Sel(1))
+        else:
+            result.append(Sel(0))
+
         result.append(N(len(select) - 1))  # N() encapsulates the number of columns. The -1 is used in case there is only one column to select: in that case, #0 of grammar_dict is used, which is 'N A'.
 
         for sel in select:
             result.append(A(sel[0])) # A() represents an aggregator. e.g. #0 is 'none', #3 is 'count'
-            self.colSet.add(sql['col_set'].index(sql['names'][sel[1][1][1]]))
             result.append(C(sql['col_set'].index(sql['names'][sel[1][1][1]])))
             # now check for the situation with *
             if sel[1][1][1] == 0:
                 result.append(self._parser_column0(sql, select))  # The "*" needs an extra handling, as it belongs not to a "normal" table.
             else:
                 result.append(T(sql['col_table'][sel[1][1][1]]))  # for every other column, we can simply add a T() with the table this column belongs to.
-            if not self.copy_selec:
-                self.copy_selec = [copy.deepcopy(result[-2]), copy.deepcopy(result[-1])]
 
         return result, None
 
@@ -153,7 +119,6 @@ class Parser:
             result.append(Sup(1))
 
         result.append(A(sql['sql']['orderBy'][1][0][1][0]))
-        self.colSet.add(sql['col_set'].index(sql['names'][sql['sql']['orderBy'][1][0][1][1]]))
         result.append(C(sql['col_set'].index(sql['names'][sql['sql']['orderBy'][1][0][1][1]])))
         if sql['sql']['orderBy'][1][0][1][1] == 0:
             result.append(self._parser_column0(sql, select))
@@ -192,23 +157,27 @@ class Parser:
                     result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
                 elif sql['sql']['where'][1] == 'and' and sql['sql']['where'][3] == 'or':
-                    result.append(Filter(1))
                     result.append(Filter(0))
                     result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
+                    result.append(Filter(1))
                     result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
                 elif sql['sql']['where'][1] == 'or' and sql['sql']['where'][3] == 'and':
                     result.append(Filter(1))
+                    result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
                     result.append(Filter(0))
                     result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
                 else:
                     result.append(Filter(1))
                     result.append(Filter(1))
                     result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
                     result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
+
+                # TODO: right now we don't handle queries which have more than 3 filters (so 3 filters and 2 AND/OR combinations).
+                # The code above should be written in a more dynamic way
+
 
         # check having
         if sql['sql']['having'] != []:
@@ -238,7 +207,6 @@ class Parser:
                 else:
                     result.append(Order(1))
                 result.append(A(sql['sql']['orderBy'][1][0][1][0]))
-                self.colSet.add(sql['col_set'].index(sql['names'][sql['sql']['orderBy'][1][0][1][1]]))
                 result.append(C(sql['col_set'].index(sql['names'][sql['sql']['orderBy'][1][0][1][1]])))
                 if sql['sql']['orderBy'][1][0][1][1] == 0:
                     result.append(self._parser_column0(sql, select))
@@ -265,6 +233,10 @@ class Parser:
                 raise NotImplementedError("not implement for the others FIL")
         else:
             # check for Filter (<,=,>,!=,between, >=,  <=, ...)
+            # Ursin: This map is a mapping between the index of the WHERE_OPS in spider and the Filter() index in SemQL:
+            # WHERE_OPS = ('not', 'between', '=', '>', '<', '>=', '<=', '!=', 'in', 'like', 'is', 'exists')
+            # Filter --> see Filter-class
+            # Example: 1:8 --> the filter type "between" is a 1 in the spider notation, but a 8 in SemQL.
             single_map = {1: 8, 2: 2, 3: 5, 4: 4, 5: 7, 6: 6, 7: 3}
             nested_map = {1: 15, 2: 11, 3: 13, 4: 12, 5: 16, 6: 17, 7: 14}
             if sql_condit[1] in [1, 2, 3, 4, 5, 6, 7]:
@@ -281,14 +253,27 @@ class Parser:
                 raise NotImplementedError("not implement for the others FIL")
 
         result.append(fil)
+
         result.append(A(sql_condit[2][1][0]))
-        self.colSet.add(sql['col_set'].index(sql['names'][sql_condit[2][1][1]]))
         result.append(C(sql['col_set'].index(sql['names'][sql_condit[2][1][1]])))
         if sql_condit[2][1][1] == 0:
             select = sql['sql']['select'][1]
             result.append(self._parser_column0(sql, select))
         else:
             result.append(T(sql['col_table'][sql_condit[2][1][1]]))
+
+        # This are filter statements which contain Values - we extend the SemQL AST with a "V" action and use the index
+        # of the value based on the provided value list (important: the value needs to exist in the list!)
+        if 2 <= fil.id_c <= 10:
+            val = sql_condit[3]
+            value_action = self._build_value_action(val)
+            result.append(value_action)
+
+            # Filter(8) is the "X.Y BETWEEN A AND B" case - here we have to store an additional value.
+            if fil.id_c == 8:
+                val = sql_condit[4]
+                value_action = self._build_value_action(val)
+                result.append(value_action)
 
         # check for the nested value
         if type(sql_condit[3]) == dict:
@@ -325,12 +310,26 @@ class Parser:
         else:
             raise NotImplementedError("Not the right state")
 
+    def _build_value_action(self, val):
+        # the ground truth values are often in a weird format (e.g. 56.0 instead of 56) and as we anyway only deal with string here,
+        # we format every value as a simple string. This also simplifies comparison in the further code. When writing the query, we will
+        # adapt it again (see sem2SQL.py --> format_value_given_datatype()).
+        val = format_groundtruth_value(val)
+
+        try:
+            return V(self.values.index(val))
+        except:
+            print(
+                f'could not find value "{val}" in the provided list of values "{self.values}". Make sure all necessary values are provided!')
+            raise
+
     def full_parse(self, query):
         """
         With this code we pare a SQL-query (as specified by spider) into a SemQL-AST
         """
 
         sql = query['sql']
+
         nest_query = {}
         nest_query['names'] = query['names']
         nest_query['query_toks_no_value'] = ""
@@ -387,25 +386,42 @@ if __name__ == '__main__':
     arg_parser.add_argument('--data_path', type=str, help='dataset', required=True)
     arg_parser.add_argument('--table_path', type=str, help='table dataset', required=True)
     arg_parser.add_argument('--output', type=str, help='output data', required=True)
+    arg_parser.add_argument('--use_ner_value_candidates', action='store_true', default=False, help="we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) "
+                                                                                                  "or we can instead let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)")
     args = arg_parser.parse_args()
 
-    parser = Parser()
-
     # loading dataSets
-    datas, table = load_dataSets(args)
+    data, table = load_dataSets(args)
     processed_data = []
 
-    for i, d in enumerate(datas):
-        if len(datas[i]['sql']['select'][1]) > 5:
+    for row in data:
+        if len(row['sql']['select'][1]) > 5:
             continue
 
+        # we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) or we can instead
+        # let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)
+        if args.use_ner_value_candidates:
+            parser = Parser(row['ner_extracted_values_processed'])
+        else:
+            parser = Parser(row['values'])
+
         # here is where the magic happens: we parse the SQL from the spider-examples and create a SemQL-AST fro it.
-        r = parser.full_parse(datas[i])
+        semql_result = parser.full_parse(row)
+
         # here we simply serialize it to a string. Keep in mind that the SemQL-Classes (e.g. "Root") override the string method, so we get not only the class
         # but also all attributes (especially the idx of the production rule)
-        datas[i]['rule_label'] = " ".join([str(x) for x in r])
-        processed_data.append(datas[i])
+        row['rule_label'] = " ".join([str(x) for x in semql_result])
 
-    print('Finished %s datas and failed %s datas' % (len(processed_data), len(datas) - len(processed_data)))
+        # if we use the NER-values then we override here the ground truth values with it. That way the training/evaluation scripts stay
+        # exactly the same and using values/ner-extracted values is decided here. To make this clear we also remove all other value lists.
+        if args.use_ner_value_candidates:
+            row['values'] = row['ner_extracted_values_processed']
+
+        del row['ner_extracted_values_processed']
+        del row['ner_extracted_values']
+
+        processed_data.append(row)
+
+    print('Finished %s datas and failed %s datas' % (len(processed_data), len(data) - len(processed_data)))
     with open(args.output, 'w', encoding='utf8') as f:
-        f.write(json.dumps(processed_data))
+        f.write(json.dumps(processed_data, indent=2))

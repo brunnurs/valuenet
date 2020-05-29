@@ -7,7 +7,7 @@ import json
 from config import read_arguments_evaluation
 from data_loader import get_data_loader
 from intermediate_representation import semQL
-from intermediate_representation.sem2SQL import transform_semQL_to_sql
+from intermediate_representation.sem2sql.sem2SQL import transform_semQL_to_sql
 from model.model import IRNet
 from spider import spider_utils
 from spider.evaluation.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
@@ -18,7 +18,7 @@ from utils import setup_device, set_seed_everywhere
 def evaluate(model, dev_loader, table_data, beam_size):
     model.eval()
 
-    sketch_correct, rule_label_correct, total = 0, 0, 0
+    sketch_correct, rule_label_correct, not_all_values_found, total = 0, 0, 0, 0
     predictions = []
     for batch in tqdm(dev_loader, desc="Evaluating"):
 
@@ -52,33 +52,38 @@ def evaluate(model, dev_loader, table_data, beam_size):
             truth_sketch = " ".join([str(x) for x in example.sketch])
             truth_rule_label = " ".join([str(x) for x in example.tgt_actions])
 
-            # with a simple string comparison to the ground truth we figure out if the sketch/prediction is correct. There is
-            # clearly room for improvement here.
-            if truth_sketch == prediction['sketch_result']:
-                sketch_correct += 1
-            if truth_rule_label == prediction['model_result']:
-                rule_label_correct += 1
+            if prediction['all_values_found']:
+                if truth_sketch == prediction['sketch_result']:
+                    sketch_correct += 1
+                if truth_rule_label == prediction['model_result']:
+                    rule_label_correct += 1
+            else:
+                question = prediction['question']
+                print(f'Not all values found during pre-processing for question {question}. Replace values with dummy to make query fail')
+                prediction['values'] = [1] * len(prediction['values'])
+                not_all_values_found += 1
+
             total += 1
 
             predictions.append(prediction)
 
-    return float(sketch_correct) / float(total), float(rule_label_correct) / float(total), predictions
+    return float(sketch_correct) / float(total), float(rule_label_correct) / float(total), float(not_all_values_found) / float(total), predictions
 
 
 def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir, experiment_dir, tb_writer, training_step):
-    succ_transform, fail_transform = transform_semQL_to_sql(table_data, predictions, experiment_dir)
+    total_count, failure_count = transform_semQL_to_sql(table_data, predictions, experiment_dir)
 
-    kmaps = build_foreign_key_map_from_json(os.path.join(data_dir, 'tables.json'))
+    kmaps = build_foreign_key_map_from_json(os.path.join(data_dir, 'original', 'tables.json'))
 
     spider_eval_results = spider_evaluation(os.path.join(experiment_dir, 'ground_truth.txt'),
                                             os.path.join(experiment_dir, 'output.txt'),
                                             os.path.join(data_dir, "original", "database"),
-                                            "match",
+                                            "exec",
                                             kmaps,
                                             tb_writer,
                                             training_step, print_stdout=False)
 
-    return succ_transform, fail_transform, spider_eval_results
+    return total_count, failure_count, spider_eval_results
 
 
 if __name__ == '__main__':
@@ -98,16 +103,19 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(args.model_to_load))
     print("Load pre-trained model from '{}'".format(args.model_to_load))
 
-    sketch_acc, acc, predictions = evaluate(model,
-                                            dev_loader,
-                                            table_data,
-                                            args.beam_size)
+    sketch_acc, acc, not_all_values_found, predictions = evaluate(model,
+                                                                  dev_loader,
+                                                                  table_data,
+                                                                  args.beam_size)
 
-    eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
-        len(dev_loader), sketch_acc, acc)
+    print("Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}, Not all values found: {}".format(len(dev_loader), sketch_acc, acc, not_all_values_found))
 
-    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w') as f:
-        json.dump(predictions, f)
+
+    with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
+        json.dump(predictions, f, indent=2)
+
+    # with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'r', encoding='utf-8') as json_file:
+    #     predictions = json.load(json_file)
 
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)
 
@@ -115,9 +123,9 @@ if __name__ == '__main__':
           "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
         count_success, count_failed))
 
-    kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'tables.json'))
+    kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'original', 'tables.json'))
 
     spider_evaluation(os.path.join(args.prediction_dir, 'ground_truth.txt'),
                       os.path.join(args.prediction_dir, 'output.txt'),
-                      os.path.join(args.data_dir, "original", "database"),
-                      "match", kmaps)
+                      os.path.join(args.data_dir, 'original', 'database'),
+                      "exec", kmaps)

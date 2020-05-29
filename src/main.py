@@ -1,3 +1,4 @@
+import json
 import os
 
 import torch
@@ -42,7 +43,7 @@ if __name__ == '__main__':
     model.to(device)
 
     # track the model
-    wandb.watch(model)
+    wandb.watch(model, log='parameters')
 
     num_train_steps = len(train_loader) * args.num_epochs
     optimizer, scheduler = build_optimizer_encoder(model,
@@ -73,22 +74,25 @@ if __name__ == '__main__':
 
         tqdm.write("Training of epoch {0} finished after {1:.2f} seconds. Evaluate now on the dev-set".format(epoch, train_time))
         with torch.no_grad():
-            sketch_acc, acc, predictions = evaluate(model,
-                                                    dev_loader,
-                                                    table_data,
-                                                    args.beam_size)
+            sketch_acc, acc, _, predictions = evaluate(model,
+                                                       dev_loader,
+                                                       table_data,
+                                                       args.beam_size)
+
+        with open(os.path.join(output_path, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
+            json.dump(predictions, f, indent=2)
 
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
         tqdm.write(eval_results_string)
 
-        succ_transform, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
-                                                                                                        table_data,
-                                                                                                        args.data_dir,
-                                                                                                        output_path,
-                                                                                                        tb_writer,
-                                                                                                        epoch + 1)
+        total_transformed, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
+                                                                                                           table_data,
+                                                                                                           args.data_dir,
+                                                                                                           output_path,
+                                                                                                           tb_writer,
+                                                                                                           epoch + 1)
 
-        tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(succ_transform, succ_transform + fail_transform))
+        tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(total_transformed - fail_transform, total_transformed))
         tqdm.write("Results from Spider-Evaluation:")
         for key, value in spider_eval_results.items():
             tqdm.write("{}: {}".format(key, value))
@@ -98,7 +102,7 @@ if __name__ == '__main__':
             tqdm.write("Accuracy of this epoch ({}) is higher then the so far best accuracy ({}). Save model.".format(acc, best_acc))
             best_acc = acc
 
-        with open(os.path.join(output_path, "eval_results.log"), "a+") as writer:
+        with open(os.path.join(output_path, "eval_results.log"), "a+", encoding='utf-8') as writer:
             writer.write(eval_results_string + "\n")
 
         wandb.log({"Sketch-accuracy": sketch_acc, "accuracy": acc}, step=epoch + 1)

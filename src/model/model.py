@@ -69,7 +69,7 @@ class IRNet(BasicModel):
 
         self.N_embed = nn.Embedding(len(semQL.N._init_grammar()), args.action_embed_size)
 
-        self.read_out_act = F.tanh if args.readout == 'non_linear' else nn_utils.identity
+        self.read_out_act = torch.tanh if args.readout == 'non_linear' else nn_utils.identity
 
         self.query_vec_to_action_embed = nn.Linear(args.att_vec_size, args.action_embed_size,
                                                    bias=args.readout == 'non_linear')
@@ -85,12 +85,16 @@ class IRNet(BasicModel):
 
         self.column_rnn_input = nn.Linear(args.col_embed_size, args.action_embed_size, bias=False)
         self.table_rnn_input = nn.Linear(args.col_embed_size, args.action_embed_size, bias=False)
+        self.value_rnn_input = nn.Linear(args.col_embed_size, args.action_embed_size, bias=False)
+
 
         self.dropout = nn.Dropout(args.dropout)
 
         self.column_pointer_net = PointerNet(args.hidden_size, args.col_embed_size, attention_type=args.column_att)
 
         self.table_pointer_net = PointerNet(args.hidden_size, args.col_embed_size, attention_type=args.column_att)
+
+        self.value_pointer_net = PointerNet(args.hidden_size, args.col_embed_size, attention_type=args.column_att)
 
         # initial the embedding layers
         nn.init.xavier_normal_(self.production_embed.weight.data)
@@ -107,7 +111,10 @@ class IRNet(BasicModel):
         table_appear_mask = batch.table_appear_mask
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
-        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
+        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output = self.encoder(batch.src_sents,
+                                                                                                                          batch.table_sents,
+                                                                                                                          batch.table_names,
+                                                                                                                          batch.values)
         question_encodings = self.dropout(question_encodings)
 
         # Source encodings to create the sketch (the AST without the leaf-nodes)
@@ -247,6 +254,8 @@ class IRNet(BasicModel):
 
         schema_embedding = table_encodings
 
+        value_embedding = value_encodings
+
         batch_table_dict = batch.col_table_dict
         table_enable = np.zeros(shape=(len(examples)))
         action_probs = [[] for _ in examples]
@@ -285,12 +294,15 @@ class IRNet(BasicModel):
 
                             a_tm1_embed = self.production_embed.weight[self.grammar.prod2id[action_tm1.production]]     # for sketch actions, we can just feed in the action (or exact: the production rule) embedding.
                         else:
-                            # previous action C is a leaf-node, so we wanna feed in the right column-embedding. We select the column idx by using the ground truth "id_c".
+                            # previous action C is a leaf-node, so we wanna feed in the right Column-embedding. We select the column idx by using the ground truth "id_c".
                             if isinstance(action_tm1, semQL.C):
                                 a_tm1_embed = self.column_rnn_input(table_embedding[e_id, action_tm1.id_c])
-                            # previous action T is a leaf-node, so we wanna feed in the right table-embedding. We select the table by using the ground truth "id_c".
+                            # previous action T is a leaf-node, so we wanna feed in the right Table-embedding. We select the table by using the ground truth "id_c".
                             elif isinstance(action_tm1, semQL.T):
                                 a_tm1_embed = self.table_rnn_input(schema_embedding[e_id, action_tm1.id_c])
+                            # previous action V is a leaf-node, so we wanna feed in the right Value-embedding. We select the Value by using the ground truth "id_c".
+                            elif isinstance(action_tm1, semQL.V):
+                                a_tm1_embed = self.value_rnn_input(value_embedding[e_id, action_tm1.id_c])
                             # action A is handled like a normal sketch-action.
                             elif isinstance(action_tm1, semQL.A):
                                 a_tm1_embed = self.production_embed.weight[self.grammar.prod2id[action_tm1.production]]
@@ -337,9 +349,9 @@ class IRNet(BasicModel):
             # the simple probability without the pointer-network is only needed for A actions. It is similar to the sketch action loss.
             apply_rule_prob = F.softmax(self.production_readout(att_t), dim=-1)
 
-            ####################### PART 4: Selecting the right column/table ###########################################
-            # We now want to calcuate the loss for selecting the right table/column. To do so, we use a point-network on top of the output of the decoder RNN.
-            # Be aware that we don't calculate any loss for the sketch here, but only for the 3 leaf node actions C, T and A.
+            ####################### PART 4: Selecting the right column/table/value ###########################################
+            # We now want to calcuate the loss for selecting the right table/column/value. To do so, we use a point-network on top of the output of the decoder RNN.
+            # Be aware that we don't calculate any loss for the sketch here, but only for the four leaf node actions C, T, A and V.
 
             table_appear_mask_val = torch.from_numpy(table_appear_mask)
             if self.cuda:
@@ -347,7 +359,7 @@ class IRNet(BasicModel):
 
             # to my understanding the difference is not using pointer-networks or not, but using memory augmented pointer networks or just normal ones.
             if self.use_column_pointer:
-                gate = F.sigmoid(self.prob_att(att_t))
+                gate = torch.sigmoid(self.prob_att(att_t))
                 # this equation can be found in the IRNet-Paper, at the end of chapter 2. See the comments in the paper.
                 weights = self.column_pointer_net(src_encodings=table_embedding, query_vec=att_t.unsqueeze(0), src_token_mask=None) * table_appear_mask_val * gate + \
                           self.column_pointer_net(src_encodings=table_embedding, query_vec=att_t.unsqueeze(0), src_token_mask=None) * (1 - table_appear_mask_val) * (1 - gate)
@@ -355,10 +367,9 @@ class IRNet(BasicModel):
                 # remember: a pointer network basically just selecting a column from "table_embedding". It is a simplified attention mechanism
                 weights = self.column_pointer_net(src_encodings=table_embedding, query_vec=att_t.unsqueeze(0), src_token_mask=batch.table_token_mask)
 
-            # The mask is necessary to mask out the question-tokens, as we are only interested in pointer to the columns! Attention (or pointer) to the other words of the question
-            # is not what we need.
-            # the "masked_fill_" function fills every position with a "True", which is the last N-rows, where the question tokens are,
-            # with the given value (minus infinity). So the remaining columns (the M in the beginning) is the columns.
+            # As not every question in the batch has the same number of columns, we need to mask out the unused columns before using the softmax.
+            # The "masked_fill_" function fills every position with a "True"  with the given value (minus infinity).
+            # So the remaining columns (the M in the beginning) is the actual columns.
             weights.data.masked_fill_(batch.table_token_mask.bool(), -float('inf'))
 
             # Calculate the probabilities for the selected columns.
@@ -368,9 +379,15 @@ class IRNet(BasicModel):
             table_weights = self.table_pointer_net(src_encodings=schema_embedding, query_vec=att_t.unsqueeze(0),
                                                    src_token_mask=None)
 
-            # it seems somehow to be harder to mask for the tables. Didn't look into this in detail yet!
+            # The first part of masking the tables is basically the same as for the columns: not each example of the batch has the same
+            # columns, therefore we need to mask out the unused ones.
             schema_token_mask = batch.schema_token_mask.expand_as(table_weights)
             table_weights.data.masked_fill_(schema_token_mask.bool(), -float('inf'))
+
+            # the second part of the masking is more complex: based which column we chose on the last step, only one (or sometimes a few)
+            # tables are possible - namely the ones which contain an attribute with this name. To implement this we save the last chosen column in "table_enable".
+            # The "batch.table_dict_mask" is then a lookup table for the column <-> table relation (with the exception case for 0, where all tables are possible).
+            # We then mask out all impossible column/table combinations by applying a second masking..
             table_dict = [batch_table_dict[x_id][int(x)] for x_id, x in enumerate(table_enable.tolist())]
             table_mask = batch.table_dict_mask(table_dict)
             table_weights.data.masked_fill_(table_mask.bool(), -float('inf'))
@@ -378,18 +395,34 @@ class IRNet(BasicModel):
             # Calculate the probabilities for the selected columns.
             table_weights = F.softmax(table_weights, dim=-1)
 
+            # Select a value with the pointer network
+            value_weights = self.value_pointer_net(src_encodings=value_embedding, query_vec=att_t.unsqueeze(0),
+                                                   src_token_mask=None)
+
+            # As not every question in the batch has the same number of values, we need to mask out the unused values before using the softmax.
+            # The "masked_fill_" function fills every position with a "True"  with the given value (minus infinity).
+            # So the remaining columns (the M in the beginning) is the actual columns.
+            # TODO: remember already "used" values and mask them out. We might also avoid masking if there is only one value per row.
+            value_weights.data.masked_fill_(batch.value_token_mask.bool(), -99999)
+
+            # Calculate the probabilities for the selected values.
+            value_weights = F.softmax(value_weights, dim=-1)
+
             # Now we calculate the loss, but only for the leaf actions (A, C and T).
             # We are not interested in the loss of the sketch, as this has already been done in Part 1. The "action_probs" array will contain only entries for the leaf actions.
             for e_id, example in enumerate(examples):
                 if t < len(example.tgt_actions):
                     action_t = example.tgt_actions[t]
                     if isinstance(action_t, semQL.C):
-                        table_appear_mask[e_id, action_t.id_c] = 1
-                        table_enable[e_id] = action_t.id_c
+                        table_appear_mask[e_id, action_t.id_c] = 1  # not 100% sure, but to my understanding we use the column/table combinations for the memory-pointer network.
+                        table_enable[e_id] = action_t.id_c  # make sure that in the next step, where we select a table, only existing column/table combinations appear. See masking above.
                         act_prob_t_i = column_attention_weights[e_id, action_t.id_c]  # ground truth says we are looking for a C action, we get the probability of predicting the right column (which is the value of the column-softmax at index id_c)
                         action_probs[e_id].append(act_prob_t_i)
                     elif isinstance(action_t, semQL.T):
                         act_prob_t_i = table_weights[e_id, action_t.id_c]  # ground truth says we are looking for a T action, we get the probability of predicting the right table (which is the value of the table-softmax at index id_c)
+                        action_probs[e_id].append(act_prob_t_i)
+                    elif isinstance(action_t, semQL.V):
+                        act_prob_t_i = value_weights[e_id, action_t.id_c]  # ground truth says we are looking for a V action, we get the probability of predicting the right Value (which is the value of the value-softmax at index id_c)
                         action_probs[e_id].append(act_prob_t_i)
                     elif isinstance(action_t, semQL.A):     # action A is handled as a normal sketch action: we take the index of the ground-truth production rule and see with what a probability we would have predicted that.
                         act_prob_t_i = apply_rule_prob[e_id, self.grammar.prod2id[action_t.production]]
@@ -420,8 +453,10 @@ class IRNet(BasicModel):
         # next lines is exactly the same as in the training case. Encode the source sentence.
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
-        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
-        question_encodings = self.dropout(question_encodings)
+        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output = self.encoder(batch.src_sents,
+                                                                                                                          batch.table_sents,
+                                                                                                                          batch.table_names,
+                                                                                                                          batch.values)
 
         utterance_encodings_sketch_linear = self.att_sketch_linear(question_encodings)
         utterance_encodings_lf_linear = self.att_lf_linear(question_encodings)
@@ -594,7 +629,10 @@ class IRNet(BasicModel):
         col_type_var = self.col_type(col_type)
 
         table_embedding = column_encodings + col_type_var
+
         schema_embedding = table_encodings
+
+        value_embedding = value_encodings
 
         batch_table_dict = batch.col_table_dict
 
@@ -664,6 +702,8 @@ class IRNet(BasicModel):
                         a_tm1_embed = self.column_rnn_input(table_embedding[0, action_tm1.id_c])    # the id_c is to select the right column-embedding, based on the column index we selected in the last step. The 0 is only necessary because the table_embedding has 2 dimensions (first is batch, which we don't use in inference).
                     elif isinstance(action_tm1, semQL.T):
                         a_tm1_embed = self.table_rnn_input(schema_embedding[0, action_tm1.id_c])
+                    elif isinstance(action_tm1, semQL.V):
+                        a_tm1_embed = self.value_rnn_input(value_embedding[0, action_tm1.id_c])
                     elif isinstance(action_tm1, semQL.A):
                         a_tm1_embed = self.production_embed.weight[self.grammar.prod2id[action_tm1.production]]     # A behaves similar to the sketch actions.
                     else:
@@ -705,7 +745,7 @@ class IRNet(BasicModel):
 
             # use the pointer network, similar to the training part.
             if self.use_column_pointer:
-                gate = F.sigmoid(self.prob_att(att_t))
+                gate = torch.sigmoid(self.prob_att(att_t))
                 weights = self.column_pointer_net(src_encodings=exp_table_embedding, query_vec=att_t.unsqueeze(0),
                                                   src_token_mask=None) * table_appear_mask_val * gate + self.column_pointer_net(
                     src_encodings=exp_table_embedding, query_vec=att_t.unsqueeze(0),
@@ -714,6 +754,9 @@ class IRNet(BasicModel):
             else:
                 weights = self.column_pointer_net(src_encodings=exp_table_embedding, query_vec=att_t.unsqueeze(0),
                                                   src_token_mask=batch.table_token_mask)
+
+            # TODO: should this mask not get activated? In my understanding it is only here because different examples in the batch have different lengths
+            # TODO  ------------> maybe not necessary because we anyway one have one beam - so only one example.
             # weights.data.masked_fill_(exp_col_pred_mask, -float('inf'))
 
             # the probabilities we use in case of C action
@@ -733,10 +776,20 @@ class IRNet(BasicModel):
             # the probabilities we use in case of T action
             table_weights = F.log_softmax(table_weights, dim=-1)
 
+            # Select a value with the pointer network
+            value_weights = self.value_pointer_net(src_encodings=value_embedding, query_vec=att_t.unsqueeze(0),
+                                                   src_token_mask=None)
+
+            # As not every question in the batch has the same number of values, we need to mask out the unused values before using the softmax.
+            # The "masked_fill_" function fills every position with a "True"  with the given value (minus infinity).
+            # So the remaining columns (the M in the beginning) is the actual columns.
+            # TODO: remember already "used" values and mask them out
+            value_weights.data.masked_fill_(batch.value_token_mask.bool(), -float('inf'))
+
             new_hyp_meta = []
             for hyp_id, hyp in enumerate(beams):
                 # TODO: should change this
-                # This is a very important part, as here the sketch from Part 1 comes together with Part 3. Important is to remember that the sketch got padded with "dummy" A, N and C's.
+                # This is a very important part, as here the sketch from Part 1 comes together with Part 3. Important is to remember that the sketch got padded with "dummy" A, C, T and V actions.
                 # here, we create new candidates for each case, based on the probabilities we calculated above with the Softmax.
                 if type(padding_sketch[t]) == semQL.A:
                     # for action A we use the same mechanism as in creating the sketch production rules. We already know it's action A, so we get all possible production rules.
@@ -752,7 +805,7 @@ class IRNet(BasicModel):
                         new_hyp_meta.append(meta_entry)
 
                 elif type(padding_sketch[t]) == semQL.C:
-                    # the column (C) and table (T) case is different: here we want to create candidates for each possible column.
+                    # the column (C), table (T) and Value (V) case is different: here we want to create candidates for each possible column.
                     for col_id, _ in enumerate(batch.table_sents[0]):
                         col_sel_score = column_selection_log_prob[hyp_id, col_id]   # the probability for each column we calculated before by using the schema encoding!
                         new_hyp_score = hyp.score + col_sel_score.data.cpu()
@@ -770,6 +823,17 @@ class IRNet(BasicModel):
                                       'score': t_sel_score, 'new_hyp_score': new_hyp_score,
                                       'prev_hyp_id': hyp_id}
                         new_hyp_meta.append(meta_entry)
+                elif type(padding_sketch[t]) == semQL.V:
+                    # similar to the C and T action
+                    for value_idx, _ in enumerate(batch.values[0]):
+                        val_sel_score = value_weights[hyp_id, value_idx]
+                        new_hyp_score = hyp.score + val_sel_score.data.cpu()
+
+                        meta_entry = {'action_type': semQL.V, 'val_id': value_idx,
+                                      'score': val_sel_score, 'new_hyp_score': new_hyp_score,
+                                      'prev_hyp_id': hyp_id}
+                        new_hyp_meta.append(meta_entry)
+
                 else:
                     # but what happens if the next Action in the sketch is a sketch Action (which is often the case, as only the padded leaf actions will be handled by the statements above)?
                     # we just create one candidate which has exactly the same production rule as the sketch action (therefore "padding_sketch[t].production")
@@ -808,6 +872,9 @@ class IRNet(BasicModel):
                 elif action_type_str == semQL.T:
                     t_id = hyp_meta_entry['t_id']
                     action = semQL.T(t_id)  # and for action T, it is the index of the table.
+                elif action_type_str == semQL.V:
+                    val_id = hyp_meta_entry['val_id']
+                    action = semQL.V(val_id)  # and for action V, it is the index of the Value.
                 # This is the case for A actions or sketch actions.
                 elif prod_id < len(self.grammar.id2prod):
                     production = self.grammar.id2prod[prod_id]
@@ -864,7 +931,7 @@ class IRNet(BasicModel):
         # we concat the hidden state and the context vector as input. Forget about the attention_function.
         # This is exactly as the described in TranX, 2.3 (equation with tanh)
         # this is just a linear function
-        att_t = F.tanh(attention_func(torch.cat([h_t, ctx_t], 1)))
+        att_t = torch.tanh(attention_func(torch.cat([h_t, ctx_t], 1)))
         att_t = self.dropout(att_t)
 
         if return_att_weight:
@@ -874,7 +941,7 @@ class IRNet(BasicModel):
 
     def init_decoder_state(self, enc_last_cell):
         h_0 = self.decoder_cell_init(enc_last_cell)
-        h_0 = F.tanh(h_0)
+        h_0 = torch.tanh(h_0)
 
         return h_0, Variable(self.new_tensor(h_0.size()).zero_())
 

@@ -14,55 +14,25 @@ from collections import deque, namedtuple
 
 # we'll use infinity as a default distance to nodes.
 inf = float('inf')
-Edge = namedtuple('Edge', 'start, end, cost')
+Edge = namedtuple('Edge', 'start, entry_column, end, exit_column, cost')
 
 
-def make_edge(start, end, cost=1):
-    return Edge(start, end, cost)
+def make_edge(start, entry_column, end, exit_column, cost=1):
+    return Edge(start, entry_column, end, exit_column, cost)
 
 
 class Graph:
     def __init__(self, edges):
         # let's check that the data is right
-        wrong_edges = [i for i in edges if len(i) not in [2, 3]]
+        wrong_edges = [i for i in edges if len(i) not in [4, 5]]
         if wrong_edges:
-            raise ValueError('Wrong edges data: {}'.format(wrong_edges))
+            raise ValueError('Wrong edges data: {}. Format should be: start, entry_column, end, exit_column, cost'.format(wrong_edges))
 
         self.edges = [make_edge(*edge) for edge in edges]
 
     @property
     def vertices(self):
-        return set(
-            # this piece of magic turns ([1,2], [3,4]) into [1, 2, 3, 4]
-            # the set above makes it's elements unique.
-            sum(
-                ([edge.start, edge.end] for edge in self.edges), []
-            )
-        )
-
-    def get_node_pairs(self, n1, n2, both_ends=True):
-        if both_ends:
-            node_pairs = [[n1, n2], [n2, n1]]
-        else:
-            node_pairs = [[n1, n2]]
-        return node_pairs
-
-    def remove_edge(self, n1, n2, both_ends=True):
-        node_pairs = self.get_node_pairs(n1, n2, both_ends)
-        edges = self.edges[:]
-        for edge in edges:
-            if [edge.start, edge.end] in node_pairs:
-                self.edges.remove(edge)
-
-    def add_edge(self, n1, n2, cost=1, both_ends=True):
-        node_pairs = self.get_node_pairs(n1, n2, both_ends)
-        for edge in self.edges:
-            if [edge.start, edge.end] in node_pairs:
-                return ValueError('Edge {} {} already exists'.format(n1, n2))
-
-        self.edges.append(Edge(start=n1, end=n2, cost=cost))
-        if both_ends:
-            self.edges.append(Edge(start=n2, end=n1, cost=cost))
+        return set([e.start for e in self.edges] + [e.end for e in self.edges])
 
     @property
     def neighbours(self):
@@ -118,13 +88,34 @@ class Graph:
             current_vertex = previous_vertices[current_vertex]
         if path:
             path.appendleft(current_vertex)
-        return path
+
+        edges_to_follow = self._get_edges_based_on_path(path)
+
+        return edges_to_follow
+
+    def _get_edges_based_on_path(self, path):
+        edges_to_follow = []
+        idx = 0
+        while idx < len(path) - 1:
+            start = path[idx]
+            end = path[idx + 1]
+
+            filtered_edges = filter(lambda edge: edge.start == start and edge.end == end, self.edges)
+            edges_to_follow.append(next(filtered_edges))
+
+            if next(filtered_edges, None) is not None:
+                # TODO: we would need the model to predict the correct relation between multiple tables, if there is more than one. For now we just take the first one we find.
+                issue_text = "There should exist exactly one edge between two tables! But we found multiple ones: Tables: {}, {}".format(start, end)
+                # print(issue_text)
+
+            idx += 1
+
+        return edges_to_follow
 
 
 if __name__ == '__main__':
-    graph = Graph([
-        ("a", "b", 7), ("a", "c", 9), ("a", "f", 14), ("b", "c", 10),
-        ("b", "d", 15), ("c", "d", 11), ("c", "f", 2), ("d", "e", 6),
-        ("e", "f", 9)])
+    graph = Graph([("A", "a", "B", "a", 7), ("A", "c", "C", "a", 9), ("A", "f", "F", "a", 14), ("B", "b", "C", "b", 10),
+                   ("B", "b", "D", "b", 15), ("C", "c", "D", "c", 11), ("C", "c", "F", "c", 2), ("D", "d", "E", "d", 6),
+                   ("E", "e", "F", "e", 9)])
 
-    print(graph.dijkstra("a", "e"))
+    print(graph.dijkstra("A", "E"))
