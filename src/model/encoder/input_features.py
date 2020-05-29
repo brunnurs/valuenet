@@ -5,7 +5,7 @@ SEGMENT_ID_QUESTION = 0
 SEGMENT_ID_SCHEMA = 1
 
 
-def encode_input(question_spans, column_names, table_names, tokenizer, max_length_model, device):
+def encode_input(question_spans, column_names, table_names, values, tokenizer, max_length_model, device):
     all_input_ids = []
     all_attention_mask = []
     all_segment_ids = []
@@ -13,33 +13,42 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
     all_question_span_lengths = []
     all_column_token_lengths = []
     all_table_token_lengths = []
+    all_values_lengths = []
 
-    for question, columns, tables in zip(question_spans, column_names, table_names):
+    for question, columns, tables, val in zip(question_spans, column_names, table_names, values):
         question_tokens, question_span_lengths, question_segment_ids = _tokenize_question(question, tokenizer)
         all_question_span_lengths.append(question_span_lengths)
 
         columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer)
-        # TODO: this is an exception case (db-id: "baseball_1") which leads to too many tokens. Therefore we don't sub-tokenize it
-        if len(columns_tokens) == 433:
+
+        if _is_baseball_1_schema(tables):
             columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
-            # print("Found a 'baseball_1' case!")
 
         all_column_token_lengths.append(column_token_lengths)
 
         table_tokens, table_token_lengths, table_segment_ids = _tokenize_table_names(tables, tokenizer)
         all_table_token_lengths.append(table_token_lengths)
 
-        assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) == \
-               len(question_tokens) + len(columns_tokens) + len(table_tokens)
+        value_tokens, value_token_lengths, value_segment_ids = _tokenize_values(val, tokenizer)
+        all_values_lengths.append(value_token_lengths)
 
-        tokens = question_tokens + columns_tokens + table_tokens
+        assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) + sum(value_token_lengths) == \
+               len(question_tokens) + len(columns_tokens) + len(table_tokens) + len(value_tokens)
+
+        tokens = question_tokens + columns_tokens + table_tokens + value_tokens
         if len(tokens) > max_length_model:
-            print("################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {} ".format(len(tokens), len(question_tokens), len(columns_tokens), len(table_tokens)))
+            print(
+                "################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {}, values: {} ".format(
+                                                                                                                                            len(tokens),
+                                                                                                                                            len(question_tokens),
+                                                                                                                                            len(columns_tokens),
+                                                                                                                                            len(table_tokens),
+                                                                                                                                            len(value_tokens)))
             print(question)
             print(columns)
             print(tables)
 
-        segment_ids = question_segment_ids + columns_segment_ids + table_segment_ids
+        segment_ids = question_segment_ids + columns_segment_ids + table_segment_ids + value_segment_ids
         # not sure here if "tokenizer.mask_token_id" or just a simple 1...
         attention_mask = [1] * len(tokens)
 
@@ -58,7 +67,7 @@ def encode_input(question_spans, column_names, table_names, tokenizer, max_lengt
     segment_ids_tensor = torch.tensor(all_segment_ids, dtype=torch.long).to(device)
     attention_mask_tensor = torch.tensor(all_attention_mask, dtype=torch.long).to(device)
 
-    return input_ids_tensor, attention_mask_tensor, segment_ids_tensor, (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths)
+    return input_ids_tensor, attention_mask_tensor, segment_ids_tensor, (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_values_lengths)
 
 
 def _tokenize_question(question, tokenizer):
@@ -126,6 +135,23 @@ def _tokenize_table_names(table_names, tokenizer):
     return all_table_tokens, table_token_lengths, segment_ids
 
 
+def _tokenize_values(values, tokenizer):
+    value_token_lengths = []
+    all_value_tokens = []
+
+    for value in values:
+        value = format_value(value)
+        value_sub_tokens = tokenizer.tokenize(value)
+        value_sub_tokens += [tokenizer.sep_token]
+
+        all_value_tokens.extend(value_sub_tokens)
+        value_token_lengths.append(len(value_sub_tokens))
+
+    segment_ids = [SEGMENT_ID_QUESTION if tok == tokenizer.sep_token else SEGMENT_ID_SCHEMA for tok in all_value_tokens]
+
+    return all_value_tokens, value_token_lengths, segment_ids
+
+
 def _padd_input(input_ids, segment_ids, attention_mask, max_length, tokenizer):
 
     while len(input_ids) < max_length:
@@ -136,3 +162,28 @@ def _padd_input(input_ids, segment_ids, attention_mask, max_length, tokenizer):
     assert len(input_ids) == max_length
     assert len(attention_mask) == max_length
     assert len(segment_ids) == max_length
+
+
+def format_value(value):
+    """
+    This function contains heuristics to improve results, e.g. by transforming an empty string value ('') to the word empty.
+    The goal is to input known values into the (transformer)-encoder, so he can learn the attention to the question.
+    The heuristic in this method should stay as little as possible.
+    """
+    # at this point, a value needs to be a string to use the transformers tokenizing magic.
+    # Any logic using numbers, needs to happen before.
+    value = str(value)
+
+    # convert empty strings to the word "empty", as the model can't handle them otherwise.
+    if "".__eq__(value):
+        value = 'empty'
+
+    return value
+
+
+def _is_baseball_1_schema(table_names):
+    return table_names == [['all', 'star'], ['appearance'], ['manager', 'award'], ['player', 'award'],
+                           ['manager', 'award', 'vote'], ['player', 'award', 'vote'], ['batting'],
+                           ['batting', 'postseason'], ['player', 'college'], ['hall', 'of', 'fame'], ['home', 'game'],
+                           ['player'], ['park'], ['salary'], ['college'], ['postseason'], ['team'],
+                           ['team', 'franchise']]

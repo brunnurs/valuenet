@@ -7,7 +7,7 @@ import torch.nn.utils
 from torch.autograd import Variable
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence
 
-from intermediate_representation.semQL import N, A, C, T, Filter, Order, Sup
+from intermediate_representation.semQL import N, A, C, T, V, Filter, Order, Sup
 
 
 class BasicModel(nn.Module):
@@ -105,16 +105,38 @@ class BasicModel(nn.Module):
                     padding_result.append(A(0))
                     padding_result.append(C(0))
                     padding_result.append(T(0))
-            elif type(action) == Filter and 'A' in action.production:
-                padding_result.append(A(0))
-                padding_result.append(C(0))
-                padding_result.append(T(0))
+            elif type(action) == Filter:
+                padding_result.extend(self._padd_filter(action))
             elif type(action) == Order or type(action) == Sup:
                 padding_result.append(A(0))
                 padding_result.append(C(0))
                 padding_result.append(T(0))
 
         return padding_result
+
+    @staticmethod
+    def _padd_filter(action):
+        if 'A' in action.production:
+            filter_paddings = []
+            start_idx = action.production.index('A')
+            all_padding_objects = action.production[start_idx:].split(' ')
+
+            for e in all_padding_objects:
+                if e == 'A':
+                    filter_paddings.append(A(0))
+                    filter_paddings.append(C(0))
+                    filter_paddings.append(T(0))
+                elif e == 'V':
+                    filter_paddings.append(V(0))
+                elif e == 'Root':
+                    # we don't need to do anything for 'Root' -> it will be padded later.
+                    continue
+                else:
+                    raise ValueError("Unknown Action: " + e)
+
+            return filter_paddings
+        else:
+            return []
 
     def gen_x_batch(self, q):
         B = len(q)

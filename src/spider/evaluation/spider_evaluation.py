@@ -26,6 +26,7 @@ import traceback
 import argparse
 
 import wandb
+from tqdm import tqdm
 
 from spider.evaluation.process_sql import tokenize, get_schema, get_tables_with_alias, Schema, get_sql
 
@@ -447,12 +448,16 @@ def print_scores(scores, etype, tb_writer, training_step, print_stdout):
     partial_types = ['select', 'select(no AGG)', 'where', 'where(no OP)', 'group(no Having)',
                      'group', 'order', 'and/or', 'IUEN', 'keywords']
 
-    exact_matching_accuracy_with_counts = {level: "{} ({})".format(scores[level]['exact'], scores[level]['count']) for level in levels}
-    exact_matching_accuracy = {level: scores[level]['exact'] for level in levels}
+    if etype in ["all", "match"]:
+        matching_accuracy_with_counts = {level: "{} ({})".format(scores[level]['exact'], scores[level]['count']) for level in levels}
+        matching_accuracy = {level: scores[level]['exact'] for level in levels}
+    else:
+        matching_accuracy_with_counts = {level: "{} ({})".format(scores[level]['exec'], scores[level]['count']) for level in levels}
+        matching_accuracy = {level: scores[level]['exec'] for level in levels}
 
     if tb_writer:
-        tb_writer.add_scalars('spider_evaluation_execution_acc', exact_matching_accuracy, training_step)
-        wandb.log(exact_matching_accuracy, step=training_step)
+        tb_writer.add_scalars('spider_evaluation_acc', matching_accuracy, training_step)
+        wandb.log(matching_accuracy, step=training_step)
 
     if print_stdout:
         print("{:20} {:20} {:20} {:20} {:20} {:20}".format("", *levels))
@@ -483,14 +488,14 @@ def print_scores(scores, etype, tb_writer, training_step, print_stdout):
                 this_scores = [scores[level]['partial'][type_]['f1'] for level in levels]
                 print("{:20} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f} {:<20.3f}".format(type_, *this_scores))
 
-    return exact_matching_accuracy_with_counts
+    return matching_accuracy_with_counts
 
 
 def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, training_step=None, print_stdout=True):
-    with open(gold) as f:
+    with open(gold, encoding='utf-8') as f:
         glist = [l.strip().split('\t') for l in f.readlines() if len(l.strip()) > 0]
 
-    with open(predict) as f:
+    with open(predict, encoding='utf-8') as f:
         plist = [l.strip().split('\t') for l in f.readlines() if len(l.strip()) > 0]
     # plist = [("select max(Share),min(Share) from performance where Type != 'terminal'", "orchestra")]
     # glist = [("SELECT max(SHARE) ,  min(SHARE) FROM performance WHERE TYPE != 'Live final'", "orchestra")]
@@ -509,7 +514,7 @@ def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, train
             scores[level]['partial'][type_] = {'acc': 0., 'rec': 0., 'f1': 0.,'acc_count':0,'rec_count':0}
 
     eval_err_num = 0
-    for p, g in zip(plist, glist):
+    for p, g in zip(tqdm(plist), tqdm(glist)):
         p_str = p[0]
         g_str, db, _ = g
         db_name = db
@@ -558,14 +563,20 @@ def spider_evaluation(gold, predict, db_dir, etype, kmaps, tb_writer=None, train
             exec_score = eval_exec_match(db, p_str, g_str, p_sql, g_sql)
             if exec_score:
                 scores[hardness]['exec'] += 1
+                scores['all']['exec'] += 1
+            else:
+                if print_stdout:
+                    print("{} pred: {}".format(hardness, p_str))
+                    print("{} gold: {}".format(hardness, g_str))
+                    print("")
 
         if etype in ["all", "match"]:
             exact_score = evaluator.eval_exact_match(p_sql, g_sql)
             partial_scores = evaluator.partial_scores
             if exact_score == 0:
                 if print_stdout:
-                    print("{} pred: {}".format(hardness,p_str))
-                    print("{} gold: {}".format(hardness,g_str))
+                    print("{} pred: {}".format(hardness, p_str))
+                    print("{} gold: {}".format(hardness, g_str))
                     print("")
             scores[hardness]['exact'] += exact_score
             scores['all']['exact'] += exact_score
@@ -627,18 +638,27 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
     return 1 if the values between prediction and gold are matching
     in the corresponding index. Currently not support multiple col_unit(pairs).
     """
+    # print("db: {}           sql-pred: {}            sql-gold: {}".format(db, p_str, g_str))
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
     try:
         cursor.execute(p_str)
         p_res = cursor.fetchall()
-    except:
+    except Exception as e:
+        print("could not execute query '{}'. Exception: {}. Database: {}".format(p_str, e, db))
         return False
 
     cursor.execute(g_str)
     q_res = cursor.fetchall()
 
+    conn.close()
+
     def res_map(res, val_units):
+        """
+        Notes Ursin: The val_units are the columns in the select and "res" is the results from the select, one tuple per row.
+        What we do now is building up a map with columns as key and a list of values from the sql-select.
+        Then we simply compare the two maps. That way we don't care about the selection-order.
+        """
         rmap = {}
         for idx, val_unit in enumerate(val_units):
             key = tuple(val_unit[1]) if not val_unit[2] else (val_unit[0], tuple(val_unit[1]), tuple(val_unit[2]))
@@ -647,6 +667,8 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
 
     p_val_units = [unit[1] for unit in pred['select'][1]]
     q_val_units = [unit[1] for unit in gold['select'][1]]
+
+    # it's important to remember that when comparing two maps, the order of the keys doesn't matter
     return res_map(p_res, p_val_units) == res_map(q_res, q_val_units)
 
 
@@ -849,7 +871,7 @@ def build_foreign_key_map(entry):
 
 
 def build_foreign_key_map_from_json(table):
-    with open(table) as f:
+    with open(table, encoding='utf-8') as f:
         data = json.load(f)
     tables = {}
     for entry in data:

@@ -1,5 +1,5 @@
 Keywords = ['des', 'asc', 'and', 'or', 'sum', 'min', 'max', 'avg', 'none', '=', '!=', '<', '>', '<=', '>=', 'between', 'like', 'not_like'] + \
-           ['in', 'not_in', 'count', 'intersect', 'union', 'except']
+           ['in', 'not_in', 'count', 'intersect', 'union', 'except', 'distinct']
 
 
 class Grammar(object):
@@ -24,6 +24,8 @@ class Grammar(object):
         self.type2id[C] = self.type_id
         self.type_id += 1
         self.type2id[T] = self.type_id
+        self.type_id += 1
+        self.type2id[V] = self.type_id
 
     def _init_grammar(self, Cls):
         """
@@ -59,7 +61,8 @@ class Action(object):
             if x not in Keywords:
                 rule_type = eval(x)
                 if is_sketch:
-                    if rule_type is not A:
+                    # it's sufficient to restrict A and V, as T and C are anyway subnodes of A and will therefore never be reached by this logic if we avoid A.
+                    if rule_type not in [A, V]:
                         actions.append(rule_type)
                 else:
                     actions.append(rule_type)
@@ -209,6 +212,27 @@ class T(Action):
         return 'T(' + str(self.id_c) + ')'
 
 
+class V(Action):
+    """
+    This class represents a Value. It can be be numeric (e.g. 15.25), a string "USA" or a Date "14.11.2020".
+    id_c is referring to the index of the value in the list of all possible values.
+    """
+
+    def __init__(self, id_c, parent=None):
+        super(V, self).__init__()
+
+        self.parent = parent
+        self.id_c = id_c
+        self.production = ''
+        self.table = None
+
+    def __str__(self):
+        return 'V(' + str(self.id_c) + ')'
+
+    def __repr__(self):
+        return 'V(' + str(self.id_c) + ')'
+
+
 class A(Action):
     """
     Aggregator
@@ -262,7 +286,8 @@ class Sel(Action):
     @classmethod
     def _init_grammar(self):
         self.grammar_dict = {
-            0: 'Sel N',
+            0: 'Sel none N',
+            1: 'Sel distinct N',
         }
         self.production_id = {}
         for id_x, value in enumerate(self.grammar_dict.values()):
@@ -296,15 +321,15 @@ class Filter(Action):
             # 0: "Filter 1"
             0: 'Filter and Filter Filter',
             1: 'Filter or Filter Filter',
-            2: 'Filter = A',
-            3: 'Filter != A',
-            4: 'Filter < A',
-            5: 'Filter > A',
-            6: 'Filter <= A',
-            7: 'Filter >= A',
-            8: 'Filter between A',
-            9: 'Filter like A',
-            10: 'Filter not_like A',
+            2: 'Filter = A V',
+            3: 'Filter != A V',
+            4: 'Filter < A V',
+            5: 'Filter > A V',
+            6: 'Filter <= A V',
+            7: 'Filter >= A V',
+            8: 'Filter between A V V',
+            9: 'Filter like A V',
+            10: 'Filter not_like A V',
             # now begin root
             11: 'Filter = A Root',
             12: 'Filter < A Root',
@@ -399,4 +424,14 @@ class Order(Action):
 
 
 if __name__ == '__main__':
-    print(list(Root._init_grammar()))
+    g = Grammar()
+    print("Actions:")
+    for key, value in g.type2id.items():
+        print("Action: {}, id: {}".format(key, value))
+
+    print()
+    print()
+    print("Production Rules:")
+
+    for key, value in g.prod2id.items():
+        print("Production Rule: {}, id: {}".format(key, value))
