@@ -18,7 +18,7 @@ from utils import setup_device, set_seed_everywhere
 def evaluate(model, dev_loader, table_data, beam_size):
     model.eval()
 
-    sketch_correct, rule_label_correct, total = 0, 0, 0
+    sketch_correct, rule_label_correct, not_all_values_found, total = 0, 0, 0, 0
     predictions = []
     for batch in tqdm(dev_loader, desc="Evaluating"):
 
@@ -61,12 +61,13 @@ def evaluate(model, dev_loader, table_data, beam_size):
                 question = prediction['question']
                 print(f'Not all values found during pre-processing for question {question}. Replace values with dummy to make query fail')
                 prediction['values'] = [1] * len(prediction['values'])
+                not_all_values_found += 1
 
             total += 1
 
             predictions.append(prediction)
 
-    return float(sketch_correct) / float(total), float(rule_label_correct) / float(total), predictions
+    return float(sketch_correct) / float(total), float(rule_label_correct) / float(total), float(not_all_values_found) / float(total), predictions
 
 
 def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir, experiment_dir, tb_writer, training_step):
@@ -102,13 +103,13 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(args.model_to_load))
     print("Load pre-trained model from '{}'".format(args.model_to_load))
 
-    sketch_acc, acc, predictions = evaluate(model,
-                                            dev_loader,
-                                            table_data,
-                                            args.beam_size)
+    sketch_acc, acc, not_all_values_found, predictions = evaluate(model,
+                                                                  dev_loader,
+                                                                  table_data,
+                                                                  args.beam_size)
 
-    eval_results_string = "Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}".format(
-        len(dev_loader), sketch_acc, acc)
+    print("Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}, Not all values found: {}".format(len(dev_loader), sketch_acc, acc, not_all_values_found))
+
 
     with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
         json.dump(predictions, f, indent=2)
