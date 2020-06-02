@@ -1,6 +1,6 @@
 # A Neural Text-to-SQL Architecture Incorporating Values
 
-[Paper](ValueNet.pdf)
+[https://arxiv.org/abs/2006.00888](https://arxiv.org/abs/2006.00888)
 
 ## Abstract
 
@@ -24,6 +24,8 @@ You can either install the script with pip (`pip install -r requirements.txt`) o
 
 ### You just wanna play around?
 Use the manual inference mode, where you specify a database and you can just ask questions. Run `src/manual_inference/manual_inference.py --model_to_load=path/to/trained_model.pt --database=cre_Theme_park`. For all configuration see the `config.py` file.
+
+**IMPORTANT:** the manual inference mode uses Google Entities API for NER (https://cloud.google.com/natural-language/docs/analyzing-entities). You need to organize a valid API key and add it to the `google_api_repository.py` file. The Google API is free up to a certain amount of requests.
 
 ![Image of Manual Inference](./screenshot_manual_inference.png)
 
