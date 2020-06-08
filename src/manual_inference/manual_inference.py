@@ -47,13 +47,13 @@ def _tokenize_question(tokenizer, question):
     return [str(token) for token in question_tokenized]
 
 
-def _pre_process_values(row):
+def _pre_process_values(row, database_path, schema_path):
     ner_results = remote_named_entity_recognition(row['question'])
     row['ner_extracted_values'] = ner_results['entities']
 
     extracted_values = pre_process(row)
 
-    row['values'] = match_values_in_database(row['db_id'], extracted_values)
+    row['values'] = match_values_in_database(row['db_id'], extracted_values, database_path, schema_path)
 
     return row
 
@@ -106,13 +106,16 @@ V::::::V           V::::::V               l:::::l                               
         ''', 'blue'))
 
 
-if __name__ == '__main__':
+def main():
     args = read_arguments_manual_inference()
 
     device, n_gpu = setup_device()
     set_seed_everywhere(args.seed, n_gpu)
 
-    schemas_raw, schemas_dict = spider_utils.load_schema(args.data_dir)
+    schema_path = os.path.join(args.data_dir, "original", "tables.json")
+    database_path = os.path.join(args.data_dir, "original", "database")
+
+    schemas_raw, schemas_dict = spider_utils.load_schema(schema_path)
 
     grammar = semQL.Grammar()
     model = IRNet(args, device, grammar)
@@ -152,7 +155,7 @@ if __name__ == '__main__':
 
             pre_processed_data = process_datas(data, related_to_concept, is_a_concept)
 
-            pre_processed_with_values = _pre_process_values(pre_processed_data[0])
+            pre_processed_with_values = _pre_process_values(pre_processed_data[0], database_path, schema_path)
 
             print(f"we found the following potential values in the question: {row['values']}")
 
@@ -177,3 +180,7 @@ if __name__ == '__main__':
             print("Exception: " + str(e))
 
         input(colored("Press [Enter] to continue with your next question.", 'red', attrs=['bold']))
+
+
+if __name__ == '__main__':
+    main()

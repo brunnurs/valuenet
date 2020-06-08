@@ -15,9 +15,6 @@ from named_entity_recognition.handcrafted_heuristics import find_values_in_quote
 from named_entity_recognition.ner_extraction_data_dto import NerExtractionData
 from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
 
-DB_FOLDER = 'data/spider/original/database'
-DB_SCHEMA = 'data/spider/original/tables.json'
-
 all_database_value_finder = {}
 
 
@@ -57,8 +54,8 @@ def pre_process(entry):
     return extracted_data
 
 
-def match_values_in_database(db_id: str, extracted_data: NerExtractionData):
-    db_value_finder = _get_or_create_value_finder(db_id)
+def match_values_in_database(db_id: str, extracted_data: NerExtractionData, database_folder: str, db_schema: str):
+    db_value_finder = _get_or_create_value_finder(db_id, database_folder, db_schema)
 
     # depending on the candidate type we set a different tolerance value for similarity matching with db-values.
     # Remember: 1.0 is looking for exact matches only. Also remember: we do lower-case only comparison, so 'Male' and 'male' will match with 1.0
@@ -214,9 +211,9 @@ def _is_value_equal(extracted_value, expected_value):
     return expected_value == extracted_value
 
 
-def _get_or_create_value_finder(database):
+def _get_or_create_value_finder(database, database_folder, db_schema):
     if database not in all_database_value_finder:
-        all_database_value_finder[database] = DatabaseValueFinder(DB_FOLDER, database, DB_SCHEMA)
+        all_database_value_finder[database] = DatabaseValueFinder(database_folder, database, db_schema)
     db_value_finder = all_database_value_finder[database]
     return db_value_finder
 
@@ -226,6 +223,8 @@ if __name__ == '__main__':
     arg_parser.add_argument('--data_path', type=str, required=True)
     arg_parser.add_argument('--ner_data_path', type=str, required=True)
     arg_parser.add_argument('--output_path', type=str, required=True)
+    arg_parser.add_argument('--database_folder', type=str, default='data/spider/original/database')
+    arg_parser.add_argument('--database_schema', type=str, default='data/spider/original/tables.json')
 
     args = arg_parser.parse_args()
 
@@ -256,7 +255,7 @@ if __name__ == '__main__':
     # we parallelize it. Important: Parallel() maintains the order of the input data!
     n_cores = multiprocessing.cpu_count()
     values_matched_with_database = Parallel(n_jobs=n_cores)(
-        delayed(match_values_in_database)(row['db_id'], extracted_value) for extracted_value, row
+        delayed(match_values_in_database)(row['db_id'], extracted_value, args.database_folder, args.database_schema) for extracted_value, row
         in zip(extracted_values, data))
     print("Scanned all databases for matching values.")
     print()
