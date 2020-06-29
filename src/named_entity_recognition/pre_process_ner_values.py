@@ -2,6 +2,7 @@ import argparse
 import json
 import multiprocessing
 import os
+from typing import Dict
 
 from joblib import Parallel, delayed
 from pytictoc import TicToc
@@ -54,8 +55,8 @@ def pre_process(entry):
     return extracted_data
 
 
-def match_values_in_database(db_id: str, extracted_data: NerExtractionData, database_folder: str, db_schema: str):
-    db_value_finder = _get_or_create_value_finder(db_id, database_folder, db_schema)
+def match_values_in_database(db_id: str, extracted_data: NerExtractionData, db_schema: str, connection_config: Dict[str, str]):
+    db_value_finder = _get_or_create_value_finder(db_id, db_schema, connection_config)
 
     # depending on the candidate type we set a different tolerance value for similarity matching with db-values.
     # Remember: 1.0 is looking for exact matches only. Also remember: we do lower-case only comparison, so 'Male' and 'male' will match with 1.0
@@ -211,9 +212,9 @@ def _is_value_equal(extracted_value, expected_value):
     return expected_value == extracted_value
 
 
-def _get_or_create_value_finder(database, database_folder, db_schema):
+def _get_or_create_value_finder(database, db_schema, connection_config):
     if database not in all_database_value_finder:
-        all_database_value_finder[database] = DatabaseValueFinder(database_folder, database, db_schema)
+        all_database_value_finder[database] = DatabaseValueFinder(database, db_schema, connection_config)
     db_value_finder = all_database_value_finder[database]
     return db_value_finder
 

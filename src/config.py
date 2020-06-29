@@ -125,7 +125,14 @@ def read_arguments_manual_inference():
 
     # manual_inference
     parser.add_argument('--model_to_load', type=str)
-    parser.add_argument('--database', default='concert_singer', type=str)
+
+    # database configuration (PostgreSQL)
+    parser.add_argument('--database', default='dummy', type=str)
+    parser.add_argument('--database_host', default='localhost', type=str)
+    parser.add_argument('--database_port', default='5432', type=str)
+    parser.add_argument('--database_user', default='postgres', type=str)
+    parser.add_argument('--database_password', default='postgres', type=str)
+    parser.add_argument('--database_schema', default='unics_cordis', type=str)
 
     # general configuration
     parser.add_argument('--seed', default=90, type=int)

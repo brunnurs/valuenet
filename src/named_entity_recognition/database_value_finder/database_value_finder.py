@@ -1,25 +1,23 @@
 import json
-import operator
 from functools import reduce
 
 import psycopg2
-from more_itertools import flatten
 import multiprocessing
-from joblib import Parallel, delayed
 
 NUM_CORES = multiprocessing.cpu_count()
 
-DATABASE = "cordis"
-USER = "postgres"
-HOST = "localhost"
-PORT = "5432"
-PASSWORD = "postgres"
-OPTIONS = "-c search_path=unics_cordis"
-
 
 class DatabaseValueFinder:
-    def __init__(self, max_results=10):
-        self.database_schema = self._load_schema("data/cordis/original/tables.json", DATABASE)
+    def __init__(self, database, db_schema_information, connection_config, max_results=10):
+        self.database = database
+
+        self.db_host = connection_config['database_host']
+        self.db_port = connection_config['database_port']
+        self.db_user = connection_config['database_user']
+        self.db_password = connection_config['database_password']
+        self.db_options = f"-c search_path={connection_config['database_schema']}"
+
+        self.database_schema = self._load_schema(db_schema_information, database)
         self.max_results = max_results
 
     def find_similar_values_in_database(self, potential_values):
@@ -27,7 +25,7 @@ class DatabaseValueFinder:
 
         table_text_column_mapping = self._get_text_columns(self.database_schema)
 
-        conn = psycopg2.connect(database=DATABASE, user=USER, password=PASSWORD, host=HOST, port=PORT, options=OPTIONS)
+        conn = psycopg2.connect(database=self.database, user=self.db_user, password=self.db_password, host=self.db_host, port=self.db_port, options=self.db_options)
 
         for table, columns in table_text_column_mapping.items():
             for column in columns:
@@ -70,7 +68,7 @@ class DatabaseValueFinder:
 
     @staticmethod
     def _assemble_query(column, table, potential_values):
-        value_listing = reduce(lambda current, next_value: current + f", '{next_value}'", potential_values[1:], f"'{potential_values[0]}'")
+        value_listing = reduce(lambda current, next_value: current + f", '{next_value[0]}'", potential_values[1:], f"'{potential_values[0][0]}'")
 
         return f'SELECT {column} FROM {table} WHERE {column} IN ({value_listing})'
 
