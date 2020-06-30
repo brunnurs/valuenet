@@ -56,23 +56,31 @@ def pre_process(entry):
 
 
 def match_values_in_database(db_id: str, extracted_data: NerExtractionData, db_schema: str, connection_config: Dict[str, str]):
+
+    # NOTE: adapting this thresholds should always be done empirically and is heavily depending on the chosen similarity metric.
+    # have a look at the script find_optimal_similarity_threshold.py to find optimal thresholds.
+
+    exact_match = 1.0   # be a ware that an exact match is not case sensitive
+    high_similarity = 0.75
+    medium_similarity = 0.5
+
     db_value_finder = _get_or_create_value_finder(db_id, db_schema, connection_config)
 
     # depending on the candidate type we set a different tolerance value for similarity matching with db-values.
     # Remember: 1.0 is looking for exact matches only. Also remember: we do lower-case only comparison, so 'Male' and 'male' will match with 1.0
     candidates = []
     # With values in quote we are a bit tolerant. Important: we keep this values anyway, as the are often used in fuzzy LIKE searches.
-    _add_without_duplicates([(quote, 0.9) for quote in extracted_data.heuristic_values_in_quote], candidates)
+    _add_without_duplicates([(quote, high_similarity) for quote in extracted_data.heuristic_values_in_quote], candidates)
     # Gender values we only want exact matches.
-    _add_without_duplicates([(gender, 1.0) for gender in extracted_data.heuristics_genders], candidates)
-    _add_without_duplicates([(common_mentionings, 0.9) for common_mentionings in extracted_data.heuristics_variety_common_mentionings], candidates)
+    _add_without_duplicates([(gender, exact_match) for gender in extracted_data.heuristics_genders], candidates)
+    _add_without_duplicates([(common_mentionings, high_similarity) for common_mentionings in extracted_data.heuristics_variety_common_mentionings], candidates)
     # a special code should match exactly
-    _add_without_duplicates([(special_code, 1.0) for special_code in extracted_data.heuristics_special_codes], candidates)
-    _add_without_duplicates([(capitalized_word, 0.75) for capitalized_word in extracted_data.heuristics_capitalized_words], candidates)
-    _add_without_duplicates([(location, 0.9) for location in extracted_data.heuristics_location_abbreviations], candidates)
+    _add_without_duplicates([(special_code, exact_match) for special_code in extracted_data.heuristics_special_codes], candidates)
+    _add_without_duplicates([(capitalized_word, medium_similarity) for capitalized_word in extracted_data.heuristics_capitalized_words], candidates)
+    _add_without_duplicates([(location, high_similarity) for location in extracted_data.heuristics_location_abbreviations], candidates)
 
     # important: in addition to all the handcrafted features, also take all values from the NER which aren't known dates/numbers/prices
-    _add_without_duplicates([(ner_value, 0.75) for ner_value in extracted_data.ner_remaining], candidates)
+    _add_without_duplicates([(ner_value, medium_similarity) for ner_value in extracted_data.ner_remaining], candidates)
 
     database_matches = _find_matches_in_database(db_value_finder, candidates)
 

@@ -34,3 +34,43 @@ Simply run `python src/main.py`. For all configuration see the `config.py` file.
 
 After each epoch the evaluation task is executed. Evaluation will use the Spider Evaluation script to execute SQL queries on the Spider databases.
 
+### Database
+In contrary to the original work using the spider databases (SQLite) we switched for the CORDIS database to PostgreSQL. Due to the large about of data we also
+need a smarter way to look up values with a certain similarity, as the trivial method of the original paper is computationally unfeasible.
+
+We therefore calculate the similarities directly on the database using the `pg_trgm` package (https://www.postgresql.org/docs/12/pgtrgm.html). 
+As a trivial approach would still be way too slow, we need smart indices, which `pg_trgm` provides with `gin_trgm_ops` and `gist_trgm_ops`.
+
+The following steps are necessary to make the system work on your database.
+* install the `pg_trgm` package: `CREATE EXTENSION pg_trgm;`
+* Create indices for all columns which contain text. You find a script to do this at [resources/database/create_tgrm_indices.sql](/resources/database/create_tgrm_indices.sql). Make sure though no columns changed in the meantime.
+* Set the minimal threshold (explanation will follow) for similarity matches. This can be done with e.g. `SELECT set_limit(0.499)`
+
+#### Query with Similarity using Indices
+We query potential values with a query looking like the following:
+```Sql 
+select title, sim_v1, sim_v2, sim_v3 from
+    (SELECT DISTINCT title,
+                    similarity(title, 'Nural Language Energy for Promoting CONSUMER Sustainable Behaviour') as sim_v1,
+                    similarity(title, 'dummy1')                                                             as sim_v2,
+                    similarity(title, 'dummy2')                                                             as sim_v3
+    FROM unics_cordis.projects
+    WHERE title % 'Nural Language Energy for Promoting CONSUMER Sustainable Behaviour'
+       OR title % 'dummy1'
+       OR title % 'dummy2') as sub_query
+where sim_v1 >= 0.9 OR sim_v2 >= 0.5 OR sim_v2 >= 0.54
+```
+
+
+Why is the nested query necessary? The special `gist_trgm_ops`-index we create for all text columns in the database 
+works only with the `%` operator, not by using a `WHERE similiarity(a,b) > x` restriction. We therefore
+need the inner query to massively reduce the result set before applying the exact similarity restrictions in order to make this query fast.
+Be aware that the `%` operator works with the internal threshold set by `set_limit(y)` and returned by `show_limit()`. 
+We therefore need to set the lowest possible threshold here (e.g. 0.499) and then use the other thresholds
+to further restrict the result set in the outer query.
+
+#### Performance Experiments
+While the original approach with loading all data and using a similarity measure in python (even though parallelized) took around **200-300s** on the CORDIS database, 
+using the trigram similarity directly in PostgreSQL reduced the time to **51s**.
+
+With using the query described above, we can reduce the amount to **1.3s**.
