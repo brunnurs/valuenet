@@ -62,7 +62,7 @@ def match_values_in_database(db_id: str, extracted_data: NerExtractionData, db_s
 
     exact_match = 1.0   # be a ware that an exact match is not case sensitive
     high_similarity = 0.75
-    medium_similarity = 0.5
+    medium_similarity = 0.7
 
     db_value_finder = _get_or_create_value_finder(db_id, db_schema, connection_config)
 
