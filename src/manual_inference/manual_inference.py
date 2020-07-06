@@ -1,8 +1,6 @@
 import os
 import pickle
-import sqlite3
-from pprint import pprint
-
+import psycopg2
 import torch
 
 from config import read_arguments_manual_inference
@@ -64,8 +62,12 @@ def _semql_to_sql(prediction, schemas):
     return result[0]
 
 
-def _execute_query(sql, db):
-    conn = sqlite3.connect(db)
+def _execute_query(sql, connection_config):
+    db_options = f"-c search_path={connection_config['database_schema']},public"
+
+    conn = psycopg2.connect(database=connection_config['database'], user=connection_config['database_user'],
+                            password=connection_config['database_password'], host=connection_config['database_host'],
+                            port=connection_config['database_port'], options=db_options)
     cursor = conn.cursor()
 
     cursor.execute(sql)
@@ -170,10 +172,10 @@ def main():
 
             print(colored(f"Transformed to SQL: {sql}", 'cyan', attrs=['bold']))
             print()
-            result = _execute_query(sql, args.database_path)
+            result = _execute_query(sql, connection_config)
 
-            print(f"Executed on the database '{args.database}'. Results: ")
-            for row in result:
+            print(f"Executed on the database '{args.database}'. First 10 Results: ")
+            for row in result[:10]:
                 print(colored(row, 'green'))
 
         except Exception as e:

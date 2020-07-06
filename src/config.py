@@ -165,7 +165,8 @@ def read_arguments_manual_inference():
     args = parser.parse_args()
 
     args.data_dir = os.path.join(Config.DATA_PREFIX, args.data_set)
-    args.database_path = os.path.join(args.data_dir, "original", "database", args.database, args.database + ".sqlite")
+    # re-active when switching back to SQLite
+    # args.database_path = os.path.join(args.data_dir, "original", "database", args.database, args.database + ".sqlite")
 
     print("*** parsed configuration from command line and combine with constants ***")
 
