@@ -807,7 +807,7 @@
       "text",
       "text"
     ],
-    "db_id": "cordis",
+    "db_id": "cordis_temporary",
     "foreign_keys": [
       [
         11,
