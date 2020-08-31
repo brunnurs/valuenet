@@ -125,6 +125,7 @@ def read_arguments_manual_inference():
 
     # manual_inference
     parser.add_argument('--model_to_load', type=str)
+    parser.add_argument('--api_key', default='1234', type=str)
 
     # database configuration (PostgreSQL)
     parser.add_argument('--database', default='dummy', type=str)

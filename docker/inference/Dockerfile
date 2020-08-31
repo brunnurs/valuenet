@@ -32,5 +32,5 @@ ENV PYTHONPATH /workspace/src
 
 WORKDIR /workspace
 
-ENTRYPOINT python src/manual_inference/manual_inference_api.py --data_set=cordis --model_to_load=models/best_model.pt  --database=cordis_temporary --database_host=testbed.inode.igd.fraunhofer.de --database_port=18001 --database_user=postgres --database_password=vdS83DJSQz2xQ --database_schema=unics_cordis --conceptNet=data/cordis/conceptNet
+ENTRYPOINT python src/manual_inference/manual_inference_api.py --api_key=$API_KEY --data_set=cordis --model_to_load=models/best_model.pt  --database=cordis_temporary --database_host=testbed.inode.igd.fraunhofer.de --database_port=18001 --database_user=postgres --database_password=vdS83DJSQz2xQ --database_schema=unics_cordis --conceptNet=data/cordis/conceptNet
 #ENTRYPOINT bash

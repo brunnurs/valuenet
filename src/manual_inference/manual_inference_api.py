@@ -49,8 +49,17 @@ with open(os.path.join(args.conceptNet, 'english_IsA.pkl'), 'rb') as f:
     is_a_concept = pickle.load(f)
 
 
+def verify_api_key():
+    api_key = request.headers.get('X-API-Key', default='No API Key provided', type=str)
+    print(f'provided API-Key is {api_key}')
+    if not args.api_key == api_key:
+        print('Invalid API-Key! Abort with 403')
+        abort(403)
+
+
 @app.route('/')
 @app.route('/health')
+@app.route('/api/health')
 def health():
     response = make_response('''
 
@@ -81,18 +90,20 @@ def health():
 
 
 @app.route("/question", methods=["PUT"])
-@app.route("/question/<question>", methods=["GET"])
+@app.route("/api/question", methods=["PUT"])     # this is a fallback for local usage, as the reverse-proxy on nginx will add this prefix
 def pose_question(question=None):
     """
     Ask a question and get the SemQL, SQL and result, as well as some further information.
-    The correct way is to call this API as a PUT, but you can also use a GET (for simplicity in the browser) and add
-    the question as path parameter.
+    Make sure to provide a proper X-API-Key as header parameter.
 
-    Example-PUT: curl -i -X PUT -H "Content-Type: application/json" -d '{"question":"What is the title of the first project which started in year 2014?"}'  http://localhost:5000/question
+    Example-PUT: curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Show me project title and cost of the project with the highest total cost"}'  http://localhost:5000/question
 
     @param question: a natural language question (for now english only)
     @return:
     """
+
+    verify_api_key()
+
     try:
         question = _ensure_question_available(question)
 
@@ -129,13 +140,15 @@ def pose_question(question=None):
         for row in result[:10]:
             print(row)
 
+        result_max_100_rows = result[:min(len(result), 100)]
+
         return {
             'question': question,
             'question_tokenized': input_data['question_toks'],
             'potential_values_found_in_db': input_data['values'],
             'sem_ql': prediction['model_result'],
             'sql': sql,
-            'result': result
+            'result': result_max_100_rows
         }
 
     except Exception as e:

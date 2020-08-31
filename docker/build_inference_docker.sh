@@ -7,6 +7,7 @@ rm -R inference/data/spider
 cd inference || exit
 
 docker build -t ursinbrunner/proton-inference:latest .
+docker push ursinbrunner/proton-inference:latest
 
 # remove everything except the Dockerfile
 rm -R $(ls -I "Dockerfile" )
