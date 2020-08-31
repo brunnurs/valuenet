@@ -10,11 +10,13 @@ from spacy.lang.en import English
 from config import read_arguments_manual_inference
 from intermediate_representation import semQL
 from manual_inference.helper import _tokenize_question, _inference_semql, _pre_process_values, _semql_to_sql, \
-    _execute_query
+    _execute_query_postgresql, _get_schemas_spider, _get_schemas_cordis, _is_cordis_or_spider, _execute_query_sqlite
 from model.model import IRNet
+from named_entity_recognition.database_value_finder.database_value_finder_postgresql import \
+    DatabaseValueFinderPostgreSQL
+from named_entity_recognition.database_value_finder.database_value_finder_sqlite import DatabaseValueFinderSQLite
 from preprocessing.process_data import process_datas
 from preprocessing.utils import merge_data_with_schema
-from spider import spider_utils
 from utils import setup_device, set_seed_everywhere
 
 app = Flask(__name__)
@@ -25,10 +27,10 @@ args = read_arguments_manual_inference()
 device, n_gpu = setup_device()
 set_seed_everywhere(args.seed, n_gpu)
 
-schema_path = os.path.join(args.data_dir, "original", "tables.json")
 connection_config = {k: v for k, v in vars(args).items() if k.startswith('database')}
 
-schemas_raw, schemas_dict = spider_utils.load_schema(schema_path)
+schemas_raw_spider, schemas_dict_spider, schema_path_spider, database_path_spider = _get_schemas_spider()
+schemas_raw_cordis, schemas_dict_cordis, schema_path_cordis, database_path_cordis = _get_schemas_cordis()
 
 grammar = semQL.Grammar()
 model = IRNet(args, device, grammar)
@@ -47,14 +49,6 @@ with open(os.path.join(args.conceptNet, 'english_RelatedTo.pkl'), 'rb') as f:
 
 with open(os.path.join(args.conceptNet, 'english_IsA.pkl'), 'rb') as f:
     is_a_concept = pickle.load(f)
-
-
-def verify_api_key():
-    api_key = request.headers.get('X-API-Key', default='No API Key provided', type=str)
-    print(f'provided API-Key is {api_key}')
-    if not args.api_key == api_key:
-        print('Invalid API-Key! Abort with 403')
-        abort(403)
 
 
 @app.route('/')
@@ -89,29 +83,41 @@ def health():
     return response
 
 
-@app.route("/question", methods=["PUT"])
-@app.route("/api/question", methods=["PUT"])     # this is a fallback for local usage, as the reverse-proxy on nginx will add this prefix
-def pose_question(question=None):
+@app.route("/question/<database>", methods=["PUT"])
+@app.route("/api/question/<database>",
+           methods=["PUT"])  # this is a fallback for local usage, as the reverse-proxy on nginx will add this prefix
+def pose_question(database):
     """
     Ask a question and get the SemQL, SQL and result, as well as some further information.
     Make sure to provide a proper X-API-Key as header parameter.
 
-    Example-PUT: curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Show me project title and cost of the project with the highest total cost"}'  http://localhost:5000/question
+    Example (cordis): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Show me project title and cost of the project with the highest total cost"}'  http://localhost:5000/api/question/cordis_temporary
+    Example (spider): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Which bridge has been built by Zaha Hadid?"}'  http://localhost:5000/api/question/architecture
 
-    @param question: a natural language question (for now english only)
+    @param database: Database to execute this query against.
     @return:
     """
 
-    verify_api_key()
+    _verify_api_key()
 
     try:
-        question = _ensure_question_available(question)
+        question = _get_question_from_payload()
 
+        if _is_cordis_or_spider(database) == 'spider':
+            schemas_raw = schemas_raw_spider
+            schemas_dict = schemas_dict_spider
+            db_value_finder = DatabaseValueFinderSQLite(database_path_spider, database, schema_path_spider)
+            execute_query_func = lambda sql_to_execute: _execute_query_sqlite(sql_to_execute, database_path_spider, database)
+        else:
+            schemas_raw = schemas_raw_cordis
+            schemas_dict = schemas_dict_cordis
+            db_value_finder = DatabaseValueFinderPostgreSQL(database, schema_path_cordis, connection_config)
+            execute_query_func = lambda sql_to_execute: _execute_query_postgresql(sql_to_execute, database, connection_config)
 
         input_data = {
             'question': question,
             'query': 'DUMMY',
-            'db_id': args.database,
+            'db_id': database,
             'question_toks': _tokenize_question(tokenizer, question)
         }
 
@@ -121,7 +127,7 @@ def pose_question(question=None):
 
         pre_processed_data = process_datas(data, related_to_concept, is_a_concept)
 
-        pre_processed_with_values = _pre_process_values(pre_processed_data[0], schema_path, connection_config)
+        pre_processed_with_values = _pre_process_values(pre_processed_data[0], db_value_finder)
 
         print(f"we found the following potential values in the question: {input_data['values']}")
 
@@ -134,9 +140,9 @@ def pose_question(question=None):
         sql = _semql_to_sql(prediction, schemas_dict)
 
         print(f"Transformed to SQL: {sql}")
-        result = _execute_query(sql, connection_config)
+        result = execute_query_func(sql)
 
-        print(f"Executed on the database '{args.database}'. First 10 Results: ")
+        print(f"Executed on the database '{database}'. First 10 Results: ")
         for row in result[:10]:
             print(row)
 
@@ -156,17 +162,21 @@ def pose_question(question=None):
         abort(500, description="Exception: " + str(e))
 
 
-def _ensure_question_available(question):
-    if not question:
-        # we might get the question in the payload
-        data = request.get_json(silent=True)
-        print(data)
-        if data and data['question']:
-            question = data['question']
-        else:
-            abort(400, description="Please specify a question, e.g. POST { question: 'Whats the question?' }")
+def _verify_api_key():
+    api_key = request.headers.get('X-API-Key', default='No API Key provided', type=str)
+    print(f'provided API-Key is {api_key}')
+    if not args.api_key == api_key:
+        print('Invalid API-Key! Abort with 403')
+        abort(403, description="Please provide a valid API Key")
 
-    return question
+
+def _get_question_from_payload():
+    data = request.get_json(silent=True)
+    print(data)
+    if data and data['question']:
+        return data['question']
+    else:
+        abort(400, description="Please specify a question, e.g. POST { question: 'Whats the question?' }")
 
 
 if __name__ == '__main__':

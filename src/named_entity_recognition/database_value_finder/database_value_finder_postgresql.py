@@ -1,15 +1,9 @@
 import json
-from functools import reduce
 
 import psycopg2
-import multiprocessing
-
-from pytictoc import TicToc
-
-NUM_CORES = multiprocessing.cpu_count()
 
 
-class DatabaseValueFinder:
+class DatabaseValueFinderPostgreSQL:
     def __init__(self, database, db_schema_information, connection_config, max_results=10):
         self.database = database
 
@@ -21,6 +15,11 @@ class DatabaseValueFinder:
 
         self.database_schema = self._load_schema(db_schema_information, database)
         self.max_results = max_results
+
+        # as this thresholds are highly depending on the database specific implementation, it needs to be provided here
+        self.exact_match_threshold = 1.0  # be a ware that an exact match is not case sensitive
+        self.high_similarity_threshold = 0.75
+        self.medium_similarity_threshold = 0.7
 
     def find_similar_values_in_database(self, potential_values):
         matching_values = set()
