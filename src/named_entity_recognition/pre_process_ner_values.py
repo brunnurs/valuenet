@@ -9,14 +9,21 @@ from pytictoc import TicToc
 
 from nltk import ngrams
 
+from named_entity_recognition.database_value_finder.database_value_finder_sqlite import DatabaseValueFinderSQLite
 from named_entity_recognition.handcrafted_heuristics import find_values_in_quote, find_ordinals, \
     find_emails, find_genders, find_null_empty_values, find_variety_of_common_mentionings, find_special_codes, \
     find_single_letters, find_capitalized_words, find_months, find_location_abbreviations
 
 from named_entity_recognition.ner_extraction_data_dto import NerExtractionData
-from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
 
 all_database_value_finder = {}
+
+
+def _get_or_create_value_finder(database, database_folder, db_schema):
+    if database not in all_database_value_finder:
+        all_database_value_finder[database] = DatabaseValueFinderSQLite(database_folder, database, db_schema)
+    db_value_finder = all_database_value_finder[database]
+    return db_value_finder
 
 
 def pre_process(entry):
@@ -55,16 +62,13 @@ def pre_process(entry):
     return extracted_data
 
 
-def match_values_in_database(db_id: str, extracted_data: NerExtractionData, db_schema: str, connection_config: Dict[str, str]):
+def match_values_in_database(db_value_finder, extracted_data):
 
     # NOTE: adapting this thresholds should always be done empirically and is heavily depending on the chosen similarity metric.
     # have a look at the script find_optimal_similarity_threshold.py to find optimal thresholds.
-
-    exact_match = 1.0   # be a ware that an exact match is not case sensitive
-    high_similarity = 0.75
-    medium_similarity = 0.7
-
-    db_value_finder = _get_or_create_value_finder(db_id, db_schema, connection_config)
+    exact_match = db_value_finder.exact_match_threshold
+    high_similarity = db_value_finder.high_similarity_threshold
+    medium_similarity = db_value_finder.medium_similarity_threshold
 
     # depending on the candidate type we set a different tolerance value for similarity matching with db-values.
     # Remember: 1.0 is looking for exact matches only. Also remember: we do lower-case only comparison, so 'Male' and 'male' will match with 1.0
@@ -218,13 +222,6 @@ def _is_value_equal(extracted_value, expected_value):
     expected_value = str(expected_value)
 
     return expected_value == extracted_value
-
-
-def _get_or_create_value_finder(database, db_schema, connection_config):
-    if database not in all_database_value_finder:
-        all_database_value_finder[database] = DatabaseValueFinder(database, db_schema, connection_config)
-    db_value_finder = all_database_value_finder[database]
-    return db_value_finder
 
 
 if __name__ == '__main__':
