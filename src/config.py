@@ -125,11 +125,17 @@ def read_arguments_manual_inference():
 
     # manual_inference
     parser.add_argument('--model_to_load', type=str)
-    parser.add_argument('--database', default='concert_singer', type=str)
+    parser.add_argument('--api_key', default='1234', type=str)
+
+    # database configuration (in case of PostgreSQL, not needed for sqlite)
+    parser.add_argument('--database_host', default='localhost', type=str)
+    parser.add_argument('--database_port', default='5432', type=str)
+    parser.add_argument('--database_user', default='postgres', type=str)
+    parser.add_argument('--database_password', default='postgres', type=str)
+    parser.add_argument('--database_schema', default='unics_cordis', type=str)
 
     # general configuration
     parser.add_argument('--seed', default=90, type=int)
-    parser.add_argument('--data_set', default='spider', type=str)
     parser.add_argument('--batch_size', default=1, type=int)
     parser.add_argument('--cuda', default=True, action='store_true')
     parser.add_argument('--conceptNet', default="data/spider/conceptNet", type=str)
@@ -157,8 +163,6 @@ def read_arguments_manual_inference():
 
     args = parser.parse_args()
 
-    args.data_dir = os.path.join(Config.DATA_PREFIX, args.data_set)
-    args.database_path = os.path.join(args.data_dir, "original", "database", args.database, args.database + ".sqlite")
 
     print("*** parsed configuration from command line and combine with constants ***")
 

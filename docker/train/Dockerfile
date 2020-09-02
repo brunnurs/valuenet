@@ -37,6 +37,6 @@ RUN python /tmp/download_nltk.py
 
 ENV PYTHONPATH /workspace
 
-WORKDIR /workspaces
+WORKDIR /workspace
 
 ENTRYPOINT service ssh restart && bash
