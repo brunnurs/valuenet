@@ -23,11 +23,16 @@ _Disclaimer_: this code is largely based on the IRNet (https://github.com/micros
 You can either install the script with pip (`pip install -r requirements.txt`) or with pipenv (`pipenv install`). After installing you can run the tasks either from the command line or in PyCharm. To run then im PyCharm, simply import the run configurations from the _.run_ folder.
 
 ### You just wanna play around?
-Use the manual inference mode, where you specify a database and you can just ask questions. Run `src/manual_inference/manual_inference.py --model_to_load=path/to/trained_model.pt --database=cre_Theme_park`. For all configuration see the `config.py` file.
-
-**IMPORTANT:** the manual inference mode uses Google Entities API for NER (https://cloud.google.com/natural-language/docs/analyzing-entities). You need to organize a valid API key and add it to the `google_api_repository.py` file. The Google API is free up to a certain amount of requests.
+The fastest way is to ask the developers for an API-Key to the deployed version of Value-Net. You will find it here [](https://valuenet.cloudlab.zhaw.ch/) https://valuenet.cloudlab.zhaw.ch/ and it allows to you test the pre-trained model on 3 databases. When used with Google Chrome it also provides a handy Speech-To-Text feature.
 
 ![Image of Manual Inference](./screenshot_manual_inference.png)
+
+In case you prefer to write your own client, use the API provided in `src/manual_inference/manual_inference_api`. You can start it with a pre-trained model and query it like this:
+```shell script
+curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Which bridge has been built by Zaha Hadid?"}'  http://localhost:5000/api/question/architecture
+```  
+
+**IMPORTANT:** the manual inference mode uses Google Entities API for NER (https://cloud.google.com/natural-language/docs/analyzing-entities). You need to organize a valid API key and add it to the `google_api_repository.py` file. The Google API is free up to a certain amount of requests.
 
 ### Training
 Simply run `python src/main.py`. For all configuration see the `config.py` file. You might wanna increase the batch_size for example.
@@ -35,6 +40,12 @@ Simply run `python src/main.py`. For all configuration see the `config.py` file.
 After each epoch the evaluation task is executed. Evaluation will use the Spider Evaluation script to execute SQL queries on the Spider databases.
 
 ### Database
+We allow the usage of both, PostgreSQL and SQLite and provide tools to access the databases when finding values. Have a look at `DatabaseValueFinderSQLite` and `DatabaseValueFinderPostgreSQL` for more details.
+
+####Spider
+The spider databases are rather small and use all SQLite. In contrary to PostgreSQL we use no native similarity measure, but 
+
+####Cordis
 In contrary to the original work using the spider databases (SQLite) we switched for the CORDIS database to PostgreSQL. Due to the large about of data we also
 need a smarter way to look up values with a certain similarity, as the trivial method of the original paper is computationally unfeasible.
 
@@ -46,7 +57,7 @@ The following steps are necessary to make the system work on your database.
 * Create indices for all columns which contain text. You find a script to do this at [resources/database/create_tgrm_indices.sql](/resources/database/create_tgrm_indices.sql). Make sure though no columns changed in the meantime.
 * Set the minimal threshold (explanation will follow) for similarity matches. This can be done with e.g. `SELECT set_limit(0.499)`
 
-#### Query with Similarity using Indices
+##### Query with Similarity using Indices
 We query potential values with a query looking like the following:
 ```Sql 
 select title, sim_v1, sim_v2, sim_v3 from
@@ -69,7 +80,7 @@ Be aware that the `%` operator works with the internal threshold set by `set_lim
 We therefore need to set the lowest possible threshold here (e.g. 0.499) and then use the other thresholds
 to further restrict the result set in the outer query.
 
-#### Performance Experiments
+##### Performance Experiments
 While the original approach with loading all data and using a similarity measure in python (even though parallelized) took around **200-300s** on the CORDIS database, 
 using the trigram similarity directly in PostgreSQL reduced the time to **51s**.
 
