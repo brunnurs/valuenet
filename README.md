@@ -42,10 +42,10 @@ After each epoch the evaluation task is executed. Evaluation will use the Spider
 ### Database
 We allow the usage of both, PostgreSQL and SQLite and provide tools to access the databases when finding values. Have a look at `DatabaseValueFinderSQLite` and `DatabaseValueFinderPostgreSQL` for more details.
 
-####Spider
+#### Spider
 The spider databases are rather small and use all SQLite. In contrary to PostgreSQL we use no native similarity measure, but 
 
-####Cordis
+#### Cordis
 In contrary to the original work using the spider databases (SQLite) we switched for the CORDIS database to PostgreSQL. Due to the large about of data we also
 need a smarter way to look up values with a certain similarity, as the trivial method of the original paper is computationally unfeasible.
 
