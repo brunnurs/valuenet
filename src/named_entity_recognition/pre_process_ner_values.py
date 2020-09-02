@@ -2,23 +2,28 @@ import argparse
 import json
 import multiprocessing
 import os
+from typing import Dict
 
 from joblib import Parallel, delayed
 from pytictoc import TicToc
 
 from nltk import ngrams
 
+from named_entity_recognition.database_value_finder.database_value_finder_sqlite import DatabaseValueFinderSQLite
 from named_entity_recognition.handcrafted_heuristics import find_values_in_quote, find_ordinals, \
     find_emails, find_genders, find_null_empty_values, find_variety_of_common_mentionings, find_special_codes, \
     find_single_letters, find_capitalized_words, find_months, find_location_abbreviations
 
 from named_entity_recognition.ner_extraction_data_dto import NerExtractionData
-from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
-
-DB_FOLDER = 'data/spider/original/database'
-DB_SCHEMA = 'data/spider/original/tables.json'
 
 all_database_value_finder = {}
+
+
+def _get_or_create_value_finder(database, database_folder, db_schema):
+    if database not in all_database_value_finder:
+        all_database_value_finder[database] = DatabaseValueFinderSQLite(database_folder, database, db_schema)
+    db_value_finder = all_database_value_finder[database]
+    return db_value_finder
 
 
 def pre_process(entry):
@@ -57,24 +62,29 @@ def pre_process(entry):
     return extracted_data
 
 
-def match_values_in_database(db_id: str, extracted_data: NerExtractionData):
-    db_value_finder = _get_or_create_value_finder(db_id)
+def match_values_in_database(db_value_finder, extracted_data):
+
+    # NOTE: adapting this thresholds should always be done empirically and is heavily depending on the chosen similarity metric.
+    # have a look at the script find_optimal_similarity_threshold.py to find optimal thresholds.
+    exact_match = db_value_finder.exact_match_threshold
+    high_similarity = db_value_finder.high_similarity_threshold
+    medium_similarity = db_value_finder.medium_similarity_threshold
 
     # depending on the candidate type we set a different tolerance value for similarity matching with db-values.
     # Remember: 1.0 is looking for exact matches only. Also remember: we do lower-case only comparison, so 'Male' and 'male' will match with 1.0
     candidates = []
     # With values in quote we are a bit tolerant. Important: we keep this values anyway, as the are often used in fuzzy LIKE searches.
-    _add_without_duplicates([(quote, 0.9) for quote in extracted_data.heuristic_values_in_quote], candidates)
+    _add_without_duplicates([(quote, high_similarity) for quote in extracted_data.heuristic_values_in_quote], candidates)
     # Gender values we only want exact matches.
-    _add_without_duplicates([(gender, 1.0) for gender in extracted_data.heuristics_genders], candidates)
-    _add_without_duplicates([(common_mentionings, 0.9) for common_mentionings in extracted_data.heuristics_variety_common_mentionings], candidates)
+    _add_without_duplicates([(gender, exact_match) for gender in extracted_data.heuristics_genders], candidates)
+    _add_without_duplicates([(common_mentionings, high_similarity) for common_mentionings in extracted_data.heuristics_variety_common_mentionings], candidates)
     # a special code should match exactly
-    _add_without_duplicates([(special_code, 1.0) for special_code in extracted_data.heuristics_special_codes], candidates)
-    _add_without_duplicates([(capitalized_word, 0.75) for capitalized_word in extracted_data.heuristics_capitalized_words], candidates)
-    _add_without_duplicates([(location, 0.9) for location in extracted_data.heuristics_location_abbreviations], candidates)
+    _add_without_duplicates([(special_code, exact_match) for special_code in extracted_data.heuristics_special_codes], candidates)
+    _add_without_duplicates([(capitalized_word, medium_similarity) for capitalized_word in extracted_data.heuristics_capitalized_words], candidates)
+    _add_without_duplicates([(location, high_similarity) for location in extracted_data.heuristics_location_abbreviations], candidates)
 
     # important: in addition to all the handcrafted features, also take all values from the NER which aren't known dates/numbers/prices
-    _add_without_duplicates([(ner_value, 0.75) for ner_value in extracted_data.ner_remaining], candidates)
+    _add_without_duplicates([(ner_value, medium_similarity) for ner_value in extracted_data.ner_remaining], candidates)
 
     database_matches = _find_matches_in_database(db_value_finder, candidates)
 
@@ -214,18 +224,13 @@ def _is_value_equal(extracted_value, expected_value):
     return expected_value == extracted_value
 
 
-def _get_or_create_value_finder(database):
-    if database not in all_database_value_finder:
-        all_database_value_finder[database] = DatabaseValueFinder(DB_FOLDER, database, DB_SCHEMA)
-    db_value_finder = all_database_value_finder[database]
-    return db_value_finder
-
-
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--data_path', type=str, required=True)
     arg_parser.add_argument('--ner_data_path', type=str, required=True)
     arg_parser.add_argument('--output_path', type=str, required=True)
+    arg_parser.add_argument('--database_folder', type=str, default='data/spider/original/database')
+    arg_parser.add_argument('--database_schema', type=str, default='data/spider/original/tables.json')
 
     args = arg_parser.parse_args()
 
@@ -256,7 +261,7 @@ if __name__ == '__main__':
     # we parallelize it. Important: Parallel() maintains the order of the input data!
     n_cores = multiprocessing.cpu_count()
     values_matched_with_database = Parallel(n_jobs=n_cores)(
-        delayed(match_values_in_database)(row['db_id'], extracted_value) for extracted_value, row
+        delayed(match_values_in_database)(row['db_id'], extracted_value, args.database_folder, args.database_schema) for extracted_value, row
         in zip(extracted_values, data))
     print("Scanned all databases for matching values.")
     print()

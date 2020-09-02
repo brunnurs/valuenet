@@ -22,6 +22,9 @@ textdistance = {extras = ["extras"],version = "*"}
 matplotlib = "*"
 spacy = "*"
 termcolor = "*"
+psycopg2 = "*"
+flask = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.6"

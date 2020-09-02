@@ -3,7 +3,6 @@ import operator
 import sqlite3
 from functools import reduce
 from pathlib import Path
-import pytictoc
 
 from more_itertools import flatten
 from textdistance import DamerauLevenshtein
@@ -13,13 +12,18 @@ from joblib import Parallel, delayed
 NUM_CORES = multiprocessing.cpu_count()
 
 
-class DatabaseValueFinder:
+class DatabaseValueFinderSQLite:
     def __init__(self, database_folder, database_name, database_schema_path, max_results=10):
         self.database = database_name
         self.database_schema = self._load_schema(database_schema_path, database_name)
         self.database_path = Path(database_folder, database_name, database_name + '.sqlite')
         self.similarity_algorithm = DamerauLevenshtein()
         self.max_results = max_results
+
+        # as this thresholds are highly depending on the database specific implementation, it needs to be provided here
+        self.exact_match_threshold = 1.0  # be a ware that an exact match is not case sensitive
+        self.high_similarity_threshold = 0.9
+        self.medium_similarity_threshold = 0.75
 
     def find_similar_values_in_database(self, potential_values):
         matching_values = set()
