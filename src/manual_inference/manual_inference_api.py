@@ -100,66 +100,61 @@ def pose_question(database):
 
     _verify_api_key()
 
-    try:
-        question = _get_question_from_payload()
+    question = _get_question_from_payload()
 
-        if _is_cordis_or_spider(database) == 'spider':
-            schemas_raw = schemas_raw_spider
-            schemas_dict = schemas_dict_spider
-            db_value_finder = DatabaseValueFinderSQLite(database_path_spider, database, schema_path_spider)
-            execute_query_func = lambda sql_to_execute: _execute_query_sqlite(sql_to_execute, database_path_spider, database)
-        else:
-            schemas_raw = schemas_raw_cordis
-            schemas_dict = schemas_dict_cordis
-            db_value_finder = DatabaseValueFinderPostgreSQL(database, schema_path_cordis, connection_config)
-            execute_query_func = lambda sql_to_execute: _execute_query_postgresql(sql_to_execute, database, connection_config)
+    if _is_cordis_or_spider(database) == 'spider':
+        schemas_raw = schemas_raw_spider
+        schemas_dict = schemas_dict_spider
+        db_value_finder = DatabaseValueFinderSQLite(database_path_spider, database, schema_path_spider)
+        execute_query_func = lambda sql_to_execute: _execute_query_sqlite(sql_to_execute, database_path_spider, database)
+    else:
+        schemas_raw = schemas_raw_cordis
+        schemas_dict = schemas_dict_cordis
+        db_value_finder = DatabaseValueFinderPostgreSQL(database, schema_path_cordis, connection_config)
+        execute_query_func = lambda sql_to_execute: _execute_query_postgresql(sql_to_execute, database, connection_config)
 
-        input_data = {
-            'question': question,
-            'query': 'DUMMY',
-            'db_id': database,
-            'question_toks': _tokenize_question(tokenizer, question)
-        }
+    input_data = {
+        'question': question,
+        'query': 'DUMMY',
+        'db_id': database,
+        'question_toks': _tokenize_question(tokenizer, question)
+    }
 
-        print(f"question has been tokenized to : {input_data['question_toks']}")
+    print(f"question has been tokenized to : {input_data['question_toks']}")
 
-        data, table = merge_data_with_schema(schemas_raw, [input_data])
+    data, table = merge_data_with_schema(schemas_raw, [input_data])
 
-        pre_processed_data = process_datas(data, related_to_concept, is_a_concept)
+    pre_processed_data = process_datas(data, related_to_concept, is_a_concept)
 
-        pre_processed_with_values = _pre_process_values(pre_processed_data[0], db_value_finder)
+    pre_processed_with_values = _pre_process_values(pre_processed_data[0], db_value_finder)
 
-        print(f"we found the following potential values in the question: {input_data['values']}")
+    print(f"we found the following potential values in the question: {input_data['values']}")
 
-        prediction, example = _inference_semql(pre_processed_with_values, schemas_dict, model)
+    prediction, example = _inference_semql(pre_processed_with_values, schemas_dict, model)
 
-        print(f"Results from schema linking (question token types): {example.src_sent}")
-        print(f"Results from schema linking (column types): {example.col_hot_type}")
+    print(f"Results from schema linking (question token types): {example.src_sent}")
+    print(f"Results from schema linking (column types): {example.col_hot_type}")
 
-        print(f"Predicted SemQL-Tree: {prediction['model_result']}")
-        sql = _semql_to_sql(prediction, schemas_dict)
+    print(f"Predicted SemQL-Tree: {prediction['model_result']}")
+    sql = _semql_to_sql(prediction, schemas_dict)
 
-        print(f"Transformed to SQL: {sql}")
-        result = execute_query_func(sql)
+    print(f"Transformed to SQL: {sql}")
+    result = execute_query_func(sql)
 
-        print(f"Executed on the database '{database}'. First 10 Results: ")
-        for row in result[:10]:
-            print(row)
+    print(f"Executed on the database '{database}'. First 10 Results: ")
+    for row in result[:10]:
+        print(row)
 
-        result_max_100_rows = result[:min(len(result), 100)]
+    result_max_100_rows = result[:min(len(result), 100)]
 
-        return {
-            'question': question,
-            'question_tokenized': input_data['question_toks'],
-            'potential_values_found_in_db': input_data['values'],
-            'sem_ql': prediction['model_result'],
-            'sql': sql,
-            'result': result_max_100_rows
-        }
-
-    except Exception as e:
-        print("Exception: " + str(e))
-        abort(500, description="Exception: " + str(e))
+    return {
+        'question': question,
+        'question_tokenized': input_data['question_toks'],
+        'potential_values_found_in_db': input_data['values'],
+        'sem_ql': prediction['model_result'],
+        'sql': sql,
+        'result': result_max_100_rows
+    }
 
 
 def _verify_api_key():
