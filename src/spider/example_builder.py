@@ -41,18 +41,17 @@ def build_example(sql, all_schemas):
     actions = _instantiate_actions(column_table_dict, sql)
 
     example = Example(
-        src_sent=[[token] for token in sql['question_toks']],
-        col_num=len(column_set),
-        tab_cols=column_set,
+        question_tokens=[[token] for token in sql['question_toks']],
+        n_columns=len(column_set),
+        column_tokens=column_set,
         sql=sql['query'],
-        col_hot_type=column_matches,
-        table_names=table_names,
-        table_len=len(table_names),
-        col_table_dict=column_table_dict,
-        cols=column_names,
-        table_col_name=columns_per_table,
-        table_col_len=len(columns_per_table),
-        tgt_actions=actions
+        column_matches=column_matches,
+        tables=table_names,
+        n_tables=len(table_names),
+        column_table_dict=column_table_dict,
+        columns=column_names,
+        columns_per_table=columns_per_table,
+        semql_actions=actions
     )
     example.sql_json = copy.deepcopy(sql)
 

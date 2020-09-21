@@ -5,43 +5,40 @@ import neural_network_utils as nn_utils
 
 
 class Example:
-    def __init__(self, src_sent, tgt_actions=None, tab_cols=None, col_num=None, sql=None, col_hot_type=None,
-                 table_names=None, table_len=None, col_table_dict=None, cols=None, table_col_name=None, table_col_len=None):
+    def __init__(self, question_tokens, semql_actions=None, column_tokens=None, n_columns=None, sql=None, column_matches=None,
+                 tables=None, n_tables=None, column_table_dict=None, columns=None, columns_per_table=None):
         """
 
-        @param src_sent: [['what'], ['are'], ['column', 'name'], ['of'], ['state'], ['where'], ['at'], ['least'], ['value', '3'], ['table', 'head'], ['were'], ['born'], ['?']]
-        @param tgt_actions: [Root1(3), Root(3), Sel(0), N(0), A(none), C(8), T(1), Filter(Filter >= A), A(count), C(0), T(1)]
-        @param tab_cols: [['count', 'number', 'many'], ['department', 'id'], ['name'], ['creation'], ['ranking'], ['budget', 'in', 'billion'], ['num', 'employee'], ['head', 'id'], ['born', 'state'], ['age'], ['temporary', 'acting']]
-        @param col_num:  11
+        @param question_tokens: [['what'], ['are'], ['column', 'name'], ['of'], ['state'], ['where'], ['at'], ['least'], ['value', '3'], ['table', 'head'], ['were'], ['born'], ['?']]
+        @param semql_actions: [Root1(3), Root(3), Sel(0), N(0), A(none), C(8), T(1), Filter(Filter >= A), A(count), C(0), T(1)]
+        @param column_tokens: [['count', 'number', 'many'], ['department', 'id'], ['name'], ['creation'], ['ranking'], ['budget', 'in', 'billion'], ['num', 'employee'], ['head', 'id'], ['born', 'state'], ['age'], ['temporary', 'acting']]
+        @param n_columns:  11
         @param sql: 'SELECT born_state FROM head GROUP BY born_state HAVING count(*)  >=  3'
-        @param col_hot_type: Has the same length as tab_cols (columns) and is indicating the colum matches --> how many times a column has ben "hit" when comparing with the question. This data will later be used for schema encoding, as the 3rd part (the "phi") in the paper
-        @param table_names: [['department'], ['head'], ['management']]. Multi-word tables would be split.
-        @param table_len: 3
-        @param col_table_dict: this dict is telling for each column in what table it appears. So the key is the idx of the column, the values the idx of the tables.
-        @param cols: ['*', 'department id', 'name', 'creation', 'ranking', 'budget in billions', 'num employees', 'head id', 'name', 'born state', 'age', 'department id', 'head id', 'temporary acting']
-        @param table_col_name: [['department', 'id', 'name', 'creation', 'ranking', 'budget', 'in', 'billion', 'num', 'employee'], ['head', 'id', 'name', 'born', 'state', 'age'], ['department', 'id', 'head', 'id', 'temporary', 'acting']]
-        @param table_col_len: 3
+        @param column_matches: Has the same length as tab_cols (columns) and is indicating the colum matches --> how many times a column has ben "hit" when comparing with the question. This data will later be used for schema encoding, as the 3rd part (the "phi") in the paper
+        @param tables: [['department'], ['head'], ['management']]. Multi-word tables would be split.
+        @param n_tables: 3
+        @param column_table_dict: this dict is telling for each column in what table it appears. So the key is the idx of the column, the values the idx of the tables.
+        @param columns: ['*', 'department id', 'name', 'creation', 'ranking', 'budget in billions', 'num employees', 'head id', 'name', 'born state', 'age', 'department id', 'head id', 'temporary acting']
+        @param columns_per_table: [['department', 'id', 'name', 'creation', 'ranking', 'budget', 'in', 'billion', 'num', 'employee'], ['head', 'id', 'name', 'born', 'state', 'age'], ['department', 'id', 'head', 'id', 'temporary', 'acting']]
         """
-        self.src_sent = src_sent
-        self.tab_cols = tab_cols
-        self.col_num = col_num
+        self.question_tokens = question_tokens
+        self.column_tokens = column_tokens
+        self.n_columns = n_columns
         self.sql = sql
-        self.col_hot_type = col_hot_type
-        self.table_names = table_names
-        self.table_len = table_len
-        self.col_table_dict = col_table_dict
-        self.cols = cols
-        self.table_col_name = table_col_name
-        self.table_col_len = table_col_len
-        self.tgt_actions = tgt_actions
-        self.truth_actions = copy.deepcopy(tgt_actions)
+        self.column_matches = column_matches
+        self.tables = tables
+        self.n_tables = n_tables
+        self.column_table_dict = column_table_dict
+        self.columns = columns
+        self.columns_per_table = columns_per_table
+        self.semql_actions = semql_actions
 
         self.sketch = list()
-        if self.truth_actions:
-            for ta in self.truth_actions:
-                if isinstance(ta, C) or isinstance(ta, T) or isinstance(ta, A):
+        if self.semql_actions:
+            for action in self.semql_actions:
+                if isinstance(action, C) or isinstance(action, T) or isinstance(action, A):
                     continue
-                self.sketch.append(ta)
+                self.sketch.append(action)
 
 
 class cached_property(object):
@@ -67,25 +64,20 @@ class Batch(object):
     def __init__(self, examples, grammar, cuda=False):
         self.examples = examples
 
-        if examples[0].tgt_actions:
-            self.max_action_num = max(len(e.tgt_actions) for e in self.examples)
+        if examples[0].semql_actions:
+            self.max_action_num = max(len(e.semql_actions) for e in self.examples)
             self.max_sketch_num = max(len(e.sketch) for e in self.examples)
 
-        self.src_sents = [e.src_sent for e in self.examples]
-        self.src_sents_len = [len(e.src_sent) for e in self.examples]
-        self.src_sents_word = [e.src_sent for e in self.examples]
-        self.table_sents_word = [[" ".join(x) for x in e.tab_cols] for e in self.examples]
+        self.all_question_tokens = [e.question_tokens for e in self.examples]
+        self.all_question_tokens_len = [len(e.question_tokens) for e in self.examples]
 
-        self.schema_sents_word = [[" ".join(x) for x in e.table_names] for e in self.examples]
-
-        self.col_hot_type = [e.col_hot_type for e in self.examples]
-        self.table_sents = [e.tab_cols for e in self.examples]
-        self.col_num = [e.col_num for e in self.examples]
-        self.table_names = [e.table_names for e in self.examples]
-        self.table_len = [e.table_len for e in examples]
-        self.col_table_dict = [e.col_table_dict for e in examples]
-        self.table_col_name = [e.table_col_name for e in examples]
-        self.table_col_len = [e.table_col_len for e in examples]
+        self.all_column_matches = [e.column_matches for e in self.examples]
+        self.all_column_tokens = [e.column_tokens for e in self.examples]
+        self.all_n_columns = [e.n_columns for e in self.examples]
+        self.all_table_names = [e.tables for e in self.examples]
+        self.all_n_tables = [e.n_tables for e in examples]
+        self.all_column_table_dict = [e.column_table_dict for e in examples]
+        self.all_columns_per_table = [e.columns_per_table for e in examples]
 
         self.grammar = grammar
         self.cuda = cuda
@@ -94,24 +86,24 @@ class Batch(object):
         return len(self.examples)
 
     def table_dict_mask(self, table_dict):
-        return nn_utils.table_dict_to_mask_tensor(self.table_len, table_dict, cuda=self.cuda)
+        return nn_utils.table_dict_to_mask_tensor(self.all_n_tables, table_dict, cuda=self.cuda)
 
     @cached_property
     def schema_token_mask(self):
-        return nn_utils.length_array_to_mask_tensor(self.table_len, cuda=self.cuda)
+        return nn_utils.length_array_to_mask_tensor(self.all_n_tables, cuda=self.cuda)
 
     @cached_property
     def table_token_mask(self):
-        return nn_utils.length_array_to_mask_tensor(self.col_num, cuda=self.cuda)
+        return nn_utils.length_array_to_mask_tensor(self.all_n_columns, cuda=self.cuda)
 
     @cached_property
     def table_appear_mask(self):
-        return nn_utils.appear_to_mask_tensor(self.col_num)
+        return nn_utils.appear_to_mask_tensor(self.all_n_columns)
 
     @cached_property
     def table_unk_mask(self):
-        return nn_utils.length_array_to_mask_tensor(self.col_num, cuda=self.cuda, value=None)
+        return nn_utils.length_array_to_mask_tensor(self.all_n_columns, cuda=self.cuda, value=None)
 
     @cached_property
     def src_token_mask(self):
-        return nn_utils.length_array_to_mask_tensor(self.src_sents_len, cuda=self.cuda)
+        return nn_utils.length_array_to_mask_tensor(self.all_question_tokens_len, cuda=self.cuda)

@@ -27,7 +27,7 @@ def train(global_step,
             except RuntimeError as e:
                 print("Exception while building example (training): {}".format(e))
 
-        examples.sort(key=lambda e: -len(e.src_sent))
+        examples.sort(key=lambda e: -len(e.question_tokens))
 
         sketch_loss, lf_loss = model.forward(examples)
 
