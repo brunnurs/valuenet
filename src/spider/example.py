@@ -5,11 +5,11 @@ import neural_network_utils as nn_utils
 
 
 class Example:
-    def __init__(self, src_sent, tgt_actions=None, vis_seq=None, tab_cols=None, col_num=None, sql=None,
-                 one_hot_type=None, col_hot_type=None, schema_len=None, tab_ids=None,
+    def __init__(self, src_sent, tgt_actions=None, tab_cols=None, col_num=None, sql=None,
+                 col_hot_type=None, schema_len=None, tab_ids=None,
                  table_names=None, table_len=None, col_table_dict=None, cols=None,
                  table_col_name=None, table_col_len=None,
-                 col_pred=None, tokenized_src_sent=None,
+                 col_pred=None,
                  ):
         """
 
@@ -19,7 +19,6 @@ class Example:
         @param tab_cols: [['count', 'number', 'many'], ['department', 'id'], ['name'], ['creation'], ['ranking'], ['budget', 'in', 'billion'], ['num', 'employee'], ['head', 'id'], ['born', 'state'], ['age'], ['temporary', 'acting']]
         @param col_num:  11
         @param sql: 'SELECT born_state FROM head GROUP BY born_state HAVING count(*)  >=  3'
-        @param one_hot_type: The one_hot_type has the same length as src_sent (tokenized question after standard NLP-pre-processing). It contains a one-hot-encoded vector of length 6 to represent information like 0:"table", 1:"column", 2:"agg" 3:"MORE", 4:"MOST", 5:"value". Tokens with NONE will not be represented in this array.
         @param col_hot_type: Has the same length as tab_cols (columns) and is indicating the type of this column, meaning if it is a partial match (#0) or an exact match (#1) of a column. An exact match (a 5 in #1) often also has some values in #1, so it's not one hot encoding. Not sure what #2 and #3 is used for, as it's never used with all spider data. This data will later be used for schema encoding, as the 3rd part (the "phi") in the paper
         @param schema_len: ---- not used in constructor ----
         @param tab_ids: ---- not used in constructor ----
@@ -30,15 +29,11 @@ class Example:
         @param table_col_name: [['department', 'id', 'name', 'creation', 'ranking', 'budget', 'in', 'billion', 'num', 'employee'], ['head', 'id', 'name', 'born', 'state', 'age'], ['department', 'id', 'head', 'id', 'temporary', 'acting']]
         @param table_col_len: 3
         @param col_pred: ---- not used in constructor ----
-        @param tokenized_src_sent: # no idea why we use this here again... its "col_set_type" from above.
         """
         self.src_sent = src_sent
-        self.tokenized_src_sent = tokenized_src_sent
-        self.vis_seq = vis_seq
         self.tab_cols = tab_cols
         self.col_num = col_num
         self.sql = sql
-        self.one_hot_type = one_hot_type
         self.col_hot_type = col_hot_type
         self.schema_len = schema_len
         self.tab_ids = tab_ids
@@ -89,15 +84,11 @@ class Batch(object):
 
         self.src_sents = [e.src_sent for e in self.examples]
         self.src_sents_len = [len(e.src_sent) for e in self.examples]
-        self.tokenized_src_sents = [e.tokenized_src_sent for e in self.examples]
-        self.tokenized_src_sents_len = [len(e.tokenized_src_sent) for e in examples]
         self.src_sents_word = [e.src_sent for e in self.examples]
         self.table_sents_word = [[" ".join(x) for x in e.tab_cols] for e in self.examples]
 
         self.schema_sents_word = [[" ".join(x) for x in e.table_names] for e in self.examples]
 
-        # TODO seems that the "src_type" (or "one_hot_type" as it is called before) is not used at all. This makes sense as it is anway part of "src_sents" (the "table"/"column"/etc.) prefix. Remove it if time.
-        self.src_type = [e.one_hot_type for e in self.examples]
         self.col_hot_type = [e.col_hot_type for e in self.examples]
         self.table_sents = [e.tab_cols for e in self.examples]
         self.col_num = [e.col_num for e in self.examples]
