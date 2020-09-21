@@ -69,7 +69,7 @@ class IRNet(BasicModel):
 
         self.N_embed = nn.Embedding(len(semQL.N._init_grammar()), args.action_embed_size)
 
-        self.read_out_act = F.tanh if args.readout == 'non_linear' else nn_utils.identity
+        self.read_out_act = torch.tanh if args.readout == 'non_linear' else nn_utils.identity
 
         self.query_vec_to_action_embed = nn.Linear(args.att_vec_size, args.action_embed_size,
                                                    bias=args.readout == 'non_linear')
@@ -864,7 +864,7 @@ class IRNet(BasicModel):
         # we concat the hidden state and the context vector as input. Forget about the attention_function.
         # This is exactly as the described in TranX, 2.3 (equation with tanh)
         # this is just a linear function
-        att_t = F.tanh(attention_func(torch.cat([h_t, ctx_t], 1)))
+        att_t = torch.tanh(attention_func(torch.cat([h_t, ctx_t], 1)))
         att_t = self.dropout(att_t)
 
         if return_att_weight:
@@ -874,7 +874,7 @@ class IRNet(BasicModel):
 
     def init_decoder_state(self, enc_last_cell):
         h_0 = self.decoder_cell_init(enc_last_cell)
-        h_0 = F.tanh(h_0)
+        h_0 = torch.tanh(h_0)
 
         return h_0, Variable(self.new_tensor(h_0.size()).zero_())
 
