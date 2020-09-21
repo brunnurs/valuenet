@@ -60,36 +60,39 @@ def load_dataSets(args):
     return datas, tables
 
 
-def group_header(toks, idx, num_toks, header_toks):
-    for endIdx in reversed(range(idx + 1, num_toks + 1)):
-        sub_toks = toks[idx: endIdx]
-        sub_toks = " ".join(sub_toks)
-        if sub_toks in header_toks:
-            return endIdx, sub_toks
+def get_multi_token_match(question_tokens, idx, n_question_tokens, column_header_tokens):
+    for endIdx in reversed(range(idx + 1, n_question_tokens + 1)):  # we go backwards though the remaining tokens (so from idx to the last word of the question)
+        sub_tokens = question_tokens[idx: endIdx]
+        if len(sub_tokens) > 1:   # and as long as we still have tokens
+            sub_tokens = " ".join(sub_tokens)
+            if sub_tokens in column_header_tokens:  # we check if this tokens (e.g. "artist song name") are a column header
+                return endIdx, sub_tokens  # if yes, we return the new end-index and the sub-tokens, which will then be marked with "col"
     return idx, None
 
 
-def fully_part_header(toks, idx, num_toks, header_toks):
-    for endIdx in reversed(range(idx + 1, num_toks + 1)):
-        sub_toks = toks[idx: endIdx]
-        if len(sub_toks) > 1:
-            sub_toks = " ".join(sub_toks)
-            if sub_toks in header_toks:
-                return endIdx, sub_toks
+def get_single_token_match(question_tokens, idx, n_question_tokens, header_tokens):
+    for endIdx in reversed(range(idx + 1, n_question_tokens + 1)):
+        sub_tokens = question_tokens[idx: endIdx]
+        sub_tokens = " ".join(sub_tokens)
+        if sub_tokens in header_tokens:
+            return endIdx, sub_tokens
     return idx, None
 
 
-def partial_header(toks, idx, header_toks):
+def get_partial_match(question_tokens, idx, header_tokens):
+    """
+    Try to find partial matches (e.g. for the question tokens "release year" and the column header "song release year")
+    """
     def check_in(list_one, list_two):
         if len(set(list_one) & set(list_two)) == len(list_one) and (len(list_two) <= 3):
             return True
 
-    for endIdx in reversed(range(idx + 1, len(toks))):
-        sub_toks = toks[idx: min(endIdx, len(toks))]
-        if len(sub_toks) > 1:
+    for endIdx in reversed(range(idx + 1, len(question_tokens))):
+        sub_toks = question_tokens[idx: min(endIdx, len(question_tokens))]
+        if len(sub_toks) > 1:  # a match is defined by a minimum of 2 matching tokens
             flag_count = 0
             tmp_heads = None
-            for heads in header_toks:
+            for heads in header_tokens:
                 if check_in(sub_toks, heads):
                     flag_count += 1
                     tmp_heads = heads

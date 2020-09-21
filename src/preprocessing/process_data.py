@@ -13,7 +13,7 @@ import argparse
 import nltk
 import os
 import pickle
-from preprocessing.utils import symbol_filter, re_lemma, fully_part_header, group_header, partial_header, num2year, group_symbol, group_values, group_digital
+from preprocessing.utils import symbol_filter, re_lemma, get_multi_token_match, get_single_token_match, get_partial_match, num2year, group_symbol, group_values, group_digital
 from preprocessing.utils import AGG, wordnet_lemmatizer
 from preprocessing.utils import load_dataSets
 
@@ -78,7 +78,7 @@ def process_datas(datas, args):
         while idx < num_toks:
 
             # fully header
-            end_idx, header = fully_part_header(question_toks, idx, num_toks, header_toks)  # the order here matters... so we are first checking if we find a full column header
+            end_idx, header = get_multi_token_match(question_toks, idx, num_toks, header_toks)  # the order here matters... so we are first checking if we find a full column header
             if header:
                 tok_concol.append(question_toks[idx: end_idx])
                 type_concol.append(["col"])
@@ -86,7 +86,7 @@ def process_datas(datas, args):
                 continue
 
             # check for table
-            end_idx, tname = group_header(question_toks, idx, num_toks, table_names)
+            end_idx, tname = get_single_token_match(question_toks, idx, num_toks, table_names)
             if tname:
                 tok_concol.append(question_toks[idx: end_idx])
                 type_concol.append(["table"])
@@ -94,7 +94,7 @@ def process_datas(datas, args):
                 continue
 
             # check for column
-            end_idx, header = group_header(question_toks, idx, num_toks, header_toks)
+            end_idx, header = get_single_token_match(question_toks, idx, num_toks, header_toks)
             if header:
                 tok_concol.append(question_toks[idx: end_idx])
                 type_concol.append(["col"])
@@ -102,7 +102,7 @@ def process_datas(datas, args):
                 continue
 
             # check for partial column
-            end_idx, tname = partial_header(question_toks, idx, header_toks_list)
+            end_idx, tname = get_partial_match(question_toks, idx, header_toks_list)
             if tname:
                 tok_concol.append(tname)
                 type_concol.append(["col"])
@@ -110,7 +110,7 @@ def process_datas(datas, args):
                 continue
 
             # check for aggregation
-            end_idx, agg = group_header(question_toks, idx, num_toks, AGG)  # check the AGG - it's basically looking for words like "average, maximum, minimum" etc.
+            end_idx, agg = get_single_token_match(question_toks, idx, num_toks, AGG)  # check the AGG - it's basically looking for words like "average, maximum, minimum" etc.
             if agg:
                 tok_concol.append(question_toks[idx: end_idx])
                 type_concol.append(["agg"])
@@ -132,7 +132,7 @@ def process_datas(datas, args):
             # string match for Time Format
             if num2year(question_toks[idx]):
                 question_toks[idx] = 'year'
-                end_idx, header = group_header(question_toks, idx, num_toks, header_toks)
+                end_idx, header = get_single_token_match(question_toks, idx, num_toks, header_toks)
                 if header:
                     tok_concol.append(question_toks[idx: end_idx])
                     type_concol.append(["col"])
@@ -217,6 +217,6 @@ if __name__ == '__main__':
     process_result = process_datas(datas, args)
 
     with open(args.output, 'w') as f:
-        json.dump(datas, f)
+        json.dump(datas, f, sort_keys=True, indent=4)
 
 
