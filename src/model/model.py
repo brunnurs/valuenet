@@ -107,7 +107,7 @@ class IRNet(BasicModel):
         table_appear_mask = batch.table_appear_mask
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
-        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
+        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.all_question_tokens, batch.all_column_tokens, batch.all_table_names)
         question_encodings = self.dropout(question_encodings)
 
         # Source encodings to create the sketch (the AST without the leaf-nodes)
@@ -237,7 +237,7 @@ class IRNet(BasicModel):
 
         # here we just create a tensor from "col_hot_type". Keep in mind: the col_hot_type is the type of matching ("exact" vs. "partial"). It basically states how well
         # a word matched with a column.
-        col_type = self.input_type(batch.col_hot_type)
+        col_type = self.input_type(batch.all_column_matches)
 
         # we create a linear layer around the col_type tensor.
         col_type_var = self.col_type(col_type)
@@ -247,7 +247,7 @@ class IRNet(BasicModel):
 
         schema_embedding = table_encodings
 
-        batch_table_dict = batch.col_table_dict
+        batch_table_dict = batch.all_column_table_dict
         table_enable = np.zeros(shape=(len(examples)))
         action_probs = [[] for _ in examples]
 
@@ -271,8 +271,8 @@ class IRNet(BasicModel):
                 # If it was though a A or C action, we choose the depending column/table embedding.
                 # The embedding is then part of the input in the next decoder step, as we see in TranX 2.3 (Decoder). It is not used to compare any loss, as this has already been done in the last step!
                 for e_id, example in enumerate(examples):
-                    if t < len(example.tgt_actions):
-                        action_tm1 = example.tgt_actions[t - 1]
+                    if t < len(example.semql_actions):
+                        action_tm1 = example.semql_actions[t - 1]
                         # We still need all the "Sketch-Action" types as they could be the t-1 action, before creating a leaf-node.
                         if type(action_tm1) in [semQL.Root1,
                                                 semQL.Root,
@@ -311,8 +311,8 @@ class IRNet(BasicModel):
                 # very similar to the part above, but we consider here the "tgt_actions" to create the parent-feeding.
                 # tgt t-1 action type
                 for e_id, example in enumerate(examples):
-                    if t < len(example.tgt_actions):
-                        action_tm = example.tgt_actions[t - 1]
+                    if t < len(example.semql_actions):
+                        action_tm = example.semql_actions[t - 1]
                         pre_type = self.type_embed.weight[self.grammar.type2id[type(action_tm)]]
                     else:
                         pre_type = zero_type_embed
@@ -381,8 +381,8 @@ class IRNet(BasicModel):
             # Now we calculate the loss, but only for the leaf actions (A, C and T).
             # We are not interested in the loss of the sketch, as this has already been done in Part 1. The "action_probs" array will contain only entries for the leaf actions.
             for e_id, example in enumerate(examples):
-                if t < len(example.tgt_actions):
-                    action_t = example.tgt_actions[t]
+                if t < len(example.semql_actions):
+                    action_t = example.semql_actions[t]
                     if isinstance(action_t, semQL.C):
                         table_appear_mask[e_id, action_t.id_c] = 1
                         table_enable[e_id] = action_t.id_c
@@ -420,7 +420,7 @@ class IRNet(BasicModel):
         # next lines is exactly the same as in the training case. Encode the source sentence.
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
-        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.src_sents, batch.table_sents, batch.table_names)
+        question_encodings, column_encodings, table_encodings, transformer_pooling_output = self.encoder(batch.all_question_tokens, batch.all_column_tokens, batch.all_table_names)
         question_encodings = self.dropout(question_encodings)
 
         utterance_encodings_sketch_linear = self.att_sketch_linear(question_encodings)
@@ -589,14 +589,14 @@ class IRNet(BasicModel):
 
         ####################### PART 2: Create Schema (Column & Table) Embeddings ###########################################
         # this part is exacty the same as Part 2 in training. It is further independent of chosen sketch in Part 1
-        col_type = self.input_type(batch.col_hot_type)
+        col_type = self.input_type(batch.all_column_matches)
 
         col_type_var = self.col_type(col_type)
 
         table_embedding = column_encodings + col_type_var
         schema_embedding = table_encodings
 
-        batch_table_dict = batch.col_table_dict
+        batch_table_dict = batch.all_column_table_dict
 
         h_tm1 = dec_init_vec
 
@@ -753,7 +753,7 @@ class IRNet(BasicModel):
 
                 elif type(padding_sketch[t]) == semQL.C:
                     # the column (C) and table (T) case is different: here we want to create candidates for each possible column.
-                    for col_id, _ in enumerate(batch.table_sents[0]):
+                    for col_id, _ in enumerate(batch.all_column_tokens[0]):
                         col_sel_score = column_selection_log_prob[hyp_id, col_id]   # the probability for each column we calculated before by using the schema encoding!
                         new_hyp_score = hyp.score + col_sel_score.data.cpu()
                         meta_entry = {'action_type': semQL.C, 'col_id': col_id,
@@ -762,7 +762,7 @@ class IRNet(BasicModel):
                         new_hyp_meta.append(meta_entry)
                 elif type(padding_sketch[t]) == semQL.T:
                     # similar to the C action
-                    for t_id, _ in enumerate(batch.table_names[0]):
+                    for t_id, _ in enumerate(batch.all_table_names[0]):
                         t_sel_score = table_weights[hyp_id, t_id]
                         new_hyp_score = hyp.score + t_sel_score.data.cpu()
 

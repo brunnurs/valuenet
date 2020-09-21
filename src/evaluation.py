@@ -53,7 +53,7 @@ def evaluate(model, dev_loader, schema, beam_size):
             prediction['model_result'] = full_prediction
 
             truth_sketch = " ".join([str(x) for x in example.sketch])
-            truth_rule_label = " ".join([str(x) for x in example.tgt_actions])
+            truth_rule_label = " ".join([str(x) for x in example.semql_actions])
 
             # with a simple string comparison to the ground truth we figure out if the sketch/prediction is correct. There is
             # clearly room for improvement here.
