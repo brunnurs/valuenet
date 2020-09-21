@@ -1,6 +1,5 @@
 import copy
 
-import numpy
 import numpy as np
 from nltk import WordNetLemmatizer
 
@@ -31,61 +30,75 @@ def build_column_matches_array(column_matches):
     return column_matches_array
 
 
-def build_example(sql, table_data):
-    # The table data contains detailed information about that database. This includes tables, table headers (columns)
-    # and also foreign/primary keys.
-    table = table_data[sql['db_id']]
+def build_example(sql, all_schemas):
+    # Schema contains detailed information about that database, especially tables & columns, as well as PK/FK relations.
+    schema = all_schemas[sql['db_id']]
 
     column_matches = build_column_matches_array(sql['column_matches'])
 
-    _, table_names = lemmatize_list(table['table_names'])
+    column_names, column_set, column_table_dict, columns_per_table, table_names = build_table_column_mappings(sql, schema)
 
-    tab_cols = [col[1] for col in table['column_names']]
-    tab_ids = [col[0] for col in table['column_names']]
-
-    _, col_set_iter = lemmatize_list(sql['col_set'])
-    _, col_iter = lemmatize_list(tab_cols)
-
-    # this dict is telling for each column in what table it appears. So the key is the idx of the column, the values the idx of the tables.
-    # example: the key 0 will appear in all tables (e.g. [1,2,3,4,5]) as it's the special column "*".
-    # Most others will only appear one, but the id's (which are used as primary key / foreign key) will appear also multiple times.
-    col_table_dict = _get_col_table_dict(tab_cols, tab_ids, sql)
-    # a simple list with sublists for each table, containing all the columns in that table.
-    table_col_name = _get_table_colNames(tab_ids, col_iter)
-
-    # this field contains the special column "*", referring to all columns in all tables. Not sure yet why we replace it with this special content.
-    col_set_iter[0] = ['count', 'number', 'many']
-
-    # in the pre-processing (see sql2SemQL.py) we parse the sql for each example to the SemQL-AST language. We then serialize it to a string.
-    # Here we do the opposite: we deserialize the SemQL-Query by dynamically create the right objects based on the string.
-    rule_label = None
-    if 'rule_label' in sql:
-        # Example: eval("Root1(3)") will dynamically create an instance of class Root1 with the constructor argument 3.
-        rule_label = [eval(x) for x in sql['rule_label'].strip().split(' ')]
-
-        if is_valid(rule_label, col_table_dict=col_table_dict, sql=sql) is False:
-            raise RuntimeError("Invalid rule_label: {}. We don't use this sample".format(sql['rule_label']))
+    actions = _instantiate_actions(column_table_dict, sql)
 
     example = Example(
         src_sent=[[token] for token in sql['question_toks']],
-        col_num=len(col_set_iter),
-        tab_cols=col_set_iter,
+        col_num=len(column_set),
+        tab_cols=column_set,
         sql=sql['query'],
         col_hot_type=column_matches,
         table_names=table_names,
         table_len=len(table_names),
-        col_table_dict=col_table_dict,
-        cols=tab_cols,
-        table_col_name=table_col_name,
-        table_col_len=len(table_col_name),
-        tgt_actions=rule_label
+        col_table_dict=column_table_dict,
+        cols=column_names,
+        table_col_name=columns_per_table,
+        table_col_len=len(columns_per_table),
+        tgt_actions=actions
     )
     example.sql_json = copy.deepcopy(sql)
 
     return example
 
 
-def _get_col_table_dict(tab_cols, tab_ids, sql):
+def build_table_column_mappings(sql, table):
+    _, table_names = lemmatize_list(table['table_names'])
+
+    column_names = [col[1] for col in table['column_names']]
+    column_table_indices = [col[0] for col in table['column_names']]
+
+    _, column_set = lemmatize_list(sql['col_set'])
+    _, columns = lemmatize_list(column_names)
+
+    # this dict is telling for each column in what table it appears. So the key is the idx of the column, the values the idx of the tables.
+    # example: the key 0 will appear in all tables (e.g. [1,2,3,4,5]) as it's the special column "*".
+    # Most others will only appear one, but the id's (which are used as primary key / foreign key) will appear also multiple times.
+    column_table_dict = _get_column_table_dict(column_names, column_table_indices, sql)
+
+    # a simple list with sublists for each table, containing all the columns in that table.
+    columns_per_table = _get_column_sublists_per_table(column_table_indices, columns)
+
+    # this field contains the special column "*", referring to all columns in all tables. Not sure yet why we replace it with this special content.
+    column_set[0] = ['count', 'number', 'many']
+
+    return column_names, column_set, column_table_dict, columns_per_table, table_names
+
+
+def _instantiate_actions(column_table_dict, sql):
+    """
+    in the pre-processing (see sql2SemQL.py) we parse the sql for each example to the SemQL-AST language. We then serialize it to a string.
+    Here we do the opposite: we deserialize the SemQL-Query by dynamically create the right objects based on the string.
+    """
+
+    rule_label = None
+    if 'rule_label' in sql:
+        # Example: eval("Root1(3)") will dynamically create an instance of class Root1 with the constructor argument 3.
+        rule_label = [eval(x) for x in sql['rule_label'].strip().split(' ')]
+
+        if is_valid(rule_label, col_table_dict=column_table_dict, sql=sql) is False:
+            raise RuntimeError("Invalid rule_label: {}. We don't use this sample".format(sql['rule_label']))
+    return rule_label
+
+
+def _get_column_table_dict(tab_cols, tab_ids, sql):
     table_dict = {}
     for c_id, c_v in enumerate(sql['col_set']):
         for cor_id, cor_val in enumerate(tab_cols):
@@ -100,7 +113,7 @@ def _get_col_table_dict(tab_cols, tab_ids, sql):
     return col_table_dict
 
 
-def _get_table_colNames(tab_ids, tab_cols):
+def _get_column_sublists_per_table(tab_ids, tab_cols):
     table_col_dict = {}
     for ci, cv in zip(tab_ids, tab_cols):
         if ci != -1:

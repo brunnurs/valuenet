@@ -16,7 +16,7 @@ from spider.example_builder import build_example
 from utils import setup_device, set_seed_everywhere
 
 
-def evaluate(model, dev_loader, table_data, beam_size):
+def evaluate(model, dev_loader, schema, beam_size):
     model.eval()
 
     sketch_correct, rule_label_correct, total = 0, 0, 0
@@ -27,7 +27,7 @@ def evaluate(model, dev_loader, table_data, beam_size):
             original_row = copy.deepcopy(data_row)
 
             try:
-                example = build_example(data_row, table_data)
+                example = build_example(data_row, schema)
             except Exception as e:
                 print("Exception while building example (evaluation): {}".format(e))
                 continue

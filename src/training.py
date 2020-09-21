@@ -7,7 +7,7 @@ from spider.example_builder import build_example
 def train(global_step,
           tb_writer,
           train_dataloader,
-          table_data,
+          schema,
           model,
           optimizer,
           clip_grad,
@@ -22,7 +22,7 @@ def train(global_step,
         examples = []
         for data_row in batch:
             try:
-                example = build_example(data_row, table_data)
+                example = build_example(data_row, schema)
                 examples.append(example)
             except RuntimeError as e:
                 print("Exception while building example (training): {}".format(e))
