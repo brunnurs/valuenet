@@ -347,7 +347,7 @@ class IRNet(BasicModel):
 
             # to my understanding the difference is not using pointer-networks or not, but using memory augmented pointer networks or just normal ones.
             if self.use_column_pointer:
-                gate = F.sigmoid(self.prob_att(att_t))
+                gate = torch.sigmoid(self.prob_att(att_t))
                 # this equation can be found in the IRNet-Paper, at the end of chapter 2. See the comments in the paper.
                 weights = self.column_pointer_net(src_encodings=table_embedding, query_vec=att_t.unsqueeze(0), src_token_mask=None) * table_appear_mask_val * gate + \
                           self.column_pointer_net(src_encodings=table_embedding, query_vec=att_t.unsqueeze(0), src_token_mask=None) * (1 - table_appear_mask_val) * (1 - gate)
@@ -705,7 +705,7 @@ class IRNet(BasicModel):
 
             # use the pointer network, similar to the training part.
             if self.use_column_pointer:
-                gate = F.sigmoid(self.prob_att(att_t))
+                gate = torch.sigmoid(self.prob_att(att_t))
                 weights = self.column_pointer_net(src_encodings=exp_table_embedding, query_vec=att_t.unsqueeze(0),
                                                   src_token_mask=None) * table_appear_mask_val * gate + self.column_pointer_net(
                     src_encodings=exp_table_embedding, query_vec=att_t.unsqueeze(0),

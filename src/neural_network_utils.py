@@ -77,22 +77,11 @@ def length_position_tensor(length_array, cuda=False, value=None):
     return mask.cuda() if cuda else mask
 
 
-def appear_to_mask_tensor(length_array, cuda=False, value=None):
+def appear_to_mask_tensor(length_array):
     max_len = max(length_array)
     batch_size = len(length_array)
     mask = np.zeros((batch_size, max_len), dtype=np.float32)
     return mask
-
-
-def pred_col_mask(value, max_len):
-    max_len = max(max_len)
-    batch_size = len(value)
-    mask = np.ones((batch_size, max_len), dtype=np.uint8)
-    for v_ind, v_val in enumerate(value):
-        for v in v_val:
-            mask[v_ind][v] = 0
-    mask = torch.ByteTensor(mask)
-    return mask.cuda()
 
 
 def input_transpose(sents, pad_token):
