@@ -1,3 +1,4 @@
+import copy
 import os
 
 import torch
@@ -23,6 +24,8 @@ def evaluate(model, dev_loader, table_data, beam_size):
     for batch in tqdm(dev_loader, desc="Evaluating"):
 
         for data_row in batch:
+            original_row = copy.deepcopy(data_row)
+
             try:
                 example = build_example(data_row, table_data)
             except Exception as e:
@@ -43,7 +46,7 @@ def evaluate(model, dev_loader, table_data, beam_size):
                 # print(e)
                 full_prediction = ""
 
-            prediction = example.sql_json['pre_sql']
+            prediction = original_row
 
             # here we set assemble the predicted sketch actions as string
             prediction['sketch_result'] = " ".join(str(x) for x in results_all[1])

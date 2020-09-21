@@ -104,40 +104,6 @@ def schema_linking(question_arg, question_arg_type, one_hot_type, col_set_type, 
                     col_set_type[sql['col_set'].index(col_probase)][3] += 1
 
 
-def process(sql, table):
-    process_dict = {}
-
-    origin_sql = sql['question_toks']
-    table_names = [[wordnet_lemmatizer.lemmatize(v).lower() for v in x.split(' ')] for x in table['table_names']]
-
-    sql['pre_sql'] = copy.deepcopy(sql)
-
-    tab_cols = [col[1] for col in table['column_names']]
-    tab_ids = [col[0] for col in table['column_names']]
-
-    col_set_iter = [[wordnet_lemmatizer.lemmatize(v).lower() for v in x.split(' ')] for x in sql['col_set']]
-    col_iter = [[wordnet_lemmatizer.lemmatize(v).lower() for v in x.split(" ")] for x in tab_cols]
-    q_iter_small = [wordnet_lemmatizer.lemmatize(x).lower() for x in origin_sql]
-    question_arg = copy.deepcopy(sql['question_arg'])
-    question_arg_type = sql['question_arg_type']
-    one_hot_type = np.zeros((len(question_arg_type), 6))
-
-    col_set_type = np.zeros((len(col_set_iter), 4))
-
-    process_dict['col_set_iter'] = col_set_iter
-    process_dict['q_iter_small'] = q_iter_small
-    process_dict['col_set_type'] = col_set_type
-    process_dict['question_arg'] = question_arg
-    process_dict['question_arg_type'] = question_arg_type
-    process_dict['one_hot_type'] = one_hot_type
-    process_dict['tab_cols'] = tab_cols
-    process_dict['tab_ids'] = tab_ids
-    process_dict['col_iter'] = col_iter
-    process_dict['table_names'] = table_names
-
-    return process_dict
-
-
 def load_data_new(sql_path, table_data, use_small=False):
     sql_data = []
 
