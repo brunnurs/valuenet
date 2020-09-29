@@ -6,7 +6,7 @@ import pickle
 import nltk
 
 from preprocessing.utils import load_dataSets, wordnet_lemmatizer, symbol_filter, get_multi_token_match, \
-    get_single_token_match, get_partial_match, AGG, group_symbol, group_values, group_digital, num2year
+    get_single_token_match, get_partial_match, AGG, group_symbol, group_digital, num2year
 
 
 def lemmatize_list(names):
@@ -20,6 +20,16 @@ def lemmatize_list(names):
         names_clean_list.append(x)
 
     return names_clean, names_clean_list
+
+
+def add_full_column_match(token, columns_list, column_matches):
+    column_ix = columns_list.index(token)
+    column_matches[column_ix]['full_column_match'] = True
+
+
+def add_value_match(token, columns_list, column_matches):
+    column_ix = columns_list.index(token)
+    column_matches[column_ix]['full_value_match'] = True
 
 
 def schema_linking(example, related_to_concept_net, is_a_concept_net):
@@ -51,6 +61,8 @@ def schema_linking(example, related_to_concept_net, is_a_concept_net):
             token_grouped.append(question_tokens[idx: end_idx])
             token_types.append(["col"])
             idx = end_idx
+
+            add_full_column_match(multi_token_column_name, columns, column_matches)
             continue
 
         # check for table
@@ -67,6 +79,8 @@ def schema_linking(example, related_to_concept_net, is_a_concept_net):
             token_grouped.append(question_tokens[idx: end_idx])
             token_types.append(["col"])
             idx = end_idx
+
+            add_full_column_match(column_name, columns, column_matches)
             continue
 
         # check for partial column matches (min 2 tokens need to match)
@@ -79,6 +93,8 @@ def schema_linking(example, related_to_concept_net, is_a_concept_net):
             # TODO: the "song release year" has been extended by song because that's the column name. Does that make sense for the transformer later?
             token_types.append(["col"])
             idx = end_idx
+
+            add_full_column_match(column_name_extended, columns_list, column_matches)
             continue
 
         # check for aggregation
@@ -133,22 +149,10 @@ def schema_linking(example, related_to_concept_net, is_a_concept_net):
             for tmp in tmp_toks:
                 token_grouped.append([tmp])
                 token_types.append([pro_result])
-                pro_result = "NONE"
-            idx = end_idx
-            continue
 
-        end_idx, values = group_values(question_tokens, idx, n_tokens)
-        if values and (len(values) > 1 or question_tokens[idx - 1] not in ['?', '.']):
-            tmp_toks = [wordnet_lemmatizer.lemmatize(x) for x in question_tokens[idx: end_idx] if x.isalnum() is True]
-            assert len(tmp_toks) > 0, print(question_tokens[idx: end_idx], values, question_tokens, idx, end_idx)
-            pro_result = get_concept_result(tmp_toks, is_a_concept_net)
-            if pro_result is None:
-                pro_result = get_concept_result(tmp_toks, related_to_concept_net)
-            if pro_result is None:
-                pro_result = "NONE"
-            for tmp in tmp_toks:
-                token_grouped.append([tmp])
-                token_types.append([pro_result])
+                if pro_result != 'NONE':
+                    add_value_match(pro_result, columns, column_matches)
+
                 pro_result = "NONE"
             idx = end_idx
             continue
@@ -159,50 +163,21 @@ def schema_linking(example, related_to_concept_net, is_a_concept_net):
             token_types.append(["value"])
             idx += 1
             continue
-        if question_tokens[idx] == ['ha']:
-            question_tokens[idx] = ['have']
 
         token_grouped.append([question_tokens[idx]])
         token_types.append(['NONE'])
         idx += 1
         continue
 
-    # TODO this code should get removed as soon as we know that everything still work the same. We need to integrate this in the loop above
-    # TODO and figure out if it is even correct to to the next few lines. In my opinion we should not just put weight on columns where we for example know
-    # TODO exactly that they are tables.
+    # This extra-loop is a bit special: we gather partial column matches by going through the question tokens and columns and finding partial matches.
+    # Full matches should already have been found further up in the loop.
+    # TODO not sure if that's a good thing, and even if, there might be room for improvement (e.g. a match when Table and Column has been hit).
     for column_idx, column in enumerate(columns_list):
         for question_idx, question_token in enumerate(question_tokens):
             if question_token in column:
                 # if we have a match between a partial column token (e.g. "horse id") and a token in the question (e.g. "horse")
                 # we will increase the counter for this column
                 column_matches[column_idx]['partial_column_match'] += 1
-
-    for token, token_type in zip(token_grouped, token_types):
-        if token_type == ["col"]:
-            column_ix = columns_list.index(token)
-            column_matches[column_ix]['full_column_match'] = True
-        elif token_type == ['NONE']:
-            pass
-        elif token_type == ['table']:
-            pass
-        elif token_type == ['agg']:
-            pass
-        elif token_type == ['MORE']:
-            pass
-        elif token_type == ['MOST']:
-            pass
-        elif token_type == ['value']:
-            pass
-        else:
-            if len(token_type) == 1:
-                value_type_which_should_be_a_column_name = token_type[0]
-                # if the token type (col_probase) is e.g. "time of day" (because the word was "night" and we found with ConceptNet it is a "time of day")
-                # we try to find a column with this name. If we find it --> we have an "Exact match", so we mark the matching column with a 5 (in the "col_set_type" array)
-                # NOTE: we could do this much smarter by using the table values.
-                column_ix = columns.index(value_type_which_should_be_a_column_name)
-                column_matches[column_ix]['full_value_match'] = True
-            else:
-                raise ValueError("Investigate this!")
 
     return token_grouped, token_types, column_matches
 
