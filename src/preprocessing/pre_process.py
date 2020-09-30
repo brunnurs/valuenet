@@ -5,6 +5,8 @@ import pickle
 
 import nltk
 
+from named_entity_recognition.database_value_finder.database_value_finder_sqlite import DatabaseValueFinderSQLite
+from named_entity_recognition.pre_process_ner_values import pre_process_ner_candidates, match_values_in_database
 from preprocessing.utils import load_dataSets, wordnet_lemmatizer, symbol_filter, get_multi_token_match, \
     get_single_token_match, get_partial_match, AGG, group_symbol, group_digital, num2year
 
@@ -15,11 +17,15 @@ def lemmatize_list(names):
     names_clean_list = []
 
     for name in names:
-        x = [wordnet_lemmatizer.lemmatize(x.lower()) for x in name.split(' ')]
+        x = split_lemmatize(name)
         names_clean.append(" ".join(x))
         names_clean_list.append(x)
 
     return names_clean, names_clean_list
+
+
+def split_lemmatize(name):
+    return [wordnet_lemmatizer.lemmatize(x.lower()) for x in name.split(' ')]
 
 
 def add_full_column_match(token, columns_list, column_matches):
@@ -32,7 +38,23 @@ def add_value_match(token, columns_list, column_matches):
     column_matches[column_ix]['full_value_match'] = True
 
 
-def schema_linking(example, related_to_concept_net, is_a_concept_net):
+def find_values_by_database_lookup(example, ner_information, database_value_finder_cache, database_path, schema_path, include_primary_keys):
+    example['ner_extracted_values'] = ner_information['entities']
+    db_name = example['db_id']
+
+    potential_value_candidates = pre_process_ner_candidates(example)
+
+    if db_name not in database_value_finder_cache:
+        database_value_finder_cache[db_name] = DatabaseValueFinderSQLite(database_path, db_name, schema_path)
+
+    database_value_finder = database_value_finder_cache[db_name]
+
+    return match_values_in_database(database_value_finder, potential_value_candidates, include_primary_keys)
+
+
+def schema_linking(example, ner_information, related_to_concept_net, is_a_concept_net, database_value_finder_cache, schema_path, database_path):
+    print(f"Question: {example['question']}")
+    print(f"SQL: {example['query']}")
     question_tokens = [wordnet_lemmatizer.lemmatize(x.lower()) for x in symbol_filter(example['question_toks'])]
 
     tables, table_list = lemmatize_list(example['table_names'])
@@ -45,7 +67,8 @@ def schema_linking(example, related_to_concept_net, is_a_concept_net):
     token_types = []
 
     # this will contain what we call the "column hints" --> information how often a column has been "hit" in a question
-    column_matches = [{"full_column_match": False,
+    column_matches = [{"column_joined": '',
+                       "full_column_match": False,
                        "partial_column_match": 0,
                        "full_value_match": False,
                        "partial_value_match": 0} for _ in columns]
@@ -173,11 +196,21 @@ def schema_linking(example, related_to_concept_net, is_a_concept_net):
     # Full matches should already have been found further up in the loop.
     # TODO not sure if that's a good thing, and even if, there might be room for improvement (e.g. a match when Table and Column has been hit).
     for column_idx, column in enumerate(columns_list):
+        column_matches[column_idx]['column_joined'] = str(column)
+
         for question_idx, question_token in enumerate(question_tokens):
             if question_token in column:
                 # if we have a match between a partial column token (e.g. "horse id") and a token in the question (e.g. "horse")
                 # we will increase the counter for this column
                 column_matches[column_idx]['partial_column_match'] += 1
+
+    include_primary_key_columns = 'id' in question_tokens
+    database_matches = find_values_by_database_lookup(example, ner_information, database_value_finder_cache, database_path, schema_path, include_primary_key_columns)
+
+    for value, column, table in database_matches:
+        column_lemma = " ".join(split_lemmatize(column))
+        column_idx = columns.index(column_lemma)
+        column_matches[column_idx]['full_value_match'] = True
 
     return token_grouped, token_types, column_matches
 
@@ -185,7 +218,9 @@ def schema_linking(example, related_to_concept_net, is_a_concept_net):
 def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--data_path', type=str, help='dataset', required=True)
-    arg_parser.add_argument('--table_path', type=str, help='table dataset', required=True)
+    arg_parser.add_argument('--ner_data_path', type=str, help='NER results (e.g. from Google API)', required=True)
+    arg_parser.add_argument('--database_path', type=str, help='database files', required=True)
+    arg_parser.add_argument('--table_path', type=str, help='schema data', required=True)
     arg_parser.add_argument('--conceptNet', type=str, help='concept net base path', required=True)
     arg_parser.add_argument('--output', type=str, help='output data')
     args = arg_parser.parse_args()
@@ -193,18 +228,34 @@ def main():
     # loading dataSets
     data, table = load_dataSets(args)
 
+    with open(os.path.join(args.ner_data_path), 'r', encoding='utf-8') as json_file:
+        ner_data = json.load(json_file)
+
     with open(os.path.join(args.conceptNet, 'english_RelatedTo.pkl'), 'rb') as f:
         related_to_concept_net = pickle.load(f)
 
     with open(os.path.join(args.conceptNet, 'english_IsA.pkl'), 'rb') as f:
         is_a_concept_net = pickle.load(f)
 
-    for example in data:
-        token_grouped, token_types, column_matches = schema_linking(example, related_to_concept_net, is_a_concept_net)
+    assert len(data) == len(ner_data), 'Both, NER data and actual data (e.g. ner_train.json and train.json) need to have the same amount of rows!'
+
+    database_value_finder_cache = {}
+
+    for idx, (example, ner_information) in enumerate(zip(data, ner_data)):
+        token_grouped, token_types, column_matches = schema_linking(example,
+                                                                    ner_information,
+                                                                    related_to_concept_net,
+                                                                    is_a_concept_net,
+                                                                    database_value_finder_cache,
+                                                                    args.table_path,
+                                                                    args.database_path,)
 
         example['question_arg'] = token_grouped
         example['question_arg_type'] = token_types
         example['column_matches'] = column_matches
+
+        print(f'Processed example {idx} out of {len(data)}')
+        print()
 
     with open(args.output, 'w') as f:
         json.dump(data, f, sort_keys=True, indent=4)
