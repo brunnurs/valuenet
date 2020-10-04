@@ -15,6 +15,7 @@ RUN pip install transformers
 RUN pip install pytictoc
 RUN pip install wandb
 RUN pip install pyyaml
+RUN pip install textdistance
 
 RUN wandb login c9bac4494d41935972b1da58001870aec716e3bb
 
