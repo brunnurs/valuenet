@@ -88,7 +88,9 @@ class DatabaseValueFinderSQLite:
         potential_values_found = []
 
         for row in data:
-            cell_value = str(row[column_idx])
+            # for a simple comparison convert value to string and make sure to strip/trim it from whitespaces (the question tokens will never contain whitespaces!)
+            cell_value = str(row[column_idx]).strip()
+
             for potential_value, tolerance in potential_values:
                 is_similar_enough, similarity = self._is_similar_enough(cell_value, potential_value, tolerance)
                 if is_similar_enough:

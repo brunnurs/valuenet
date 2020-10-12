@@ -157,12 +157,6 @@ def group_symbol(toks, idx, num_toks):
     return idx, None
 
 
-def num2year(tok):
-    if len(str(tok)) == 4 and str(tok).isdigit() and int(str(tok)[:2]) < 22 and int(str(tok)[:2]) > 15:
-        return True
-    return False
-
-
 def set_header(toks, header_toks, tok_concol, idx, num_toks):
     def check_in(list_one, list_two):
         if set(list_one) == set(list_two):
