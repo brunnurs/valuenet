@@ -65,18 +65,21 @@ class DatabaseValueFinderSQLite:
             if columns:
                 query = self._assemble_query(columns, table)
 
-                data = self.fetch_data(query, cursor)
+                try:
+                    data = self.fetch_data(query, cursor)
 
-                # The overhead of parallelization only helps after a certain size of data. Example: a table with ~ 300k entries and 4 columns takes ~20s with a single core.
-                # By using all 12 virtual cores we get down to ~12s. But the table has only 60k entries and 4 columns, the overhead of parallelization is larger than calculating
-                # everything on a single core (~3.8s vs. ~4.1s)
-                if len(data) > 80000:
-                    matches = Parallel(n_jobs=NUM_CORES)(delayed(self._find_matches_in_column)(table, column, column_idx, data, potential_values) for column_idx, column in enumerate(columns))
-                    print(f'Parallelization activated as table has {len(data)} rows.')
-                else:
-                    matches = [self._find_matches_in_column(table, column, column_idx, data, potential_values) for column_idx, column in enumerate(columns)]
+                    # The overhead of parallelization only helps after a certain size of data. Example: a table with ~ 300k entries and 4 columns takes ~20s with a single core.
+                    # By using all 12 virtual cores we get down to ~12s. But the table has only 60k entries and 4 columns, the overhead of parallelization is larger than calculating
+                    # everything on a single core (~3.8s vs. ~4.1s)
+                    if len(data) > 80000:
+                        matches = Parallel(n_jobs=NUM_CORES)(delayed(self._find_matches_in_column)(table, column, column_idx, data, potential_values) for column_idx, column in enumerate(columns))
+                        print(f'Parallelization activated as table has {len(data)} rows.')
+                    else:
+                        matches = [self._find_matches_in_column(table, column, column_idx, data, potential_values) for column_idx, column in enumerate(columns)]
 
-                matching_values.update(flatten(matches))
+                    matching_values.update(flatten(matches))
+                except Exception as e:
+                    print(f'Error while fetching data with from database {self.database} with query "{query}" Error: {e}')
 
         conn.close()
 
