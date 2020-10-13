@@ -151,6 +151,11 @@ def find_capitalized_words(question):
     """
     all_capitalized_words = []
 
+    # english sentences normally start with an upper case - but it could also be that the first word is already a special word.
+    # We therefore check if the first letter is uppercase and the second one is lowercase. If that's the case, we simply throw away the first letter to avoid confusion.
+    if question[0].isupper and  question[1].islower():
+        question = question[1:]
+
     # with re.finditer() the group() property is referring to the full match. The next elements are the groups. Have a look at regex101.com to get the regex.
     consecutive_capitalized_words = [match.group() for match in re.finditer(r"(\b[A-Z0-9][A-Za-z0-9-/]+\b\s)+\b[A-Z0-9][A-Za-z0-9-/]+", question)]
     all_capitalized_words.extend(consecutive_capitalized_words)
@@ -158,13 +163,11 @@ def find_capitalized_words(question):
     single_capitalized_word = [match.group() for match in re.finditer(r"\b[A-Z0-9][A-Za-z0-9-/]+\b", question)]
 
     for capitalized_word in single_capitalized_word:
-        # avoid the first word of the sentence which is in english normally uppercase as well.
-        if not question.startswith(capitalized_word):
-            # make sure the capitalized word is not already part of consecutive_capitalized_words.
-            if next(filter(lambda w: capitalized_word in w, consecutive_capitalized_words), None) is None:
-                # don't add simple numbers - they get handled by other heuristics
-                if not capitalized_word.isnumeric():
-                    all_capitalized_words.append(capitalized_word)
+        # make sure the capitalized word is not already part of consecutive_capitalized_words.
+        if next(filter(lambda w: capitalized_word in w, consecutive_capitalized_words), None) is None:
+            # don't add simple numbers - they get handled by other heuristics
+            if not capitalized_word.isnumeric():
+                all_capitalized_words.append(capitalized_word)
 
     return all_capitalized_words
 
