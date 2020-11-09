@@ -22,15 +22,15 @@ for v, _, _ in values:
 # encoded = encode_input([question, question2], [columns, columns], [tables, tables], tokenizer, 551, 'cpu')
 #
 # # print(encoded)
-device, n_gpu = setup_device()
-set_seed_everywhere(42, n_gpu)
-
-encoder = TransformerEncoder('bert-base-uncased', device, 512, 300, 300)
-encoder.to(device)
-
-last_layer = encoder([question, question2], [columns, columns2], [tables, tables2])
-
-print(last_layer)
+# device, n_gpu = setup_device()
+# set_seed_everywhere(42, n_gpu)
+#
+# encoder = TransformerEncoder('bert-base-uncased', device, 512, 300, 300)
+# encoder.to(device)
+#
+# last_layer = encoder([question, question2], [columns, columns2], [tables, tables2])
+#
+# print(last_layer)
 
 # import json
 #
@@ -81,4 +81,23 @@ print(last_layer)
 #
 #     print(table_occurances)
 
-print(len(values))
+
+from more_itertools import flatten
+from transformers import BartConfig, BartModel, BartTokenizer
+
+config_class, model_class, tokenizer_class = (BartConfig, BartModel, BartTokenizer)
+
+transformer_config = config_class.from_pretrained('facebook/bart-base')
+tokenizer = tokenizer_class.from_pretrained('facebook/bart-base')
+transformer_model = model_class.from_pretrained('facebook/bart-base', config=transformer_config)
+
+tokens = ['Which', 'player', 'has', 'the', 'most', 'all', 'star', 'game', 'exper', 'iences', '?', 'Give', 'me', 'the', 'first', 'name', ',', 'last', 'name', 'and', 'id', 'of', 'the', 'player', ',', 'as', 'well', 'as', 'the', 'number', 'of', 'times', 'the', 'player', 'part', 'icipated', 'in', 'all', 'star', 'game', '.']
+full_question = 'Which player has the most all star game experiences ? Give me the first name , last name and id of the player , as well as the number of times the player participated in all star game .'
+question_untokenized = [['Which'], ['player'], ['has'], ['the'], ['most'], ['all'], ['star'], ['game'], ['experiences'], ['?'], ['Give'], ['me'], ['the'], ['first'], ['name'], [','], ['last'], ['name'], ['and'], ['id'], ['of'], ['the'], ['player'], [','], ['as'], ['well'], ['as'], ['the'], ['number'], ['of'], ['times'], ['the'], ['player'], ['participated'], ['in'], ['all'], ['star'], ['game'], ['.']]
+
+
+tokenized = tokenizer(tokens, is_split_into_words=True)
+tokenized2 = tokenizer(list(flatten(question_untokenized)), text_pair=list(flatten(question_untokenized)), is_split_into_words=True)
+tokenized3 = tokenizer(full_question, text_pair=full_question)
+
+print('ddd')
