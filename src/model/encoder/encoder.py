@@ -1,20 +1,11 @@
 import torch
 from more_itertools import flatten
-from torch import nn
+from torch import nn, FloatTensor
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_sequence
-from transformers import BertConfig, BertModel, BertTokenizer
+from transformers import BartModel, BartTokenizer, BartConfig
+from transformers.modeling_bart import BartClassificationHead
 
 from model.encoder.input_features import encode_input
-
-
-def get_encoder_model(pretrained_model):
-    print("load pretrained model/tokenizer for '{}'".format(pretrained_model))
-    config_class, model_class, tokenizer_class = (BertConfig, BertModel, BertTokenizer)
-    config = config_class.from_pretrained(pretrained_model)
-    tokenizer = tokenizer_class.from_pretrained(pretrained_model)
-    model = model_class.from_pretrained(pretrained_model, config=config)
-
-    return model, tokenizer
 
 
 class TransformerEncoder(nn.Module):
@@ -25,11 +16,13 @@ class TransformerEncoder(nn.Module):
         self.max_sequence_length = max_sequence_length
         self.device = device
 
-        config_class, model_class, tokenizer_class = (BertConfig, BertModel, BertTokenizer)
+        config_class, model_class, tokenizer_class = (BartConfig, BartModel, BartTokenizer)
 
-        transformer_config = config_class.from_pretrained(pretrained_model)
-        self.tokenizer = tokenizer_class.from_pretrained(pretrained_model)
-        self.transformer_model = model_class.from_pretrained(pretrained_model, config=transformer_config)
+        transformer_config: BartConfig = config_class.from_pretrained(pretrained_model)
+        self.tokenizer: BartTokenizer = tokenizer_class.from_pretrained(pretrained_model)
+        self.transformer_model: BartModel = model_class.from_pretrained(pretrained_model, config=transformer_config)
+
+        self.pooling_head = PoolingHead(transformer_config)
 
         self.encoder_hidden_size = transformer_config.hidden_size
 
@@ -46,22 +39,25 @@ class TransformerEncoder(nn.Module):
         print("Successfully loaded pre-trained transformer '{}'".format(pretrained_model))
 
     def forward(self, question_tokens, column_names, table_names, values):
-        input_ids_tensor, attention_mask_tensor, segment_ids_tensor, input_lengths = encode_input(question_tokens,
-                                                                                                  column_names,
-                                                                                                  table_names,
-                                                                                                  values,
-                                                                                                  self.tokenizer,
-                                                                                                  self.max_sequence_length,
-                                                                                                  self.device)
+        input_ids_tensor, attention_mask_tensor, input_lengths = encode_input(question_tokens,
+                                                                              column_names,
+                                                                              table_names,
+                                                                              values,
+                                                                              self.tokenizer,
+                                                                              self.max_sequence_length,
+                                                                              self.device)
 
         # while the "last_hidden-states" is one hidden state per input token, the pooler_output is the hidden state of the [CLS]-token, further processed.
         # See e.g. "BertModel" documentation for more information.
 
-        last_hidden_states, pooling_output = self.transformer_model(input_ids_tensor, attention_mask_tensor, segment_ids_tensor)
+        outputs = self.transformer_model(input_ids=input_ids_tensor, attention_mask=attention_mask_tensor)
+        last_hidden_states = outputs[0]
+
+        pooling_output = self._pool_output(last_hidden_states)
 
         (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_value_token_lengths) = input_lengths
 
-        # we get the relevant hidden states for the question-tokens and average, if there are multiple token per  word (e.g ['table', 'college'])
+        # we get the relevant hidden states for the question-tokens and average, if there are multiple token per word (e.g ['table', 'college'])
         averaged_hidden_states_question, pointers_after_question = self._average_hidden_states_question(last_hidden_states, all_question_span_lengths)
         question_out = pad_sequence(averaged_hidden_states_question, batch_first=True)  # (batch_size * max_question_tokens_per_batch * hidden_size)
         # as the transformer uses normally a size of 768 and the decoder only 300 per vector, we need to reduce dimensionality here with a linear layer.
@@ -256,6 +252,16 @@ class TransformerEncoder(nn.Module):
 
         return original_split
 
+    def _pool_output(self, last_hidden_states: FloatTensor):
+        """
+        In contrary to BERT, BART does not come with a "pooler_output" out of the box. We therefore use the same mechanism as
+        BART uses for classification - a BartClassificationHead with the right configuration.
+        @param last_hidden_states:
+        """
+
+        pooling_output = self.pooling_head(last_hidden_states)
+        return pooling_output
+
     @staticmethod
     def _assert_all_elements_processed(all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_value_token_lengths, last_pointers, len_last_hidden_states):
 
@@ -264,3 +270,18 @@ class TransformerEncoder(nn.Module):
 
         for question_span_lengths, column_token_lengths, table_token_lengths, value_token_length, last_pointer in zip(all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_value_token_lengths, last_pointers):
             assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) + sum(value_token_length) == last_pointer
+
+
+class PoolingHead(nn.Module):
+    """Head for sentence-level classification tasks."""
+
+    def __init__(self, config):
+        super().__init__()
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+
+    def forward(self, features, **kwargs):
+        x = features[:, 0, :]  # take <s> token (equiv. to [CLS])
+        x = self.dense(x)
+        x = torch.tanh(x)
+
+        return x

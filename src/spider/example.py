@@ -71,7 +71,8 @@ class Batch(object):
             self.max_sketch_num = max(len(e.sketch) for e in self.examples)
 
         self.all_question_tokens = [e.question_tokens for e in self.examples]
-        self.all_question_tokens_len = [len(e.question_tokens) for e in self.examples]
+        # the +1 represents the extra separator token after the end of the question. Not sure yet it is really necessary.
+        self.all_question_tokens_len = [len(e.question_tokens) + 1 for e in self.examples]
 
         self.all_column_matches = [e.column_matches for e in self.examples]
         self.all_column_tokens = [e.column_tokens for e in self.examples]

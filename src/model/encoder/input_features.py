@@ -8,7 +8,6 @@ SEGMENT_ID_SCHEMA = 1
 def encode_input(question_spans, column_names, table_names, values, tokenizer, max_length_model, device):
     all_input_ids = []
     all_attention_mask = []
-    all_segment_ids = []
 
     all_question_span_lengths = []
     all_column_token_lengths = []
@@ -16,58 +15,41 @@ def encode_input(question_spans, column_names, table_names, values, tokenizer, m
     all_values_lengths = []
 
     for question, columns, tables, val in zip(question_spans, column_names, table_names, values):
-        question_tokens, question_span_lengths, question_segment_ids = _tokenize_question(question, tokenizer)
+        question_token_ids, question_span_lengths = _tokenize_question(question, tokenizer)
+        column_token_ids, column_token_lengths = _tokenize_schema_names(columns, tokenizer)
+        table_token_ids, table_token_lengths = _tokenize_schema_names(tables, tokenizer)
+        value_tokens_ids, value_token_lengths = _tokenize_values(val, tokenizer)
+
         all_question_span_lengths.append(question_span_lengths)
-
-        columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer)
-
-        if _is_baseball_1_schema(tables):
-            columns_tokens, column_token_lengths, columns_segment_ids = _tokenize_column_names(columns, tokenizer,  do_sub_tokenizing=False)
-
         all_column_token_lengths.append(column_token_lengths)
-
-        table_tokens, table_token_lengths, table_segment_ids = _tokenize_table_names(tables, tokenizer)
         all_table_token_lengths.append(table_token_lengths)
-
-        value_tokens, value_token_lengths, value_segment_ids = _tokenize_values(val, tokenizer)
         all_values_lengths.append(value_token_lengths)
 
         assert sum(question_span_lengths) + sum(column_token_lengths) + sum(table_token_lengths) + sum(value_token_lengths) == \
-               len(question_tokens) + len(columns_tokens) + len(table_tokens) + len(value_tokens)
+               len(question_token_ids) + len(column_token_ids) + len(table_token_ids) + len(value_tokens_ids)
 
-        tokens = question_tokens + columns_tokens + table_tokens + value_tokens
-        if len(tokens) > max_length_model:
-            print(
-                "################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {}, values: {} ".format(
-                                                                                                                                            len(tokens),
-                                                                                                                                            len(question_tokens),
-                                                                                                                                            len(columns_tokens),
-                                                                                                                                            len(table_tokens),
-                                                                                                                                            len(value_tokens)))
+        all_ids = question_token_ids + column_token_ids + table_token_ids + value_tokens_ids
+        if len(all_ids) > max_length_model:
+            print("################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {} ".format(len(all_ids), len(question_token_ids), len(column_token_ids), len(table_token_ids)))
             print(question)
             print(columns)
             print(tables)
 
-        segment_ids = question_segment_ids + columns_segment_ids + table_segment_ids + value_segment_ids
         # not sure here if "tokenizer.mask_token_id" or just a simple 1...
-        attention_mask = [1] * len(tokens)
+        attention_mask = [1] * len(all_ids)
 
-        input_ids = tokenizer.convert_tokens_to_ids(tokens)
-
-        all_input_ids.append(input_ids)
-        all_segment_ids.append(segment_ids)
+        all_input_ids.append(all_ids)
         all_attention_mask.append(attention_mask)
 
     max_length_data = max(map(lambda ids: len(ids), all_input_ids))
 
-    for input_ids, segment_ids, attention_mask in zip(all_input_ids, all_segment_ids, all_attention_mask):
-        _padd_input(input_ids, segment_ids, attention_mask, max_length_data, tokenizer)
+    for input_ids, attention_mask in zip(all_input_ids, all_attention_mask):
+        _padd_input(input_ids, attention_mask, max_length_data, tokenizer)
 
     input_ids_tensor = torch.tensor(all_input_ids, dtype=torch.long).to(device)
-    segment_ids_tensor = torch.tensor(all_segment_ids, dtype=torch.long).to(device)
     attention_mask_tensor = torch.tensor(all_attention_mask, dtype=torch.long).to(device)
 
-    return input_ids_tensor, attention_mask_tensor, segment_ids_tensor, (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_values_lengths)
+    return input_ids_tensor, attention_mask_tensor, (all_question_span_lengths, all_column_token_lengths, all_table_token_lengths, all_values_lengths)
 
 
 def _tokenize_question(question, tokenizer):
@@ -79,89 +61,60 @@ def _tokenize_question(question, tokenizer):
     @param tokenizer:
     @return:
     """
-    question_span_lengths = [1]  # the initial value represents the length of the CLS_TOKEN in the beginning.
-    all_sub_token = []
+    question_tokenized = tokenizer(list(flatten(question)), is_split_into_words=True)
+    question_tokenized_ids = question_tokenized.data['input_ids']
 
-    for question_span in question:
-        # remember: question-span can consist of multiple words. Example: ['column', 'state']
-        sub_token = list(flatten(map(lambda tok: tokenizer.tokenize(tok), question_span)))
-        all_sub_token.extend(sub_token)
-        question_span_lengths.append(len(sub_token))
+    question_tokenized_ids = question_tokenized_ids + [tokenizer.sep_token_id]
 
-    question_tokens_with_special_chars = [tokenizer.cls_token] + all_sub_token + [tokenizer.sep_token]
-    segment_ids = [SEGMENT_ID_QUESTION] * len(question_tokens_with_special_chars)
+    question_span_lengths = [1] * len(question_tokenized_ids)
 
-    # the additional 1 represents the SEP_TOKEN in the end.
-    question_span_lengths.append(1)
-
-    return question_tokens_with_special_chars, question_span_lengths, segment_ids
+    return question_tokenized_ids, question_span_lengths
 
 
-def _tokenize_column_names(column_names, tokenizer, do_sub_tokenizing=True):
-    column_token_lengths = []
-    all_column_tokens = []
+def _tokenize_schema_names(schema_elements_names, tokenizer):
+    all_schema_element_length = []
+    all_schema_element_ids = []
 
-    for column in column_names:
-        if do_sub_tokenizing:
-            # columns most often consists of multiple words. Here, we further tokenize them into sub-words if necessary.
-            column_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), column)))
-        else:
-            column_sub_tokens = column
+    for schema_element in schema_elements_names:
+        schema_element_tokenized = tokenizer(schema_element, is_split_into_words=True)
+        schema_element_ids = schema_element_tokenized.data['input_ids']
 
-        # the SEP_TOKEN needs to be packed in a list as python can only concat two lists to a new list.
-        column_sub_tokens += [tokenizer.sep_token]
+        # why the [1:]? We saw in experiments with the tokenizer that the bos_token does not appear in the second tokenization when
+        # using tokenizer(text1, text_pair=text2). We therefore cut it out on purpose
+        schema_element_ids_with_separator = schema_element_ids[1:] + [tokenizer.sep_token_id]
 
-        all_column_tokens.extend(column_sub_tokens)
-        column_token_lengths.append(len(column_sub_tokens))
+        all_schema_element_ids.extend(schema_element_ids_with_separator)
+        all_schema_element_length.append(len(schema_element_ids_with_separator))
 
-    segment_ids = [SEGMENT_ID_QUESTION if tok == tokenizer.sep_token else SEGMENT_ID_SCHEMA for tok in all_column_tokens]
-
-    return all_column_tokens, column_token_lengths, segment_ids
-
-
-def _tokenize_table_names(table_names, tokenizer):
-    table_token_lengths = []
-    all_table_tokens = []
-
-    for table in table_names:
-        table_sub_tokens = list(flatten(map(lambda tok: tokenizer.tokenize(tok), table)))
-        table_sub_tokens += [tokenizer.sep_token]
-
-        all_table_tokens.extend(table_sub_tokens)
-        table_token_lengths.append(len(table_sub_tokens))
-
-    segment_ids = [SEGMENT_ID_QUESTION if tok == tokenizer.sep_token else SEGMENT_ID_SCHEMA for tok in all_table_tokens]
-
-    return all_table_tokens, table_token_lengths, segment_ids
-
+    return all_schema_element_ids, all_schema_element_length
 
 def _tokenize_values(values, tokenizer):
-    value_token_lengths = []
-    all_value_tokens = []
+    all_values_length = []
+    all_values_ids = []
 
     for value in values:
         value = format_value(value)
-        value_sub_tokens = tokenizer.tokenize(value)
-        value_sub_tokens += [tokenizer.sep_token]
+        value = tokenizer(value, is_split_into_words=True)
+        value_ids = value.data['input_ids']
 
-        all_value_tokens.extend(value_sub_tokens)
-        value_token_lengths.append(len(value_sub_tokens))
+        # why the [1:]? We saw in experiments with the tokenizer that the bos_token does not appear in the second tokenization when
+        # using tokenizer(text1, text_pair=text2). We therefore cut it out on purpose
+        value_ids_with_separator = value_ids[1:] + [tokenizer.sep_token_id]
 
-    segment_ids = [SEGMENT_ID_QUESTION if tok == tokenizer.sep_token else SEGMENT_ID_SCHEMA for tok in all_value_tokens]
+        all_values_ids.extend(value_ids_with_separator)
+        all_values_length.append(len(value_ids_with_separator))
 
-    return all_value_tokens, value_token_lengths, segment_ids
+    return all_values_ids, all_values_length
 
 
-def _padd_input(input_ids, segment_ids, attention_mask, max_length, tokenizer):
+def _padd_input(input_ids, attention_mask, max_length, tokenizer):
 
     while len(input_ids) < max_length:
         input_ids.append(tokenizer.pad_token_id)
         attention_mask.append(tokenizer.pad_token_id)
-        segment_ids.append(tokenizer.pad_token_id)
 
     assert len(input_ids) == max_length
     assert len(attention_mask) == max_length
-    assert len(segment_ids) == max_length
 
 
 def format_value(value):
@@ -181,13 +134,3 @@ def format_value(value):
     return value
 
 
-def _is_baseball_1_schema(table_names):
-    return table_names == [['all', 'star'], ['appearance'], ['manager', 'award'], ['player', 'award'],
-                           ['manager', 'award', 'vote'],
-                           ['player', 'award', 'vote'], ['batting'], ['batting', 'postseason'], ['player', 'college'],
-                           ['fielding'],
-                           ['fielding', 'outfield'], ['fielding', 'postseason'], ['hall', 'of', 'fame'],
-                           ['home', 'game'], ['manager'],
-                           ['manager', 'half'], ['player'], ['park'], ['pitching'], ['pitching', 'postseason'],
-                           ['salary'], ['college'],
-                           ['postseason'], ['team'], ['team', 'franchise'], ['team', 'half']]
