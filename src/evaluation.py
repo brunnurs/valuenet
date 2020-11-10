@@ -11,7 +11,7 @@ from intermediate_representation import semQL
 from intermediate_representation.sem2sql.sem2SQL import transform_semQL_to_sql
 from model.model import IRNet
 from spider import spider_utils
-from spider.evaluation.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
+from spider.evaluation_old.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
 from spider.example_builder import build_example
 from utils import setup_device, set_seed_everywhere
 
