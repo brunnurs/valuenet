@@ -66,7 +66,7 @@ class TransformerEncoder(nn.Module):
         column_hidden_states, pointers_after_columns = self._get_schema_hidden_states(last_hidden_states, all_column_token_lengths, pointers_after_question)
         table_hidden_states, pointers_after_tables = self._get_schema_hidden_states(last_hidden_states, all_table_token_lengths, pointers_after_columns)
 
-        # in this scenario, we know the values upfront and encode them similar to tables/columns. This is different as soon as we don't know the values but have to extract them from the question.
+        # in this scenario, we know the values upfront and encode them similar to tables/columns.
         value_hidden_states, pointers_after_values = self._get_schema_hidden_states(last_hidden_states, all_value_token_lengths, pointers_after_tables)
 
         # This is simply to make sure the rather complex token-concatenation happens correctly. Can get removed at some point.
@@ -116,22 +116,29 @@ class TransformerEncoder(nn.Module):
         else:
             value_out_padded = torch.zeros(table_out_padded.shape[0], 0, table_out_padded.shape[2]).to(self.device)
 
-        return question_out, column_out_padded, table_out_padded, value_out_padded, pooling_output
+        # we need the information of how many tokens are question tokens to later create the mask when calculating
+        # attention over schema
+        question_token_lengths = [sum(question_lengths) for question_lengths in all_question_span_lengths]
+
+        return question_out, column_out_padded, table_out_padded, value_out_padded, pooling_output, question_token_lengths
 
     @staticmethod
     def _average_hidden_states_question(last_hidden_states, all_question_span_lengths):
         """
+        NOTE: Keep in mind that we might soon skip this whole step, as averaging is not used right now - question token length is always 0.
         As described in the IRNet-paper, we will just average over the sub-tokens of a question-span.
         """
         all_averaged_hidden_states = []
         last_pointers = []
 
         for batch_itr_idx, question_span_lengths in enumerate(all_question_span_lengths):
-            pointer = 1  # we start with pointer 1 - remember, the first hidden state is the special [CLS] token, which we don't need.
+            # pointer = 1  # we start with pointer 1 - remember, the first hidden state is the special [CLS] token, which we don't need.
+            pointer = 0  # we start with pointer 1 - remember, the first hidden state is the special [CLS] token, which we don't need.
             averaged_hidden_states = []
 
             # the first span_length represents the [CLS] token, the last one the [SEP] - we only want the one in between!
-            for idx in range(1, len(question_span_lengths) - 1):
+            # for idx in range(1, len(question_span_lengths) - 1):
+            for idx in range(0, len(question_span_lengths)):
                 span_length = question_span_lengths[idx]
 
                 averaged_span = torch.mean(last_hidden_states[batch_itr_idx, pointer: pointer + span_length, :],
@@ -140,7 +147,8 @@ class TransformerEncoder(nn.Module):
                 pointer += span_length
 
             all_averaged_hidden_states.append(torch.cat(averaged_hidden_states, dim=0))
-            last_pointers.append(pointer + 1)  # the + 1 represents the [SEP] token in the end
+            # last_pointers.append(pointer + 1)  # the + 1 represents the [SEP] token in the end
+            last_pointers.append(pointer)  # the + 1 represents the [SEP] token in the end
 
         return all_averaged_hidden_states, last_pointers
 
