@@ -112,3 +112,5 @@ venv.bak/
 # mypy
 .mypy_cache/
 /wandb/
+/data/spider/testsuite_databases/
+/data/tmp/

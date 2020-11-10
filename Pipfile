@@ -21,13 +21,11 @@ spacy = "*"
 word2number = "*"
 textdistance = {extras = ["extras"],version = "*"}
 matplotlib = "*"
-spacy = "*"
 termcolor = "*"
 psycopg2 = "*"
 flask = "*"
 flask-cors = "*"
-codalab = "*"
-textdistance = "*"
+sqlparse = "*"
 
 [requires]
 python_version = "3.6"
