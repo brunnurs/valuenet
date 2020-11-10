@@ -95,9 +95,22 @@ tokens = ['Which', 'player', 'has', 'the', 'most', 'all', 'star', 'game', 'exper
 full_question = 'Which player has the most all star game experiences ? Give me the first name , last name and id of the player , as well as the number of times the player participated in all star game .'
 question_untokenized = [['Which'], ['player'], ['has'], ['the'], ['most'], ['all'], ['star'], ['game'], ['experiences'], ['?'], ['Give'], ['me'], ['the'], ['first'], ['name'], [','], ['last'], ['name'], ['and'], ['id'], ['of'], ['the'], ['player'], [','], ['as'], ['well'], ['as'], ['the'], ['number'], ['of'], ['times'], ['the'], ['player'], ['participated'], ['in'], ['all'], ['star'], ['game'], ['.']]
 
+tokens_batch_3 = [['one', 'two', 'three'], ['one', 'two'], ['one']]
+tokenized = tokenizer(tokens_batch_3, is_split_into_words=True, padding=True)
 
 tokenized = tokenizer(tokens, is_split_into_words=True)
 tokenized2 = tokenizer(list(flatten(question_untokenized)), text_pair=list(flatten(question_untokenized)), is_split_into_words=True)
 tokenized3 = tokenizer(full_question, text_pair=full_question)
 
 print('ddd')
+
+example = [[['what'], ['are'], ['the'], ['names'], ['of'], ['the'], ['channels'], ['that'], ['broadcast'], ['in'], ['both'],
+  ['morning'], ['and'], ['night'], ['?']],
+ [['Return'], ['the'], ['countries'], ['of'], ['the'], ['mountains'], ['that'], ['have'], ['a'], ['height'], ['larger'],
+  ['than'], ['5000'], ['.']],
+ [['Find'], ['the'], ['total'], ['number'], ['of'], ['king'], ['beds'], ['available'], ['.']]]
+
+example_flat = [list(flatten(l)) for l in example]
+
+tokenized = tokenizer(example_flat, is_split_into_words=True, padding=True)
+print(tokenized)
