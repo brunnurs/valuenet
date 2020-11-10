@@ -111,10 +111,10 @@ class IRNet(BasicModel):
         table_appear_mask = batch.table_appear_mask
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
-        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output = self.encoder(batch.all_question_tokens,
-                                                                                                                          batch.all_column_tokens,
-                                                                                                                          batch.all_table_names,
-                                                                                                                          batch.values)
+        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output, question_token_lengths = self.encoder(batch.all_question_tokens,
+                                                                                                                                                  batch.all_column_tokens,
+                                                                                                                                                  batch.all_table_names,
+                                                                                                                                                  batch.values)
         question_encodings = self.dropout(question_encodings)
 
         # Source encodings to create the sketch (the AST without the leaf-nodes)
@@ -194,7 +194,7 @@ class IRNet(BasicModel):
                 # 3. ("pre_types"): the parent feeding (see TranX-paper)
                 x = torch.cat(inputs, dim=-1)
 
-            src_mask = batch.src_token_mask
+            src_mask = nn_utils.length_array_to_mask_tensor(question_token_lengths, cuda=self.cuda)
 
             # in here we do get the next step of the sketch_decoder_lstm, together with an attention mechanism, as described in TranX, 2.3
             # we only use (h_t, cell_t) only for the next step, to predict the sketch we use only att_t (keep in mind that h_t has already been used to calculate att_t)
@@ -338,7 +338,8 @@ class IRNet(BasicModel):
 
                 x = torch.cat(inputs, dim=-1)
 
-            src_mask = batch.src_token_mask
+            # src_mask = batch.src_token_mask
+            src_mask = nn_utils.length_array_to_mask_tensor(question_token_lengths, cuda=self.cuda)
 
             # we use a second RNN to predict the next actions for the leaf-nodes. Everything else stays the same as above
             (h_t, cell_t), att_t, aw = self.step(x, h_tm1, question_encodings,
@@ -453,10 +454,10 @@ class IRNet(BasicModel):
         # next lines is exactly the same as in the training case. Encode the source sentence.
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
-        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output = self.encoder(batch.all_question_tokens,
-                                                                                                                          batch.all_column_tokens,
-                                                                                                                          batch.all_table_names,
-                                                                                                                          batch.values)
+        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output, question_token_lengths = self.encoder(batch.all_question_tokens,
+                                                                                                                                                  batch.all_column_tokens,
+                                                                                                                                                  batch.all_table_names,
+                                                                                                                                                  batch.values)
 
         utterance_encodings_sketch_linear = self.att_sketch_linear(question_encodings)
         utterance_encodings_lf_linear = self.att_lf_linear(question_encodings)
