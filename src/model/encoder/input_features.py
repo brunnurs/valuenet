@@ -110,8 +110,12 @@ def _tokenize_values(values, tokenizer):
 def _padd_input(input_ids, attention_mask, max_length, tokenizer):
 
     while len(input_ids) < max_length:
+        # We pad the input with the official padding token of the transformer and the attention mask with a zero.
+        # This is also how the tokenizer works. Example:
+        # tokens_batch_3 = [['one', 'two', 'three'], ['one', 'two'], ['one']]
+        # tokenized = tokenizer(tokens_batch_3, is_split_into_words=True, padding=True)
         input_ids.append(tokenizer.pad_token_id)
-        attention_mask.append(tokenizer.pad_token_id)
+        attention_mask.append(0)
 
     assert len(input_ids) == max_length
     assert len(attention_mask) == max_length
