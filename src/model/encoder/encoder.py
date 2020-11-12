@@ -132,12 +132,9 @@ class TransformerEncoder(nn.Module):
         last_pointers = []
 
         for batch_itr_idx, question_span_lengths in enumerate(all_question_span_lengths):
-            # pointer = 1  # we start with pointer 1 - remember, the first hidden state is the special [CLS] token, which we don't need.
-            pointer = 0  # we start with pointer 1 - remember, the first hidden state is the special [CLS] token, which we don't need.
+            pointer = 0
             averaged_hidden_states = []
 
-            # the first span_length represents the [CLS] token, the last one the [SEP] - we only want the one in between!
-            # for idx in range(1, len(question_span_lengths) - 1):
             for idx in range(0, len(question_span_lengths)):
                 span_length = question_span_lengths[idx]
 
@@ -147,8 +144,7 @@ class TransformerEncoder(nn.Module):
                 pointer += span_length
 
             all_averaged_hidden_states.append(torch.cat(averaged_hidden_states, dim=0))
-            # last_pointers.append(pointer + 1)  # the + 1 represents the [SEP] token in the end
-            last_pointers.append(pointer)  # the + 1 represents the [SEP] token in the end
+            last_pointers.append(pointer)
 
         return all_averaged_hidden_states, last_pointers
 
