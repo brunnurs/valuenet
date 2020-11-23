@@ -17,6 +17,7 @@ pytictoc = "*"
 pattern = "*"
 wandb = "*"
 pyyaml = "*"
+spacy = "*"
 word2number = "*"
 textdistance = {extras = ["extras"],version = "*"}
 matplotlib = "*"
