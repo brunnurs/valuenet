@@ -1,3 +1,4 @@
+import copy
 import os
 
 import torch
@@ -15,7 +16,7 @@ from spider.example_builder import build_example
 from utils import setup_device, set_seed_everywhere
 
 
-def evaluate(model, dev_loader, table_data, beam_size):
+def evaluate(model, dev_loader, schema, beam_size):
     model.eval()
 
     sketch_correct, rule_label_correct, not_all_values_found, total = 0, 0, 0, 0
@@ -23,8 +24,10 @@ def evaluate(model, dev_loader, table_data, beam_size):
     for batch in tqdm(dev_loader, desc="Evaluating"):
 
         for data_row in batch:
+            original_row = copy.deepcopy(data_row)
+
             try:
-                example = build_example(data_row, table_data)
+                example = build_example(data_row, schema)
             except Exception as e:
                 print("Exception while building example (evaluation): {}".format(e))
                 continue
@@ -43,14 +46,14 @@ def evaluate(model, dev_loader, table_data, beam_size):
                 # print(e)
                 full_prediction = ""
 
-            prediction = example.sql_json['pre_sql']
+            prediction = original_row
 
             # here we set assemble the predicted sketch actions as string
             prediction['sketch_result'] = " ".join(str(x) for x in results_all[1])
             prediction['model_result'] = full_prediction
 
             truth_sketch = " ".join([str(x) for x in example.sketch])
-            truth_rule_label = " ".join([str(x) for x in example.tgt_actions])
+            truth_rule_label = " ".join([str(x) for x in example.semql_actions])
 
             if prediction['all_values_found']:
                 if truth_sketch == prediction['sketch_result']:

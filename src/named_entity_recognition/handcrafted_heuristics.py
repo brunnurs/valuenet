@@ -128,7 +128,7 @@ def find_special_codes(question):
     "What is the first name of the professor who is teaching CIS-220 and QM-261?"
     """
     matches = re.findall(r"[A-Z-/0-9]{2,}", question) # Attention: the space in the start of the regex ist not a mistake, but necessary to avoid apostrophes in word (e.g. Jean d'Arc is 'french')
-    return [m for m in matches]
+    return [m for m in matches if not m.isnumeric()]
 
 
 def find_single_letters(question):
@@ -162,7 +162,9 @@ def find_capitalized_words(question):
         if not question.startswith(capitalized_word):
             # make sure the capitalized word is not already part of consecutive_capitalized_words.
             if next(filter(lambda w: capitalized_word in w, consecutive_capitalized_words), None) is None:
-                all_capitalized_words.append(capitalized_word)
+                # don't add simple numbers - they get handled by other heuristics
+                if not capitalized_word.isnumeric():
+                    all_capitalized_words.append(capitalized_word)
 
     return all_capitalized_words
 

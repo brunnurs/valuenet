@@ -26,7 +26,7 @@ def _get_or_create_value_finder(database, database_folder, db_schema):
     return db_value_finder
 
 
-def pre_process(entry):
+def pre_process_ner_candidates(entry):
 
     extracted_data = NerExtractionData([], [], [], [], [], [], [], [], [], [], [], [], [], [], [])
 
@@ -62,7 +62,7 @@ def pre_process(entry):
     return extracted_data
 
 
-def match_values_in_database(db_value_finder, extracted_data):
+def match_values_in_database(db_value_finder, extracted_data, include_primary_keys):
 
     # NOTE: adapting this thresholds should always be done empirically and is heavily depending on the chosen similarity metric.
     # have a look at the script find_optimal_similarity_threshold.py to find optimal thresholds.
@@ -86,35 +86,51 @@ def match_values_in_database(db_value_finder, extracted_data):
     # important: in addition to all the handcrafted features, also take all values from the NER which aren't known dates/numbers/prices
     _add_without_duplicates([(ner_value, medium_similarity) for ner_value in extracted_data.ner_remaining], candidates)
 
-    database_matches = _find_matches_in_database(db_value_finder, candidates)
+    _add_without_duplicates([(ordinal, exact_match) for ordinal in extracted_data.heuristic_ordinals], candidates)
+    _add_without_duplicates([(email, high_similarity) for email in extracted_data.heuristics_emails], candidates)
+    _add_without_duplicates([(single_letter, exact_match) for single_letter in extracted_data.heuristics_single_letters], candidates)
+    _add_without_duplicates([(ner_date, exact_match) for ner_date in extracted_data.ner_dates], candidates)
+    _add_without_duplicates([(ner_number, exact_match) for ner_number in extracted_data.ner_numbers], candidates)
+    _add_without_duplicates([(ner_price, exact_match) for ner_price in extracted_data.ner_prices], candidates)
 
-    # Here we put all the values to one happy list together: the ones we matched via database and the ones we got directly out of the question.
-    # The 'set' is to remove duplicates.
-    return list(set(extracted_data.heuristic_values_in_quote +  # we put in values in quote a second time as those values are often fuzzy strings.
-                    extracted_data.heuristic_ordinals +
-                    extracted_data.heuristics_emails +
-                    extracted_data.heuristics_null_empty +
-                    extracted_data.heuristics_single_letters +
-                    extracted_data.heuristics_months +
-                    extracted_data.ner_dates +
-                    extracted_data.ner_numbers +
-                    extracted_data.ner_prices +
-                    database_matches))
-
-
-def _find_matches_in_database(db_value_finder, potential_values):
-    matches = []
     tic_toc = TicToc()
     tic_toc.tic()
-    print(f'Find potential candiates "{potential_values}" in database {db_value_finder.database}')
-    try:
-        matching_db_values = db_value_finder.find_similar_values_in_database(potential_values)
-        matches = list(map(lambda v: v[0], matching_db_values))
-    except Exception as e:
-        print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Error executing a query by the database finder. Error: {e}")
-
+    print(f'Look for potential candidates "{candidates}" in database {db_value_finder.database} (include primary keys: {include_primary_keys})')
+    matching_db_values = db_value_finder.find_similar_values_in_database(candidates, include_primary_keys)
+    print(f'Confirmed the following candidates "{matching_db_values}"')
     tic_toc.toc()
-    return matches
+
+    return matching_db_values
+
+#     database_matches = _find_matches_in_database(db_value_finder, candidates)
+#
+#     # Here we put all the values to one happy list together: the ones we matched via database and the ones we got directly out of the question.
+#     # The 'set' is to remove duplicates.
+#     return list(set(extracted_data.heuristic_values_in_quote +  # we put in values in quote a second time as those values are often fuzzy strings.
+#                     extracted_data.heuristic_ordinals +
+#                     extracted_data.heuristics_emails +
+#                     extracted_data.heuristics_null_empty +
+#                     extracted_data.heuristics_single_letters +
+#                     extracted_data.heuristics_months +
+#                     extracted_data.ner_dates +
+#                     extracted_data.ner_numbers +
+#                     extracted_data.ner_prices +
+#                     database_matches))
+#
+#
+# def _find_matches_in_database(db_value_finder, potential_values):
+#     matches = []
+#     tic_toc = TicToc()
+#     tic_toc.tic()
+#     print(f'Find potential candiates "{potential_values}" in database {db_value_finder.database}')
+#     try:
+#         matching_db_values = db_value_finder.find_similar_values_in_database(potential_values)
+#         matches = list(map(lambda v: v[0], matching_db_values))
+#     except Exception as e:
+#         print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Error executing a query by the database finder. Error: {e}")
+#
+#     tic_toc.toc()
+#     return matches
 
 
 def _add_without_duplicates(new_candidates, candidates):
@@ -224,6 +240,13 @@ def _is_value_equal(extracted_value, expected_value):
     return expected_value == extracted_value
 
 
+def compare_questions(row, ner_information):
+    if len(row['question']) != len(ner_information['question']):
+        return row['question'][:-2] != ner_information['question'][:-1]
+    else:
+        return row['question'] != ner_information['question']
+
+
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--data_path', type=str, required=True)
@@ -243,7 +266,9 @@ if __name__ == '__main__':
     assert len(data) == len(ner_data), 'Both, NER data and actual data (e.g. ner_train.json and preprocessed_train.json) need to have the same amount of rows!'
 
     # add both, the ner-extracted values and the actual values (extracted from the SQL-ground truth) to the data file.
-    for row, ner_information in zip(data, ner_data):
+    for idx, (row, ner_information) in enumerate(zip(data, ner_data)):
+        if compare_questions(row, ner_information):
+            print(f'{idx}       {row["question"]}               {ner_information["question"]}')
         row['ner_extracted_values'] = ner_information['entities']
         row['values'] = ner_information['values']
 
@@ -252,7 +277,7 @@ if __name__ == '__main__':
     total_expected_value_count = 0
 
     # here we pre-process the NER results and add further values by handcrafted heuristics
-    extracted_values = [pre_process(row) for idx, row in enumerate(data)]
+    extracted_values = [pre_process_ner_candidates(row) for idx, row in enumerate(data)]
     print("Preprocessed all NER values and applied handcrafted handcrafted heuristics. "
           "Next Step: matching values in database. This might take a while.")
     print()

@@ -262,6 +262,16 @@ class Test(TestCase):
         self.assertEqual(['KLR209'], special_codes2)
         self.assertEqual(['AS'], special_codes3)
 
+    def test__find_special_codes__avoid_simple_numbers(self):
+        # GIVEN
+        question1 = "What are the names of stations that have latitude lower than 37.5?"
+
+        # WHEN
+        special_codes1 = find_special_codes(question1)
+
+        # THEN
+        self.assertEqual([], special_codes1)
+
     def test__find_single_letters(self):
         # GIVEN
         question1 = "when is the hire date for those employees whose first name does not containing the letter M?"
@@ -295,6 +305,7 @@ class Test(TestCase):
         question10 = "Do you have a friend living in New York City?"
         question11 = "Show all flight numbers with aircraft Airbus A340-300."
         question12 = "Show names for all employees who have certificates on both Boeing 737-800 and Airbus A340-300"
+        question13 = "What are the names of stations that have latitude lower than 37.5?"
 
         # WHEN
         capitalized_words1 = find_capitalized_words(question1)
@@ -309,6 +320,7 @@ class Test(TestCase):
         capitalized_words10 = find_capitalized_words(question10)
         capitalized_words11 = find_capitalized_words(question11)
         capitalized_words12 = find_capitalized_words(question12)
+        capitalized_words13 = find_capitalized_words(question13)
 
         # THEN
         self.assertEqual(['Initial Applications', 'Regular'], capitalized_words1)
@@ -323,6 +335,7 @@ class Test(TestCase):
         self.assertEqual(['New York City'], capitalized_words10)
         self.assertEqual(['Airbus A340-300'], capitalized_words11)
         self.assertEqual(['Boeing 737-800', 'Airbus A340-300'], capitalized_words12)
+        self.assertEqual([], capitalized_words13)  # a plain number is not a capitalized word!
 
     def test__find_location_abbreviations(self):
         # GIVEN
