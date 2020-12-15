@@ -386,7 +386,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('--data_path', type=str, help='dataset', required=True)
     arg_parser.add_argument('--table_path', type=str, help='table dataset', required=True)
     arg_parser.add_argument('--output', type=str, help='output data', required=True)
-    arg_parser.add_argument('--use_ner_value_candidates', action='store_true', default=False, help="we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) "
+    arg_parser.add_argument('--use_ner_value_candidates', action='store_true', default=True, help="we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) "
                                                                                                   "or we can instead let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)")
     args = arg_parser.parse_args()
 
@@ -418,7 +418,6 @@ if __name__ == '__main__':
             row['values'] = row['ner_extracted_values_processed']
 
         del row['ner_extracted_values_processed']
-        del row['ner_extracted_values']
 
         processed_data.append(row)
 

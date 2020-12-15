@@ -38,7 +38,7 @@ class Example:
         self.sketch = list()
         if self.semql_actions:
             for action in self.semql_actions:
-                if isinstance(action, C) or isinstance(action, T) or isinstance(action, A) or isinstance(ta, V):
+                if isinstance(action, C) or isinstance(action, T) or isinstance(action, A) or isinstance(action, V):
                     continue
                 self.sketch.append(action)
 

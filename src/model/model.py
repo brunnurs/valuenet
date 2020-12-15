@@ -111,9 +111,9 @@ class IRNet(BasicModel):
         table_appear_mask = batch.table_appear_mask
 
         # We use our transformer encoder to encode question together with the schema (columns and tables). See "TransformerEncoder" for details
-        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output = self.encoder(batch.src_sents,
-                                                                                                                          batch.table_sents,
-                                                                                                                          batch.table_names,
+        question_encodings, column_encodings, table_encodings, value_encodings, transformer_pooling_output = self.encoder(batch.all_question_tokens,
+                                                                                                                          batch.all_column_tokens,
+                                                                                                                          batch.all_table_names,
                                                                                                                           batch.values)
         question_encodings = self.dropout(question_encodings)
 
@@ -256,7 +256,7 @@ class IRNet(BasicModel):
 
         value_embedding = value_encodings
 
-        batch_table_dict = batch.col_table_dict
+        batch_table_dict = batch.all_column_table_dict
         table_enable = np.zeros(shape=(len(examples)))
         action_probs = [[] for _ in examples]
 
