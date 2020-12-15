@@ -54,6 +54,11 @@ class DatabaseValueFinderSQLite:
         relevant_columns = self._get_relevant_columns(self.database_schema, include_primary_keys)
 
         conn = sqlite3.connect(str(self.database_path.resolve()))
+
+        # this is necessary to avoid decoding errors with non-utf-8 content of the database
+        # https://stackoverflow.com/questions/22751363/sqlite3-operationalerror-could-not-decode-to-utf-8-column
+        conn.text_factory = lambda b: b.decode(errors='ignore')
+
         cursor = conn.cursor()
 
         for table, columns in relevant_columns.items():

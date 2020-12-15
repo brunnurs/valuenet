@@ -368,6 +368,10 @@ def format_groundtruth_value(val):
         if val.startswith('%') or val.endswith('%'):
             val = val.replace('%', '')
 
+        # some ground truth values contain a trailing tab - no idea why.
+        if val.endswith('\t'):
+            val = val.rstrip()
+
     # the ground truth values are all floats, even if there is no decimals (e.g. 56.0 instead of 56). But to make the
     # .index() work, we need exact matches!
     if isinstance(val, float) and val.is_integer():
