@@ -183,7 +183,11 @@ def format_value(value):
 
 def _is_baseball_1_schema(table_names):
     return table_names == [['all', 'star'], ['appearance'], ['manager', 'award'], ['player', 'award'],
-                           ['manager', 'award', 'vote'], ['player', 'award', 'vote'], ['batting'],
-                           ['batting', 'postseason'], ['player', 'college'], ['hall', 'of', 'fame'], ['home', 'game'],
-                           ['player'], ['park'], ['salary'], ['college'], ['postseason'], ['team'],
-                           ['team', 'franchise']]
+                           ['manager', 'award', 'vote'],
+                           ['player', 'award', 'vote'], ['batting'], ['batting', 'postseason'], ['player', 'college'],
+                           ['fielding'],
+                           ['fielding', 'outfield'], ['fielding', 'postseason'], ['hall', 'of', 'fame'],
+                           ['home', 'game'], ['manager'],
+                           ['manager', 'half'], ['player'], ['park'], ['pitching'], ['pitching', 'postseason'],
+                           ['salary'], ['college'],
+                           ['postseason'], ['team'], ['team', 'franchise'], ['team', 'half']]
