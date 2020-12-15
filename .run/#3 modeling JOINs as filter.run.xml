@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="#3 modeling JOINs as filter (train)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing TRAIN">
+  <configuration default="false" name="#2 modeling JOINs as filter (train)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing TRAIN">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/preprocessing/model_joins_as_filter.py" />
-    <option name="PARAMETERS" value="--data_path=data/spider/preprocessed_with_values_train.json --output=data/spider/preprocessed_with_joins_train.json" />
+    <option name="PARAMETERS" value="--data_path=data/spider/preprocessed_train.json --output=data/spider/preprocessed_with_joins_train.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

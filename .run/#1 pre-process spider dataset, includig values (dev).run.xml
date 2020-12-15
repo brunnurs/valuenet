@@ -1,19 +1,19 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="get values from SQL and save it to ner_xy.json" type="PythonConfigurationType" factoryName="Python" folderName="Tools">
+  <configuration default="false" name="#1 pre-process spider dataset, includig values (dev)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing DEV">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
-    <option name="SDK_HOME" value="" />
+    <option name="SDK_HOME" value="$USER_HOME$/.local/share/virtualenvs/proton-2oP9uAK9/bin/python" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    <option name="IS_MODULE_SDK" value="true" />
+    <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/tools/get_values_from_sql.py" />
-    <option name="PARAMETERS" value="--data_path data/spider/original/dev.json --table_path data/spider/original/tables.json --ner_path data/spider/ner_dev.json" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/preprocessing/pre_process.py" />
+    <option name="PARAMETERS" value="--data_path=data/spider/original/dev.json --ner_data_path=data/spider/ner_dev.json --database_path=data/spider/original/database --table_path=data/spider/original/tables.json --output=data/spider/preprocessed_dev.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

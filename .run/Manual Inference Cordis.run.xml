@@ -1,20 +1,20 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="get values from SQL and save it to ner_xy.json" type="PythonConfigurationType" factoryName="Python" folderName="Tools">
+  <configuration default="false" name="Manual Inference Cordis" type="PythonConfigurationType" factoryName="Python">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
-    <option name="SDK_HOME" value="" />
+    <option name="SDK_HOME" value="$USER_HOME$/.local/share/virtualenvs/proton-2oP9uAK9/bin/python" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    <option name="IS_MODULE_SDK" value="true" />
+    <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/tools/get_values_from_sql.py" />
-    <option name="PARAMETERS" value="--data_path data/spider/original/dev.json --table_path data/spider/original/tables.json --ner_path data/spider/ner_dev.json" />
-    <option name="SHOW_COMMAND_LINE" value="false" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/manual_inference/manual_inference_terminal.py" />
+    <option name="PARAMETERS" value="--data_set=cordis --model_to_load=experiments/ner_values_best/best_model.pt --database=cordis_temporary --database_host=testbed.inode.igd.fraunhofer.de --database_port=18001 --database_user=postgres --database_password=vdS83DJSQz2xQ --database_schema=unics_cordis" />
+    <option name="SHOW_COMMAND_LINE" value="true" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
     <option name="REDIRECT_INPUT" value="false" />
