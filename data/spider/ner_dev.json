@@ -303,8 +303,8 @@
         "name": "France",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0f8l9c",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/France"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/France",
+          "mid": "/m/0f8l9c"
         },
         "salience": 0.1291739,
         "mentions": [
@@ -390,8 +390,8 @@
         "name": "French",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/064_8sq",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/French_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/French_language",
+          "mid": "/m/064_8sq"
         },
         "salience": 0.11569801,
         "mentions": [
@@ -928,23 +928,6 @@
         ]
       },
       {
-        "name": "5000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "5000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "5000",
-              "beginOffset": 64
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "10000",
         "type": "NUMBER",
         "metadata": {
@@ -956,6 +939,23 @@
             "text": {
               "content": "10000",
               "beginOffset": 73
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "5000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "5000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "5000",
+              "beginOffset": 64
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -1076,30 +1076,30 @@
   {
     "entities": [
       {
-        "name": "average",
+        "name": "capacity",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.49913496,
+        "salience": 0.4155629,
         "mentions": [
           {
             "text": {
-              "content": "average",
-              "beginOffset": 12
+              "content": "capacity",
+              "beginOffset": 20
             },
             "type": "COMMON"
           }
         ]
       },
       {
-        "name": "capacity",
+        "name": "average",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.2827347,
+        "salience": 0.32991052,
         "mentions": [
           {
             "text": {
-              "content": "capacity",
-              "beginOffset": 36
+              "content": "average",
+              "beginOffset": 37
             },
             "type": "COMMON"
           }
@@ -1109,7 +1109,7 @@
         "name": "stadiums",
         "type": "LOCATION",
         "metadata": {},
-        "salience": 0.21813035,
+        "salience": 0.2545266,
         "mentions": [
           {
             "text": {
@@ -1122,7 +1122,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the average and the maximum capacity of all stadiums?",
+    "question": "What is the maximum capacity and the average of all stadiums ?",
     "values": []
   },
   {
@@ -1158,14 +1158,14 @@
         ]
       },
       {
-        "name": "stations",
-        "type": "ORGANIZATION",
+        "name": "stadiums",
+        "type": "LOCATION",
         "metadata": {},
         "salience": 0.25543192,
         "mentions": [
           {
             "text": {
-              "content": "stations",
+              "content": "stadiums",
               "beginOffset": 51
             },
             "type": "COMMON"
@@ -1174,7 +1174,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the average and maximum capacities for all stations?",
+    "question": "What is the average and maximum capacities for all stadiums ?",
     "values": []
   },
   {
@@ -1363,23 +1363,6 @@
         ]
       },
       {
-        "name": "2014",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2014"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2014",
-              "beginOffset": 36
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2015",
         "type": "NUMBER",
         "metadata": {
@@ -1391,6 +1374,23 @@
             "text": {
               "content": "2015",
               "beginOffset": 44
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 36
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -1456,23 +1456,6 @@
         ]
       },
       {
-        "name": "2015",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2015"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2015",
-              "beginOffset": 38
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2014",
         "type": "NUMBER",
         "metadata": {
@@ -1484,6 +1467,23 @@
             "text": {
               "content": "2014",
               "beginOffset": 30
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2015",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2015"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2015",
+              "beginOffset": 38
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -1760,7 +1760,7 @@
           {
             "text": {
               "content": "concerts",
-              "beginOffset": 60
+              "beginOffset": 59
             },
             "type": "COMMON"
           }
@@ -1777,7 +1777,7 @@
           {
             "text": {
               "content": "2013",
-              "beginOffset": 75
+              "beginOffset": 74
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -1794,7 +1794,7 @@
           {
             "text": {
               "content": "2013",
-              "beginOffset": 75
+              "beginOffset": 74
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -1802,9 +1802,9 @@
       }
     ],
     "language": "en",
-    "question": "What is the name and capacity of the stadium  with the most concerts after 2013?",
+    "question": "What is the name and capacity of the stadium with the most concerts after 2013 ?",
     "values": [
-      "2014"
+      "2013"
     ]
   },
   {
@@ -2353,7 +2353,7 @@
         "name": "names",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.271753,
+        "salience": 0.32047492,
         "mentions": [
           {
             "text": {
@@ -2365,45 +2365,30 @@
         ]
       },
       {
-        "name": "number",
-        "type": "OTHER",
-        "metadata": {},
-        "salience": 0.1953578,
-        "mentions": [
-          {
-            "text": {
-              "content": "number",
-              "beginOffset": 32
-            },
-            "type": "COMMON"
-          }
-        ]
-      },
-      {
         "name": "themes",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.19311775,
+        "salience": 0.22867,
         "mentions": [
           {
             "text": {
               "content": "themes",
-              "beginOffset": 20
+              "beginOffset": 21
             },
             "type": "COMMON"
           }
         ]
       },
       {
-        "name": "singers",
-        "type": "PERSON",
+        "name": "number",
+        "type": "OTHER",
         "metadata": {},
-        "salience": 0.18017317,
+        "salience": 0.21348567,
         "mentions": [
           {
             "text": {
-              "content": "singers",
-              "beginOffset": 42
+              "content": "number",
+              "beginOffset": 34
             },
             "type": "COMMON"
           }
@@ -2413,27 +2398,27 @@
         "name": "concert",
         "type": "EVENT",
         "metadata": {},
-        "salience": 0.09768552,
+        "salience": 0.16355658,
         "mentions": [
           {
             "text": {
               "content": "concert",
-              "beginOffset": 69
+              "beginOffset": 62
             },
             "type": "COMMON"
           }
         ]
       },
       {
-        "name": "each",
-        "type": "OTHER",
+        "name": "singers",
+        "type": "PERSON",
         "metadata": {},
-        "salience": 0.061912727,
+        "salience": 0.07381283,
         "mentions": [
           {
             "text": {
-              "content": "each",
-              "beginOffset": 54
+              "content": "singers",
+              "beginOffset": 44
             },
             "type": "COMMON"
           }
@@ -2441,7 +2426,7 @@
       }
     ],
     "language": "en",
-    "question": "What are the names, themes, and number of singers for each and every concert?",
+    "question": "What are the names , themes , and number of singers for every concert ?",
     "values": []
   },
   {
@@ -3079,23 +3064,6 @@
         ]
       },
       {
-        "name": "2015",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2015"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2015",
-              "beginOffset": 102
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2014",
         "type": "NUMBER",
         "metadata": {
@@ -3107,6 +3075,23 @@
             "text": {
               "content": "2014",
               "beginOffset": 93
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2015",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2015"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2015",
+              "beginOffset": 102
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -3322,7 +3307,7 @@
       }
     ],
     "language": "en",
-    "question": "Find the number of concerts happened in the stadium with the highest capacity.",
+    "question": "Find the number of concerts happened in the stadium with the highest capacity .",
     "values": []
   },
   {
@@ -3389,7 +3374,7 @@
       }
     ],
     "language": "en",
-    "question": "What are the number of concerts that occurred in the stadium with the largest capacity?",
+    "question": "What are the number of concerts that occurred in the stadium with the largest capacity ?",
     "values": []
   },
   {
@@ -3804,7 +3789,7 @@
         "name": "pets",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.68244517,
+        "salience": 0.5138493,
         "mentions": [
           {
             "text": {
@@ -3819,7 +3804,7 @@
         "name": "students",
         "type": "PERSON",
         "metadata": {},
-        "salience": 0.24013121,
+        "salience": 0.36762145,
         "mentions": [
           {
             "text": {
@@ -3834,7 +3819,7 @@
         "name": "age",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.07742359,
+        "salience": 0.118529245,
         "mentions": [
           {
             "text": {
@@ -4229,12 +4214,12 @@
         "name": "students",
         "type": "PERSON",
         "metadata": {},
-        "salience": 0.38839447,
+        "salience": 0.4234433,
         "mentions": [
           {
             "text": {
               "content": "students",
-              "beginOffset": 17
+              "beginOffset": 23
             },
             "type": "COMMON"
           }
@@ -4244,27 +4229,12 @@
         "name": "name",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.2890967,
+        "salience": 0.3151849,
         "mentions": [
           {
             "text": {
               "content": "name",
-              "beginOffset": 9
-            },
-            "type": "COMMON"
-          }
-        ]
-      },
-      {
-        "name": "cat",
-        "type": "OTHER",
-        "metadata": {},
-        "salience": 0.12647656,
-        "mentions": [
-          {
-            "text": {
-              "content": "cat",
-              "beginOffset": 40
+              "beginOffset": 15
             },
             "type": "COMMON"
           }
@@ -4274,12 +4244,12 @@
         "name": "pets",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.09801613,
+        "salience": 0.10686114,
         "mentions": [
           {
             "text": {
               "content": "pets",
-              "beginOffset": 52
+              "beginOffset": 58
             },
             "type": "COMMON"
           }
@@ -4289,12 +4259,27 @@
         "name": "dog",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.09801613,
+        "salience": 0.10686114,
         "mentions": [
           {
             "text": {
               "content": "dog",
-              "beginOffset": 48
+              "beginOffset": 54
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "cat",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.04764955,
+        "mentions": [
+          {
+            "text": {
+              "content": "cat",
+              "beginOffset": 46
             },
             "type": "COMMON"
           }
@@ -4302,7 +4287,7 @@
       }
     ],
     "language": "en",
-    "question": "Find the name of students who have both cat and dog pets.",
+    "question": "Find the first name of students who have both cat and dog pets .",
     "values": [
       "cat",
       "dog"
@@ -5683,7 +5668,7 @@
         "name": "students",
         "type": "PERSON",
         "metadata": {},
-        "salience": 0.6846195,
+        "salience": 0.60453486,
         "mentions": [
           {
             "text": {
@@ -5698,7 +5683,7 @@
         "name": "pets",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.119514845,
+        "salience": 0.14619899,
         "mentions": [
           {
             "text": {
@@ -5713,12 +5698,12 @@
         "name": "pets",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.111755006,
+        "salience": 0.102733985,
         "mentions": [
           {
             "text": {
               "content": "pets",
-              "beginOffset": 37
+              "beginOffset": 38
             },
             "type": "COMMON"
           }
@@ -5728,12 +5713,42 @@
         "name": "student",
         "type": "PERSON",
         "metadata": {},
-        "salience": 0.08411065,
+        "salience": 0.092568666,
         "mentions": [
           {
             "text": {
               "content": "student",
-              "beginOffset": 52
+              "beginOffset": 53
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "ids",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.031673472,
+        "mentions": [
+          {
+            "text": {
+              "content": "ids",
+              "beginOffset": 79
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "names",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.02229003,
+        "mentions": [
+          {
+            "text": {
+              "content": "names",
+              "beginOffset": 94
             },
             "type": "COMMON"
           }
@@ -5741,7 +5756,7 @@
       }
     ],
     "language": "en",
-    "question": "For students who have pets, how many pets does each student have?",
+    "question": "For students who have pets , how many pets does each student have ? list their ids instead of names .",
     "values": []
   },
   {
@@ -6116,7 +6131,7 @@
       }
     ],
     "language": "en",
-    "question": "Find the average age of students who do not have any pet.",
+    "question": "Find the average age of students who do not have any pet .",
     "values": []
   },
   {
@@ -6168,7 +6183,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the average age for all students who do not own any pets?",
+    "question": "What is the average age for all students who do not own any pets ?",
     "values": []
   },
   {
@@ -7547,7 +7562,7 @@
           {
             "text": {
               "content": "maker",
-              "beginOffset": 71
+              "beginOffset": 77
             },
             "type": "COMMON"
           }
@@ -7562,7 +7577,7 @@
           {
             "text": {
               "content": "name",
-              "beginOffset": 82
+              "beginOffset": 88
             },
             "type": "COMMON"
           }
@@ -7577,7 +7592,7 @@
           {
             "text": {
               "content": "count",
-              "beginOffset": 57
+              "beginOffset": 63
             },
             "type": "COMMON"
           }
@@ -7585,7 +7600,7 @@
       }
     ],
     "language": "en",
-    "question": "How many car models are produced by each maker? List the count and the maker full name.",
+    "question": "How many car models are produced by each maker ? Only list the count and the maker full name .",
     "values": []
   },
   {
@@ -7814,8 +7829,8 @@
         "name": "france",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0f8l9c",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/France"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/France",
+          "mid": "/m/0f8l9c"
         },
         "salience": 0.26756865,
         "mentions": [
@@ -7928,8 +7943,8 @@
         "name": "usa",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.31423512,
         "mentions": [
@@ -8198,6 +8213,23 @@
         ]
       },
       {
+        "name": "8",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "8"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "8",
+              "beginOffset": 53
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
         "name": "1974",
         "type": "NUMBER",
         "metadata": {
@@ -8213,29 +8245,12 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
-      },
-      {
-        "name": "4",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "4"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "4",
-              "beginOffset": 53
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
       }
     ],
     "language": "en",
-    "question": "What is the smallest weight of the car produced with 4 cylinders on 1974?",
+    "question": "What is the smallest weight of the car produced with 8 cylinders on 1974 ?",
     "values": [
-      "4",
+      "8",
       "1974"
     ]
   },
@@ -8250,7 +8265,7 @@
           {
             "text": {
               "content": "weight",
-              "beginOffset": 19
+              "beginOffset": 20
             },
             "type": "COMMON"
           }
@@ -8265,7 +8280,7 @@
           {
             "text": {
               "content": "car",
-              "beginOffset": 33
+              "beginOffset": 34
             },
             "type": "COMMON"
           }
@@ -8280,7 +8295,7 @@
           {
             "text": {
               "content": "cylinders",
-              "beginOffset": 44
+              "beginOffset": 45
             },
             "type": "COMMON"
           }
@@ -8297,24 +8312,7 @@
           {
             "text": {
               "content": "1974",
-              "beginOffset": 66
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
-        "name": "4",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "4"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "4",
-              "beginOffset": 42
+              "beginOffset": 67
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -8331,7 +8329,24 @@
           {
             "text": {
               "content": "1974",
-              "beginOffset": 66
+              "beginOffset": 67
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "8",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "8"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "8",
+              "beginOffset": 43
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -8339,9 +8354,9 @@
       }
     ],
     "language": "en",
-    "question": "What is the minimu weight of the car with 4 cylinders produced in 1974?",
+    "question": "What is the minimum weight of the car with 8 cylinders produced in 1974 ?",
     "values": [
-      "4",
+      "8",
       "1974"
     ]
   },
@@ -8813,8 +8828,8 @@
         "name": "europe",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02j9z",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe",
+          "mid": "/m/02j9z"
         },
         "salience": 0.1507046,
         "mentions": [
@@ -9169,14 +9184,14 @@
   {
     "entities": [
       {
-        "name": "car",
-        "type": "CONSUMER_GOOD",
+        "name": "car model",
+        "type": "OTHER",
         "metadata": {},
         "salience": 1,
         "mentions": [
           {
             "text": {
-              "content": "car",
+              "content": "car model",
               "beginOffset": 12
             },
             "type": "COMMON"
@@ -9185,7 +9200,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the car wmodel with the highest mpg?",
+    "question": "What is the car model with the highest mpg ?",
     "values": []
   },
   {
@@ -9279,14 +9294,14 @@
         ]
       },
       {
-        "name": "cards",
-        "type": "OTHER",
+        "name": "cars",
+        "type": "CONSUMER_GOOD",
         "metadata": {},
         "salience": 0.44422242,
         "mentions": [
           {
             "text": {
-              "content": "cards",
+              "content": "cars",
               "beginOffset": 39
             },
             "type": "COMMON"
@@ -9304,7 +9319,7 @@
           {
             "text": {
               "content": "1980",
-              "beginOffset": 61
+              "beginOffset": 60
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -9321,7 +9336,7 @@
           {
             "text": {
               "content": "1980",
-              "beginOffset": 61
+              "beginOffset": 60
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -9329,7 +9344,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the average horsepower for all cards produced before 1980?",
+    "question": "What is the average horsepower for all cars produced before 1980 ?",
     "values": [
       "1980"
     ]
@@ -9884,8 +9899,8 @@
         "name": "American Motor Company",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/017yws",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Motors_Corporation"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Motors_Corporation",
+          "mid": "/m/017yws"
         },
         "salience": 0.1376529,
         "mentions": [
@@ -10252,8 +10267,8 @@
         "name": "General Motors",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/035nm",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/General_Motors"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/General_Motors",
+          "mid": "/m/035nm"
         },
         "salience": 0.5256134,
         "mentions": [
@@ -10331,23 +10346,6 @@
         ]
       },
       {
-        "name": "4000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "4000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "4000",
-              "beginOffset": 78
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "3000",
         "type": "NUMBER",
         "metadata": {
@@ -10363,10 +10361,27 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "4000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "4000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "4000",
+              "beginOffset": 78
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
-    "question": "In which years cars were produced weighing no less than 3000 and no more than 4000?",
+    "question": "In which years cars were produced weighing no less than 3000 and no more than 4000 ?",
     "values": [
       "3000",
       "4000"
@@ -10440,7 +10455,7 @@
       }
     ],
     "language": "en",
-    "question": "What are the different years in which there were cars produced that weighed less than 4000 and also cars that weighted more than 3000?",
+    "question": "What are the different years in which there were cars produced that weighed less than 4000 and also cars that weighted more than 3000 ?",
     "values": [
       "3000",
       "4000"
@@ -10875,8 +10890,10 @@
       }
     ],
     "language": "en",
-    "question": "How many countries has more than 2 car makers?",
-    "values": []
+    "question": "How many countries has more than 2 car makers ?",
+    "values": [
+      "2"
+    ]
   },
   {
     "entities": [
@@ -10944,8 +10961,10 @@
       }
     ],
     "language": "en",
-    "question": "What is the number of countries with more than 2 car makers?",
-    "values": []
+    "question": "What is the number of countries with more than 2 car makers ?",
+    "values": [
+      "2"
+    ]
   },
   {
     "entities": [
@@ -11368,7 +11387,7 @@
         "name": "cars",
         "type": "CONSUMER_GOOD",
         "metadata": {},
-        "salience": 0.6498968,
+        "salience": 0.64743006,
         "mentions": [
           {
             "text": {
@@ -11383,12 +11402,12 @@
         "name": "ids",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.16918163,
+        "salience": 0.17233501,
         "mentions": [
           {
             "text": {
               "content": "ids",
-              "beginOffset": 74
+              "beginOffset": 75
             },
             "type": "COMMON"
           }
@@ -11398,7 +11417,7 @@
         "name": "horsepower",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.098734036,
+        "salience": 0.09835929,
         "mentions": [
           {
             "text": {
@@ -11413,12 +11432,12 @@
         "name": "cylinders",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.050332792,
+        "salience": 0.05014175,
         "mentions": [
           {
             "text": {
               "content": "cylinders",
-              "beginOffset": 117
+              "beginOffset": 119
             },
             "type": "COMMON"
           }
@@ -11428,12 +11447,12 @@
         "name": "names",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.031854764,
+        "salience": 0.03173386,
         "mentions": [
           {
             "text": {
               "content": "names",
-              "beginOffset": 82
+              "beginOffset": 83
             },
             "type": "COMMON"
           }
@@ -11450,7 +11469,7 @@
           {
             "text": {
               "content": "4",
-              "beginOffset": 115
+              "beginOffset": 117
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -11458,7 +11477,7 @@
       }
     ],
     "language": "en",
-    "question": "Among the cars that do not have the minimum horsepower, what are the make ids and names of al those with less than 4 cylinders?",
+    "question": "Among the cars that do not have the minimum horsepower , what are the make ids and names of all those with less than 4 cylinders ?",
     "values": [
       "4"
     ]
@@ -11563,7 +11582,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the maximum miles per gallon of the car with 8 cylinders or produced before 1980?",
+    "question": "What is the maximum miles per gallon of the car with 8 cylinders or produced before 1980 ?",
     "values": [
       "8",
       "1980"
@@ -11634,23 +11653,6 @@
         ]
       },
       {
-        "name": "8",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "8"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "8",
-              "beginOffset": 45
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "1980",
         "type": "NUMBER",
         "metadata": {
@@ -11666,10 +11668,27 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "8",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "8"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "8",
+              "beginOffset": 45
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
-    "question": "What is the maximum mpg of the cars that had 8 cylinders or that were produced before 1980?",
+    "question": "What is the maximum mpg of the cars that had 8 cylinders or that were produced before 1980 ?",
     "values": [
       "8",
       "1980"
@@ -11696,8 +11715,8 @@
         "name": "Ford Motor Company",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/02zs4",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Ford_Motor_Company"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ford_Motor_Company",
+          "mid": "/m/02zs4"
         },
         "salience": 0.14986143,
         "mentions": [
@@ -11905,7 +11924,7 @@
         "name": "car makers",
         "type": "ORGANIZATION",
         "metadata": {},
-        "salience": 0.5004041,
+        "salience": 0.57401717,
         "mentions": [
           {
             "text": {
@@ -11920,7 +11939,7 @@
         "name": "models",
         "type": "CONSUMER_GOOD",
         "metadata": {},
-        "salience": 0.23159784,
+        "salience": 0.24694523,
         "mentions": [
           {
             "text": {
@@ -11932,14 +11951,14 @@
         ]
       },
       {
-        "name": "car",
-        "type": "CONSUMER_GOOD",
+        "name": "car makers",
+        "type": "ORGANIZATION",
         "metadata": {},
-        "salience": 0.1676898,
+        "salience": 0.06758273,
         "mentions": [
           {
             "text": {
-              "content": "car",
+              "content": "car makers",
               "beginOffset": 73
             },
             "type": "COMMON"
@@ -11950,12 +11969,12 @@
         "name": "id",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.055719335,
+        "salience": 0.059411712,
         "mentions": [
           {
             "text": {
               "content": "id",
-              "beginOffset": 93
+              "beginOffset": 95
             },
             "type": "COMMON"
           }
@@ -11965,31 +11984,14 @@
         "name": "maker",
         "type": "ORGANIZATION",
         "metadata": {},
-        "salience": 0.044588923,
+        "salience": 0.05204313,
         "mentions": [
           {
             "text": {
               "content": "maker",
-              "beginOffset": 104
+              "beginOffset": 106
             },
             "type": "COMMON"
-          }
-        ]
-      },
-      {
-        "name": "2",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2",
-              "beginOffset": 48
-            },
-            "type": "TYPE_UNKNOWN"
           }
         ]
       },
@@ -12009,10 +12011,27 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "2",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2",
+              "beginOffset": 48
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
-    "question": "Which are the car makers which produce at least 2 models and more than 3 car makes? List the id and the maker.",
+    "question": "Which are the car makers which produce at least 2 models and more than 3 car makers ? List the id and the maker .",
     "values": [
       "2",
       "3"
@@ -12096,23 +12115,6 @@
         ]
       },
       {
-        "name": "2",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2",
-              "beginOffset": 68
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "3",
         "type": "NUMBER",
         "metadata": {
@@ -12124,6 +12126,23 @@
             "text": {
               "content": "3",
               "beginOffset": 96
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2",
+              "beginOffset": 68
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -12260,7 +12279,7 @@
         "name": "countries",
         "type": "LOCATION",
         "metadata": {},
-        "salience": 0.34686112,
+        "salience": 0.42532676,
         "mentions": [
           {
             "text": {
@@ -12275,7 +12294,7 @@
         "name": "names",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.21910025,
+        "salience": 0.2119537,
         "mentions": [
           {
             "text": {
@@ -12290,7 +12309,7 @@
         "name": "ids",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.21424407,
+        "salience": 0.20725593,
         "mentions": [
           {
             "text": {
@@ -12302,14 +12321,14 @@
         ]
       },
       {
-        "name": "fiats",
-        "type": "OTHER",
+        "name": "fiat model",
+        "type": "CONSUMER_GOOD",
         "metadata": {},
-        "salience": 0.11248038,
+        "salience": 0.10881153,
         "mentions": [
           {
             "text": {
-              "content": "fiats",
+              "content": "fiat model",
               "beginOffset": 95
             },
             "type": "COMMON"
@@ -12320,7 +12339,7 @@
         "name": "car makers",
         "type": "PERSON",
         "metadata": {},
-        "salience": 0.107314184,
+        "salience": 0.04665207,
         "mentions": [
           {
             "text": {
@@ -12350,7 +12369,7 @@
       }
     ],
     "language": "en",
-    "question": "What are the ids and names of all countries that either have more than 3 car makers or produce fiats?",
+    "question": "What are the ids and names of all countries that either have more than 3 car makers or produce fiat model ?",
     "values": [
       "3",
       "fiat"
@@ -12377,8 +12396,8 @@
         "name": "JetBlue Airways",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/020v6m",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/JetBlue"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/JetBlue",
+          "mid": "/m/020v6m"
         },
         "salience": 0.46297643,
         "mentions": [
@@ -12517,8 +12536,8 @@
         "name": "Jetblue Airways",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/020v6m",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/JetBlue"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/JetBlue",
+          "mid": "/m/020v6m"
         },
         "salience": 0.13259842,
         "mentions": [
@@ -12574,8 +12593,8 @@
         "name": "USA",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.047527358,
         "mentions": [
@@ -13018,8 +13037,8 @@
         "name": "UAL",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/07y2s",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_Airlines"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_Airlines",
+          "mid": "/m/07y2s"
         },
         "salience": 0.122841515,
         "mentions": [
@@ -13174,8 +13193,8 @@
         "name": "USA",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.18413581,
         "mentions": [
@@ -13726,7 +13745,10 @@
       {
         "name": "ATO",
         "type": "ORGANIZATION",
-        "metadata": {},
+        "metadata": {
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Taxation_Office",
+          "mid": "/m/02zyjq"
+        },
         "salience": 0.07744374,
         "mentions": [
           {
@@ -13859,8 +13881,8 @@
         "name": "Aberdeen",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0rng",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen",
+          "mid": "/m/0rng"
         },
         "salience": 0.25139165,
         "mentions": [
@@ -13930,7 +13952,10 @@
       {
         "name": "Aberdeen",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen",
+          "mid": "/m/0rng"
+        },
         "salience": 0.18413581,
         "mentions": [
           {
@@ -14110,8 +14135,8 @@
         "name": "JetBlue Airways",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/020v6m",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/JetBlue"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/JetBlue",
+          "mid": "/m/020v6m"
         },
         "salience": 0.1296166,
         "mentions": [
@@ -14152,8 +14177,8 @@
         "name": "Jetblue Airways",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/020v6m",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/JetBlue"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/JetBlue",
+          "mid": "/m/020v6m"
         },
         "salience": 0.28663042,
         "mentions": [
@@ -14242,8 +14267,8 @@
         "name": "Airport",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09cjl",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Airport"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Airport",
+          "mid": "/m/09cjl"
         },
         "salience": 0.08810874,
         "mentions": [
@@ -14300,8 +14325,8 @@
         "name": "United Airlines",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/07y2s",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_Airlines"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_Airlines",
+          "mid": "/m/07y2s"
         },
         "salience": 0.17881966,
         "mentions": [
@@ -14318,8 +14343,8 @@
         "name": "ASY Airport",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0n53xth",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Ashley_Municipal_Airport"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ashley_Municipal_Airport",
+          "mid": "/m/0n53xth"
         },
         "salience": 0.12605855,
         "mentions": [
@@ -14452,8 +14477,8 @@
         "name": "AHD Airport",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Sardar_Vallabhbhai_Patel_International_Airport",
-          "mid": "/m/03_t0x"
+          "mid": "/m/03_t0x",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sardar_Vallabhbhai_Patel_International_Airport"
         },
         "salience": 0.14454149,
         "mentions": [
@@ -14583,8 +14608,8 @@
         "name": "United Airlines",
         "type": "ORGANIZATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_Airlines",
-          "mid": "/m/07y2s"
+          "mid": "/m/07y2s",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_Airlines"
         },
         "salience": 0.13262066,
         "mentions": [
@@ -14600,7 +14625,10 @@
       {
         "name": "Aberdeen",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "mid": "/m/0rng",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen"
+        },
         "salience": 0.09316586,
         "mentions": [
           {
@@ -16387,10 +16415,7 @@
       {
         "name": "APG",
         "type": "LOCATION",
-        "metadata": {
-          "mid": "/m/0tvsm",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen_Proving_Ground"
-        },
+        "metadata": {},
         "salience": 0.18895161,
         "mentions": [
           {
@@ -16621,7 +16646,10 @@
       {
         "name": "Aberdeen",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "mid": "/m/0rng",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen"
+        },
         "salience": 0.18895161,
         "mentions": [
           {
@@ -16691,8 +16719,8 @@
         "name": "Abilene",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/013m_x",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Abilene,_Texas"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Abilene,_Texas",
+          "mid": "/m/013m_x"
         },
         "salience": 0.093695104,
         "mentions": [
@@ -16749,8 +16777,8 @@
         "name": "Aberdeen",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0rng",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aberdeen",
+          "mid": "/m/0rng"
         },
         "salience": 0.23994605,
         "mentions": [
@@ -16767,8 +16795,8 @@
         "name": "Abilene",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/013m_x",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Abilene,_Texas"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Abilene,_Texas",
+          "mid": "/m/013m_x"
         },
         "salience": 0.18411486,
         "mentions": [
@@ -17208,23 +17236,6 @@
         ]
       },
       {
-        "name": "one",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "1"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "one",
-              "beginOffset": 26
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "30",
         "type": "NUMBER",
         "metadata": {
@@ -17236,6 +17247,23 @@
             "text": {
               "content": "30",
               "beginOffset": 49
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "one",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "one",
+              "beginOffset": 26
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -19151,23 +19179,6 @@
         ]
       },
       {
-        "name": "10000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "10000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "10000",
-              "beginOffset": 109
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "3000",
         "type": "NUMBER",
         "metadata": {
@@ -19179,6 +19190,23 @@
             "text": {
               "content": "3000",
               "beginOffset": 67
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "10000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "10000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "10000",
+              "beginOffset": 109
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -20011,8 +20039,8 @@
         "name": "PPT",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/0k7vl",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Microsoft_PowerPoint"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Microsoft_PowerPoint",
+          "mid": "/m/0k7vl"
         },
         "salience": 0.04215755,
         "mentions": [
@@ -21882,10 +21910,7 @@
       {
         "name": "BK",
         "type": "OTHER",
-        "metadata": {
-          "mid": "/m/01601q",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Burger_King"
-        },
+        "metadata": {},
         "salience": 0.24447168,
         "mentions": [
           {
@@ -22510,8 +22535,8 @@
         "name": "Book",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/0bt_c3",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Book"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Book",
+          "mid": "/m/0bt_c3"
         },
         "salience": 0.47939125,
         "mentions": [
@@ -23049,10 +23074,7 @@
       {
         "name": "Korea",
         "type": "LOCATION",
-        "metadata": {
-          "mid": "/m/048fz",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Korea"
-        },
+        "metadata": {},
         "salience": 0.05385595,
         "mentions": [
           {
@@ -23066,9 +23088,9 @@
       }
     ],
     "language": "en",
-    "question": "Show paragraph details for paragraph with text 'Korea'.",
+    "question": "Show paragraph details for paragraph with text 'Korea ' .",
     "values": [
-      "Korea"
+      "korea"
     ]
   },
   {
@@ -23106,10 +23128,7 @@
       {
         "name": "Korea",
         "type": "LOCATION",
-        "metadata": {
-          "mid": "/m/048fz",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Korea"
-        },
+        "metadata": {},
         "salience": 0.09041039,
         "mentions": [
           {
@@ -23138,9 +23157,9 @@
       }
     ],
     "language": "en",
-    "question": "What are the details for the paragraph that includes the text 'Korea'?",
+    "question": "What are the details for the paragraph that includes the text 'Korea ' ?",
     "values": [
-      "Korea"
+      "korea"
     ]
   },
   {
@@ -23209,8 +23228,8 @@
         "name": "NY",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_City",
-          "mid": "/m/02_286"
+          "mid": "/m/02_286",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_City"
         },
         "salience": 0.09914141,
         "mentions": [
@@ -23311,8 +23330,8 @@
         "name": "NY",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02_286",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_City"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_City",
+          "mid": "/m/02_286"
         },
         "salience": 0.090347104,
         "mentions": [
@@ -24362,8 +24381,8 @@
         "name": "Brazil",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/015fr",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Brazil"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Brazil",
+          "mid": "/m/015fr"
         },
         "salience": 0.2042228,
         "mentions": [
@@ -24824,7 +24843,7 @@
       },
       {
         "name": "Little Lever Urban District",
-        "type": "LOCATION",
+        "type": "ORGANIZATION",
         "metadata": {
           "mid": "/g/11c0w4rwlm",
           "wikipedia_url": "https://en.wikipedia.org/wiki/Little_Lever_Urban_District"
@@ -24834,7 +24853,7 @@
           {
             "text": {
               "content": "Little Lever Urban District",
-              "beginOffset": 49
+              "beginOffset": 51
             },
             "type": "PROPER"
           }
@@ -24842,9 +24861,9 @@
       }
     ],
     "language": "en",
-    "question": "List the name of teachers whose hometown is not \"Little Lever Urban District\".",
+    "question": "List the name of teachers whose hometown is not `` Little Lever Urban District '' .",
     "values": [
-      "Little Lever Urban District"
+      "little lever urban district"
     ]
   },
   {
@@ -24853,7 +24872,7 @@
         "name": "teachers",
         "type": "PERSON",
         "metadata": {},
-        "salience": 0.48107874,
+        "salience": 0.4217814,
         "mentions": [
           {
             "text": {
@@ -24868,7 +24887,7 @@
         "name": "names",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.23103458,
+        "salience": 0.257435,
         "mentions": [
           {
             "text": {
@@ -24883,7 +24902,7 @@
         "name": "hometown",
         "type": "LOCATION",
         "metadata": {},
-        "salience": 0.19763114,
+        "salience": 0.22021452,
         "mentions": [
           {
             "text": {
@@ -24896,17 +24915,17 @@
       },
       {
         "name": "Little Lever Urban District",
-        "type": "LOCATION",
+        "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/g/11c0w4rwlm",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Little_Lever_Urban_District"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Little_Lever_Urban_District",
+          "mid": "/g/11c0w4rwlm"
         },
-        "salience": 0.09025556,
+        "salience": 0.1005691,
         "mentions": [
           {
             "text": {
               "content": "Little Lever Urban District",
-              "beginOffset": 58
+              "beginOffset": 60
             },
             "type": "PROPER"
           }
@@ -24914,9 +24933,9 @@
       }
     ],
     "language": "en",
-    "question": "What are the names of the teachers whose hometown is not \"Little Lever Urban District\"?",
+    "question": "What are the names of the teachers whose hometown is not `` Little Lever Urban District '' ?",
     "values": [
-      "Little Lever Urban District"
+      "little lever urban district"
     ]
   },
   {
@@ -25026,23 +25045,6 @@
         ]
       },
       {
-        "name": "33",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "33"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "33",
-              "beginOffset": 61
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "32",
         "type": "NUMBER",
         "metadata": {
@@ -25054,6 +25056,23 @@
             "text": {
               "content": "32",
               "beginOffset": 55
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "33",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "33"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "33",
+              "beginOffset": 61
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -27537,23 +27556,6 @@
         ]
       },
       {
-        "name": "2011",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2011"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2011",
-              "beginOffset": 103
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2009",
         "type": "NUMBER",
         "metadata": {
@@ -27565,6 +27567,23 @@
             "text": {
               "content": "2009",
               "beginOffset": 72
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2011",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2011"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2011",
+              "beginOffset": 103
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -27718,23 +27737,6 @@
         ]
       },
       {
-        "name": "2008",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2008"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2008",
-              "beginOffset": 50
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2013",
         "type": "NUMBER",
         "metadata": {
@@ -27746,6 +27748,23 @@
             "text": {
               "content": "2013",
               "beginOffset": 35
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2008",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2008"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2008",
+              "beginOffset": 50
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -28030,8 +28049,8 @@
         "name": "USA",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.15819845,
         "mentions": [
@@ -29089,23 +29108,6 @@
         ]
       },
       {
-        "name": "2016",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2016"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2016",
-              "beginOffset": 40
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2013",
         "type": "NUMBER",
         "metadata": {
@@ -29117,6 +29119,23 @@
             "text": {
               "content": "2013",
               "beginOffset": 32
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2016",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2016"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2016",
+              "beginOffset": 40
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -29181,8 +29200,8 @@
         "name": "WTA Championships",
         "type": "EVENT",
         "metadata": {
-          "mid": "/m/04wbkq",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/WTA_Finals"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/WTA_Finals",
+          "mid": "/m/04wbkq"
         },
         "salience": 0.071956106,
         "mentions": [
@@ -29214,8 +29233,8 @@
         "name": "Australian Open",
         "type": "EVENT",
         "metadata": {
-          "mid": "/m/0p58j",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Open"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Open",
+          "mid": "/m/0p58j"
         },
         "salience": 0.050706558,
         "mentions": [
@@ -30066,8 +30085,8 @@
         "name": "Australian Open",
         "type": "EVENT",
         "metadata": {
-          "mid": "/m/0p58j",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Open"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Open",
+          "mid": "/m/0p58j"
         },
         "salience": 0.039586548,
         "mentions": [
@@ -31188,8 +31207,8 @@
         "name": "WTA Championships",
         "type": "EVENT",
         "metadata": {
-          "mid": "/m/04wbkq",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/WTA_Finals"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/WTA_Finals",
+          "mid": "/m/04wbkq"
         },
         "salience": 0.3018833,
         "mentions": [
@@ -31246,8 +31265,8 @@
         "name": "WTA Championships",
         "type": "EVENT",
         "metadata": {
-          "mid": "/m/04wbkq",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/WTA_Finals"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/WTA_Finals",
+          "mid": "/m/04wbkq"
         },
         "salience": 0.09347552,
         "mentions": [
@@ -32188,10 +32207,7 @@
       {
         "name": "Baldwin I",
         "type": "PERSON",
-        "metadata": {
-          "mid": "/m/0129l_",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Baldwin_I_of_Jerusalem"
-        },
+        "metadata": {},
         "salience": 0.24855945,
         "mentions": [
           {
@@ -32817,7 +32833,9 @@
       {
         "name": "Port Chelsea",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "mid": "/g/1tp1z3cs"
+        },
         "salience": 0.47326198,
         "mentions": [
           {
@@ -32997,30 +33015,15 @@
   {
     "entities": [
       {
-        "name": "department id",
-        "type": "OTHER",
-        "metadata": {},
-        "salience": 0.2878524,
-        "mentions": [
-          {
-            "text": {
-              "content": "department id",
-              "beginOffset": 9
-            },
-            "type": "COMMON"
-          }
-        ]
-      },
-      {
         "name": "name",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.25474182,
+        "salience": 0.3562825,
         "mentions": [
           {
             "text": {
               "content": "name",
-              "beginOffset": 36
+              "beginOffset": 12
             },
             "type": "COMMON"
           }
@@ -33030,27 +33033,27 @@
         "name": "department",
         "type": "ORGANIZATION",
         "metadata": {},
-        "salience": 0.21157913,
+        "salience": 0.21351145,
         "mentions": [
           {
             "text": {
               "content": "department",
-              "beginOffset": 48
+              "beginOffset": 31
             },
             "type": "COMMON"
           }
         ]
       },
       {
-        "name": "number",
+        "name": "id",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.14369707,
+        "salience": 0.21108776,
         "mentions": [
           {
             "text": {
-              "content": "number",
-              "beginOffset": 73
+              "content": "id",
+              "beginOffset": 21
             },
             "type": "COMMON"
           }
@@ -33060,12 +33063,27 @@
         "name": "degrees",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.10212959,
+        "salience": 0.15098086,
         "mentions": [
           {
             "text": {
               "content": "degrees",
-              "beginOffset": 83
+              "beginOffset": 66
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "number",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.06813742,
+        "mentions": [
+          {
+            "text": {
+              "content": "number",
+              "beginOffset": 56
             },
             "type": "COMMON"
           }
@@ -33073,7 +33091,7 @@
       }
     ],
     "language": "en",
-    "question": "For each department id, what is the name of the department with the most number of degrees?",
+    "question": "What is the name and id of the department with the most number of degrees ?",
     "values": []
   },
   {
@@ -34139,23 +34157,6 @@
         ]
       },
       {
-        "name": "one",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "1"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "one",
-              "beginOffset": 117
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2",
         "type": "NUMBER",
         "metadata": {
@@ -34167,6 +34168,23 @@
             "text": {
               "content": "2",
               "beginOffset": 96
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "one",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "one",
+              "beginOffset": 117
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -35208,8 +35226,8 @@
         "name": "North Carolina",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/05fkf",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/North_Carolina"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/North_Carolina",
+          "mid": "/m/05fkf"
         },
         "salience": 0.05258787,
         "mentions": [
@@ -35591,14 +35609,14 @@
         ]
       },
       {
-        "name": "Timothy Ward",
+        "name": "Timmothy Ward",
         "type": "PERSON",
         "metadata": {},
         "salience": 0.22073108,
         "mentions": [
           {
             "text": {
-              "content": "Timothy Ward",
+              "content": "Timmothy Ward",
               "beginOffset": 53
             },
             "type": "PROPER"
@@ -35607,10 +35625,10 @@
       }
     ],
     "language": "en",
-    "question": "What is the mobile phone number of the student named Timothy Ward?",
+    "question": "What is the mobile phone number of the student named Timmothy Ward ?",
     "values": [
-      "Timmothy",
-      "Ward"
+      "timmothy",
+      "ward"
     ]
   },
   {
@@ -37080,8 +37098,8 @@
         "name": "Haiti",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/03gyl",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Haiti"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Haiti",
+          "mid": "/m/03gyl"
         },
         "salience": 0.27089024,
         "mentions": [
@@ -37135,9 +37153,9 @@
       }
     ],
     "language": "en",
-    "question": "Find the first name of the students who permanently live in the country Haiti or have the cell phone number 09700166582.",
+    "question": "Find the first name of the students who permanently live in the country Haiti or have the cell phone number 09700166582 .",
     "values": [
-      "Haiti",
+      "haiti",
       "09700166582"
     ]
   },
@@ -37225,9 +37243,9 @@
       }
     ],
     "language": "en",
-    "question": "What are the first names of the students who live in Haiti permanently or have the cell phone number 09700166582?",
+    "question": "What are the first names of the students who live in Haiti permanently or have the cell phone number 09700166582 ?",
     "values": [
-      "Haiti",
+      "haiti",
       "09700166582"
     ]
   },
@@ -37990,8 +38008,8 @@
         "name": "TV Channel",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/07c82",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Television_channel"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Television_channel",
+          "mid": "/m/07c82"
         },
         "salience": 0.09617116,
         "mentions": [
@@ -38158,8 +38176,8 @@
         "name": "Sky Radio",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/0kvgrzj",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Sky_Radio"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sky_Radio",
+          "mid": "/m/0kvgrzj"
         },
         "salience": 0.17216548,
         "mentions": [
@@ -38276,8 +38294,8 @@
         "name": "Sky Radio",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/0kvgrzj",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Sky_Radio"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sky_Radio",
+          "mid": "/m/0kvgrzj"
         },
         "salience": 0.16550528,
         "mentions": [
@@ -38397,8 +38415,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.118395284,
         "mentions": [
@@ -38692,8 +38710,8 @@
         "name": "TV Channel",
         "type": "ORGANIZATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Television_channel",
-          "mid": "/m/07c82"
+          "mid": "/m/07c82",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Television_channel"
         },
         "salience": 0.84539247,
         "mentions": [
@@ -38818,10 +38836,7 @@
       {
         "name": "Blue Beetle",
         "type": "OTHER",
-        "metadata": {
-          "mid": "/m/02pbmg",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Blue_Beetle"
-        },
+        "metadata": {},
         "salience": 0.07985781,
         "mentions": [
           {
@@ -39582,8 +39597,8 @@
         "name": "TV Channel",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/07c82",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Television_channel"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Television_channel",
+          "mid": "/m/07c82"
         },
         "salience": 0.68432343,
         "mentions": [
@@ -39851,8 +39866,8 @@
         "name": "Sky Radio",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/0kvgrzj",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Sky_Radio"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sky_Radio",
+          "mid": "/m/0kvgrzj"
         },
         "salience": 0.18450466,
         "mentions": [
@@ -40025,7 +40040,7 @@
       }
     ],
     "language": "en",
-    "question": "Find the production code and channel of the most recently aired cartoon.",
+    "question": "Find the production code and channel of the most recently aired cartoon .",
     "values": []
   },
   {
@@ -40077,7 +40092,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the produdction code and channel of the most recent cartoon?",
+    "question": "What is the produdction code and channel of the most recent cartoon ?",
     "values": []
   },
   {
@@ -40298,7 +40313,9 @@
       {
         "name": "Todd Casey",
         "type": "PERSON",
-        "metadata": {},
+        "metadata": {
+          "mid": "/g/11g_zj4tjv"
+        },
         "salience": 0.08955791,
         "mentions": [
           {
@@ -40367,7 +40384,9 @@
       {
         "name": "Todd Casey",
         "type": "PERSON",
-        "metadata": {},
+        "metadata": {
+          "mid": "/g/11g_zj4tjv"
+        },
         "salience": 0.050189584,
         "mentions": [
           {
@@ -40436,7 +40455,9 @@
       {
         "name": "Todd Casey",
         "type": "PERSON",
-        "metadata": {},
+        "metadata": {
+          "mid": "/g/11g_zj4tjv"
+        },
         "salience": 0.08955791,
         "mentions": [
           {
@@ -40490,7 +40511,9 @@
       {
         "name": "Todd Casey",
         "type": "PERSON",
-        "metadata": {},
+        "metadata": {
+          "mid": "/g/11g_zj4tjv"
+        },
         "salience": 0.09276609,
         "mentions": [
           {
@@ -40590,8 +40613,8 @@
         "name": "Michael Chang",
         "type": "PERSON",
         "metadata": {
-          "mid": "/m/022skn",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Michael_Chang"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Michael_Chang",
+          "mid": "/m/022skn"
         },
         "salience": 0.046718955,
         "mentions": [
@@ -42210,25 +42233,10 @@
   {
     "entities": [
       {
-        "name": "poker players",
-        "type": "PERSON",
-        "metadata": {},
-        "salience": 0.5305759,
-        "mentions": [
-          {
-            "text": {
-              "content": "poker players",
-              "beginOffset": 22
-            },
-            "type": "COMMON"
-          }
-        ]
-      },
-      {
         "name": "names",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.24752425,
+        "salience": 0.38314,
         "mentions": [
           {
             "text": {
@@ -42240,10 +42248,25 @@
         ]
       },
       {
+        "name": "poker players",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.2733837,
+        "mentions": [
+          {
+            "text": {
+              "content": "poker players",
+              "beginOffset": 22
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
         "name": "number",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.16488929,
+        "salience": 0.25523028,
         "mentions": [
           {
             "text": {
@@ -42258,7 +42281,7 @@
         "name": "tables",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.05701059,
+        "salience": 0.08824605,
         "mentions": [
           {
             "text": {
@@ -43233,8 +43256,8 @@
         "name": "Russia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/06bnz",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Russia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Russia",
+          "mid": "/m/06bnz"
         },
         "salience": 0.029082144,
         "mentions": [
@@ -43290,8 +43313,8 @@
         "name": "Russia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/06bnz",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Russia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Russia",
+          "mid": "/m/06bnz"
         },
         "salience": 0.10704905,
         "mentions": [
@@ -44034,8 +44057,8 @@
         "name": "NY",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/059rby",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_(state)"
+          "mid": "/m/02_286",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/New_York_City"
         },
         "salience": 0.12857392,
         "mentions": [
@@ -44332,10 +44355,40 @@
   {
     "entities": [
       {
+        "name": "contestants",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.45808247,
+        "mentions": [
+          {
+            "text": {
+              "content": "contestants",
+              "beginOffset": 24
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
         "name": "names",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.28947282,
+        "salience": 0.25244254,
+        "mentions": [
+          {
+            "text": {
+              "content": "names",
+              "beginOffset": 42
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "names",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.17104135,
         "mentions": [
           {
             "text": {
@@ -44347,45 +44400,15 @@
         ]
       },
       {
-        "name": "names",
-        "type": "OTHER",
-        "metadata": {},
-        "salience": 0.28947282,
-        "mentions": [
-          {
-            "text": {
-              "content": "names",
-              "beginOffset": 39
-            },
-            "type": "COMMON"
-          }
-        ]
-      },
-      {
-        "name": "contestants",
-        "type": "PERSON",
-        "metadata": {},
-        "salience": 0.28524798,
-        "mentions": [
-          {
-            "text": {
-              "content": "contestants",
-              "beginOffset": 21
-            },
-            "type": "COMMON"
-          }
-        ]
-      },
-      {
         "name": "Al",
         "type": "PERSON",
         "metadata": {},
-        "salience": 0.077704884,
+        "salience": 0.06776463,
         "mentions": [
           {
             "text": {
               "content": "Al",
-              "beginOffset": 68
+              "beginOffset": 71
             },
             "type": "PROPER"
           }
@@ -44395,12 +44418,12 @@
         "name": "substring",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.058101516,
+        "salience": 0.050668992,
         "mentions": [
           {
             "text": {
               "content": "substring",
-              "beginOffset": 57
+              "beginOffset": 60
             },
             "type": "COMMON"
           }
@@ -44408,9 +44431,9 @@
       }
     ],
     "language": "en",
-    "question": "Return the names the contestants whose names contain the substring 'Al'.",
+    "question": "Return the names of the contestants whose names contain the substring 'Al' .",
     "values": [
-      "Al"
+      "al"
     ]
   },
   {
@@ -44790,8 +44813,8 @@
         "name": "Carribean",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0261m",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Caribbean"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Caribbean",
+          "mid": "/m/0261m"
         },
         "salience": 0.103113085,
         "mentions": [
@@ -44832,8 +44855,8 @@
         "name": "Anguilla",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0n3g",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Anguilla"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Anguilla",
+          "mid": "/m/0n3g"
         },
         "salience": 0.31389028,
         "mentions": [
@@ -44965,8 +44988,8 @@
         "name": "Kabul",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0494n",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Kabul"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kabul",
+          "mid": "/m/0494n"
         },
         "salience": 0.31389028,
         "mentions": [
@@ -45007,8 +45030,8 @@
         "name": "Aruba",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j11",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Aruba"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aruba",
+          "mid": "/m/0j11"
         },
         "salience": 0.13603228,
         "mentions": [
@@ -45049,8 +45072,8 @@
         "name": "Aruba",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j11",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Aruba"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aruba",
+          "mid": "/m/0j11"
         },
         "salience": 0.07372406,
         "mentions": [
@@ -45133,8 +45156,8 @@
         "name": "Brazil",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/015fr",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Brazil"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Brazil",
+          "mid": "/m/015fr"
         },
         "salience": 0.369786,
         "mentions": [
@@ -45247,8 +45270,8 @@
         "name": "Angola",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j4b",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Angola"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Angola",
+          "mid": "/m/0j4b"
         },
         "salience": 0.5207847,
         "mentions": [
@@ -45348,10 +45371,7 @@
       {
         "name": "Central Africa",
         "type": "LOCATION",
-        "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Central_Africa",
-          "mid": "/m/02n0ld"
-        },
+        "metadata": {},
         "salience": 0.09846768,
         "mentions": [
           {
@@ -45421,8 +45441,8 @@
         "name": "Central Africa",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02n0ld",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Central_Africa"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Central_Africa",
+          "mid": "/m/02n0ld"
         },
         "salience": 0.1753311,
         "mentions": [
@@ -45565,8 +45585,8 @@
         "name": "Asia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
         "salience": 0.18017073,
         "mentions": [
@@ -45607,8 +45627,8 @@
         "name": "Asia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
         "salience": 0.22569355,
         "mentions": [
@@ -45751,8 +45771,8 @@
         "name": "African",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0dg3n1",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa",
+          "mid": "/m/0dg3n1"
         },
         "salience": 0.12988381,
         "mentions": [
@@ -45882,8 +45902,8 @@
         "name": "Europe",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02j9z",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe",
+          "mid": "/m/02j9z"
         },
         "salience": 0.15762755,
         "mentions": [
@@ -45900,8 +45920,8 @@
         "name": "Asia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
         "salience": 0.07052483,
         "mentions": [
@@ -45958,8 +45978,8 @@
         "name": "Europe",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02j9z",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe",
+          "mid": "/m/02j9z"
         },
         "salience": 0.18673627,
         "mentions": [
@@ -45976,8 +45996,8 @@
         "name": "Asia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
         "salience": 0.0839303,
         "mentions": [
@@ -46090,10 +46110,7 @@
       {
         "name": "Gelderland",
         "type": "LOCATION",
-        "metadata": {
-          "mid": "/m/0fqxw",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Gelderland"
-        },
+        "metadata": {},
         "salience": 0.09362239,
         "mentions": [
           {
@@ -46178,8 +46195,8 @@
         "name": "US",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.06138067,
         "mentions": [
@@ -46280,8 +46297,8 @@
         "name": "US",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.07093994,
         "mentions": [
@@ -46483,8 +46500,8 @@
         "name": "Africa",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0dg3n1",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa",
+          "mid": "/m/0dg3n1"
         },
         "salience": 0.16397463,
         "mentions": [
@@ -46624,8 +46641,8 @@
         "name": "Afghanistan",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0jdd",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Afghanistan"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Afghanistan",
+          "mid": "/m/0jdd"
         },
         "salience": 0.3670385,
         "mentions": [
@@ -46667,8 +46684,8 @@
         "name": "Afghanistan",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0jdd",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Afghanistan"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Afghanistan",
+          "mid": "/m/0jdd"
         },
         "salience": 0.31423512,
         "mentions": [
@@ -46918,8 +46935,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.23994605,
         "mentions": [
@@ -46936,8 +46953,8 @@
         "name": "Dutch",
         "type": "PERSON",
         "metadata": {
-          "mid": "/m/02bv9",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_language",
+          "mid": "/m/02bv9"
         },
         "salience": 0.18411486,
         "mentions": [
@@ -47064,8 +47081,8 @@
         "name": "French",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/064_8sq",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/French_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/French_language",
+          "mid": "/m/064_8sq"
         },
         "salience": 0.14333336,
         "mentions": [
@@ -47140,8 +47157,8 @@
         "name": "French",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/064_8sq",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/French_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/French_language",
+          "mid": "/m/064_8sq"
         },
         "salience": 0.094701916,
         "mentions": [
@@ -47158,8 +47175,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.042370997,
         "mentions": [
@@ -47249,8 +47266,8 @@
         "name": "French",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/064_8sq",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/French_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/French_language",
+          "mid": "/m/064_8sq"
         },
         "salience": 0.03279923,
         "mentions": [
@@ -47402,8 +47419,8 @@
         "name": "Chinese",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/01r2l",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language",
+          "mid": "/m/01r2l"
         },
         "salience": 0.047967896,
         "mentions": [
@@ -47444,8 +47461,8 @@
         "name": "Chinese",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/01r2l",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language",
+          "mid": "/m/01r2l"
         },
         "salience": 0.17340353,
         "mentions": [
@@ -47486,8 +47503,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.17608693,
         "mentions": [
@@ -47503,10 +47520,7 @@
       {
         "name": "Dutch",
         "type": "PERSON",
-        "metadata": {
-          "mid": "/m/02bv9",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_language"
-        },
+        "metadata": {},
         "salience": 0.13425294,
         "mentions": [
           {
@@ -47623,8 +47637,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.11945297,
         "mentions": [
@@ -47641,8 +47655,8 @@
         "name": "Dutch",
         "type": "PERSON",
         "metadata": {
-          "mid": "/m/02bv9",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_language",
+          "mid": "/m/02bv9"
         },
         "salience": 0.09226762,
         "mentions": [
@@ -47657,12 +47671,12 @@
       }
     ],
     "language": "en",
-    "question": "What are the countries where either English or Dutch is the official language?",
+    "question": "What are the countries where either English or Dutch is the official language ?",
     "values": [
-      "English",
-      "T",
-      "Dutch",
-      "T"
+      "english",
+      "t",
+      "dutch",
+      "t"
     ]
   },
   {
@@ -47699,10 +47713,10 @@
       },
       {
         "name": "Dutch",
-        "type": "PERSON",
+        "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02bv9",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_language",
+          "mid": "/m/02bv9"
         },
         "salience": 0.12730339,
         "mentions": [
@@ -47850,7 +47864,10 @@
       {
         "name": "Asian",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "mid": "/m/0j0k",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+        },
         "salience": 0.06214743,
         "mentions": [
           {
@@ -48089,8 +48106,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.15122284,
         "mentions": [
@@ -48292,10 +48309,7 @@
       {
         "name": "Asian",
         "type": "LOCATION",
-        "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
-        },
+        "metadata": {},
         "salience": 0.039547555,
         "mentions": [
           {
@@ -48365,8 +48379,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.1216517,
         "mentions": [
@@ -48568,8 +48582,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.10620326,
         "mentions": [
@@ -48958,8 +48972,8 @@
         "name": "Europe",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02j9z",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe",
+          "mid": "/m/02j9z"
         },
         "salience": 0.07170579,
         "mentions": [
@@ -49030,8 +49044,8 @@
         "name": "Europe",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02j9z",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe",
+          "mid": "/m/02j9z"
         },
         "salience": 0.08440917,
         "mentions": [
@@ -49102,8 +49116,8 @@
         "name": "African",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0dg3n1",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa",
+          "mid": "/m/0dg3n1"
         },
         "salience": 0.123950586,
         "mentions": [
@@ -49120,8 +49134,8 @@
         "name": "Asia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
         "salience": 0.060249943,
         "mentions": [
@@ -49302,8 +49316,8 @@
         "name": "Africa",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0dg3n1",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa",
+          "mid": "/m/0dg3n1"
         },
         "salience": 0.07823274,
         "mentions": [
@@ -49408,8 +49422,8 @@
         "name": "Africa",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0dg3n1",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Africa",
+          "mid": "/m/0dg3n1"
         },
         "salience": 0.03983022,
         "mentions": [
@@ -49523,8 +49537,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.11377529,
         "mentions": [
@@ -49754,8 +49768,8 @@
         "name": "English",
         "type": "OTHER",
         "metadata": {
-          "mid": "/m/02h40lc",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_language",
+          "mid": "/m/02h40lc"
         },
         "salience": 0.112220116,
         "mentions": [
@@ -49772,8 +49786,8 @@
         "name": "Republic",
         "type": "ORGANIZATION",
         "metadata": {
-          "mid": "/m/06cx9",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Republic"
+          "wikipedia_url": "https://de.wikipedia.org/wiki/Republik",
+          "mid": "/m/06cx9"
         },
         "salience": 0.07553253,
         "mentions": [
@@ -49966,8 +49980,8 @@
         "name": "European",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/02j9z",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Europe",
+          "mid": "/m/02j9z"
         },
         "salience": 0.07326046,
         "mentions": [
@@ -50087,12 +50101,12 @@
         "name": "countries",
         "type": "LOCATION",
         "metadata": {},
-        "salience": 0.3799326,
+        "salience": 0.39016414,
         "mentions": [
           {
             "text": {
               "content": "countries",
-              "beginOffset": 35
+              "beginOffset": 33
             },
             "type": "COMMON"
           }
@@ -50102,12 +50116,12 @@
         "name": "cities",
         "type": "LOCATION",
         "metadata": {},
-        "salience": 0.24164738,
+        "salience": 0.23813733,
         "mentions": [
           {
             "text": {
               "content": "cities",
-              "beginOffset": 14
+              "beginOffset": 13
             },
             "type": "COMMON"
           }
@@ -50117,12 +50131,12 @@
         "name": "language",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.15551762,
+        "salience": 0.15325865,
         "mentions": [
           {
             "text": {
               "content": "language",
-              "beginOffset": 75
+              "beginOffset": 73
             },
             "type": "COMMON"
           }
@@ -50135,12 +50149,12 @@
           "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language",
           "mid": "/m/01r2l"
         },
-        "salience": 0.11668067,
+        "salience": 0.11498582,
         "mentions": [
           {
             "text": {
               "content": "Chinese",
-              "beginOffset": 51
+              "beginOffset": 49
             },
             "type": "PROPER"
           }
@@ -50150,15 +50164,15 @@
         "name": "Asian",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
-        "salience": 0.10622172,
+        "salience": 0.10345405,
         "mentions": [
           {
             "text": {
               "content": "Asian",
-              "beginOffset": 29
+              "beginOffset": 27
             },
             "type": "PROPER"
           }
@@ -50166,11 +50180,11 @@
       }
     ],
     "language": "en",
-    "question": "Whic`h unique cities are in  Asian countries where Chinese is the official language?",
+    "question": "Which unique cities are in Asian countries where Chinese is the official language ?",
     "values": [
-      "T",
-      "Chinese",
-      "Asia"
+      "t",
+      "chinese",
+      "asia"
     ]
   },
   {
@@ -50224,8 +50238,8 @@
         "name": "Asia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
         "salience": 0.10448678,
         "mentions": [
@@ -50242,8 +50256,8 @@
         "name": "Chinese",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/01r2l",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_language",
+          "mid": "/m/01r2l"
         },
         "salience": 0.03901806,
         "mentions": [
@@ -50691,31 +50705,16 @@
     "language": "en",
     "question": "Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.",
     "values": [
-      "3"
+      "2"
     ]
   },
   {
     "entities": [
       {
-        "name": "names",
-        "type": "OTHER",
-        "metadata": {},
-        "salience": 0.47934976,
-        "mentions": [
-          {
-            "text": {
-              "content": "names",
-              "beginOffset": 13
-            },
-            "type": "COMMON"
-          }
-        ]
-      },
-      {
         "name": "countries",
         "type": "LOCATION",
         "metadata": {},
-        "salience": 0.35652322,
+        "salience": 0.42988542,
         "mentions": [
           {
             "text": {
@@ -50730,7 +50729,7 @@
         "name": "languages",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.09615742,
+        "salience": 0.34525636,
         "mentions": [
           {
             "text": {
@@ -50742,10 +50741,25 @@
         ]
       },
       {
+        "name": "names",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.14290245,
+        "mentions": [
+          {
+            "text": {
+              "content": "names",
+              "beginOffset": 13
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
         "name": "languages",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.06796959,
+        "salience": 0.08195577,
         "mentions": [
           {
             "text": {
@@ -51825,8 +51839,8 @@
         "name": "Asia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0j0k",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Asia",
+          "mid": "/m/0j0k"
         },
         "salience": 0.07744374,
         "mentions": [
@@ -52155,9 +52169,9 @@
       }
     ],
     "language": "en",
-    "question": "What is the total population and average area of countries in the continent of North America whose area is bigger than 3000\uff1f",
+    "question": "What is the total population and average area of countries in the continent of North America whose area is bigger than 3000 ?",
     "values": [
-      "North America",
+      "north america",
       "3000"
     ]
   },
@@ -52217,21 +52231,24 @@
           {
             "text": {
               "content": "surface area",
-              "beginOffset": 106
+              "beginOffset": 107
             },
             "type": "COMMON"
           }
         ]
       },
       {
-        "name": "Noth America",
+        "name": "North America",
         "type": "LOCATION",
-        "metadata": {},
+        "metadata": {
+          "mid": "/m/059g4",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/North_America"
+        },
         "salience": 0.09826883,
         "mentions": [
           {
             "text": {
-              "content": "Noth America",
+              "content": "North America",
               "beginOffset": 81
             },
             "type": "PROPER"
@@ -52249,7 +52266,7 @@
           {
             "text": {
               "content": "3000",
-              "beginOffset": 132
+              "beginOffset": 133
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -52257,9 +52274,9 @@
       }
     ],
     "language": "en",
-    "question": "Give the total population and average surface area corresponding to countries in Noth America that have a surface area greater than 3000.",
+    "question": "Give the total population and average surface area corresponding to countries in North America that have a surface area greater than 3000 .",
     "values": [
-      "North America",
+      "north america",
       "3000"
     ]
   },
@@ -52296,23 +52313,6 @@
         ]
       },
       {
-        "name": "160000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "160000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "160000",
-              "beginOffset": 48
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "900000",
         "type": "NUMBER",
         "metadata": {
@@ -52324,6 +52324,23 @@
             "text": {
               "content": "900000",
               "beginOffset": 59
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "160000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "160000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "160000",
+              "beginOffset": 48
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -52385,23 +52402,6 @@
         ]
       },
       {
-        "name": "160000",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "160000"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "160000",
-              "beginOffset": 58
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "900000",
         "type": "NUMBER",
         "metadata": {
@@ -52417,10 +52417,27 @@
             "type": "TYPE_UNKNOWN"
           }
         ]
+      },
+      {
+        "name": "160000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "160000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "160000",
+              "beginOffset": 58
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
       }
     ],
     "language": "en",
-    "question": "Return the names of cities that have a population between 160000 and 900000.",
+    "question": "Return the names of cities that have a population between 160000 and 900000 .",
     "values": [
       "160000",
       "900000"
@@ -52730,8 +52747,8 @@
         "name": "Spanish",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/06nm1",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Spanish_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Spanish_language",
+          "mid": "/m/06nm1"
         },
         "salience": 0.09428883,
         "mentions": [
@@ -52817,8 +52834,8 @@
         "name": "Spanish",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/06nm1",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Spanish_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Spanish_language",
+          "mid": "/m/06nm1"
         },
         "salience": 0.124707766,
         "mentions": [
@@ -52976,8 +52993,8 @@
         "name": "Spanish",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/06nm1",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Spanish_language"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Spanish_language",
+          "mid": "/m/06nm1"
         },
         "salience": 0.13517983,
         "mentions": [
@@ -53226,8 +53243,8 @@
         "name": "USA",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/09c7w0",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
+          "mid": "/m/09c7w0"
         },
         "salience": 0.09249761,
         "mentions": [
@@ -53283,8 +53300,8 @@
         "name": "USA",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States",
-          "mid": "/m/09c7w0"
+          "mid": "/m/09c7w0",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/United_States"
         },
         "salience": 0.095070966,
         "mentions": [
@@ -54951,7 +54968,7 @@
           {
             "text": {
               "content": "2003",
-              "beginOffset": 62
+              "beginOffset": 77
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -54968,7 +54985,7 @@
           {
             "text": {
               "content": "2003",
-              "beginOffset": 77
+              "beginOffset": 62
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -55059,7 +55076,7 @@
           {
             "text": {
               "content": "2003",
-              "beginOffset": 107
+              "beginOffset": 78
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -55076,7 +55093,7 @@
           {
             "text": {
               "content": "2003",
-              "beginOffset": 78
+              "beginOffset": 107
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -56946,10 +56963,7 @@
       {
         "name": "Kyle",
         "type": "PERSON",
-        "metadata": {
-          "mid": "/m/07998x",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Kyle_Richards"
-        },
+        "metadata": {},
         "salience": 0.3318329,
         "mentions": [
           {
@@ -58052,23 +58066,6 @@
         ]
       },
       {
-        "name": "2",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "2"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "2",
-              "beginOffset": 76
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "5",
         "type": "NUMBER",
         "metadata": {
@@ -58080,6 +58077,23 @@
             "text": {
               "content": "5",
               "beginOffset": 56
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2",
+              "beginOffset": 76
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -58156,23 +58170,6 @@
         ]
       },
       {
-        "name": "5",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "5"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "5",
-              "beginOffset": 62
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "2",
         "type": "NUMBER",
         "metadata": {
@@ -58184,6 +58181,23 @@
             "text": {
               "content": "2",
               "beginOffset": 73
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "5"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "5",
+              "beginOffset": 62
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -58787,8 +58801,8 @@
         "name": "Indiana",
         "type": "LOCATION",
         "metadata": {
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Indiana",
-          "mid": "/m/03v1s"
+          "mid": "/m/03v1s",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Indiana"
         },
         "salience": 0.09931469,
         "mentions": [
@@ -58967,8 +58981,8 @@
         "name": "Indiana",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/03v1s",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Indiana"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Indiana",
+          "mid": "/m/03v1s"
         },
         "salience": 0.016790539,
         "mentions": [
@@ -59062,7 +59076,7 @@
           {
             "text": {
               "content": "dog names",
-              "beginOffset": 76
+              "beginOffset": 77
             },
             "type": "COMMON"
           }
@@ -59087,7 +59101,7 @@
       }
     ],
     "language": "en",
-    "question": "Which dogs have not cost their owner more than 1000 for treatment? List the dog names.",
+    "question": "Which dogs have not cost their owner more than 1000 for treatment ? List the dog names .",
     "values": [
       "1000"
     ]
@@ -59098,7 +59112,7 @@
         "name": "dogs",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.50649464,
+        "salience": 0.49973932,
         "mentions": [
           {
             "text": {
@@ -59113,7 +59127,7 @@
         "name": "names",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.24324037,
+        "salience": 0.23999618,
         "mentions": [
           {
             "text": {
@@ -59128,7 +59142,7 @@
         "name": "owner",
         "type": "PERSON",
         "metadata": {},
-        "salience": 0.16203557,
+        "salience": 0.17321184,
         "mentions": [
           {
             "text": {
@@ -59143,12 +59157,12 @@
         "name": "treatment",
         "type": "OTHER",
         "metadata": {},
-        "salience": 0.0882294,
+        "salience": 0.08705265,
         "mentions": [
           {
             "text": {
               "content": "treatment",
-              "beginOffset": 76
+              "beginOffset": 84
             },
             "type": "COMMON"
           }
@@ -59165,7 +59179,7 @@
           {
             "text": {
               "content": "1000",
-              "beginOffset": 67
+              "beginOffset": 75
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -59173,7 +59187,7 @@
       }
     ],
     "language": "en",
-    "question": "What are the names of the dogs for which the owner spent more than 1000 for treatment?",
+    "question": "What are the names of the dogs for which the owner has not spend more than 1000 for treatment ?",
     "values": [
       "1000"
     ]
@@ -61694,8 +61708,8 @@
         "name": "Virginia",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/07z1m",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Virginia"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Virginia",
+          "mid": "/m/07z1m"
         },
         "salience": 0.07758093,
         "mentions": [
@@ -61977,8 +61991,8 @@
         "name": "Hawaii",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/03gh4",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/Hawaii"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hawaii",
+          "mid": "/m/03gh4"
         },
         "salience": 0.023601044,
         "mentions": [
@@ -63114,7 +63128,7 @@
           {
             "text": {
               "content": "treatment",
-              "beginOffset": 50
+              "beginOffset": 54
             },
             "type": "COMMON"
           }
@@ -63122,7 +63136,7 @@
       }
     ],
     "language": "en",
-    "question": "Tell me the number of dogs that have received any treatment.",
+    "question": "Tell me the number of dogs that have not received any treatment .",
     "values": []
   },
   {
@@ -63396,23 +63410,6 @@
         ]
       },
       {
-        "name": "0",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "0"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "0",
-              "beginOffset": 93
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "1",
         "type": "NUMBER",
         "metadata": {
@@ -63424,6 +63421,23 @@
             "text": {
               "content": "1",
               "beginOffset": 71
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "0",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "0"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "0",
+              "beginOffset": 93
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -64570,8 +64584,8 @@
         "name": "France",
         "type": "LOCATION",
         "metadata": {
-          "mid": "/m/0f8l9c",
-          "wikipedia_url": "https://en.wikipedia.org/wiki/France"
+          "wikipedia_url": "https://en.wikipedia.org/wiki/France",
+          "mid": "/m/0f8l9c"
         },
         "salience": 0.09155738,
         "mentions": [
@@ -64835,23 +64849,6 @@
         ]
       },
       {
-        "name": "1948",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "1948"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "1948",
-              "beginOffset": 63
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "1949",
         "type": "NUMBER",
         "metadata": {
@@ -64863,6 +64860,23 @@
             "text": {
               "content": "1949",
               "beginOffset": 71
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "1948",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1948"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "1948",
+              "beginOffset": 63
             },
             "type": "TYPE_UNKNOWN"
           }
@@ -65170,7 +65184,7 @@
       }
     ],
     "language": "en",
-    "question": "What is the msot common singer citizenship?",
+    "question": "What is the most common singer citizenship ?",
     "values": []
   },
   {
@@ -66078,23 +66092,6 @@
         ]
       },
       {
-        "name": "1945",
-        "type": "NUMBER",
-        "metadata": {
-          "value": "1945"
-        },
-        "salience": 0,
-        "mentions": [
-          {
-            "text": {
-              "content": "1945",
-              "beginOffset": 78
-            },
-            "type": "TYPE_UNKNOWN"
-          }
-        ]
-      },
-      {
         "name": "1955",
         "type": "NUMBER",
         "metadata": {
@@ -66106,6 +66103,23 @@
             "text": {
               "content": "1955",
               "beginOffset": 93
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "1945",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1945"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "1945",
+              "beginOffset": 78
             },
             "type": "TYPE_UNKNOWN"
           }
