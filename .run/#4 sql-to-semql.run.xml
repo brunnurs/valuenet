@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="#4 sql-to-semql  (train)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing TRAIN">
+  <configuration default="false" name="#3 sql-to-semql  (train)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing TRAIN">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
