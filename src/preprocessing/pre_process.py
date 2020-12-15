@@ -6,14 +6,16 @@ import nltk
 from pytictoc import TicToc
 
 from named_entity_recognition.database_value_finder.database_value_finder_sqlite import DatabaseValueFinderSQLite
-from named_entity_recognition.pre_process_ner_values import pre_process_ner_candidates, match_values_in_database
+from named_entity_recognition.pre_process_ner_values import pre_process_ner_candidates, match_values_in_database, \
+    add_non_found_values
 from preprocessing.utils import load_dataSets, wordnet_lemmatizer, symbol_filter, get_multi_token_match, \
     get_single_token_match, get_partial_match, AGG, group_symbol
 
 import multiprocessing
 from joblib import Parallel, delayed
 
-NUM_CORES = multiprocessing.cpu_count()
+# keep always a few cores free
+NUM_CORES = max(multiprocessing.cpu_count() - 2, 1)
 
 
 def lemmatize_list(names):
@@ -43,15 +45,83 @@ def add_value_match(token, columns_list, column_matches):
     column_matches[column_ix]['full_value_match'] = True
 
 
-def find_values_by_database_lookup(example, ner_information, database_path, schema_path, include_primary_keys):
-    example['ner_extracted_values'] = ner_information['entities']
-    db_name = example['db_id']
-
-    potential_value_candidates = pre_process_ner_candidates(example)
+def find_values_by_database_lookup(db_name, potential_value_candidates, database_path, schema_path, include_primary_keys):
 
     database_value_finder = DatabaseValueFinderSQLite(database_path, db_name, schema_path)
 
     return match_values_in_database(database_value_finder, potential_value_candidates, include_primary_keys)
+
+
+def add_likely_value_candidates(value_candidates, potential_value_candidates):
+    """
+    Some values can by definition not get found in the database - take the example "how many dogs are older than 20 years?"
+    The value 20 will most probably not get found in the database, but maybe 21 or 32. Similar cases appear when a user asks for something
+    that does not exist (e.g. "give me all bills for Christian Benz" - and there is no "Christian Benz")
+    We therefore add certain values always to the value_candidates
+    """
+    return list(set(
+        potential_value_candidates.heuristic_values_in_quote +  # we put in values in quote a second time as those values are often fuzzy strings.
+        potential_value_candidates.heuristic_ordinals +
+        potential_value_candidates.heuristics_emails +
+        potential_value_candidates.heuristics_null_empty +
+        potential_value_candidates.heuristics_single_letters +
+        potential_value_candidates.heuristics_months +
+        potential_value_candidates.ner_dates +
+        potential_value_candidates.ner_numbers +
+        potential_value_candidates.ner_prices +
+        potential_value_candidates.heuristics_special_codes +
+        potential_value_candidates.heuristics_capitalized_words +
+        value_candidates))
+
+
+def lookup_database(example, ner_information, columns, question_tokens, column_matches, database_path, schema_path):
+    """
+    Now we use the base data (database) for two things:
+    * to put together a list of values from which the neural network later hase to pick the right one.
+    * to get "hints" which column should get selected, based on if we find a value in this column.
+    As as input we use the entities extracted by the NER and then boil it down with the help of the base data (database).
+    """
+
+    potential_value_candidates = pre_process_ner_candidates(ner_information['entities'], example['question'], example['question_toks'])
+
+    # Here we use the power of the base-data: if we find a potential value in the database, we mark the column we found the value in with a "full value match".
+    # TODO: also use the information on table level
+    include_primary_key_columns = 'id' in question_tokens
+
+    # here we do the actual database lookup
+    database_matches = find_values_by_database_lookup(example['db_id'],
+                                                      potential_value_candidates,
+                                                      database_path,
+                                                      schema_path,
+                                                      include_primary_key_columns)
+
+    # and add the hint to the corresponding column
+    for value, column, table in database_matches:
+        column_lemma = " ".join(split_lemmatize(column))
+        column_idx = columns.index(column_lemma)
+        column_matches[column_idx]['full_value_match'] = True
+
+    #  Now we basically just have to return all the potential values - the neural network later has to pick the correct one.
+    value_candidates = list(map(lambda v: v[0], database_matches))
+
+    # Some values can by definition not get found in the database - take the example "how many dogs are older than 20 years?"
+    # The value 20 will most probably not get found in the database, but maybe 21 or 32. Similar cases appear when a user asks for something
+    # that does not exist (e.g. "give me all bills for Christian Benz" - and there is no "Christian Benz")
+    # We therefore add certain values always to the value_candidates
+    value_candidates = add_likely_value_candidates(value_candidates, potential_value_candidates)
+    
+
+    # but what if we can't find all values, because e.g. the NER does not return the correct candidates?:
+    # if we don't find a value in the values candidates, we add it from the ground truth. Be aware that is is basically cheating.
+    # This makes sense though for training, as we don't want to reduce the training samples because of non-found values. We also mark
+    # the samples where not all values could get extracted, so we can manually fail them during evaluation.
+    value_candidates_adjusted, all_values_found, _ = add_non_found_values(ner_information['values'], value_candidates)
+
+    if not all_values_found:
+        print(str(potential_value_candidates))
+        print(ner_information['values'])
+
+    return value_candidates_adjusted, all_values_found, column_matches
 
 
 def schema_linking(idx, example, ner_information, schema_path, database_path):
@@ -162,17 +232,10 @@ def schema_linking(idx, example, ner_information, schema_path, database_path):
                 # we will increase the counter for this column
                 column_matches[column_idx]['partial_column_match'] += 1
 
-    # Here we use the power of the base-data: if we find a potential value in the database, we mark the column we found the value in with a "full value match".
-    # TODO: also use the information on table level
-    include_primary_key_columns = 'id' in question_tokens
-    database_matches = find_values_by_database_lookup(example, ner_information, database_path, schema_path, include_primary_key_columns)
+    # a lot of interesting stuff happens here - make sure you are aware of it!
+    value_candidates, all_values_found, column_matches = lookup_database(example, ner_information, columns, question_tokens, column_matches, database_path, schema_path)
 
-    for value, column, table in database_matches:
-        column_lemma = " ".join(split_lemmatize(column))
-        column_idx = columns.index(column_lemma)
-        column_matches[column_idx]['full_value_match'] = True
-
-    return token_grouped, token_types, column_matches
+    return token_grouped, token_types, column_matches, value_candidates, all_values_found
 
 
 def main():
@@ -181,7 +244,6 @@ def main():
     arg_parser.add_argument('--ner_data_path', type=str, help='NER results (e.g. from Google API)', required=True)
     arg_parser.add_argument('--database_path', type=str, help='database files', required=True)
     arg_parser.add_argument('--table_path', type=str, help='schema data', required=True)
-    arg_parser.add_argument('--conceptNet', type=str, help='concept net base path', required=True)
     arg_parser.add_argument('--output', type=str, help='output data')
     args = arg_parser.parse_args()
 
@@ -193,25 +255,41 @@ def main():
 
     assert len(data) == len(ner_data), 'Both, NER data and actual data (e.g. ner_train.json and train.json) need to have the same amount of rows!'
 
+    not_found_count = 0
+
     t = TicToc()
     t.tic()
 
     # To analyze a specific sample use this. You find the sample-idx with e.g. this code snippet:
     # [(idx, query) for idx, query in enumerate(data) if query['question'] == "THE QUESTION YOU SEARCH FOR"]
-    # data = data[932:933]
-    # ner_data = ner_data[932:933]
+    # data = data[5579:5580]
+    # ner_data = ner_data[5579:5580]
 
-    # To better debug this code, just set "n_jobs=1"
-    results = Parallel(n_jobs=NUM_CORES)(delayed(schema_linking)(idx, example, ner_information, args.table_path, args.database_path) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
-    all_token_grouped, all_token_types, all_column_matches = zip(*results)
+    # results = Parallel(n_jobs=NUM_CORES)(delayed(schema_linking)(idx, example, ner_information, args.table_path, args.database_path) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
+    # To better debug this code, use the non-parallelized version of the code
+    results = [schema_linking(idx, example, ner_information, args.table_path, args.database_path) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
 
-    for example, token_grouped, token_types, column_matches in zip(data, all_token_grouped, all_token_types, all_column_matches):
+    all_token_grouped, all_token_types, all_column_matches, all_value_candidates, all_complete_values_found = zip(*results)
 
+    for example, token_grouped, token_types, column_matches, value_candidates, complete_values_found in zip(data,
+                                                                                                                all_token_grouped,
+                                                                                                                all_token_types,
+                                                                                                                all_column_matches,
+                                                                                                                all_value_candidates,
+                                                                                                                all_complete_values_found):
+
+        # this are the only additional information we store after pre-processing
         example['question_arg'] = token_grouped
         example['question_arg_type'] = token_types
         example['column_matches'] = column_matches
+        example['ner_extracted_values_processed'] = value_candidates
+        example['all_values_found'] = complete_values_found
+
+        if not complete_values_found:
+            not_found_count += 1
 
     t.toc(msg="Total pre-processing took")
+    print(f"Could not find all values in {not_found_count} examples. All examples where values could not get extracted, will get disable on evaluation")
 
     with open(args.output, 'w') as f:
         json.dump(data, f, sort_keys=True, indent=4)

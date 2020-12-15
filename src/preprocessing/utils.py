@@ -147,14 +147,6 @@ def get_multi_token_match(question_tokens, idx, n_question_tokens, column_header
             sub_tokens = " ".join(sub_tokens)
             if sub_tokens in column_header_tokens:  # we check if this tokens (e.g. "artist song name") are a column header
                 return endIdx, sub_tokens  # if yes, we return the new end-index and the sub-tokens, which will then be marked with "col"
-
-
-def group_header(toks, idx, num_toks, header_toks):
-    for endIdx in reversed(range(idx + 1, num_toks + 1)):
-        sub_toks = toks[idx: endIdx]
-        sub_toks = " ".join(sub_toks)
-        if sub_toks in header_toks:
-            return endIdx, sub_toks
     return idx, None
 
 
