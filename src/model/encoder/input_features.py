@@ -30,10 +30,11 @@ def encode_input(question_spans, column_names, table_names, values, tokenizer, m
 
         all_ids = question_token_ids + column_token_ids + table_token_ids + value_tokens_ids
         if len(all_ids) > max_length_model:
-            print("################### ATTENTION! Example too long ({}). Question-len: {}, column-len:{}, table-len: {} ".format(len(all_ids), len(question_token_ids), len(column_token_ids), len(table_token_ids)))
+            print(f"################### ATTENTION! Example too long ({len(all_ids)}). Question-len: {len(question_token_ids)}, column-len:{len(column_token_ids)}, table-len: {len(table_token_ids)} value-len: {len(value_tokens_ids)}")
             print(question)
             print(columns)
             print(tables)
+            print(values)
 
         # not sure here if "tokenizer.mask_token_id" or just a simple 1...
         attention_mask = [1] * len(all_ids)
@@ -55,11 +56,7 @@ def encode_input(question_spans, column_names, table_names, values, tokenizer, m
 def _tokenize_question(question, tokenizer):
     """
     How does a question look like? Example: [['what'], ['are'], ['name'], ['of'], ['all'], ['column', 'state'], ['playing'] ... ['?']]
-    What we do here is Wordpiece tokenization and adding special tokens. We further return the segment ids for the question tokens.
-
-    @param question:
-    @param tokenizer:
-    @return:
+    What we do here is tokenization (based on the Transformer architecture we use) and adding special tokens.
     """
     question_tokenized = tokenizer(list(flatten(question)), is_split_into_words=True)
     question_tokenized_ids = question_tokenized.data['input_ids']
@@ -87,6 +84,7 @@ def _tokenize_schema_names(schema_elements_names, tokenizer):
         all_schema_element_length.append(len(schema_element_ids_with_separator))
 
     return all_schema_element_ids, all_schema_element_length
+
 
 def _tokenize_values(values, tokenizer):
     all_values_length = []
