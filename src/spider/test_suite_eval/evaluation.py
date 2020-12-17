@@ -24,7 +24,7 @@ import json
 import sqlite3
 import argparse
 
-from process_sql import get_schema, Schema, get_sql
+from spider.process_sql import get_schema, Schema, get_sql
 from exec_eval import eval_exec_match
 
 # Flag to disable value evaluation
