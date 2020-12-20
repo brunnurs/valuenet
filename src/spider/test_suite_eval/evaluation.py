@@ -24,8 +24,10 @@ import json
 import sqlite3
 import argparse
 
-from spider.process_sql import get_schema, Schema, get_sql
-from exec_eval import eval_exec_match
+import wandb
+
+from spider.test_suite_eval.process_sql import get_schema, Schema, get_sql
+from spider.test_suite_eval.exec_eval import eval_exec_match
 
 # Flag to disable value evaluation
 DISABLE_VALUE = True
@@ -447,7 +449,7 @@ def print_formated_s(row_name, l, element_format):
     print(template.format(row_name, *l))
 
 
-def print_scores(scores, etype, include_turn_acc=True):
+def print_scores(scores, etype, training_step, include_turn_acc=True):
     turns = ['turn 1', 'turn 2', 'turn 3', 'turn 4', 'turn > 4']
     levels = ['easy', 'medium', 'hard', 'extra', 'all']
     if include_turn_acc:
@@ -463,6 +465,9 @@ def print_scores(scores, etype, include_turn_acc=True):
         print ('=====================   EXECUTION ACCURACY     =====================')
         exec_scores = [scores[level]['exec'] for level in levels]
         print_formated_s("execution", exec_scores, '{:<20.3f}')
+
+        matching_accuracy = {level: scores[level]['exec'] for level in levels}
+        wandb.log(matching_accuracy, step=training_step)
 
     if etype in ["all", "match"]:
         print ('\n====================== EXACT MATCHING ACCURACY =====================')
@@ -501,7 +506,7 @@ def print_scores(scores, etype, include_turn_acc=True):
             print_formated_s("exact match", exact_scores, '{:<20.3f}')
 
 
-def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, progress_bar_for_each_datapoint):
+def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, progress_bar_for_each_datapoint, training_step, quickmode=False):
 
     with open(gold) as f:
         glist = []
@@ -567,7 +572,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
             p, g = pg
             p_str = p[0]
             p_str = p_str.replace("value", "1")
-            g_str, db = g
+            g_str, db, question = g
             db_name = db
             db = os.path.join(db_dir, db, db + ".sqlite")
             schema = Schema(get_schema(db))
@@ -607,7 +612,8 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
 
             if etype in ["all", "exec"]:
                 exec_score = eval_exec_match(db=db, p_str=p_str, g_str=g_str, plug_value=plug_value,
-                                             keep_distinct=keep_distinct, progress_bar_for_each_datapoint=progress_bar_for_each_datapoint)
+                                             keep_distinct=keep_distinct, progress_bar_for_each_datapoint=progress_bar_for_each_datapoint,
+                                             quickmode=quickmode)
                 if exec_score:
                     scores[hardness]['exec'] += 1
                     scores[turn_id]['exec'] += 1
@@ -702,7 +708,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
                         2.0 * scores[level]['partial'][type_]['acc'] * scores[level]['partial'][type_]['rec'] / (
                         scores[level]['partial'][type_]['rec'] + scores[level]['partial'][type_]['acc'])
 
-    print_scores(scores, etype, include_turn_acc=include_turn_acc)
+    print_scores(scores, etype, training_step, include_turn_acc=include_turn_acc)
 
 
 # Rebuild SQL functions for value evaluation

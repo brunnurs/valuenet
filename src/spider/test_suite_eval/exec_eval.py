@@ -1,11 +1,14 @@
 import os
+import re
+import sqlite3
 import threading
 from typing import Tuple, Any, List, Set
 from itertools import product
 from collections import defaultdict
 import tqdm
 import random
-from parse import get_all_preds_for_execution, remove_distinct
+
+from spider.test_suite_eval.parse import get_all_preds_for_execution, remove_distinct
 import time
 import pickle as pkl
 import subprocess
@@ -15,7 +18,7 @@ from itertools import chain
 
 threadLock = threading.Lock()
 TIMEOUT = 60
-EXEC_TMP_DIR = 'tmp/'
+EXEC_TMP_DIR = 'data/tmp'
 
 def permute_tuple(element: Tuple, perm: Tuple) -> Tuple:
     assert len(element) == len(perm)
@@ -126,6 +129,38 @@ def clean_tmp_f(f_prefix: str):
             if os.path.exists(f_path):
                 os.unlink(f_path)
 
+def replace_cur_year(query: str) -> str:
+    return re.sub('YEAR\s*\(\s*CURDATE\s*\(\s*\)\s*\)\s*', '2020', query, flags=re.IGNORECASE)
+
+
+# get the database cursor for a sqlite database path
+def get_cursor_from_path(sqlite_path: str):
+    try:
+        if not os.path.exists(sqlite_path):
+            print('Openning a new connection %s' % sqlite_path)
+        connection = sqlite3.connect(sqlite_path)
+    except Exception as e:
+        print(sqlite_path)
+        raise e
+    connection.text_factory = lambda b: b.decode(errors='ignore')
+    cursor = connection.cursor()
+    return cursor
+
+
+def exec_on_db_without_wrapper(sqlite_path: str, query: str) -> Tuple[str, Any]:
+    query = replace_cur_year(query)
+    cursor = get_cursor_from_path(sqlite_path)
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        cursor.connection.close()
+
+        return 'result', result
+    except Exception as e:
+        cursor.close()
+        cursor.connection.close()
+        return 'exception', e
 
 # we need a wrapper, because simple timeout will not stop the database connection
 def exec_on_db(sqlite_path: str, query: str, process_id: str = '', timeout: int = TIMEOUT) -> Tuple[str, Any]:
@@ -137,7 +172,7 @@ def exec_on_db(sqlite_path: str, query: str, process_id: str = '', timeout: int 
             f_prefix = os.path.join(EXEC_TMP_DIR, process_id)
         pkl.dump((sqlite_path, query), open(f_prefix + '.in', 'wb'))
     try:
-        subprocess.call(['python3', 'exec_subprocess.py', f_prefix], timeout=timeout, stderr=open('runerr.log', 'a'))
+        subprocess.call(['python3', 'src/spider/test_suite_eval/exec_subprocess.py', f_prefix], timeout=timeout, stderr=open('runerr.log', 'a'))
     except Exception as e:
         print(e)
         clean_tmp_f(f_prefix)
@@ -168,7 +203,7 @@ def postprocess(query: str) -> str:
 # 0 if denotationally equivalent
 # 1 otherwise
 # the meaning of each auxillary argument can be seen in the parser definition in evaluation.py
-def eval_exec_match(db: str, p_str: str, g_str: str, plug_value: bool, keep_distinct: bool, progress_bar_for_each_datapoint: bool) -> int:
+def eval_exec_match(db: str, p_str: str, g_str: str, plug_value: bool, keep_distinct: bool, progress_bar_for_each_datapoint: bool, quickmode: bool) -> int:
     # post-process the prediction.
     # e.g. removing spaces between ">" and "="
     p_str, g_str = postprocess(p_str), postprocess(g_str)
@@ -185,7 +220,10 @@ def eval_exec_match(db: str, p_str: str, g_str: str, plug_value: bool, keep_dist
 
     # find all databases in the same directory
     db_dir = os.path.dirname(db)
-    db_paths = [os.path.join(db_dir, basename) for basename in os.listdir(db_dir) if '.sqlite' in basename]
+    if not quickmode:
+        db_paths = [os.path.join(db_dir, basename) for basename in os.listdir(db_dir) if '.sqlite' in basename]
+    else:
+        db_paths = [db]
 
     preds = [p_str]
     # if plug in value (i.e. we do not consider value prediction correctness)
@@ -208,8 +246,8 @@ def eval_exec_match(db: str, p_str: str, g_str: str, plug_value: bool, keep_dist
             ranger = db_paths
 
         for db_path in ranger:
-            g_flag, g_denotation = exec_on_db(db_path, g_str)
-            p_flag, p_denotation = exec_on_db(db_path, pred)
+            g_flag, g_denotation = exec_on_db_without_wrapper(db_path, g_str)
+            p_flag, p_denotation = exec_on_db_without_wrapper(db_path, pred)
 
             # we should expect the gold to be succesfully executed on the database
             assert g_flag != 'exception', 'gold query %s has error on database file %s' % (g_str, db_path)
@@ -222,6 +260,11 @@ def eval_exec_match(db: str, p_str: str, g_str: str, plug_value: bool, keep_dist
             elif not result_eq(g_denotation, p_denotation, order_matters=order_matters):
                 pred_passes = 0
             if pred_passes == 0:
+                print('The following query failed:')
+                print(f'gold: {g_str}')
+                print(f'pred: {p_str}')
+                print(f'database: {db_path}')
+                print()
                 break
 
         # the model prediction has the same denotation as the gold for all databases
