@@ -1,10 +1,12 @@
 import os
 
+import wandb
+from pytictoc import TicToc
+
 from config import read_arguments_evaluation
 from intermediate_representation.sem2sql.sem2SQL import transform_semQL_to_sql
 from spider import spider_utils
-from spider.evaluation.evaluation import evaluate
-from spider.evaluation_old.spider_evaluation import build_foreign_key_map_from_json, spider_evaluation
+from spider.test_suite_eval.evaluation import evaluate
 
 ####### use this code to test the ground-truth directly with the Spider-Execution validation
 ####### that way we can test the SQL -> SemQL -> SQL round trip. Use sql_data for the whole training set or val_sql_data for dev
@@ -22,14 +24,12 @@ print("Transformed {} samples successful to SQL. {} samples failed. Generated th
       "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
     count_success, count_failed))
 
+t = TicToc()
+t.tic()
+wandb.init(project="proton")
 
 evaluate(os.path.join(args.prediction_dir, 'ground_truth.txt'),
          os.path.join(args.prediction_dir, 'output.txt'),
          os.path.join(args.data_dir, "testsuite_databases"),
-         'exec', None, False, False, True)
-#
-#
-# spider_evaluation(os.path.join(args.prediction_dir, 'ground_truth.txt'),
-#                   os.path.join(args.prediction_dir, 'output.txt'),
-#                   os.path.join(args.data_dir, "original", "database"),
-#                   "exec", kmaps)
+         'exec', None, False, True, True, 1, quickmode=False)
+t.toc()
