@@ -74,12 +74,12 @@ def evaluate(model, dev_loader, schema, beam_size):
     return float(sketch_correct) / float(total), float(rule_label_correct) / float(total), float(not_all_values_found) / float(total), predictions
 
 
-def transform_to_sql_and_evaluate_with_spider(predictions, table_data, experiment_dir, training_step):
+def transform_to_sql_and_evaluate_with_spider(predictions, table_data, experiment_dir, data_dir, training_step):
     total_count, failure_count = transform_semQL_to_sql(table_data, predictions, experiment_dir)
 
     spider_eval_results = spider_evaluation.evaluate(os.path.join(experiment_dir, 'ground_truth.txt'),
                                                      os.path.join(experiment_dir, 'output.txt'),
-                                                     os.path.join(args.data_dir, "testsuite_databases"),
+                                                     os.path.join(data_dir, "testsuite_databases"),
                                                      "exec",
                                                      None,
                                                      False,

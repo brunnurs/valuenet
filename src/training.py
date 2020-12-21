@@ -14,7 +14,7 @@ def train(global_step,
           sketch_loss_weight=1,
           lf_loss_weight=1):
 
-    tr_loss, logging_loss = 0.0, 0.0
+    tr_loss = 0.0
     model.zero_grad()
     model.train()
 
@@ -45,8 +45,5 @@ def train(global_step,
         model.zero_grad()  # after we optimized the weights, we set the gradient back to zero.
 
         global_step += 1
-
-        wandb.log({'loss': (tr_loss - logging_loss)}, step=global_step)
-        logging_loss = tr_loss
 
     return global_step

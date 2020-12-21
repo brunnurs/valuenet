@@ -466,8 +466,8 @@ def print_scores(scores, etype, training_step, include_turn_acc=True):
         exec_scores = [scores[level]['exec'] for level in levels]
         print_formated_s("execution", exec_scores, '{:<20.3f}')
 
-        matching_accuracy = {level: scores[level]['exec'] for level in levels}
-        wandb.log(matching_accuracy, step=training_step)
+        exec_accuracy = {level: scores[level]['exec'] for level in levels}
+        wandb.log(exec_accuracy, step=training_step)
 
     if etype in ["all", "match"]:
         print ('\n====================== EXACT MATCHING ACCURACY =====================')
@@ -505,6 +505,7 @@ def print_scores(scores, etype, training_step, include_turn_acc=True):
             exact_scores = [scores[turn]['exact'] for turn in turns]
             print_formated_s("exact match", exact_scores, '{:<20.3f}')
 
+    return exec_accuracy
 
 def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, progress_bar_for_each_datapoint, training_step, quickmode=False):
 
@@ -708,7 +709,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
                         2.0 * scores[level]['partial'][type_]['acc'] * scores[level]['partial'][type_]['rec'] / (
                         scores[level]['partial'][type_]['rec'] + scores[level]['partial'][type_]['acc'])
 
-    print_scores(scores, etype, training_step, include_turn_acc=include_turn_acc)
+    return print_scores(scores, etype, training_step, include_turn_acc=include_turn_acc)
 
 
 # Rebuild SQL functions for value evaluation

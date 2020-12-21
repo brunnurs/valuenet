@@ -6,7 +6,7 @@
     <envs>
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
-    <option name="SDK_HOME" value="sftp://root@localhost:8888/opt/conda/bin/python" />
+    <option name="SDK_HOME" value="sshConfig://root@localhost:8888 agent/opt/conda/bin/python3.8" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
