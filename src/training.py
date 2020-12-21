@@ -1,11 +1,11 @@
 import torch
+import wandb
 from tqdm import tqdm
 
 from spider.example_builder import build_example
 
 
 def train(global_step,
-          tb_writer,
           train_dataloader,
           schema,
           model,
@@ -46,7 +46,7 @@ def train(global_step,
 
         global_step += 1
 
-        tb_writer.add_scalar('loss', (tr_loss - logging_loss), global_step)
+        wandb.log({'loss': (tr_loss - logging_loss)}, step=global_step)
         logging_loss = tr_loss
 
     return global_step

@@ -2,6 +2,7 @@ import copy
 import os
 
 import torch
+import wandb
 from tqdm import tqdm
 import json
 
@@ -11,9 +12,9 @@ from intermediate_representation import semQL
 from intermediate_representation.sem2sql.sem2SQL import transform_semQL_to_sql
 from model.model import IRNet
 from spider import spider_utils
-from spider.evaluation_old.spider_evaluation import spider_evaluation, build_foreign_key_map_from_json
 from spider.example_builder import build_example
 from utils import setup_device, set_seed_everywhere
+import spider.test_suite_eval.evaluation as spider_evaluation
 
 
 def evaluate(model, dev_loader, schema, beam_size):
@@ -73,18 +74,19 @@ def evaluate(model, dev_loader, schema, beam_size):
     return float(sketch_correct) / float(total), float(rule_label_correct) / float(total), float(not_all_values_found) / float(total), predictions
 
 
-def transform_to_sql_and_evaluate_with_spider(predictions, table_data, data_dir, experiment_dir, tb_writer, training_step):
+def transform_to_sql_and_evaluate_with_spider(predictions, table_data, experiment_dir, training_step):
     total_count, failure_count = transform_semQL_to_sql(table_data, predictions, experiment_dir)
 
-    kmaps = build_foreign_key_map_from_json(os.path.join(data_dir, 'original', 'tables.json'))
-
-    spider_eval_results = spider_evaluation(os.path.join(experiment_dir, 'ground_truth.txt'),
-                                            os.path.join(experiment_dir, 'output.txt'),
-                                            os.path.join(data_dir, "original", "database"),
-                                            "exec",
-                                            kmaps,
-                                            tb_writer,
-                                            training_step, print_stdout=False)
+    spider_eval_results = spider_evaluation.evaluate(os.path.join(experiment_dir, 'ground_truth.txt'),
+                                                     os.path.join(experiment_dir, 'output.txt'),
+                                                     os.path.join(args.data_dir, "testsuite_databases"),
+                                                     "exec",
+                                                     None,
+                                                     False,
+                                                     False,
+                                                     False,
+                                                     training_step,
+                                                     quickmode=False)
 
     return total_count, failure_count, spider_eval_results
 
@@ -111,8 +113,8 @@ if __name__ == '__main__':
                                                                   table_data,
                                                                   args.beam_size)
 
-    print("Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}, Not all values found: {}".format(len(dev_loader), sketch_acc, acc, not_all_values_found))
-
+    print("Predicted {} examples. Start now converting them to SQL. Sketch-Accuracy: {}, Accuracy: {}, Not all values found: {}".format(
+            len(dev_loader), sketch_acc, acc, not_all_values_found))
 
     with open(os.path.join(args.prediction_dir, 'predictions_sem_ql.json'), 'w', encoding='utf-8') as f:
         json.dump(predictions, f, indent=2)
@@ -126,9 +128,9 @@ if __name__ == '__main__':
           "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
         count_success, count_failed))
 
-    kmaps = build_foreign_key_map_from_json(os.path.join(args.data_dir, 'original', 'tables.json'))
+    wandb.init(project="proton")
 
-    spider_evaluation(os.path.join(args.prediction_dir, 'ground_truth.txt'),
-                      os.path.join(args.prediction_dir, 'output.txt'),
-                      os.path.join(args.data_dir, 'original', 'database'),
-                      "exec", kmaps)
+    spider_evaluation.evaluate(os.path.join(args.prediction_dir, 'ground_truth.txt'),
+                               os.path.join(args.prediction_dir, 'output.txt'),
+                               os.path.join(args.data_dir, "testsuite_databases"),
+                               'exec', None, False, False, False, 1, quickmode=False)

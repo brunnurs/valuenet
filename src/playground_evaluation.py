@@ -31,5 +31,5 @@ wandb.init(project="proton")
 evaluate(os.path.join(args.prediction_dir, 'ground_truth.txt'),
          os.path.join(args.prediction_dir, 'output.txt'),
          os.path.join(args.data_dir, "testsuite_databases"),
-         'exec', None, False, True, True, 1, quickmode=False)
+         'exec', None, False, False, False, 1, quickmode=False)
 t.toc()
