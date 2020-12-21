@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/pytorch:19.12-py3
+FROM nvcr.io/nvidia/pytorch:20.12-py3
 
 COPY download_nltk.py /tmp
 
@@ -13,18 +13,20 @@ EXPOSE 22
 RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
 
-ADD ssh_keys.tar.gz /tmp/
+ADD authorized_keys /tmp/
+ADD known_hosts /tmp/
 RUN mkdir -p /root/.ssh \
-    && mv /tmp/ssh_keys/authorized_keys /root/.ssh/authorized_keys \
-    && chown root:root /root/.ssh/authorized_keys \
-    && rm -rf /tmp/ssh_keys ssh_keys.tar.gz
+    && mv /tmp/authorized_keys /root/.ssh/authorized_keys \
+    && mv /tmp/known_hosts /root/.ssh/known_hosts \
+    && chown root:root /root/.ssh/*\
+    && rm -rf /tmp/authorized_keys
 
 # Don't just use the requirements file and install torch etc.... the nvidia image already
 # comes with a pre-installed torch etc, so installing another torch/pytorch (and also the transitive torch dependency of transformers for example)
 # will cause quite a bit of trouble.
 RUN pip install nltk
 RUN pip install tqdm
-RUN pip install pattern
+RUN pip install patternk
 RUN pip install transformers
 RUN pip install pytictoc
 RUN pip install wandb
