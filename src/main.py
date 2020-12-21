@@ -3,7 +3,6 @@ import os
 
 import torch
 from pytictoc import TicToc
-from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
 from model.model import IRNet
@@ -51,7 +50,6 @@ if __name__ == '__main__':
                                                    args.lr_transformer, args.lr_connection, args.lr_base,
                                                    args.scheduler_gamma)
 
-    tb_writer = SummaryWriter(output_path)
     global_step = 0
     best_acc = 0.0
 
@@ -62,7 +60,6 @@ if __name__ == '__main__':
 
         t.tic()
         global_step = train(global_step,
-                            tb_writer,
                             train_loader,
                             table_data,
                             model,
@@ -87,9 +84,7 @@ if __name__ == '__main__':
 
         total_transformed, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
                                                                                                            table_data,
-                                                                                                           args.data_dir,
                                                                                                            output_path,
-                                                                                                           tb_writer,
                                                                                                            epoch + 1)
 
         tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(total_transformed - fail_transform, total_transformed))
@@ -107,9 +102,4 @@ if __name__ == '__main__':
 
         wandb.log({"Sketch-accuracy": sketch_acc, "accuracy": acc}, step=epoch + 1)
 
-        tb_writer.add_scalar("sketch-accuracy", sketch_acc, epoch + 1)
-        tb_writer.add_scalar("accuracy", acc, epoch + 1)
-
         scheduler.step()  # Update learning rate schedule
-
-    tb_writer.close()
