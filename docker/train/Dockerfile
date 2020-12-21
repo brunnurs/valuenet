@@ -26,13 +26,14 @@ RUN mkdir -p /root/.ssh \
 # will cause quite a bit of trouble.
 RUN pip install nltk
 RUN pip install tqdm
-RUN pip install patternk
+RUN pip install pattern
 RUN pip install transformers
 RUN pip install pytictoc
 RUN pip install wandb
 RUN pip install pyyaml
 RUN pip install textdistance
 RUN pip install word2number
+RUN pip install sqlparse
 
 RUN wandb login c9bac4494d41935972b1da58001870aec716e3bb
 

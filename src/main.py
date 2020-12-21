@@ -85,6 +85,7 @@ if __name__ == '__main__':
         total_transformed, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
                                                                                                            table_data,
                                                                                                            output_path,
+                                                                                                           args.data_dir,
                                                                                                            epoch + 1)
 
         tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(total_transformed - fail_transform, total_transformed))
