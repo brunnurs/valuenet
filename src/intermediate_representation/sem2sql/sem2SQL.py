@@ -6,7 +6,7 @@ import numbers
 from intermediate_representation.graph import Graph
 from intermediate_representation.sem2sql.infer_from_clause import infer_from_clause
 from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1, V
-from intermediate_representation.sem_utils import alter_inter, alter_not_in, alter_column0
+from intermediate_representation.sem_utils import alter_column0
 
 
 def split_logical_form(lf):

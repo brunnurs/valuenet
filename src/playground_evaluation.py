@@ -18,7 +18,10 @@ sql_data, table_data, val_sql_data, val_table_data = spider_utils.load_dataset(a
 for d in val_sql_data:
     d['model_result'] = d['rule_label']
 
+t = TicToc()
+t.tic()
 count_success, count_failed = transform_semQL_to_sql(val_table_data, val_sql_data, args.prediction_dir)
+t.toc()
 
 print("Transformed {} samples successful to SQL. {} samples failed. Generated the files a 'ground_truth.txt' "
       "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
