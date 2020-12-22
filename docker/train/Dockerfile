@@ -38,6 +38,7 @@ RUN pip install sqlparse
 RUN wandb login c9bac4494d41935972b1da58001870aec716e3bb
 
 RUN python /tmp/download_nltk.py
+RUN python -m spacy download en_core_web_sm
 
 ENV PYTHONPATH /workspace
 
