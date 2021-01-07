@@ -41,7 +41,7 @@ jellyfish==0.7.2
 jmespath==0.9.5
 joblib==0.14.1
 kiwisolver==1.2.0
-lxml==4.5.0
+lxml==4.6.2
 markdown==3.2.1
 matplotlib==3.2.1
 more-itertools==8.2.0
