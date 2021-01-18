@@ -1,37 +1,39 @@
 from unittest import TestCase
 
-from pytictoc import TicToc
-
 from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
 
 
 class TestDatabaseValueFinder(TestCase):
 
-    def test_find_similar_values_in_database__exact_matches(self):
+    def test_get_relevant_columns_with_or_without_pk_fk(self):
         # GIVEN
-        potential_values = [('Belize', 1.00), ('dummy1', 0.75), ('dummy2', 0.75)]
+        db_name = 'concert_singer'
+        db_schemas = 'data/spider/original/tables.json'
 
-        db_value_finder = self._initiate_db_finder()
-
-        tic = TicToc()
-        tic.tic()
+        db_value_finder = DatabaseValueFinder(db_name, db_schemas, 1)
 
         # WHEN
-        similar_values_db = db_value_finder.find_similar_values_in_database(potential_values)
+        column_table_mapping_with_pk = db_value_finder._get_relevant_columns(True)
+        column_table_mapping_without_pk = db_value_finder._get_relevant_columns(False)
 
         # THEN
-        tic.toc()
-        print(similar_values_db)
-        self.assertEqual(('Belize', 'country_name', 'countries'), similar_values_db[0])
+        self.assertIn('concert_ID', column_table_mapping_with_pk['concert'])
+        self.assertNotIn('concert_ID', column_table_mapping_without_pk['concert'])
 
-    @staticmethod
-    def _initiate_db_finder():
-        config = {'database': 'cordis',
-                  'database_host': 'localhost',
-                  'database_port': '5432',
-                  'database_user': 'postgres',
-                  'database_password': 'postgres', 'database_schema': 'unics_cordis'}
+    def test_get_relevant_columns_text_columns_only(self):
+        # GIVEN
+        db_name = 'concert_singer'
+        db_schemas = 'data/spider/original/tables.json'
 
-        return DatabaseValueFinder(config['database'], 'data/cordis/original/tables.json', config)
+        db_value_finder = DatabaseValueFinder(db_name, db_schemas, 1)
 
+        # WHEN
+        column_table_mapping_text_columns_only = db_value_finder._get_relevant_columns(True, True)
+        column_table_mapping = db_value_finder._get_relevant_columns(True)
 
+        # THEN
+        self.assertIn('Name', column_table_mapping['stadium'])
+        self.assertIn('Name', column_table_mapping_text_columns_only['stadium'])
+
+        self.assertIn('Capacity', column_table_mapping['stadium'])
+        self.assertNotIn('Capacity', column_table_mapping_text_columns_only['stadium'])
