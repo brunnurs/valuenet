@@ -9,39 +9,18 @@ from textdistance import DamerauLevenshtein
 import multiprocessing
 from joblib import Parallel, delayed
 
+from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
+
 NUM_CORES = multiprocessing.cpu_count()
 
 
-def is_foreign_key(current_idx, all_foreign_keys):
-    matching_foreign_keys = list(filter(lambda fk_pair: fk_pair[0] == current_idx, all_foreign_keys))
-    return matching_foreign_keys != []
-
-
-def is_primary_key(current_idx, all_primary_keys):
-    return current_idx in all_primary_keys
-
-
-def get_cleaned_column_name_by_original_column_name(column_name_original, all_original_column_names, all_cleaned_column_names):
-    for idx, original in enumerate(all_original_column_names):
-        name = original[1]
-        if column_name_original == name:
-            return all_cleaned_column_names[idx][1]
-
-    raise ValueError(f'Could not find clean counterpart of column name {column_name_original}')
-
-
-def get_cleaned_table_name_by_original_table_name(table_name_original, all_original_table_names, all_cleaned_table_names):
-    idx = all_original_table_names.index(table_name_original)
-    return all_cleaned_table_names[idx]
-
-
-class DatabaseValueFinderSQLite:
+class DatabaseValueFinderSQLite(DatabaseValueFinder):
     def __init__(self, database_folder, database_name, database_schema_path, max_results=10):
-        self.database = database_name
-        self.database_schema = self._load_schema(database_schema_path, database_name)
+
+        super().__init__(database_name, database_schema_path, max_results)
+
         self.database_path = Path(database_folder, database_name, database_name + '.sqlite')
         self.similarity_algorithm = DamerauLevenshtein()
-        self.max_results = max_results
 
         # as this thresholds are highly depending on the database specific implementation, it needs to be provided here
         self.exact_match_threshold = 1.0  # be a ware that an exact match is not case sensitive
@@ -51,7 +30,7 @@ class DatabaseValueFinderSQLite:
     def find_similar_values_in_database(self, potential_values, include_primary_keys):
         matching_values = set()
 
-        relevant_columns = self._get_relevant_columns(self.database_schema, include_primary_keys)
+        relevant_columns = self._get_relevant_columns(include_primary_keys)
 
         conn = sqlite3.connect(str(self.database_path.resolve()))
 
@@ -120,35 +99,10 @@ class DatabaseValueFinderSQLite:
             # similarity to 0 if there is no exact match. The goal is to improve speed.
             return p == c, int(p == c)
 
-    def _top_n_results(self, matching_values):
-        # remember: we were dealing with a list before to avoid duplicates
-        matching_values_list = list(matching_values)
-        # itemgetter(1) is referring to the first element of the tuple, which is the similarity
-        matching_values_list.sort(key=operator.itemgetter(1), reverse=True)
-        return [(value,
-                 get_cleaned_column_name_by_original_column_name(column, self.database_schema['column_names_original'], self.database_schema['column_names']),
-                 get_cleaned_table_name_by_original_table_name(table, self.database_schema['table_names_original'], self.database_schema['table_names']))
-                for value, _, column, table in matching_values_list[:self.max_results]]
-
     @staticmethod
     def fetch_data(query, cursor):
         cursor.execute(query)
         return cursor.fetchall()
-
-    @staticmethod
-    def _get_relevant_columns(database_schema, include_primary_keys):
-        table_columns = {}
-        for idx, (table_idx, column_name) in enumerate(database_schema['column_names_original']):
-            if column_name != '*':
-                if not is_foreign_key(idx, database_schema['foreign_keys']):
-                    if include_primary_keys or not is_primary_key(idx, database_schema['primary_keys']):
-                        table = database_schema['table_names_original'][table_idx]
-                        if table in table_columns:
-                            table_columns[table].append(column_name)
-                        else:
-                            table_columns[table] = [column_name]
-
-        return table_columns
 
     @staticmethod
     def _assemble_query(columns, table):
@@ -158,13 +112,3 @@ class DatabaseValueFinderSQLite:
                                f'{table}.[{columns[0]}]')
 
         return f'SELECT {select_clause} FROM {table}'
-
-    @staticmethod
-    def _load_schema(database_schema_path, database_name):
-        with open(database_schema_path, 'r', encoding='utf-8') as json_file:
-            schemas = json.load(json_file)
-            for db_schema in schemas:
-                if db_schema['db_id'] == database_name:
-                    return db_schema
-
-            raise ValueError(f'Schema of database "{database_name}" not found in schemas')

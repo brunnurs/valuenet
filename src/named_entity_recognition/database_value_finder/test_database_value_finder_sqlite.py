@@ -132,7 +132,6 @@ class TestDatabaseValueFinderSQLite(TestCase):
         self.assertGreaterEqual(similar_values_db.index(('Ashley', 'city', 'airports')), 0, 'Could not find "Ashley" in database.')
         self.assertGreaterEqual(similar_values_db.index(('Aberdeen', 'city', 'airports')), 0, 'Could not find "Aberdeen" in database.')
 
-
     def test__assemble_query(self):
         # GIVEN
         columns = ['A', 'B', 'C']
@@ -198,4 +197,3 @@ class TestDatabaseValueFinderSQLite(TestCase):
         self.assertFalse(result)
         # TODO should be true when implementation is fixed.
         # self.assertTrue(result)
-
