@@ -45,11 +45,8 @@ def add_value_match(token, columns_list, column_matches):
     column_matches[column_ix]['full_value_match'] = True
 
 
-def find_values_by_database_lookup(db_name, potential_value_candidates, database_path, schema_path, include_primary_keys):
-
-    database_value_finder = DatabaseValueFinderSQLite(database_path, db_name, schema_path)
-
-    return match_values_in_database(database_value_finder, potential_value_candidates, include_primary_keys)
+def build_db_value_finder(database_path, db_name, schema_path):
+    return DatabaseValueFinderSQLite(database_path, db_name, schema_path)
 
 
 def add_likely_value_candidates(value_candidates, potential_value_candidates):
@@ -74,7 +71,7 @@ def add_likely_value_candidates(value_candidates, potential_value_candidates):
         value_candidates))
 
 
-def lookup_database(example, ner_information, columns, question_tokens, column_matches, database_path, schema_path):
+def lookup_database(example, ner_information, columns, question_tokens, column_matches, database_value_finder, add_values_from_ground_truth):
     """
     Now we use the base data (database) for two things:
     * to put together a list of values from which the neural network later hase to pick the right one.
@@ -89,11 +86,7 @@ def lookup_database(example, ner_information, columns, question_tokens, column_m
     include_primary_key_columns = 'id' in question_tokens
 
     # here we do the actual database lookup
-    database_matches = find_values_by_database_lookup(example['db_id'],
-                                                      potential_value_candidates,
-                                                      database_path,
-                                                      schema_path,
-                                                      include_primary_key_columns)
+    database_matches = match_values_in_database(database_value_finder, potential_value_candidates, include_primary_key_columns)
 
     # and add the hint to the corresponding column
     for value, column, table in database_matches:
@@ -109,22 +102,24 @@ def lookup_database(example, ner_information, columns, question_tokens, column_m
     # that does not exist (e.g. "give me all bills for Christian Benz" - and there is no "Christian Benz")
     # We therefore add certain values always to the value_candidates
     value_candidates = add_likely_value_candidates(value_candidates, potential_value_candidates)
-    
 
-    # but what if we can't find all values, because e.g. the NER does not return the correct candidates?:
-    # if we don't find a value in the values candidates, we add it from the ground truth. Be aware that is is basically cheating.
-    # This makes sense though for training, as we don't want to reduce the training samples because of non-found values. We also mark
-    # the samples where not all values could get extracted, so we can manually fail them during evaluation.
-    value_candidates_adjusted, all_values_found, _ = add_non_found_values(ner_information['values'], value_candidates)
+    if add_values_from_ground_truth:
+        # but what if we can't find all values, because e.g. the NER does not return the correct candidates?:
+        # if we don't find a value in the values candidates, we add it from the ground truth. Be aware that is is basically cheating.
+        # This makes sense though for training, as we don't want to reduce the training samples because of non-found values. We also mark
+        # the samples where not all values could get extracted, so we can manually fail them during evaluation.
+        value_candidates, all_values_found, _ = add_non_found_values(ner_information['values'], value_candidates)
 
-    if not all_values_found:
-        print(str(potential_value_candidates))
-        print(ner_information['values'])
+        if not all_values_found:
+            print(str(potential_value_candidates))
+            print(ner_information['values'])
+    else:
+        all_values_found = True
 
-    return value_candidates_adjusted, all_values_found, column_matches
+    return value_candidates, all_values_found, column_matches
 
 
-def schema_linking(idx, example, ner_information, schema_path, database_path):
+def pre_process(idx, example, ner_information, db_value_finder, is_training):
     print()
     print(f'Process example idx: {idx}')
     print(f"Question: {example['question']}")
@@ -233,7 +228,7 @@ def schema_linking(idx, example, ner_information, schema_path, database_path):
                 column_matches[column_idx]['partial_column_match'] += 1
 
     # a lot of interesting stuff happens here - make sure you are aware of it!
-    value_candidates, all_values_found, column_matches = lookup_database(example, ner_information, columns, question_tokens, column_matches, database_path, schema_path)
+    value_candidates, all_values_found, column_matches = lookup_database(example, ner_information, columns, question_tokens, column_matches, db_value_finder, add_values_from_ground_truth=is_training)
 
     return token_grouped, token_types, column_matches, value_candidates, all_values_found
 
@@ -265,9 +260,9 @@ def main():
     # data = data[5579:5580]
     # ner_data = ner_data[5579:5580]
 
-    # results = Parallel(n_jobs=NUM_CORES)(delayed(schema_linking)(idx, example, ner_information, args.table_path, args.database_path) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
+    # results = Parallel(n_jobs=NUM_CORES)(delayed(pre_process)(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
     # To better debug this code, use the non-parallelized version of the code
-    results = [schema_linking(idx, example, ner_information, args.table_path, args.database_path) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
+    results = [pre_process(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
 
     all_token_grouped, all_token_types, all_column_matches, all_value_candidates, all_complete_values_found = zip(*results)
 
