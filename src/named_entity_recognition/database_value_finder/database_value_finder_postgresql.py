@@ -1,11 +1,12 @@
-import json
-
 import psycopg2
 
+from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
 
-class DatabaseValueFinderPostgreSQL:
-    def __init__(self, database, db_schema_information, connection_config, max_results=10):
-        self.database = database
+
+class DatabaseValueFinderPostgreSQL(DatabaseValueFinder):
+    def __init__(self, database_name, db_schema_information, connection_config, max_results=10):
+
+        super().__init__(database_name, db_schema_information, max_results)
 
         self.db_host = connection_config['database_host']
         self.db_port = connection_config['database_port']
@@ -13,18 +14,16 @@ class DatabaseValueFinderPostgreSQL:
         self.db_password = connection_config['database_password']
         self.db_options = f"-c search_path={connection_config['database_schema']},public"
 
-        self.database_schema = self._load_schema(db_schema_information, database)
-        self.max_results = max_results
-
         # as this thresholds are highly depending on the database specific implementation, it needs to be provided here
         self.exact_match_threshold = 1.0  # be a ware that an exact match is not case sensitive
         self.high_similarity_threshold = 0.75
         self.medium_similarity_threshold = 0.7
 
-    def find_similar_values_in_database(self, potential_values):
+    def find_similar_values_in_database(self, potential_values, include_primary_keys):
         matching_values = set()
 
-        table_text_column_mapping = self._get_text_columns(self.database_schema)
+        # right now the similarity search on PostgreSQL supports only text columns due to the special indices
+        table_text_column_mapping = self._get_relevant_columns(include_primary_keys, text_columns_only=True)
 
         conn = psycopg2.connect(database=self.database, user=self.db_user, password=self.db_password, host=self.db_host, port=self.db_port, options=self.db_options)
 
@@ -49,28 +48,11 @@ class DatabaseValueFinderPostgreSQL:
         # toc.toc(f"{table}.{column} took")
         # print(len(rows))
 
-        # r[0] is therefore valid as we query always exactly one column
-        return list(map(lambda r: (r[0], column, table), rows))
-
-    def _top_n_results(self, matching_values):
-        matching_values_list = list(matching_values)
-        return matching_values_list[:self.max_results]
-
-    @staticmethod
-    def _get_text_columns(database_schema):
-        """
-        Find all text columns in this database schema and return it in a map grouped by table.
-        """
-        table_columns = {}
-        for idx, (table_idx, column_name) in enumerate(database_schema['column_names_original']):
-            if database_schema['column_types'][idx] == 'text' and column_name != '*':
-                table = database_schema['table_names_original'][table_idx]
-                if table in table_columns:
-                    table_columns[table].append(column_name)
-                else:
-                    table_columns[table] = [column_name]
-
-        return table_columns
+        # r[0] is always the value of the column we query. r[1:] represents the similarity with all potential values.
+        # Keep in mind that we only get the result back, if one of the similarities was higher than the similiarity-threshold
+        # for this potential value. By using the max() function we therefore always get the similarity of the potential value
+        # that matched best to the value of the column
+        return list(map(lambda r: (r[0], max(r[1:]), column, table), rows))
 
     @staticmethod
     def _assemble_query(column, table, potential_values):
@@ -111,13 +93,3 @@ class DatabaseValueFinderPostgreSQL:
         # print(full_query)
 
         return full_query
-
-    @staticmethod
-    def _load_schema(database_schema_path, database_name):
-        with open(database_schema_path, 'r', encoding='utf-8') as json_file:
-            schemas = json.load(json_file)
-            for db_schema in schemas:
-                if db_schema['db_id'] == database_name:
-                    return db_schema
-
-            raise ValueError(f'Schema of database "{database_name}" not found in schemas')
