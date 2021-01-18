@@ -9,13 +9,12 @@ from spacy.lang.en import English
 
 from config import read_arguments_manual_inference
 from intermediate_representation import semQL
-from manual_inference.helper import _tokenize_question, _inference_semql, _pre_process_values, _semql_to_sql, \
+from manual_inference.helper import _tokenize_question, _inference_semql, _pre_processing, _semql_to_sql, \
     _execute_query_postgresql, _get_schemas_spider, _get_schemas_cordis, _is_cordis_or_spider, _execute_query_sqlite
 from model.model import IRNet
 from named_entity_recognition.database_value_finder.database_value_finder_postgresql import \
     DatabaseValueFinderPostgreSQL
 from named_entity_recognition.database_value_finder.database_value_finder_sqlite import DatabaseValueFinderSQLite
-from preprocessing.process_data import process_datas
 from preprocessing.utils import merge_data_with_schema
 from utils import setup_device, set_seed_everywhere
 
@@ -43,12 +42,6 @@ print("Load pre-trained model from '{}'".format(args.model_to_load))
 
 nlp = English()
 tokenizer = nlp.Defaults.create_tokenizer(nlp)
-
-with open(os.path.join(args.conceptNet, 'english_RelatedTo.pkl'), 'rb') as f:
-    related_to_concept = pickle.load(f)
-
-with open(os.path.join(args.conceptNet, 'english_IsA.pkl'), 'rb') as f:
-    is_a_concept = pickle.load(f)
 
 
 @app.route('/')
@@ -113,27 +106,22 @@ def pose_question(database):
         db_value_finder = DatabaseValueFinderPostgreSQL(database, schema_path_cordis, connection_config)
         execute_query_func = lambda sql_to_execute: _execute_query_postgresql(sql_to_execute, database, connection_config)
 
-    input_data = {
+    example = {
         'question': question,
         'query': 'DUMMY',
         'db_id': database,
         'question_toks': _tokenize_question(tokenizer, question)
     }
 
-    print(f"question has been tokenized to : {input_data['question_toks']}")
+    print(f"question has been tokenized to : {example['question_toks']}")
 
-    data, table = merge_data_with_schema(schemas_raw, [input_data])
+    example_merged, _ = merge_data_with_schema(schemas_raw, [example])
 
-    pre_processed_data = process_datas(data, related_to_concept, is_a_concept)
+    example_pre_processed = _pre_processing(example_merged[0], db_value_finder)
 
-    pre_processed_with_values = _pre_process_values(pre_processed_data[0], db_value_finder)
+    print(f"we found the following potential values in the question: {example_pre_processed['values']}")
 
-    print(f"we found the following potential values in the question: {input_data['values']}")
-
-    prediction, example = _inference_semql(pre_processed_with_values, schemas_dict, model)
-
-    print(f"Results from schema linking (question token types): {example.src_sent}")
-    print(f"Results from schema linking (column types): {example.col_hot_type}")
+    prediction, example = _inference_semql(example_pre_processed, schemas_dict, model)
 
     print(f"Predicted SemQL-Tree: {prediction['model_result']}")
     sql = _semql_to_sql(prediction, schemas_dict)
@@ -149,8 +137,8 @@ def pose_question(database):
 
     return {
         'question': question,
-        'question_tokenized': input_data['question_toks'],
-        'potential_values_found_in_db': input_data['values'],
+        'question_tokenized': prediction['question_toks'],
+        'potential_values_found_in_db': prediction['values'],
         'sem_ql': prediction['model_result'],
         'sql': sql,
         'result': result_max_100_rows

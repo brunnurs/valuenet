@@ -1,3 +1,4 @@
+import copy
 import os
 import sqlite3
 from pathlib import Path
@@ -8,13 +9,14 @@ import torch
 from config import Config
 from intermediate_representation.sem_utils import alter_column0
 from named_entity_recognition.api_ner.google_api_repository import remote_named_entity_recognition
-from named_entity_recognition.pre_process_ner_values import pre_process, match_values_in_database
+from preprocessing.pre_process import pre_process
 from spider import spider_utils
 from spider.example_builder import build_example
 from intermediate_representation.sem2sql.sem2SQL import transform
 
 
 def _inference_semql(data_row, schemas, model):
+    original_row = copy.deepcopy(data_row)
     example = build_example(data_row, schemas)
 
     with torch.no_grad():
@@ -23,10 +25,9 @@ def _inference_semql(data_row, schemas, model):
     # here we set assemble the predicted actions (including leaf-nodes) as string
     full_prediction = " ".join([str(x) for x in results[0].actions])
 
-    prediction = example.sql_json['pre_sql']
-    prediction['model_result'] = full_prediction
+    original_row['model_result'] = full_prediction
 
-    return prediction, example
+    return original_row, example
 
 
 def _tokenize_question(tokenizer, question):
@@ -38,15 +39,17 @@ def _tokenize_question(tokenizer, question):
     return [str(token) for token in question_tokenized]
 
 
-def _pre_process_values(row, db_value_finder):
-    ner_results = remote_named_entity_recognition(row['question'])
-    row['ner_extracted_values'] = ner_results['entities']
+def _pre_processing(example, db_value_finder):
+    ner_information = remote_named_entity_recognition(example['question'])
 
-    extracted_values = pre_process(row)
+    token_grouped, token_types, column_matches, value_candidates, _ = pre_process(0, example, ner_information, db_value_finder, is_training=False)
 
-    row['values'] = match_values_in_database(db_value_finder, extracted_values)
+    example['question_arg'] = token_grouped
+    example['question_arg_type'] = token_types
+    example['column_matches'] = column_matches
+    example['values'] = value_candidates
 
-    return row
+    return example
 
 
 def _semql_to_sql(prediction, schemas):
