@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/pytorch:19.12-py3
+FROM nvcr.io/nvidia/pytorch:20.12-py3
 
 ENTRYPOINT bash
 
@@ -16,6 +16,7 @@ RUN pip install pytictoc
 RUN pip install wandb
 RUN pip install pyyaml
 RUN pip install word2number
+RUN pip install sqlparse
 RUN pip install "textdistance[extras]"
 RUN pip install spacy
 RUN pip install psycopg2-binary
@@ -27,9 +28,10 @@ COPY data /workspace/data
 COPY models /workspace/models
 
 RUN python src/tools/download_nltk.py
+RUN python -m spacy download en_core_web_sm
 
 ENV PYTHONPATH /workspace/src
 
 WORKDIR /workspace
 
-ENTRYPOINT python src/manual_inference/manual_inference_api.py --api_key=$API_KEY --model_to_load=models/best_model.pt --database_host=testbed.inode.igd.fraunhofer.de --database_port=18001 --database_user=postgres --database_password=vdS83DJSQz2xQ --database_schema=unics_cordis --conceptNet=data/cordis/conceptNet
+ENTRYPOINT python src/manual_inference/manual_inference_api.py --api_key=$API_KEY --model_to_load=models/best_model.pt --database_host=testbed.inode.igd.fraunhofer.de --database_port=18001 --database_user=postgres --database_password=$DB_PW --database_schema=unics_cordis
