@@ -47286,8 +47286,7 @@
     "values": [
       "English",
       "T",
-      "French",
-      "T"
+      "French"
     ]
   },
   {
@@ -47379,8 +47378,7 @@
     "values": [
       "English",
       "T",
-      "French",
-      "T"
+      "French"
     ]
   },
   {
@@ -47675,8 +47673,7 @@
     "values": [
       "english",
       "t",
-      "dutch",
-      "t"
+      "dutch"
     ]
   },
   {
@@ -47753,8 +47750,7 @@
     "values": [
       "English",
       "T",
-      "Dutch",
-      "T"
+      "Dutch"
     ]
   },
   {
@@ -54995,7 +54991,6 @@
     "language": "en",
     "question": "Show the record companies shared by orchestras founded before 2003 and after 2003.",
     "values": [
-      "2003",
       "2003"
     ]
   },
@@ -55103,7 +55098,6 @@
     "language": "en",
     "question": "What are the record companies that are used by both orchestras founded before 2003 and those founded after 2003?",
     "values": [
-      "2003",
       "2003"
     ]
   },
