@@ -1,0 +1,7 @@
+[
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT T1.total_cost \nFROM projects AS T1 \n WHERE T1.title = 'Theseus'",
+    "question": "Find the total cost of the project Theseus"
+  }
+]
