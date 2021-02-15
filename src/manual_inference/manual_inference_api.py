@@ -1,6 +1,3 @@
-import os
-import pickle
-
 import torch
 from flask import Flask, make_response, abort, request
 from flask_cors import CORS
@@ -9,8 +6,8 @@ from spacy.lang.en import English
 
 from config import read_arguments_manual_inference
 from intermediate_representation import semQL
-from manual_inference.helper import _tokenize_question, _inference_semql, _pre_processing, _semql_to_sql, \
-    _execute_query_postgresql, _get_schemas_spider, _get_schemas_cordis, _is_cordis_or_spider, _execute_query_sqlite
+from manual_inference.helper import tokenize_question, _inference_semql, _pre_processing, _semql_to_sql, \
+    _execute_query_postgresql, get_schemas_spider, get_schemas_cordis, _is_cordis_or_spider, _execute_query_sqlite
 from model.model import IRNet
 from named_entity_recognition.database_value_finder.database_value_finder_postgresql import \
     DatabaseValueFinderPostgreSQL
@@ -28,8 +25,8 @@ set_seed_everywhere(args.seed, n_gpu)
 
 connection_config = {k: v for k, v in vars(args).items() if k.startswith('database')}
 
-schemas_raw_spider, schemas_dict_spider, schema_path_spider, database_path_spider = _get_schemas_spider()
-schemas_raw_cordis, schemas_dict_cordis, schema_path_cordis, database_path_cordis = _get_schemas_cordis()
+schemas_raw_spider, schemas_dict_spider, schema_path_spider, database_path_spider = get_schemas_spider()
+schemas_raw_cordis, schemas_dict_cordis, schema_path_cordis, database_path_cordis = get_schemas_cordis()
 
 grammar = semQL.Grammar()
 model = IRNet(args, device, grammar)
@@ -110,7 +107,7 @@ def pose_question(database):
         'question': question,
         'query': 'DUMMY',
         'db_id': database,
-        'question_toks': _tokenize_question(tokenizer, question)
+        'question_toks': tokenize_question(tokenizer, question)
     }
 
     print(f"question has been tokenized to : {example['question_toks']}")
