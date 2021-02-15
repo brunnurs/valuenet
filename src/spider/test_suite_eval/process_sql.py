@@ -556,7 +556,7 @@ def get_sql(schema, query):
     tables_with_alias = get_tables_with_alias(schema.schema, toks)
     _, sql = parse_sql(toks, 0, tables_with_alias, schema)
 
-    return sql
+    return sql, toks
 
 
 def skip_semicolon(toks, start_idx):
