@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Inference API Cordis" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="Inference API" type="PythonConfigurationType" factoryName="Python">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/manual_inference/manual_inference_api.py" />
-    <option name="PARAMETERS" value="--model_to_load=experiments/ner_values_best/best_model.pt" />
+    <option name="PARAMETERS" value="--model_to_load=experiments/bart_best_model/best_model.pt" />
     <option name="SHOW_COMMAND_LINE" value="true" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

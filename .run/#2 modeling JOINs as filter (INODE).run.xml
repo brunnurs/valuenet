@@ -1,19 +1,19 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DONT RUN THIS IT COSTS MONEY!   Extract Values with Entities API by Google" type="PythonConfigurationType" factoryName="Python" folderName="NER">
+  <configuration default="false" name="#4 modeling JOINs as filter (INODE)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing INODE">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
-    <option name="SDK_HOME" value="$USER_HOME$/.local/share/virtualenvs/proton-2oP9uAK9/bin/python" />
+    <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    <option name="IS_MODULE_SDK" value="false" />
+    <option name="IS_MODULE_SDK" value="true" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/named_entity_recognition/api_ner/extract_values.py" />
-    <option name="PARAMETERS" value="--data_path=data/cordis/inode_trainingdata/train.json --output_path=data/cordis/inode_trainingdata/ner_train.json" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/preprocessing/model_joins_as_filter.py" />
+    <option name="PARAMETERS" value="--data_path=data/cordis/preprocessed_train.json --output=data/cordis/preprocessed_with_joins_train.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

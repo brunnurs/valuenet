@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="get values from SQL and save it to ner_xy.json" type="PythonConfigurationType" factoryName="Python" folderName="Tools">
+  <configuration default="false" name="Get values from SQL construct and save it to ner_xy.json" type="PythonConfigurationType" factoryName="Python" folderName="NER">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/tools/get_values_from_sql.py" />
-    <option name="PARAMETERS" value="--data_path data/spider/original/dev.json --table_path data/spider/original/tables.json --ner_path data/spider/ner_dev.json" />
+    <option name="PARAMETERS" value="--data_path data/cordis/original/train.json --table_path data/cordis/original/tables.json --ner_path data/cordis/ner_train.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

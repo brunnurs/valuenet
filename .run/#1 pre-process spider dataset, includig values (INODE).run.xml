@@ -1,20 +1,20 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Manual Inference Spider" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="#3 pre-process dataset, includig values (INODE)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing INODE">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
-    <option name="SDK_HOME" value="" />
+    <option name="SDK_HOME" value="$USER_HOME$/.local/share/virtualenvs/proton-2oP9uAK9/bin/python" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    <option name="IS_MODULE_SDK" value="true" />
+    <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/manual_inference/manual_inference.py" />
-    <option name="PARAMETERS" value="--model_to_load=experiments/ner_values_best/best_model.pt --database=cre_Theme_park" />
-    <option name="SHOW_COMMAND_LINE" value="true" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/preprocessing/pre_process.py" />
+    <option name="PARAMETERS" value="--data_path=data/cordis/original/train.json --ner_data_path=data/cordis/ner_train.json --database_path= --table_path=data/cordis/original/tables.json --output=data/cordis/preprocessed_train.json" />
+    <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
     <option name="REDIRECT_INPUT" value="false" />
