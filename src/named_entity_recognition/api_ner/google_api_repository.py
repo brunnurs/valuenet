@@ -14,7 +14,7 @@ def remote_named_entity_recognition(document):
     }
 
     parameters = {
-        'key': 'NOT VALID ANYMORE - PLEASE CREATE YOUR OWN ACCOUNT!'
+        'key': 'AIzaSyDyVpMdvC2ndqpT05-oyJ-mZMmIESH3JLc'
     }
 
     url = 'https://language.googleapis.com/v1beta2/documents:analyzeEntities'
