@@ -577,7 +577,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
             db_name = db
             db = os.path.join(db_dir, db, db + ".sqlite")
             schema = Schema(get_schema(db))
-            g_sql = get_sql(schema, g_str)
+            g_sql, _ = get_sql(schema, g_str)
             hardness = evaluator.eval_hardness(g_sql)
             if idx > 3:
                 idx = "> 4"
@@ -589,7 +589,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
             scores['all']['count'] += 1
 
             try:
-                p_sql = get_sql(schema, p_str)
+                p_sql, _ = get_sql(schema, p_str)
             except:
                 # If p_sql is not valid, then we will use an empty sql to evaluate with the correct sql
                 p_sql = {
