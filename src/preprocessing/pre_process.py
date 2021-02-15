@@ -5,11 +5,13 @@ import os
 import nltk
 from pytictoc import TicToc
 
+from named_entity_recognition.database_value_finder.database_value_finder_postgresql import \
+    DatabaseValueFinderPostgreSQL
 from named_entity_recognition.database_value_finder.database_value_finder_sqlite import DatabaseValueFinderSQLite
 from named_entity_recognition.pre_process_ner_values import pre_process_ner_candidates, match_values_in_database, \
     add_non_found_values
 from preprocessing.utils import load_dataSets, wordnet_lemmatizer, symbol_filter, get_multi_token_match, \
-    get_single_token_match, get_partial_match, AGG, group_symbol
+    get_single_token_match, get_partial_match, AGG
 
 import multiprocessing
 from joblib import Parallel, delayed
@@ -46,7 +48,17 @@ def add_value_match(token, columns_list, column_matches):
 
 
 def build_db_value_finder(database_path, db_name, schema_path):
-    return DatabaseValueFinderSQLite(database_path, db_name, schema_path)
+    if db_name != 'cordis_temporary':
+        return DatabaseValueFinderSQLite(database_path, db_name, schema_path)
+    else:
+        # a bit of a hack, when more postgres-db gets added for training we have to improve this.
+        config = {'database': db_name,
+                  'database_host': 'localhost',
+                  'database_port': '5432',
+                  'database_user': 'postgres',
+                  'database_password': 'postgres', 'database_schema': 'unics_cordis'}
+
+        return DatabaseValueFinderPostgreSQL(config['database'], schema_path, config)
 
 
 def add_likely_value_candidates(value_candidates, potential_value_candidates):
@@ -260,9 +272,9 @@ def main():
     # data = data[5579:5580]
     # ner_data = ner_data[5579:5580]
 
-    # results = Parallel(n_jobs=NUM_CORES)(delayed(pre_process)(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
+    results = Parallel(n_jobs=NUM_CORES)(delayed(pre_process)(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
     # To better debug this code, use the non-parallelized version of the code
-    results = [pre_process(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
+    # results = [pre_process(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
 
     all_token_grouped, all_token_types, all_column_matches, all_value_candidates, all_complete_values_found = zip(*results)
 
