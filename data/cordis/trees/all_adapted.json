@@ -564,7 +564,7 @@
     "id": "5f9bda49913f25fdb2030f4b",
     "user": "antonismand",
     "question": "Show me the acronym of projects whose principal investigator is Geoffrey Bodenhausen, the project's end date is 2011-01-19 and the projects are assigned to members with a department name Information Society Section.",
-    "query": "select project.acronym\nfrom people join projects on people.unics_id = projects.principal_investigator\n join project_members on projects.unics_id = project_members.project\nwhere people.full_name = 'Geoffrey Bodenhausen'\nand projects.end_date = '2011-01-19'\nand project_members.department_name = 'Information Society Section')"
+    "query": "select projects.acronym\nfrom people join projects on people.unics_id = projects.principal_investigator\n join project_members on projects.unics_id = project_members.project\nwhere people.full_name = 'Geoffrey Bodenhausen'\nand projects.end_date = '2011-01-19'\nand project_members.department_name = 'Information Society Section')"
   },
   {
     "db_id": "cordis_temporary",
@@ -760,7 +760,7 @@
     "id": "5f9bec84913f25fdb2030f67",
     "user": "antonismand",
     "question": "Retrieve all subject areas assigned to projects with a total cost more than 1492828 having the topic \"Bioactive compounds from meso-organism's bioconversion\"?",
-    "query": "select distinct subject_areas.title\nfrom topics join project_topics on topics.code = project_topics.topic\n join projects on project_topics.project = projects.unics_id\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.total_cost > '1492828'\nand topics.title = 'Bioactive compounds from meso-organism's bioconversion'"
+    "query": "select distinct subject_areas.title\nfrom topics join project_topics on topics.code = project_topics.topic\n join projects on project_topics.project = projects.unics_id\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.total_cost > '1492828'\nand topics.title = 'Bioactive compounds from meso-organisms bioconversion'"
   },
   {
     "db_id": "cordis_temporary",
