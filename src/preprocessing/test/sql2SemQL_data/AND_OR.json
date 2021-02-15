@@ -1,0 +1,415 @@
+{
+  "all_values_found": false,
+  "col_set": [
+    "*",
+    "allergy name",
+    "allergy type",
+    "stuid",
+    "allergy",
+    "last name",
+    "first name",
+    "age",
+    "sex",
+    "major",
+    "advisor",
+    "city code"
+  ],
+  "col_table": [
+    -1,
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "column_matches": [
+    {
+      "column_joined": "['*']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['allergy', 'name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 1,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['allergy', 'type']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 1,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['stuid']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['allergy']",
+      "full_column_match": true,
+      "full_value_match": false,
+      "partial_column_match": 1,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['last', 'name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['first', 'name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['age']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['sex']",
+      "full_column_match": false,
+      "full_value_match": true,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['major']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['advisor']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['city', 'code']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    }
+  ],
+  "db_id": "allergy_1",
+  "keys": {
+    "4": 1,
+    "1": 1,
+    "3": 5,
+    "5": 5
+  },
+  "names": [
+    "*",
+    "allergy name",
+    "allergy type",
+    "stuid",
+    "allergy",
+    "stuid",
+    "last name",
+    "first name",
+    "age",
+    "sex",
+    "major",
+    "advisor",
+    "city code"
+  ],
+  "query": "SELECT count(*) FROM has_allergy AS T1 JOIN Student AS T2 ON T1.StuID  =  T2.StuID WHERE T2.sex  =  \"F\" AND T1.allergy  =  \"Milk\" OR T1.allergy  =  \"Eggs\"",
+  "query_toks": [
+    "SELECT",
+    "count",
+    "(",
+    "*",
+    ")",
+    "FROM",
+    "has_allergy",
+    "AS",
+    "T1",
+    "JOIN",
+    "Student",
+    "AS",
+    "T2",
+    "ON",
+    "T1.StuID",
+    "=",
+    "T2.StuID",
+    "WHERE",
+    "T2.sex",
+    "=",
+    "``",
+    "F",
+    "''",
+    "AND",
+    "T1.allergy",
+    "=",
+    "``",
+    "Milk",
+    "''",
+    "OR",
+    "T1.allergy",
+    "=",
+    "``",
+    "Eggs",
+    "''"
+  ],
+  "query_toks_no_value": [
+    "select",
+    "count",
+    "(",
+    "*",
+    ")",
+    "from",
+    "has_allergy",
+    "as",
+    "t1",
+    "join",
+    "student",
+    "as",
+    "t2",
+    "on",
+    "t1",
+    ".",
+    "stuid",
+    "=",
+    "t2",
+    ".",
+    "stuid",
+    "where",
+    "t2",
+    ".",
+    "sex",
+    "=",
+    "value",
+    "and",
+    "t1",
+    ".",
+    "allergy",
+    "=",
+    "value",
+    "or",
+    "t1",
+    ".",
+    "allergy",
+    "=",
+    "value"
+  ],
+  "question": "How many female students have milk or egg allergies?",
+  "question_arg": [
+    [
+      "how"
+    ],
+    [
+      "many"
+    ],
+    [
+      "female"
+    ],
+    [
+      "student"
+    ],
+    [
+      "have"
+    ],
+    [
+      "milk"
+    ],
+    [
+      "or"
+    ],
+    [
+      "egg"
+    ],
+    [
+      "allergy"
+    ],
+    [
+      "?"
+    ]
+  ],
+  "question_arg_type": [
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "table"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "col"
+    ],
+    [
+      "NONE"
+    ]
+  ],
+  "question_toks": [
+    "How",
+    "many",
+    "female",
+    "students",
+    "have",
+    "milk",
+    "or",
+    "egg",
+    "allergies",
+    "?"
+  ],
+  "sql": {
+    "except": null,
+    "from": {
+      "conds": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              3,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            5,
+            false
+          ],
+          null
+        ]
+      ],
+      "table_units": [
+        [
+          "table_unit",
+          1
+        ],
+        [
+          "table_unit",
+          2
+        ]
+      ]
+    },
+    "groupBy": [],
+    "having": [],
+    "intersect": null,
+    "limit": null,
+    "orderBy": [],
+    "select": [
+      false,
+      [
+        [
+          3,
+          [
+            0,
+            [
+              0,
+              0,
+              false
+            ],
+            null
+          ]
+        ]
+      ]
+    ],
+    "union": null,
+    "where": [
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            9,
+            false
+          ],
+          null
+        ],
+        "\"F\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            4,
+            false
+          ],
+          null
+        ],
+        "\"Milk\"",
+        null
+      ],
+      "or",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            4,
+            false
+          ],
+          null
+        ],
+        "\"Eggs\"",
+        null
+      ]
+    ]
+  },
+  "table_names": [
+    "allergy type",
+    "has allergy",
+    "student"
+  ],
+  "rule_label": "Root1(3) Root(3) Sel(0) N(0) A(3) C(0) T(1) Filter(0) Filter(2) A(0) C(8) T(2) V(0) Filter(1) Filter(2) A(0) C(4) T(1) V(1) Filter(2) A(0) C(4) T(1) V(2)",
+  "values": [
+    "F",
+    "Milk",
+    "Eggs"
+  ]
+}

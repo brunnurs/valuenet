@@ -12,10 +12,8 @@
 import argparse
 import json
 import sys
+from typing import List, Union
 
-import copy
-
-from tools.get_values_from_sql import format_groundtruth_value
 from preprocessing.utils import load_dataSets, find_table_of_star_column
 from intermediate_representation.semQL import Root1, Root, N, A, C, T, Sel, Sup, Filter, Order, V
 
@@ -24,9 +22,23 @@ sys.path.append("..")
 
 class Parser:
 
-    def __init__(self, values: list) -> None:
-        # this values will get used to create the SemQL ground truth - for each value, the index to that value will be saved in the V-action (e.g. V(5))
-        self.values = values
+    def __init__(self, values=None, build_value_list: bool = False) -> None:
+        """
+        The SQL to SemQL parser will transform SQL to SemQL. It can handle all supported features of SemQL.
+        The "values" parameter is a list of values from which the Parser will incorporate the correct one in the query.
+        If a value is not provided but required during parsing, it will result in an exception.
+
+        If the build_value_list parameter is provided, the Parser will build the values-list up on the fly and choose the value itself.
+        @param values:
+        @param build_value_list
+        """
+        if values is not None:
+            # this values will get used to create the SemQL ground truth - for each value, the index to that value will be saved in the V-action (e.g. V(5))
+            self.values = values
+        else:
+            self.values = []
+
+        self.build_value_list = build_value_list
 
     def _parse_root(self, sql):
         """
@@ -134,55 +146,48 @@ class Parser:
         :return: [Filter(), states]
         """
         result = []
-        # check the where
+
+        # in case there are WHERE and HAVING restrictions, we concatenate them with an AND
         if sql['sql']['where'] != [] and sql['sql']['having'] != []:
             result.append(Filter(0))
 
-        if sql['sql']['where'] != []:
-            # check the not and/or
-            if len(sql['sql']['where']) == 1:
-                result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
-            elif len(sql['sql']['where']) == 3:
-                if sql['sql']['where'][1] == 'or':
-                    result.append(Filter(1))
-                else:
-                    result.append(Filter(0))
-                result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
-                result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
-            else:
-                if sql['sql']['where'][1] == 'and' and sql['sql']['where'][3] == 'and':
-                    result.append(Filter(0))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
-                    result.append(Filter(0))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
-                elif sql['sql']['where'][1] == 'and' and sql['sql']['where'][3] == 'or':
-                    result.append(Filter(0))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
-                    result.append(Filter(1))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
-                elif sql['sql']['where'][1] == 'or' and sql['sql']['where'][3] == 'and':
-                    result.append(Filter(1))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
-                    result.append(Filter(0))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
-                else:
-                    result.append(Filter(1))
-                    result.append(Filter(1))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][0], sql['names'], sql))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][2], sql['names'], sql))
-                    result.extend(self.parse_one_condition(sql['sql']['where'][4], sql['names'], sql))
+        if sql['sql']['where']:
+            # the real magic happens in this recursive function
+            result.extend(self._parse_filter_internal(sql['sql']['where'], sql))
 
-                # TODO: right now we don't handle queries which have more than 3 filters (so 3 filters and 2 AND/OR combinations).
-                # The code above should be written in a more dynamic way
-
-
-        # check having
-        if sql['sql']['having'] != []:
-            result.extend(self.parse_one_condition(sql['sql']['having'][0], sql['names'], sql))
+        if sql['sql']['having']:
+            # the real magic happens in this recursive function
+            result.extend(self._parse_filter_internal(sql['sql']['having'], sql))
         return result, None
+
+    def _parse_filter_internal(self, filter_conditions: List[Union[dict, str]], sql: dict) -> List[Filter]:
+        """
+        This recursive method is parsing the whole list of filters. It will divide the list by "AND" and "OR" operators
+        until only one condition is left, which will be parsed.
+        """
+        if len(filter_conditions) >= 3:
+            results = []
+
+            # TODO: The order of AND and OR here is essential. In my opinion it should be "OR" first, but because the
+            # TODO: SemQL2SQL module can't handle it right now, we leave it like this. See comments in test test_full_parse__four_AND_one_OR()
+            if 'and' in filter_conditions:
+                results.append(Filter(0))
+                idx_condition = filter_conditions.index('and')
+            elif 'or' in filter_conditions:
+                results.append(Filter(1))
+                idx_condition = filter_conditions.index('or')
+            else:
+                raise ValueError('if there are 3 where clauses left, there need to be either an AND or an OR to concatenate them!')
+
+            results.extend(self._parse_filter_internal(filter_conditions[:idx_condition], sql))
+            results.extend(self._parse_filter_internal(filter_conditions[idx_condition + 1:], sql))
+
+            return results
+
+        if len(filter_conditions) == 1:
+            return self.parse_one_condition(filter_conditions[0], sql['names'], sql)
+
+        raise ValueError('There should always be an uneven amount of filter conditions (e.g. [cond_1, "AND", cond2]. Check "where"/"having" clause')
 
     def _parse_order(self, sql):
         """
@@ -314,14 +319,40 @@ class Parser:
         # the ground truth values are often in a weird format (e.g. 56.0 instead of 56) and as we anyway only deal with string here,
         # we format every value as a simple string. This also simplifies comparison in the further code. When writing the query, we will
         # adapt it again (see sem2SQL.py --> format_value_given_datatype()).
-        val = format_groundtruth_value(val)
+        val = self.format_groundtruth_value(val)
+
+        # when using the Parser with this parameter = True, we automatically build up the value_list during parsing.
+        if self.build_value_list:
+            if val not in self.values:
+                self.values.append(val)
 
         try:
             return V(self.values.index(val))
-        except:
-            print(
-                f'could not find value "{val}" in the provided list of values "{self.values}". Make sure all necessary values are provided!')
-            raise
+        except ValueError as e:
+            raise ValueError(
+                f'could not find value "{val}" in the provided list of values "{self.values}". '
+                f'Make sure all necessary values are provided in the constructor of the parser or use the parser with parameter "build_value_list" = True') from e
+
+    @staticmethod
+    def format_groundtruth_value(val):
+        if isinstance(val, str):
+            val = val.strip('\'\"')  # remove string quotes, as we will add them later anyway.
+
+            # if it is a fuzzy string (e.g. '%hello%') we wan't to remove the wildcards, as they get in later as part of the post-processing.
+            if val.startswith('%') or val.endswith('%'):
+                val = val.replace('%', '')
+
+            # some ground truth values contain a trailing tab - no idea why.
+            if val.endswith('\t'):
+                val = val.rstrip()
+
+        # the ground truth values are all floats, even if there is no decimals (e.g. 56.0 instead of 56). But to make the
+        # .index() work, we need exact matches!
+        if isinstance(val, float) and val.is_integer():
+            val = int(val)
+
+        # results from NER will only be strings - therefore we need to make sure the values we use here are also string only!
+        return str(val)
 
     def full_parse(self, query):
         """
@@ -386,7 +417,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('--data_path', type=str, help='dataset', required=True)
     arg_parser.add_argument('--table_path', type=str, help='table dataset', required=True)
     arg_parser.add_argument('--output', type=str, help='output data', required=True)
-    arg_parser.add_argument('--use_ner_value_candidates', action='store_true', default=True, help="we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) "
+    arg_parser.add_argument('--use_ner_value_candidates', action='store_true', default=False, help="we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) "
                                                                                                   "or we can instead let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)")
     args = arg_parser.parse_args()
 
@@ -394,32 +425,36 @@ if __name__ == '__main__':
     data, table = load_dataSets(args)
     processed_data = []
 
-    for row in data:
-        if len(row['sql']['select'][1]) > 5:
-            continue
+    with open('new.txt', 'a') as the_file:
+        for row in data:
+            if len(row['sql']['select'][1]) > 5:
+                continue
 
-        # we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) or we can instead
-        # let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)
-        if args.use_ner_value_candidates:
-            parser = Parser(row['ner_extracted_values_processed'])
-        else:
-            parser = Parser(row['values'])
+            # we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) or we can instead
+            # let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)
+            if args.use_ner_value_candidates:
+                parser = Parser(row['ner_extracted_values_processed'])
+                del row['ner_extracted_values_processed']
+            else:
+                parser = Parser(row['values'])
 
-        # here is where the magic happens: we parse the SQL from the spider-examples and create a SemQL-AST fro it.
-        semql_result = parser.full_parse(row)
+            # here is where the magic happens: we parse the SQL from the spider-examples and create a SemQL-AST fro it.
+            semql_result = parser.full_parse(row)
 
-        # here we simply serialize it to a string. Keep in mind that the SemQL-Classes (e.g. "Root") override the string method, so we get not only the class
-        # but also all attributes (especially the idx of the production rule)
-        row['rule_label'] = " ".join([str(x) for x in semql_result])
+            # here we simply serialize it to a string. Keep in mind that the SemQL-Classes (e.g. "Root") override the string method, so we get not only the class
+            # but also all attributes (especially the idx of the production rule)
+            row['rule_label'] = " ".join([str(x) for x in semql_result])
 
-        # if we use the NER-values then we override here the ground truth values with it. That way the training/evaluation scripts stay
-        # exactly the same and using values/ner-extracted values is decided here. To make this clear we also remove all other value lists.
-        if args.use_ner_value_candidates:
-            row['values'] = row['ner_extracted_values_processed']
+            the_file.write(row['rule_label'] + '\n')
 
-        del row['ner_extracted_values_processed']
+            print(row['rule_label'])
 
-        processed_data.append(row)
+            # if we use the NER-values then we override here the ground truth values with it. That way the training/evaluation scripts stay
+            # exactly the same and using values/ner-extracted values is decided here. To make this clear we also remove all other value lists.
+            if args.use_ner_value_candidates:
+                row['values'] = row['ner_extracted_values_processed']
+
+            processed_data.append(row)
 
     print('Finished %s datas and failed %s datas' % (len(processed_data), len(data) - len(processed_data)))
     with open(args.output, 'w', encoding='utf8') as f:

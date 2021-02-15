@@ -1,0 +1,709 @@
+{
+  "all_values_found": false,
+  "col_set": [
+    "*",
+    "bid",
+    "business id",
+    "name",
+    "full address",
+    "city",
+    "latitude",
+    "longitude",
+    "review count",
+    "is open",
+    "rating",
+    "state",
+    "id",
+    "category name",
+    "uid",
+    "user id",
+    "cid",
+    "count",
+    "day",
+    "neighbourhood name",
+    "rid",
+    "text",
+    "year",
+    "month",
+    "tip id",
+    "likes"
+  ],
+  "col_table": [
+    -1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3,
+    3,
+    4,
+    4,
+    4,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "column_matches": [
+    {
+      "column_joined": "['*']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['bid']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['business', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['full', 'address']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['city']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['latitude']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['longitude']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['review', 'count']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['is', 'open']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['rating']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['state']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['category', 'name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['uid']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['user', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['cid']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['count']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['day']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['neighbourhood', 'name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 1,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['rid']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['text']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['year']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['month']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['tip', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['like']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    }
+  ],
+  "db_id": "yelp",
+  "keys": {
+    "13": 2,
+    "2": 33,
+    "19": 2,
+    "23": 2,
+    "27": 16,
+    "16": 35,
+    "26": 2,
+    "35": 16,
+    "33": 2,
+    "1": 1,
+    "12": 12,
+    "15": 15,
+    "18": 18,
+    "22": 22,
+    "25": 25,
+    "32": 32
+  },
+  "names": [
+    "*",
+    "bid",
+    "business id",
+    "name",
+    "full address",
+    "city",
+    "latitude",
+    "longitude",
+    "review count",
+    "is open",
+    "rating",
+    "state",
+    "id",
+    "business id",
+    "category name",
+    "uid",
+    "user id",
+    "name",
+    "cid",
+    "business id",
+    "count",
+    "day",
+    "id",
+    "business id",
+    "neighbourhood name",
+    "rid",
+    "business id",
+    "user id",
+    "rating",
+    "text",
+    "year",
+    "month",
+    "tip id",
+    "business id",
+    "text",
+    "user id",
+    "likes",
+    "year",
+    "month"
+  ],
+  "query": "SELECT t1.name FROM category AS t3 JOIN business AS t1 ON t3.business_id  =  t1.business_id JOIN category AS t4 ON t4.business_id  =  t1.business_id JOIN neighbourhood AS t2 ON t2.business_id  =  t1.business_id WHERE t1.city  =  \"Madison\" AND t3.category_name  =  \"Italian\" AND t4.category_name  =  \"restaurant\" AND t2.neighbourhood_name  =  \"Meadowood\";",
+  "query_toks": [
+    "SELECT",
+    "t1.name",
+    "FROM",
+    "category",
+    "AS",
+    "t3",
+    "JOIN",
+    "business",
+    "AS",
+    "t1",
+    "ON",
+    "t3.business_id",
+    "=",
+    "t1.business_id",
+    "JOIN",
+    "category",
+    "AS",
+    "t4",
+    "ON",
+    "t4.business_id",
+    "=",
+    "t1.business_id",
+    "JOIN",
+    "neighbourhood",
+    "AS",
+    "t2",
+    "ON",
+    "t2.business_id",
+    "=",
+    "t1.business_id",
+    "WHERE",
+    "t1.city",
+    "=",
+    "``",
+    "Madison",
+    "''",
+    "AND",
+    "t3.category_name",
+    "=",
+    "``",
+    "Italian",
+    "''",
+    "AND",
+    "t4.category_name",
+    "=",
+    "``",
+    "restaurant",
+    "''",
+    "AND",
+    "t2.neighbourhood_name",
+    "=",
+    "``",
+    "Meadowood",
+    "''",
+    ";"
+  ],
+  "query_toks_no_value": [
+    "select",
+    "t1",
+    ".",
+    "name",
+    "from",
+    "category",
+    "as",
+    "t3",
+    "join",
+    "business",
+    "as",
+    "t1",
+    "on",
+    "t3",
+    ".",
+    "business_id",
+    "=",
+    "t1",
+    ".",
+    "business_id",
+    "join",
+    "category",
+    "as",
+    "t4",
+    "on",
+    "t4",
+    ".",
+    "business_id",
+    "=",
+    "t1",
+    ".",
+    "business_id",
+    "join",
+    "neighbourhood",
+    "as",
+    "t2",
+    "on",
+    "t2",
+    ".",
+    "business_id",
+    "=",
+    "t1",
+    ".",
+    "business_id",
+    "where",
+    "t1",
+    ".",
+    "city",
+    "=",
+    "value",
+    "and",
+    "t3",
+    ".",
+    "category_name",
+    "=",
+    "value",
+    "and",
+    "t4",
+    ".",
+    "category_name",
+    "=",
+    "value",
+    "and",
+    "t2",
+    ".",
+    "neighbourhood_name",
+    "=",
+    "value"
+  ],
+  "question": "Find all Italian restaurant in the Meadowood neighbourhood of Madison",
+  "question_arg": [
+    [
+      "find"
+    ],
+    [
+      "all"
+    ],
+    [
+      "italian"
+    ],
+    [
+      "restaurant"
+    ],
+    [
+      "in"
+    ],
+    [
+      "the"
+    ],
+    [
+      "meadowood"
+    ],
+    [
+      "neighbourhood"
+    ],
+    [
+      "of"
+    ],
+    [
+      "madison"
+    ]
+  ],
+  "question_arg_type": [
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "table"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ]
+  ],
+  "question_toks": [
+    "Find",
+    "all",
+    "Italian",
+    "restaurant",
+    "in",
+    "the",
+    "Meadowood",
+    "neighbourhood",
+    "of",
+    "Madison"
+  ],
+  "sql": {
+    "except": null,
+    "from": {
+      "conds": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              13,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            2,
+            false
+          ],
+          null
+        ],
+        "and",
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              13,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            2,
+            false
+          ],
+          null
+        ],
+        "and",
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              23,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            2,
+            false
+          ],
+          null
+        ]
+      ],
+      "table_units": [
+        [
+          "table_unit",
+          1
+        ],
+        [
+          "table_unit",
+          0
+        ],
+        [
+          "table_unit",
+          1
+        ],
+        [
+          "table_unit",
+          4
+        ]
+      ]
+    },
+    "groupBy": [],
+    "having": [],
+    "intersect": null,
+    "limit": null,
+    "orderBy": [],
+    "select": [
+      false,
+      [
+        [
+          0,
+          [
+            0,
+            [
+              0,
+              3,
+              false
+            ],
+            null
+          ]
+        ]
+      ]
+    ],
+    "union": null,
+    "where": [
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            5,
+            false
+          ],
+          null
+        ],
+        "\"Madison\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            14,
+            false
+          ],
+          null
+        ],
+        "\"Italian\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            14,
+            false
+          ],
+          null
+        ],
+        "\"restaurant\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            24,
+            false
+          ],
+          null
+        ],
+        "\"Meadowood\"",
+        null
+      ]
+    ]
+  },
+  "table_names": [
+    "business",
+    "category",
+    "user",
+    "checkin",
+    "neighbourhood",
+    "review",
+    "tip"
+  ],
+  "rule_label": "Root1(3) Root(3) Sel(0) N(0) A(0) C(3) T(0) Filter(0) Filter(2) A(0) C(5) T(0) V(2) Filter(0) Filter(2) A(0) C(13) T(1) V(0) Filter(2) A(0) C(13) T(1) V(3)",
+  "values": [
+    "Italian",
+    "Meadowood",
+    "Madison",
+    "restaurant"
+  ]
+}

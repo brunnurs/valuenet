@@ -1,0 +1,1028 @@
+{
+  "all_values_found": true,
+  "col_set": [
+    "*",
+    "name",
+    "seq",
+    "id",
+    "title",
+    "artist id",
+    "last name",
+    "first name",
+    "reports to",
+    "birth date",
+    "hire date",
+    "address",
+    "city",
+    "state",
+    "country",
+    "postal code",
+    "phone",
+    "fax",
+    "email",
+    "company",
+    "support rep id",
+    "customer id",
+    "invoice date",
+    "billing address",
+    "billing city",
+    "billing state",
+    "billing country",
+    "billing postal code",
+    "total",
+    "album id",
+    "media type id",
+    "genre id",
+    "composer",
+    "milliseconds",
+    "bytes",
+    "unit price",
+    "invoice id",
+    "track id",
+    "quantity",
+    "playlist id"
+  ],
+  "col_table": [
+    -1,
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    5,
+    5,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    7,
+    7,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    9,
+    9,
+    9,
+    9,
+    9,
+    10,
+    10,
+    11,
+    11
+  ],
+  "column_matches": [
+    {
+      "column_joined": "['*']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['seq']",
+      "full_column_match": false,
+      "full_value_match": true,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['title']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['artist', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['last', 'name']",
+      "full_column_match": false,
+      "full_value_match": true,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['first', 'name']",
+      "full_column_match": false,
+      "full_value_match": true,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['report', 'to']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['birth', 'date']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['hire', 'date']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['address']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['city']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['state']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['country']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['postal', 'code']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['phone']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['fax']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['email']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['company']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['support', 'rep', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['customer', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['invoice', 'date']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['billing', 'address']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['billing', 'city']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['billing', 'state']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['billing', 'country']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['billing', 'postal', 'code']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['total']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['album', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['medium', 'type', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['genre', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['composer']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['millisecond']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['byte']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['unit', 'price']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['invoice', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['track', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 1,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['quantity']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['playlist', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    }
+  ],
+  "db_id": "store_1",
+  "keys": {
+    "7": 1,
+    "1": 1,
+    "12": 8,
+    "8": 8,
+    "35": 8,
+    "39": 23,
+    "23": 23,
+    "52": 47,
+    "47": 47,
+    "53": 36,
+    "36": 36,
+    "51": 5,
+    "5": 5,
+    "60": 49,
+    "49": 49,
+    "59": 38,
+    "38": 38,
+    "66": 49,
+    "65": 65,
+    "63": 63,
+    "58": 58
+  },
+  "names": [
+    "*",
+    "name",
+    "seq",
+    "id",
+    "name",
+    "id",
+    "title",
+    "artist id",
+    "id",
+    "last name",
+    "first name",
+    "title",
+    "reports to",
+    "birth date",
+    "hire date",
+    "address",
+    "city",
+    "state",
+    "country",
+    "postal code",
+    "phone",
+    "fax",
+    "email",
+    "id",
+    "first name",
+    "last name",
+    "company",
+    "address",
+    "city",
+    "state",
+    "country",
+    "postal code",
+    "phone",
+    "fax",
+    "email",
+    "support rep id",
+    "id",
+    "name",
+    "id",
+    "customer id",
+    "invoice date",
+    "billing address",
+    "billing city",
+    "billing state",
+    "billing country",
+    "billing postal code",
+    "total",
+    "id",
+    "name",
+    "id",
+    "name",
+    "album id",
+    "media type id",
+    "genre id",
+    "composer",
+    "milliseconds",
+    "bytes",
+    "unit price",
+    "id",
+    "invoice id",
+    "track id",
+    "unit price",
+    "quantity",
+    "id",
+    "name",
+    "playlist id",
+    "track id"
+  ],
+  "query": "SELECT T1.name FROM tracks AS T1 JOIN invoice_lines AS T2 ON T1.id = T2.track_id JOIN invoices AS T3 ON T3.id = T2.invoice_id JOIN customers AS T4 ON T4.id = T3.customer_id WHERE T4.first_name = \"Daan\" AND T4.last_name = \"Peeters\";",
+  "query_toks": [
+    "SELECT",
+    "T1.name",
+    "FROM",
+    "tracks",
+    "AS",
+    "T1",
+    "JOIN",
+    "invoice_lines",
+    "AS",
+    "T2",
+    "ON",
+    "T1.id",
+    "=",
+    "T2.track_id",
+    "JOIN",
+    "invoices",
+    "AS",
+    "T3",
+    "ON",
+    "T3.id",
+    "=",
+    "T2.invoice_id",
+    "JOIN",
+    "customers",
+    "AS",
+    "T4",
+    "ON",
+    "T4.id",
+    "=",
+    "T3.customer_id",
+    "WHERE",
+    "T4.first_name",
+    "=",
+    "``",
+    "Daan",
+    "''",
+    "AND",
+    "T4.last_name",
+    "=",
+    "``",
+    "Peeters",
+    "''",
+    ";"
+  ],
+  "query_toks_no_value": [
+    "select",
+    "t1",
+    ".",
+    "name",
+    "from",
+    "tracks",
+    "as",
+    "t1",
+    "join",
+    "invoice_lines",
+    "as",
+    "t2",
+    "on",
+    "t1",
+    ".",
+    "id",
+    "=",
+    "t2",
+    ".",
+    "track_id",
+    "join",
+    "invoices",
+    "as",
+    "t3",
+    "on",
+    "t3",
+    ".",
+    "id",
+    "=",
+    "t2",
+    ".",
+    "invoice_id",
+    "join",
+    "customers",
+    "as",
+    "t4",
+    "on",
+    "t4",
+    ".",
+    "id",
+    "=",
+    "t3",
+    ".",
+    "customer_id",
+    "where",
+    "t4",
+    ".",
+    "first_name",
+    "=",
+    "value",
+    "and",
+    "t4",
+    ".",
+    "last_name",
+    "=",
+    "value"
+  ],
+  "question": "What are the tracks that Dean Peeters bought?",
+  "question_arg": [
+    [
+      "what"
+    ],
+    [
+      "are"
+    ],
+    [
+      "the"
+    ],
+    [
+      "track"
+    ],
+    [
+      "that"
+    ],
+    [
+      "dean"
+    ],
+    [
+      "peeters"
+    ],
+    [
+      "bought"
+    ],
+    [
+      "?"
+    ]
+  ],
+  "question_arg_type": [
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "table"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ]
+  ],
+  "question_toks": [
+    "What",
+    "are",
+    "the",
+    "tracks",
+    "that",
+    "Dean",
+    "Peeters",
+    "bought",
+    "?"
+  ],
+  "sql": {
+    "except": null,
+    "from": {
+      "conds": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              49,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            60,
+            false
+          ],
+          null
+        ],
+        "and",
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              38,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            59,
+            false
+          ],
+          null
+        ],
+        "and",
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              23,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            39,
+            false
+          ],
+          null
+        ]
+      ],
+      "table_units": [
+        [
+          "table_unit",
+          8
+        ],
+        [
+          "table_unit",
+          9
+        ],
+        [
+          "table_unit",
+          6
+        ],
+        [
+          "table_unit",
+          4
+        ]
+      ]
+    },
+    "groupBy": [],
+    "having": [],
+    "intersect": null,
+    "limit": null,
+    "orderBy": [],
+    "select": [
+      false,
+      [
+        [
+          0,
+          [
+            0,
+            [
+              0,
+              50,
+              false
+            ],
+            null
+          ]
+        ]
+      ]
+    ],
+    "union": null,
+    "where": [
+      [
+        false,
+        8,
+        [
+          0,
+          [
+            0,
+            23,
+            false
+          ],
+          null
+        ],
+        {
+          "select": [
+            false,
+            [
+              [
+                0,
+                [
+                  0,
+                  [
+                    0,
+                    39,
+                    false
+                  ],
+                  null
+                ]
+              ]
+            ]
+          ],
+          "from": {
+            "table_units": [
+              [
+                "table_unit",
+                6
+              ]
+            ],
+            "conds": []
+          },
+          "where": [],
+          "groupBy": [],
+          "orderBy": [],
+          "having": [],
+          "limit": null,
+          "intersect": null,
+          "except": null,
+          "union": null
+        },
+        null
+      ],
+      "and",
+      [
+        false,
+        8,
+        [
+          0,
+          [
+            0,
+            59,
+            false
+          ],
+          null
+        ],
+        {
+          "select": [
+            false,
+            [
+              [
+                0,
+                [
+                  0,
+                  [
+                    0,
+                    38,
+                    false
+                  ],
+                  null
+                ]
+              ]
+            ]
+          ],
+          "from": {
+            "table_units": [
+              [
+                "table_unit",
+                6
+              ]
+            ],
+            "conds": []
+          },
+          "where": [],
+          "groupBy": [],
+          "orderBy": [],
+          "having": [],
+          "limit": null,
+          "intersect": null,
+          "except": null,
+          "union": null
+        },
+        null
+      ],
+      "and",
+      [
+        false,
+        8,
+        [
+          0,
+          [
+            0,
+            38,
+            false
+          ],
+          null
+        ],
+        {
+          "select": [
+            false,
+            [
+              [
+                0,
+                [
+                  0,
+                  [
+                    0,
+                    59,
+                    false
+                  ],
+                  null
+                ]
+              ]
+            ]
+          ],
+          "from": {
+            "table_units": [
+              [
+                "table_unit",
+                9
+              ]
+            ],
+            "conds": []
+          },
+          "where": [],
+          "groupBy": [],
+          "orderBy": [],
+          "having": [],
+          "limit": null,
+          "intersect": null,
+          "except": null,
+          "union": null
+        },
+        null
+      ],
+      "and",
+      [
+        false,
+        8,
+        [
+          0,
+          [
+            0,
+            49,
+            false
+          ],
+          null
+        ],
+        {
+          "select": [
+            false,
+            [
+              [
+                0,
+                [
+                  0,
+                  [
+                    0,
+                    60,
+                    false
+                  ],
+                  null
+                ]
+              ]
+            ]
+          ],
+          "from": {
+            "table_units": [
+              [
+                "table_unit",
+                9
+              ]
+            ],
+            "conds": []
+          },
+          "where": [],
+          "groupBy": [],
+          "orderBy": [],
+          "having": [],
+          "limit": null,
+          "intersect": null,
+          "except": null,
+          "union": null
+        },
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            24,
+            false
+          ],
+          null
+        ],
+        "\"Daan\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            25,
+            false
+          ],
+          null
+        ],
+        "\"Peeters\"",
+        null
+      ]
+    ]
+  },
+  "table_names": [
+    "sqlite sequence",
+    "artists",
+    "albums",
+    "employees",
+    "customers",
+    "genres",
+    "invoices",
+    "media types",
+    "tracks",
+    "invoice lines",
+    "playlists",
+    "playlist tracks"
+  ],
+  "rule_label": "Root1(3) Root(3) Sel(0) N(0) A(0) C(1) T(8) Filter(0) Filter(18) A(0) C(3) T(4) Root(5) Sel(0) N(0) A(0) C(21) T(6) Filter(0) Filter(18) A(0) C(36) T(9) Root(5) Sel(0) N(0) A(0) C(3) T(6) Filter(0) Filter(18) A(0) C(3) T(6) Root(5) Sel(0) N(0) A(0) C(36) T(9) Filter(0) Filter(18) A(0) C(3) T(8) Root(5) Sel(0) N(0) A(0) C(37) T(9) Filter(0) Filter(2) A(0) C(7) T(4) V(3) Filter(2) A(0) C(6) T(4) V(1)",
+  "values": [
+    "Dan",
+    "Peeters",
+    "tracks",
+    "Daan"
+  ]
+}
