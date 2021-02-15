@@ -1,5 +1,4 @@
 import copy
-import os
 import sqlite3
 from pathlib import Path
 
@@ -9,7 +8,7 @@ import torch
 from config import Config
 from intermediate_representation.sem_utils import alter_column0
 from named_entity_recognition.api_ner.google_api_repository import remote_named_entity_recognition
-from preprocessing.pre_process import pre_process
+from preprocessing import pre_process
 from spider import spider_utils
 from spider.example_builder import build_example
 from intermediate_representation.sem2sql.sem2SQL import transform
@@ -30,7 +29,7 @@ def _inference_semql(data_row, schemas, model):
     return original_row, example
 
 
-def _tokenize_question(tokenizer, question):
+def tokenize_question(tokenizer, question):
     # Create a Tokenizer with the default settings for English
     # including punctuation rules and exceptions
 
@@ -88,7 +87,7 @@ def _execute_query_sqlite(sql, database_path, db):
     return result
 
 
-def _get_schemas_spider():
+def get_schemas_spider():
     base_path = Path(Config.DATA_PREFIX) / 'spider' / 'original'
     schema_path = str(base_path / 'tables.json')
     database_path = str(base_path / 'database')
@@ -98,7 +97,7 @@ def _get_schemas_spider():
     return schemas_raw, schemas_dict, schema_path, database_path
 
 
-def _get_schemas_cordis():
+def get_schemas_cordis():
     base_path = Path(Config.DATA_PREFIX) / 'cordis' / 'original'
     schema_path = str(base_path / 'tables.json')
     database_path = str(base_path / 'database')
