@@ -1,0 +1,727 @@
+{
+  "all_values_found": true,
+  "col_set": [
+    "*",
+    "id",
+    "name",
+    "latitude",
+    "longitude",
+    "dock count",
+    "city",
+    "installation date",
+    "station id",
+    "bikes available",
+    "docks available",
+    "time",
+    "duration",
+    "start date",
+    "start station name",
+    "start station id",
+    "end date",
+    "end station name",
+    "end station id",
+    "bike id",
+    "subscription type",
+    "zip code",
+    "date",
+    "max temperature f",
+    "mean temperature f",
+    "min temperature f",
+    "max dew point f",
+    "mean dew point f",
+    "min dew point f",
+    "max humidity",
+    "mean humidity",
+    "min humidity",
+    "max sea level pressure inches",
+    "mean sea level pressure inches",
+    "min sea level pressure inches",
+    "max visibility miles",
+    "mean visibility miles",
+    "min visibility miles",
+    "max wind speed mph",
+    "mean wind speed mph",
+    "max gust speed mph",
+    "precipitation inches",
+    "cloud cover",
+    "events",
+    "wind dir degrees"
+  ],
+  "col_table": [
+    -1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "column_matches": [
+    {
+      "column_joined": "['*']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['latitude']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['longitude']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['dock', 'count']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['city']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['installation', 'date']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['station', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['bike', 'available']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['dock', 'available']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['time']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['duration']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['start', 'date']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['start', 'station', 'name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['start', 'station', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['end', 'date']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['end', 'station', 'name']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['end', 'station', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['bike', 'id']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['subscription', 'type']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['zip', 'code']",
+      "full_column_match": true,
+      "full_value_match": true,
+      "partial_column_match": 2,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['date']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['max', 'temperature', 'f']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['mean', 'temperature', 'f']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['min', 'temperature', 'f']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['max', 'dew', 'point', 'f']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['mean', 'dew', 'point', 'f']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['min', 'dew', 'point', 'f']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['max', 'humidity']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['mean', 'humidity']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['min', 'humidity']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['max', 'sea', 'level', 'pressure', 'inch']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['mean', 'sea', 'level', 'pressure', 'inch']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['min', 'sea', 'level', 'pressure', 'inch']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['max', 'visibility', 'mile']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['mean', 'visibility', 'mile']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['min', 'visibility', 'mile']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['max', 'wind', 'speed', 'mph']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['mean', 'wind', 'speed', 'mph']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['max', 'gust', 'speed', 'mph']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['precipitation', 'inch']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['cloud', 'cover']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['event']",
+      "full_column_match": false,
+      "full_value_match": true,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    },
+    {
+      "column_joined": "['wind', 'dir', 'degree']",
+      "full_column_match": false,
+      "full_value_match": false,
+      "partial_column_match": 0,
+      "partial_value_match": 0
+    }
+  ],
+  "db_id": "bike_1",
+  "keys": {
+    "8": 1,
+    "1": 1,
+    "12": 12
+  },
+  "names": [
+    "*",
+    "id",
+    "name",
+    "latitude",
+    "longitude",
+    "dock count",
+    "city",
+    "installation date",
+    "station id",
+    "bikes available",
+    "docks available",
+    "time",
+    "id",
+    "duration",
+    "start date",
+    "start station name",
+    "start station id",
+    "end date",
+    "end station name",
+    "end station id",
+    "bike id",
+    "subscription type",
+    "zip code",
+    "date",
+    "max temperature f",
+    "mean temperature f",
+    "min temperature f",
+    "max dew point f",
+    "mean dew point f",
+    "min dew point f",
+    "max humidity",
+    "mean humidity",
+    "min humidity",
+    "max sea level pressure inches",
+    "mean sea level pressure inches",
+    "min sea level pressure inches",
+    "max visibility miles",
+    "mean visibility miles",
+    "min visibility miles",
+    "max wind speed mph",
+    "mean wind speed mph",
+    "max gust speed mph",
+    "precipitation inches",
+    "cloud cover",
+    "events",
+    "wind dir degrees",
+    "zip code"
+  ],
+  "query": "SELECT date FROM weather WHERE zip_code  =  94107 AND EVENTS != \"Fog\" AND EVENTS != \"Rain\"",
+  "query_toks": [
+    "SELECT",
+    "date",
+    "FROM",
+    "weather",
+    "WHERE",
+    "zip_code",
+    "=",
+    "94107",
+    "AND",
+    "EVENTS",
+    "!",
+    "=",
+    "``",
+    "Fog",
+    "''",
+    "AND",
+    "EVENTS",
+    "!",
+    "=",
+    "``",
+    "Rain",
+    "''"
+  ],
+  "query_toks_no_value": [
+    "select",
+    "date",
+    "from",
+    "weather",
+    "where",
+    "zip_code",
+    "=",
+    "value",
+    "and",
+    "events",
+    "!",
+    "=",
+    "value",
+    "and",
+    "events",
+    "!",
+    "=",
+    "value"
+  ],
+  "question": "In zip code 94107, on which day neither Fog nor Rain was not observed?",
+  "question_arg": [
+    [
+      "in"
+    ],
+    [
+      "zip",
+      "code"
+    ],
+    [
+      "94107"
+    ],
+    [
+      ","
+    ],
+    [
+      "on"
+    ],
+    [
+      "which"
+    ],
+    [
+      "day"
+    ],
+    [
+      "neither"
+    ],
+    [
+      "fog"
+    ],
+    [
+      "nor"
+    ],
+    [
+      "rain"
+    ],
+    [
+      "wa"
+    ],
+    [
+      "not"
+    ],
+    [
+      "observed"
+    ],
+    [
+      "?"
+    ]
+  ],
+  "question_arg_type": [
+    [
+      "NONE"
+    ],
+    [
+      "col"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ],
+    [
+      "NONE"
+    ]
+  ],
+  "question_toks": [
+    "In",
+    "zip",
+    "code",
+    "94107",
+    ",",
+    "on",
+    "which",
+    "day",
+    "neither",
+    "Fog",
+    "nor",
+    "Rain",
+    "was",
+    "not",
+    "observed",
+    "?"
+  ],
+  "sql": {
+    "except": null,
+    "from": {
+      "conds": [],
+      "table_units": [
+        [
+          "table_unit",
+          3
+        ]
+      ]
+    },
+    "groupBy": [],
+    "having": [],
+    "intersect": null,
+    "limit": null,
+    "orderBy": [],
+    "select": [
+      false,
+      [
+        [
+          0,
+          [
+            0,
+            [
+              0,
+              23,
+              false
+            ],
+            null
+          ]
+        ]
+      ]
+    ],
+    "union": null,
+    "where": [
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            46,
+            false
+          ],
+          null
+        ],
+        94107.0,
+        null
+      ],
+      "and",
+      [
+        false,
+        7,
+        [
+          0,
+          [
+            0,
+            44,
+            false
+          ],
+          null
+        ],
+        "\"Fog\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        7,
+        [
+          0,
+          [
+            0,
+            44,
+            false
+          ],
+          null
+        ],
+        "\"Rain\"",
+        null
+      ]
+    ]
+  },
+  "table_names": [
+    "station",
+    "status",
+    "trip",
+    "weather"
+  ],
+  "rule_label": "Root1(3) Root(3) Sel(0) N(0) A(0) C(22) T(3) Filter(0) Filter(2) A(0) C(21) T(3) V(2) Filter(0) Filter(3) A(0) C(43) T(3) V(3) Filter(3) A(0) C(43) T(3) V(1)",
+  "values": [
+    "rain",
+    "Rain",
+    "94107",
+    "Fog"
+  ]
+}

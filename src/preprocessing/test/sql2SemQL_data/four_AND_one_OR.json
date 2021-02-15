@@ -1,0 +1,388 @@
+{
+  "col_set": [
+    "*",
+    "bid",
+    "business id",
+    "name",
+    "full address",
+    "city",
+    "latitude",
+    "longitude",
+    "review count",
+    "is open",
+    "rating",
+    "state",
+    "id",
+    "category name",
+    "uid",
+    "user id",
+    "cid",
+    "count",
+    "day",
+    "neighbourhood name",
+    "rid",
+    "text",
+    "year",
+    "month",
+    "tip id",
+    "likes"
+  ],
+  "col_table": [
+    -1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3,
+    3,
+    4,
+    4,
+    4,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "db_id": "yelp",
+  "keys": {
+    "13": 2,
+    "2": 33,
+    "19": 2,
+    "23": 2,
+    "27": 16,
+    "16": 35,
+    "26": 2,
+    "35": 16,
+    "33": 2,
+    "1": 1,
+    "12": 12,
+    "15": 15,
+    "18": 18,
+    "22": 22,
+    "25": 25,
+    "32": 32
+  },
+  "names": [
+    "*",
+    "bid",
+    "business id",
+    "name",
+    "full address",
+    "city",
+    "latitude",
+    "longitude",
+    "review count",
+    "is open",
+    "rating",
+    "state",
+    "id",
+    "business id",
+    "category name",
+    "uid",
+    "user id",
+    "name",
+    "cid",
+    "business id",
+    "count",
+    "day",
+    "id",
+    "business id",
+    "neighbourhood name",
+    "rid",
+    "business id",
+    "user id",
+    "rating",
+    "text",
+    "year",
+    "month",
+    "tip id",
+    "business id",
+    "text",
+    "user id",
+    "likes",
+    "year",
+    "month"
+  ],
+  "query": "SELECT t1.name\nFROM category AS t3 JOIN business AS t1 ON t3.business_id = t1.business_id JOIN category AS t4 ON t4.business_id = t1.business_id JOIN neighbourhood AS t2 ON t2.business_id = t1.business_id WHERE t1.city = \"Madison\" AND t3.category_name = \"Italian\" AND t4.category_name = \"restaurant\" AND t2.neighbourhood_name = \"Meadowood\"\nOR t1.city = \"New York\" AND t3.category_name = \"French\" AND t4.category_name = \"restaurant\" AND t2.neighbourhood_name = \"Soho\"",
+  "question": "Find all Italian restaurant in the Meadowood neighbourhood of Madison and all French restaurant in the Soho area in New York",
+  "sql": {
+    "except": null,
+    "from": {
+      "conds": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              13,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            2,
+            false
+          ],
+          null
+        ],
+        "and",
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              13,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            2,
+            false
+          ],
+          null
+        ],
+        "and",
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              23,
+              false
+            ],
+            null
+          ],
+          [
+            0,
+            2,
+            false
+          ],
+          null
+        ]
+      ],
+      "table_units": [
+        [
+          "table_unit",
+          1
+        ],
+        [
+          "table_unit",
+          0
+        ],
+        [
+          "table_unit",
+          1
+        ],
+        [
+          "table_unit",
+          4
+        ]
+      ]
+    },
+    "groupBy": [],
+    "having": [],
+    "intersect": null,
+    "limit": null,
+    "orderBy": [],
+    "select": [
+      false,
+      [
+        [
+          0,
+          [
+            0,
+            [
+              0,
+              3,
+              false
+            ],
+            null
+          ]
+        ]
+      ]
+    ],
+    "union": null,
+    "where": [
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            5,
+            false
+          ],
+          null
+        ],
+        "\"Madison\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            14,
+            false
+          ],
+          null
+        ],
+        "\"Italian\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            14,
+            false
+          ],
+          null
+        ],
+        "\"restaurant\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            24,
+            false
+          ],
+          null
+        ],
+        "\"Meadowood\"",
+        null
+      ],
+      "or",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            5,
+            false
+          ],
+          null
+        ],
+        "\"Soho\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            14,
+            false
+          ],
+          null
+        ],
+        "\"French\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            14,
+            false
+          ],
+          null
+        ],
+        "\"restaurant\"",
+        null
+      ],
+      "and",
+      [
+        false,
+        2,
+        [
+          0,
+          [
+            0,
+            24,
+            false
+          ],
+          null
+        ],
+        "\"New York\"",
+        null
+      ]
+    ]
+  },
+  "table_names": [
+    "business",
+    "category",
+    "user",
+    "checkin",
+    "neighbourhood",
+    "review",
+    "tip"
+  ],
+  "rule_label": "Root1(3) Root(3) Sel(0) N(0) A(0) C(3) T(0) Filter(0) Filter(2) A(0) C(5) T(0) V(2) Filter(0) Filter(2) A(0) C(13) T(1) V(0) Filter(2) A(0) C(13) T(1) V(3)",
+  "values": [
+    "Italian",
+    "Meadowood",
+    "Madison",
+    "restaurant",
+    "Soho",
+    "New York",
+    "French"
+  ]
+}
