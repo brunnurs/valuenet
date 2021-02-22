@@ -33,7 +33,7 @@ def pre_process_ner_candidates(ner_extracted_values, question, question_tokens):
     extracted_data.heuristics_single_letters.extend(find_single_letters(question))
     extracted_data.heuristics_capitalized_words.extend(find_capitalized_words(question))
     extracted_data.heuristics_months.extend(find_months(question_tokens))
-    extracted_data.heuristics_location_abbreviations.extend(find_location_abbreviations(question))
+    extracted_data.heuristics_location_abbreviations.extend(find_location_abbreviations(question_tokens, question))
 
     for entity in ner_extracted_values:
         # for all types see https://cloud.google.com/natural-language/docs/reference/rest/v1beta2/Entity#Type
