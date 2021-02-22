@@ -417,7 +417,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('--data_path', type=str, help='dataset', required=True)
     arg_parser.add_argument('--table_path', type=str, help='table dataset', required=True)
     arg_parser.add_argument('--output', type=str, help='output data', required=True)
-    arg_parser.add_argument('--use_ner_value_candidates', action='store_true', default=False, help="we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) "
+    arg_parser.add_argument('--use_ner_value_candidates', action='store_true', default=True, help="we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) "
                                                                                                   "or we can instead let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)")
     args = arg_parser.parse_args()
 
@@ -428,12 +428,18 @@ if __name__ == '__main__':
     with open('new.txt', 'a') as the_file:
         for row in data:
             if len(row['sql']['select'][1]) > 5:
+                print('more than 5 rows to select! Currently not implemented')
                 continue
 
             # we can either let the model predict from the ground truth-values only (values extracted directly from the SQL-structure) or we can instead
             # let it predict the right value from a set of possible values extracted by NER and handcrafted heuristics (see pre_process_ner_values.py)
             if args.use_ner_value_candidates:
                 parser = Parser(row['ner_extracted_values_processed'])
+
+                # When using the NER-values, we override here the ground truth values with it. That way the training/evaluation scripts stay
+                # exactly the same and using values/ner-extracted values is decided here. To make this clear we also remove all other value lists.
+                # Be aware that at this point, we already have added missing values from the ground-truth if necessary (see pre-processing and "all_values_found" flag)
+                row['values'] = row['ner_extracted_values_processed']
                 del row['ner_extracted_values_processed']
             else:
                 parser = Parser(row['values'])
@@ -448,11 +454,6 @@ if __name__ == '__main__':
             the_file.write(row['rule_label'] + '\n')
 
             print(row['rule_label'])
-
-            # if we use the NER-values then we override here the ground truth values with it. That way the training/evaluation scripts stay
-            # exactly the same and using values/ner-extracted values is decided here. To make this clear we also remove all other value lists.
-            if args.use_ner_value_candidates:
-                row['values'] = row['ner_extracted_values_processed']
 
             processed_data.append(row)
 

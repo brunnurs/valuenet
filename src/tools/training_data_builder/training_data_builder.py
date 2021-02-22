@@ -45,7 +45,7 @@ def main():
     samples = []
 
     path_training_samples_1: Path = Path('data/cordis/trees/all_adapted.json')
-    path_training_samples_2: Path = Path('data/cordis/handmade_training_data.json')
+    path_training_samples_2: Path = Path('data/cordis/handmade_training_data/handmade_training_data.json')
 
     for path in [path_training_samples_1, path_training_samples_2]:
         with open(path, 'r', encoding='utf-8') as file_handle:
