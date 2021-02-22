@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from intermediate_representation.sem2sql.sem2SQL import transform
 from intermediate_representation.sem_utils import alter_column0
-from manual_inference.helper import get_schemas_spider
+from manual_inference.helper import get_schemas_spider, get_schemas_cordis
 
 
 class Test(TestCase):
@@ -82,3 +82,20 @@ JOIN customers AS T2 ON T3.customer_id = T2.id
 WHERE T2.first_name = 'Daan' 
 and T2.last_name = 'Peeters' 
         '''.replace('\n', '').strip(), result[0].strip())
+
+    def test_transform__temp(self):
+        # GIVEN
+        _, self.schemas, _, _ = get_schemas_cordis()
+
+        with open('src/intermediate_representation/sem2sql/test/sql2SemQL_data/temp.json', 'r',
+                  encoding='utf8') as f:
+            example = json.load(f)
+
+        example['model_result'] = example['rule_label']
+
+        # WHEN
+        alter_column0([example])
+        result = transform(example, self.schemas[example['db_id']])
+
+        # THEN
+        print(result[0].strip())

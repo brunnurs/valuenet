@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/tools/create_schema_from_db.py" />
-    <option name="PARAMETERS" value="data/cordis data/cordis/tables_new.json data/cordis/tables.json" />
+    <option name="PARAMETERS" value="data/spider/original/hack_night data/spider/original/tables_new.json data/spider/original/tables.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

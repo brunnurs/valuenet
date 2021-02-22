@@ -8,7 +8,7 @@ import torch
 from config import Config
 from intermediate_representation.sem_utils import alter_column0
 from named_entity_recognition.api_ner.google_api_repository import remote_named_entity_recognition
-from preprocessing import pre_process
+from preprocessing.pre_process import pre_process
 from spider import spider_utils
 from spider.example_builder import build_example
 from intermediate_representation.sem2sql.sem2SQL import transform
