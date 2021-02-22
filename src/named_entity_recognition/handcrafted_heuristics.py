@@ -199,7 +199,7 @@ def find_months(question_tokens):
     return months_fuzzy_dates
 
 
-def find_location_abbreviations(question):
+def find_location_abbreviations(question_tokens, question):
     """
     This heuristic is just a very basic approximation for a much complexer problem. Location names are very divers and require a powerful
     model to understand them properly.
@@ -269,11 +269,11 @@ def find_location_abbreviations(question):
 
     for key, potential_values in location_abbvreviations_US.items():
         add_me = False
-        if key in question:
+        if key in question_tokens:
             add_me = True
 
         for sub_value in potential_values:
-            if sub_value in question:
+            if sub_value in question_tokens:
                 add_me = True
 
         if add_me:
