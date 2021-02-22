@@ -342,22 +342,24 @@ class Test(TestCase):
 
     def test__find_location_abbreviations(self):
         # GIVEN
-        question1 = "What are the departure and arrival dates of all flights from LA to Honolulu?"
-        question2 = "List the number of invoices from the US, grouped by state."
-        question3 = "List the number of invoices and the invoice total from California."
-        question4 = "What are the companies and main industries of all companies that are not headquartered in the United States?"
-        question5 = "What are the names of the ships  that are from either the US or the UK?"
-        question6 = "What is average number of students enrolled in Florida colleges?"
-        question7 = "What are the names and enrollment numbers for colleges that have more than 10000 enrolled and are located in Louisiana?"
+        question1 = ['What', 'are', 'the', 'departure', 'and', 'arrival', 'dates', 'of', 'all', 'flights', 'from', 'LA', 'to', 'Honolulu', '?']
+        question2 = ['List', 'the', 'number', 'of', 'invoices', 'from', 'the', 'US', ',', 'grouped', 'by', 'state', '.']
+        question3 = ['List', 'the', 'number', 'of', 'invoices', 'and', 'the', 'invoice', 'total', 'from', 'California', '.']
+        question4 = ['What', 'are', 'the', 'companies', 'and', 'main', 'industries', 'of', 'all', 'companies', 'that', 'are', 'not', 'headquartered', 'in', 'the', 'United', 'States', '?']
+        question5 = ['What', 'are', 'the', 'names', 'of', 'the', 'ships', 'that', 'are', 'from', 'either', 'the', 'US', 'or', 'the', 'UK', '?']
+        question6 = ['What', 'is', 'average', 'number', 'of', 'students', 'enrolled', 'in', 'Florida', 'colleges', '?']
+        question7 = ['What', 'are', 'the', 'names', 'and', 'enrollment', 'numbers', 'for', 'colleges', 'that', 'have', 'more', 'than', '10000', 'enrolled', 'and', 'are', 'located', 'in', 'Louisiana', '?']
+        question8 = ['How', 'many', 'are', 'the', 'projects', 'started', 'in', 'Caserta', 'in', 'the', 'QUANTUM', 'ENGINEERING', 'DEPARTMENT', 'started', 'after', 'the', '2015', '?']
 
         # WHEN
-        location_abbreviations1 = find_location_abbreviations(question1)
-        location_abbreviations2 = find_location_abbreviations(question2)
-        location_abbreviations3 = find_location_abbreviations(question3)
-        location_abbreviations4 = find_location_abbreviations(question4)
-        location_abbreviations5 = find_location_abbreviations(question5)
-        location_abbreviations6 = find_location_abbreviations(question6)
-        location_abbreviations7 = find_location_abbreviations(question7)
+        location_abbreviations1 = find_location_abbreviations(question1, ' '.join(question1))
+        location_abbreviations2 = find_location_abbreviations(question2, ' '.join(question2))
+        location_abbreviations3 = find_location_abbreviations(question3, ' '.join(question3))
+        location_abbreviations4 = find_location_abbreviations(question4, ' '.join(question4))
+        location_abbreviations5 = find_location_abbreviations(question5, ' '.join(question5))
+        location_abbreviations6 = find_location_abbreviations(question6, ' '.join(question6))
+        location_abbreviations7 = find_location_abbreviations(question7, ' '.join(question7))
+        location_abbreviations8 = find_location_abbreviations(question8, ' '.join(question8))
 
         # THEN
         self.assertEqual(['LA', 'Louisiana', 'Los Angeles'], location_abbreviations1)
@@ -367,6 +369,7 @@ class Test(TestCase):
         self.assertEqual(['USA', 'US', 'United States', 'United States of America', 'UK', 'United Kingdom', 'England'], location_abbreviations5)
         self.assertEqual(['FL', 'Florida'], location_abbreviations6)
         self.assertEqual(['LA', 'Louisiana', 'Los Angeles'], location_abbreviations7)
+        self.assertEqual([], location_abbreviations8)
 
     def test__find_months(self):
         # GIVEN
