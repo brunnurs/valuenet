@@ -19,6 +19,7 @@ RUN pip install word2number
 RUN pip install sqlparse
 RUN pip install "textdistance[extras]"
 RUN pip install spacy
+# in contrary to the pipfile we need some binaries for postgres too.
 RUN pip install psycopg2-binary
 RUN pip install flask
 RUN pip install flask-cors
