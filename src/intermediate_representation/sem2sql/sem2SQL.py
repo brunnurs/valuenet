@@ -696,7 +696,7 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
         if key is None:
             continue
         new_table_names[table_names_replace[key]] = value
-    from_clause = infer_from_clause(new_table_names, schema, all_columns).strip()
+    from_clause = infer_from_clause(new_table_names, schema['graph'], all_columns).strip()
 
     sql = ' '.join([select_clause_str, from_clause, where_clause, group_by_clause, have_clause, sup_clause, order_clause,
                     intersect_clause, union_clause, except_clause])

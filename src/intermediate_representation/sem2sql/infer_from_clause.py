@@ -1,10 +1,10 @@
-def infer_from_clause(table_names, schema, columns):
+def infer_from_clause(table_names, graph, columns):
     tables = list(table_names.keys())
 
     if len(tables) == 1:  # no JOINS needed - just return the simple "FROM" clause.
         return "FROM {} AS {}".format(tables[0], table_names[tables[0]])
     else:  # we have to deal with multiple tables - and find the shortest path between them
-        join_clauses, cross_join_clauses = _generate_path_by_graph(schema, table_names, tables)
+        join_clauses, cross_join_clauses = generate_path_by_graph(graph, table_names, tables)
 
     if len(_tables_in_join_clauses(join_clauses)) >= 3:
         join_clauses = _find_and_remove_star_table(columns, join_clauses)
@@ -43,9 +43,8 @@ def infer_from_clause(table_names, schema, columns):
     return 'FROM ' + ' '.join(stringified_join_clauses)
 
 
-def _generate_path_by_graph(schema, table_names, tables):
+def generate_path_by_graph(graph, table_names, tables):
     join_clause = list()
-    graph = schema['graph']
 
     cross_joins, tables_handled_by_cross_joins = _handle_standalone_tables(graph, table_names, tables)
 

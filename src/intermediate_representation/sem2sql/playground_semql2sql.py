@@ -6,8 +6,7 @@ schema = {'column_names': [[-1, '*'], [0, 'cont id'], [0, 'continent'], [1, 'cou
 columns = [('none', 'Id', 'cars data'), ('none', 'Continent', 'continents'), ('none', 'CountryName', 'countries')]
 
 graph = build_graph(schema)
-schema['graph'] = graph
 
-from_clause = infer_from_clause(table_names, schema, columns)
+from_clause = infer_from_clause(table_names, graph, columns)
 print(from_clause)
 assert from_clause == "FROM cars_data AS T1 JOIN continents AS T2 JOIN countries AS T3"
