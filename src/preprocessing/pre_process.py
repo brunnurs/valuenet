@@ -269,12 +269,12 @@ def main():
 
     # To analyze a specific sample use this. You find the sample-idx with e.g. this code snippet:
     # [(idx, query) for idx, query in enumerate(data) if query['question'] == "THE QUESTION YOU SEARCH FOR"]
-    # data = data[5579:5580]
-    # ner_data = ner_data[5579:5580]
+    # data = data[7646:7647]
+    # ner_data = ner_data[7646:7647]
 
-    # results = Parallel(n_jobs=NUM_CORES)(delayed(pre_process)(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
+    results = Parallel(n_jobs=NUM_CORES)(delayed(pre_process)(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
     # To better debug this code, use the non-parallelized version of the code
-    results = [pre_process(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
+    # results = [pre_process(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
 
     all_token_grouped, all_token_types, all_column_matches, all_value_candidates, all_complete_values_found = zip(*results)
 
