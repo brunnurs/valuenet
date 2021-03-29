@@ -45,7 +45,7 @@ def main():
     samples = []
 
     path_training_samples_1: Path = Path('data/cordis/trees/all_adapted.json')
-    path_training_samples_2: Path = Path('data/cordis/handmade_training_data/handmade_training_data.json')
+    path_training_samples_2: Path = Path('data/cordis/handmade_training_data/handmade_data_train.json')
 
     for path in [path_training_samples_1, path_training_samples_2]:
         with open(path, 'r', encoding='utf-8') as file_handle:
@@ -56,6 +56,20 @@ def main():
                 samples.append(transformed)
 
     with open(Path('data/cordis/original/train.json'), 'w', encoding='utf-8') as f:
+        json.dump(samples, f, indent=2)
+
+    # now lets do the same for DEV, assuming there is only handmade dev data.
+    samples = []
+
+    path_dev_samples: Path = Path('data/cordis/handmade_training_data/handmade_data_dev.json')
+    with open(path_dev_samples, 'r', encoding='utf-8') as file_handle:
+        data = json.load(file_handle)
+
+        for sample in data:
+            transformed = transform_sample(sample, schemas_dict)
+            samples.append(transformed)
+
+    with open(Path('data/cordis/original/dev.json'), 'w', encoding='utf-8') as f:
         json.dump(samples, f, indent=2)
 
 
