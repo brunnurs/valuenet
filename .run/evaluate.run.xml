@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/evaluation.py" />
-    <option name="PARAMETERS" value="--model_to_load=experiments/bart_best_model/best_model.pt --prediction_dir experiments/prediction --data_set spider" />
+    <option name="PARAMETERS" value="--model_to_load=experiments/bart_best_model/best_model.pt --prediction_dir experiments/prediction --data_set spider --beam_size 3" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="true" />
     <option name="MODULE_MODE" value="false" />
