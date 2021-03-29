@@ -23,7 +23,7 @@ import spider.test_suite_eval.evaluation as spider_evaluation
 def evaluate(model, dev_loader, schema, beam_size):
     model.eval()
 
-    sketch_correct, rule_label_correct, not_all_values_found, total = 0, 0, 0, 0
+    sketch_correct, rule_label_correct, found_in_beams, not_all_values_found, total = 0, 0, 0, 0, 0
     predictions = []
     for batch in tqdm(dev_loader, desc="Evaluating"):
 
@@ -40,12 +40,12 @@ def evaluate(model, dev_loader, schema, beam_size):
                 results_all = model.parse(example, beam_size=beam_size)
 
             results = results_all[0]
-            list_preds = []
+            all_predictions = []
             try:
                 # here we set assemble the predicted actions (including leaf-nodes) as string
                 full_prediction = " ".join([str(x) for x in results[0].actions])
-                for x in results:
-                    list_preds.append(" ".join(str(x.actions)))
+                for beam in results:
+                    all_predictions.append(" ".join([str(x) for x in beam.actions]))
             except Exception as e:
                 # print(e)
                 full_prediction = ""
@@ -64,15 +64,19 @@ def evaluate(model, dev_loader, schema, beam_size):
                     sketch_correct += 1
                 if truth_rule_label == prediction['model_result']:
                     rule_label_correct += 1
+                elif truth_rule_label in all_predictions:
+                    found_in_beams += 1
             else:
                 question = prediction['question']
-                print(f'Not all values found during pre-processing for question {question}. Replace values with dummy to make query fail')
+                tqdm.write(f'Not all values found during pre-processing for question "{question}". Replace values with dummy to make query fail')
                 prediction['values'] = [1] * len(prediction['values'])
                 not_all_values_found += 1
 
             total += 1
 
             predictions.append(prediction)
+
+    print(f"in {found_in_beams} times we found the correct results in another beam (failing queries: {total - rule_label_correct})")
 
     return float(sketch_correct) / float(total), float(rule_label_correct) / float(total), float(not_all_values_found) / float(total), predictions
 
