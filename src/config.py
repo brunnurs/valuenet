@@ -36,6 +36,14 @@ def _add_model_configuration(parser):
     parser.add_argument('--dropout', default=0.3, type=float, help='dropout rate')
 
 
+def _add_postgresql_configuration(parser):
+    parser.add_argument('--database_host', default='testbed.inode.igd.fraunhofer.de', type=str)
+    parser.add_argument('--database_port', default='18001', type=str)
+    parser.add_argument('--database_user', default='postgres', type=str)
+    parser.add_argument('--database_password', default='vdS83DJSQz2xQ', type=str)
+    parser.add_argument('--database_schema', default='unics_cordis', type=str)
+
+
 def read_arguments_train():
     parser = argparse.ArgumentParser(description="Run training with following arguments")
 
@@ -87,8 +95,11 @@ def read_arguments_evaluation():
     _add_model_configuration(parser)
 
     # evaluation
+    parser.add_argument('--evaluation_type', default='spider', type=str)
+
     parser.add_argument('--model_to_load', type=str)
     parser.add_argument('--prediction_dir', type=str)
+    parser.add_argument('--batch_size', default=1, type=int)
 
     # general configuration
     parser.add_argument('--seed', default=90, type=int)
@@ -98,6 +109,11 @@ def read_arguments_evaluation():
     parser.add_argument('--beam_size', default=1, type=int, help='beam size for beam search')
     parser.add_argument('--decode_max_time_step', default=40, type=int,
                         help='maximum number of time steps used in decoding and sampling')
+
+    # DB config is only needed in case evaluation is executed on PostgreSQL DB
+    _add_postgresql_configuration(parser)
+
+    parser.add_argument('--database', default='cordis_temporary', type=str)
 
     args = parser.parse_args()
 
@@ -122,11 +138,7 @@ def read_arguments_manual_inference():
     parser.add_argument('--api_key', default='1234', type=str)
 
     # database configuration (in case of PostgreSQL, not needed for sqlite)
-    parser.add_argument('--database_host', default='localhost', type=str)
-    parser.add_argument('--database_port', default='5432', type=str)
-    parser.add_argument('--database_user', default='postgres', type=str)
-    parser.add_argument('--database_password', default='postgres', type=str)
-    parser.add_argument('--database_schema', default='unics_cordis', type=str)
+    _add_postgresql_configuration(parser)
 
     # general configuration
     parser.add_argument('--seed', default=90, type=int)

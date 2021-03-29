@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/named_entity_recognition/api_ner/extract_values.py" />
-    <option name="PARAMETERS" value="--data_path=data/cordis/inode_trainingdata/train.json --output_path=data/cordis/inode_trainingdata/ner_train.json" />
+    <option name="PARAMETERS" value="--data_path=data/cordis/original/dev.json --output_path=data/cordis/ner_dev.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

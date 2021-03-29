@@ -53,10 +53,11 @@ def build_db_value_finder(database_path, db_name, schema_path):
     else:
         # a bit of a hack, when more postgres-db gets added for training we have to improve this.
         config = {'database': db_name,
-                  'database_host': 'localhost',
-                  'database_port': '5432',
+                  'database_host': 'testbed.inode.igd.fraunhofer.de',
+                  'database_port': '18001',
                   'database_user': 'postgres',
-                  'database_password': 'postgres', 'database_schema': 'unics_cordis'}
+                  'database_password': 'vdS83DJSQz2xQ',
+                  'database_schema': 'unics_cordis'}
 
         return DatabaseValueFinderPostgreSQL(config['database'], schema_path, config)
 

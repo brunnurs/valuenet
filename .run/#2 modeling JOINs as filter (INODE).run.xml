@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="#4 modeling JOINs as filter (INODE)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing INODE">
+  <configuration default="false" name="#4 modeling JOINs as filter (TRAIN)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing INODE">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />

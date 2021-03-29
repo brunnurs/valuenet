@@ -719,21 +719,25 @@ def transform_semQL_to_sql(schemas, sem_ql_prediction, output_dir):
             try:
                 result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']])
                 d.write(result[0] + '\n')
-                g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
+                g.write("%s\t%s\t%s\n" % (replace_tabs_linebreaks(i, sem_ql_prediction), sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
                 count += 1
             except Exception as e:
                 # This origin seems to be the fallback-query. Not sure how we come up with it, most probably it's just a dummy query to fill in a result for each example.
                 result = transform(sem_ql_prediction[i], schemas[sem_ql_prediction[i]['db_id']], origin='Root1(3) Root(5) Sel(0) N(0) A(3) C(0) T(0)')
                 exception_count += 1
                 d.write(result[0] + '\n')
-                g.write("%s\t%s\t%s\n" % (sem_ql_prediction[i]['query'], sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
+                g.write("%s\t%s\t%s\n" % (replace_tabs_linebreaks(i, sem_ql_prediction), sem_ql_prediction[i]["db_id"], sem_ql_prediction[i]["question"]))
                 count += 1
                 # print(e)
                 print('Exception')
                 print(traceback.format_exc())
                 print(sem_ql_prediction[i]['question'])
-                print(sem_ql_prediction[i]['query'])
+                print(replace_tabs_linebreaks(i, sem_ql_prediction))
                 print(sem_ql_prediction[i]['db_id'])
                 print('===\n\n')
 
     return count, exception_count
+
+
+def replace_tabs_linebreaks(i, sem_ql_prediction):
+    return sem_ql_prediction[i]['query'].replace('\t', ' ').replace('\n', ' ')
