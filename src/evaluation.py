@@ -1,5 +1,6 @@
 import copy
 import os
+from pathlib import Path
 
 import torch
 import wandb
@@ -10,9 +11,11 @@ from config import read_arguments_evaluation
 from data_loader import get_data_loader
 from intermediate_representation import semQL
 from intermediate_representation.sem2sql.sem2SQL import transform_semQL_to_sql
+from manual_inference.helper import _execute_query_postgresql
 from model.model import IRNet
 from spider import spider_utils
 from spider.example_builder import build_example
+from spider.test_suite_eval.exec_eval import result_eq
 from utils import setup_device, set_seed_everywhere
 import spider.test_suite_eval.evaluation as spider_evaluation
 
@@ -91,7 +94,58 @@ def transform_to_sql_and_evaluate_with_spider(predictions, table_data, experimen
     return total_count, failure_count, spider_eval_results
 
 
-if __name__ == '__main__':
+def _remove_unnecessary_distinct(p, g):
+    p_tokens = p.split(' ')
+    g_tokens = g.split(' ')
+
+    if 'distinct' not in g_tokens and 'DISTINCT' not in g_tokens:
+        return ' '.join([p_token for p_token in p_tokens if p_token != 'DISTINCT'])
+    else:
+        return p
+
+
+def evaluate_cordis(groundtruth_path: Path, prediction_path: Path, database: str, connection_config: dict, do_not_verify_distinct=True):
+
+    with open(groundtruth_path, 'r', encoding='utf-8') as f:
+        groundtruth_full_lines = f.readlines()
+        groundtruth = [g.strip().split('\t')[0] for g in groundtruth_full_lines]
+        questions = [g.strip().split('\t')[2] for g in groundtruth_full_lines]
+
+    with open(prediction_path, 'r', encoding='utf-8') as f:
+        prediction = f.readlines()
+
+    n_success = 0
+    for p, g, q in zip(prediction, groundtruth, questions):
+
+        if do_not_verify_distinct:
+            p = _remove_unnecessary_distinct(p, g)
+
+        try:
+            results_prediction = _execute_query_postgresql(p, database, connection_config)
+        except Exception as ex:
+            print("Prediction is not a valid SQL query:")
+            print(f"Q: {q.strip()}")
+            print(f"P: {p.strip()}")
+            print(f"G: {g.strip()}")
+            print()
+
+            continue
+
+        results_groundtruth = _execute_query_postgresql(g, database, connection_config)
+
+        if result_eq(results_groundtruth, results_prediction, order_matters=True):
+            n_success += 1
+        else:
+            print("Results not equal for:")
+            print(f"Q: {q.strip()}")
+            print(f"P: {p.strip()}")
+            print(f"G: {g.strip()}")
+            print()
+
+    print(f"================== Total score: {n_success} of {len(groundtruth)} ({100 / len(groundtruth) * n_success}%) ==================")
+
+
+def main():
     args = read_arguments_evaluation()
 
     device, n_gpu = setup_device()
@@ -125,12 +179,30 @@ if __name__ == '__main__':
     count_success, count_failed = transform_semQL_to_sql(val_table_data, predictions, args.prediction_dir)
 
     print("Transformed {} samples successful to SQL. {} samples failed. Generated the files a 'ground_truth.txt' "
-          "and a 'output.txt' file. We now use the official Spider evaluation script to evaluate this files.".format(
+          "and a 'output.txt' file.".format(
         count_success, count_failed))
 
-    wandb.init(project="proton")
+    if args.evaluation_type == 'spider':
 
-    spider_evaluation.evaluate(os.path.join(args.prediction_dir, 'ground_truth.txt'),
-                               os.path.join(args.prediction_dir, 'output.txt'),
-                               os.path.join(args.data_dir, "testsuite_databases"),
-                               'exec', None, False, False, False, 1, quickmode=False)
+        print('We now use the official Spider evaluation script to evaluate the generated/ground truth files.')
+        wandb.init(project="proton")
+
+        spider_evaluation.evaluate(os.path.join(args.prediction_dir, 'ground_truth.txt'),
+                                   os.path.join(args.prediction_dir, 'output.txt'),
+                                   os.path.join(args.data_dir, "testsuite_databases"),
+                                   'exec', None, False, False, False, 1, quickmode=False)
+
+    elif args.evaluation_type == 'cordis':
+
+        connection_config = {k: v for k, v in vars(args).items() if k.startswith('database')}
+
+        evaluate_cordis(Path(args.prediction_dir) / 'ground_truth.txt',
+                        Path(args.prediction_dir) / 'output.txt',
+                        args.database,
+                        connection_config)
+    else:
+        raise NotImplemented('Only Spider and CORDIS evaluation are implemented so far.')
+
+
+if __name__ == '__main__':
+    main()

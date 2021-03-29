@@ -307,6 +307,7 @@ class Test(TestCase):
         question12 = "Show names for all employees who have certificates on both Boeing 737-800 and Airbus A340-300"
         question13 = "What are the names of stations that have latitude lower than 37.5?"
         question14 = "Have Peter Mertens and Dina Barbian written a paper together ?"
+        question15 = "how many papers does David M. Blei have at AISTATS"
 
         # WHEN
         capitalized_words1 = find_capitalized_words(question1)
@@ -323,6 +324,7 @@ class Test(TestCase):
         capitalized_words12 = find_capitalized_words(question12)
         capitalized_words13 = find_capitalized_words(question13)
         capitalized_words14 = find_capitalized_words(question14)
+        capitalized_words15 = find_capitalized_words(question15)
 
         # THEN
         self.assertEqual(['Initial Applications', 'Regular'], capitalized_words1)
@@ -339,6 +341,7 @@ class Test(TestCase):
         self.assertEqual(['Boeing 737-800', 'Airbus A340-300'], capitalized_words12)
         self.assertEqual([], capitalized_words13)  # a plain number is not a capitalized word!
         self.assertEqual(['Peter Mertens', 'Dina Barbian'], capitalized_words14)
+        self.assertEqual(['David M. Blei', 'AISTATS'], capitalized_words15)
 
     def test__find_location_abbreviations(self):
         # GIVEN
