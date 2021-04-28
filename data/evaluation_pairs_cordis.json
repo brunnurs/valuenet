@@ -1,0 +1,267 @@
+[
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT T1.total_cost FROM projects AS T1 WHERE T1.title = 'Theseus'",
+    "question": "Find the total cost of the project Theseus"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT T1.total_cost FROM projects AS T1 WHERE T1.title = 'Theseus'",
+    "question": "Show total cost of project with title Theseus"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT acronym FROM projects WHERE start_year = 2018",
+    "question": "Show me the acronyms of projects that started in 2018"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT acronym FROM projects WHERE start_year = 2018",
+    "question": "Get acronyms of projects beginning in 2018"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT title FROM projects WHERE start_year < 2016",
+    "question": "Show me the titles of projects that started before 2016"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT title FROM projects WHERE start_year < 2016",
+    "question": "Find titles of projects which started earlier than 2016"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT T1.institutions_name\nFROM institutions AS T1\n         JOIN eu_territorial_units AS T2 ON T1.geocode_regions_3 = T2.geocode_regions\nWHERE T2.description = 'Nordjylland'",
+    "question": "Find institutions from the region of Nordjylland"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT T1.institutions_name\nFROM institutions AS T1\n         JOIN eu_territorial_units AS T2 ON T1.geocode_regions_3 = T2.geocode_regions\nWHERE T2.description = 'Nordjylland'",
+    "question": "Show the name of institutions based in Nordjylland"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT T2.full_name\nFROM projects AS T1 join people as T2 on T1.principal_investigator = T2.unics_id\nWHERE T1.start_year = 2014",
+    "question": "Find the name of principal investigators in projects that started in 2014"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT T2.full_name\nFROM projects AS T1 join people as T2 on T1.principal_investigator = T2.unics_id\nWHERE T1.start_year = 2014",
+    "question": "Show the full name of people being investigators in projects that began in 2014"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT t1.title\nFROM projects AS T1\n         join project_subject_areas as psa on T1.unics_id = psa.project\n         join subject_areas as sa on psa.subject_area = sa.code\nWHERE sa.title = 'Mathematics and Statistics'",
+    "question": "Find projects whose subject area is “Mathematics and Statistics”"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT t1.acronym, sa.description\nFROM projects AS T1\n         join project_subject_areas as psa on T1.unics_id = psa.project\n         join subject_areas as sa on psa.subject_area = sa.code\nWHERE sa.title = 'Mathematics and Statistics'",
+    "question": "Show the acronym and subject area description of projects with subject area “Mathematics and Statistics”"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT distinct t.title\nFROM projects AS T1\n         join project_topics as pt on T1.unics_id = pt.project\n         join topics as t on pt.topic = t.code\nwhere t1.end_year = 2014",
+    "question": "Find all different topics of projects that ended in 2014"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT distinct t.title\nFROM projects AS T1\n         join project_topics as pt on T1.unics_id = pt.project\n         join topics as t on pt.topic = t.code\nwhere t1.end_year = 2014",
+    "question": "Find distinct titles of topics of projects that with end year 2014"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "Select p.acronym\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\n         join institutions as i on pm.institution_id = i.unics_id\n         join countries as c on i.country_id = c.unics_id\nwhere c.country_name = 'Greece'",
+    "question": "Show the acronym of projects with a member from Greece"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "Select i.institutions_name\nfrom institutions as i\n         join countries as c on i.country_id = c.unics_id\nwhere c.country_name = 'France' or c.country_name = 'Germany'",
+    "question": "Show names of institutions from France or Germany"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "Select i.institutions_name\nfrom institutions as i\n         join countries as c on i.country_id = c.unics_id\nwhere c.country_name != 'France'",
+    "question": "Show names of institutions which are not from France"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "Select count(p.unics_id)\nfrom projects as p\nwhere start_year = 2016",
+    "question": "Count the projects that started in 2016"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "Select p.title\nfrom projects as p\nwhere total_cost = (select max(p2.total_cost) from projects as p2)",
+    "question": "Show the title of the project with the highest total cost"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT T1.member_name\nFROM project_members AS T1\n         JOIN projects AS T2 ON T1.project = T2.unics_id\nWHERE T2.total_cost < (SELECT AVG(T23.total_cost) FROM projects AS T23)",
+    "question": "Show the name of members in projects costing less than the average project cost."
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.unics_id\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\ngroup by p.unics_id\nhaving count(p.unics_id) >= 100",
+    "question": "Find the id of projects with at least 100 members"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select s.code, s.title\nfrom funding_schemes as s\nwhere s.code = (select s2.code\n                 from funding_schemes as s2\n                          join projects as p on s2.code = p.ec_fund_scheme\n                 group by s2.code\n                 order by count(*) desc\n                 LIMIT 1)",
+    "question": "Find the code and title of the funding scheme which funded the highest number of projects."
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "SELECT sum(total_cost)\nFROM projects",
+    "question": "Show the total costs of all projects"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title\nfrom projects\nwhere start_year > 2006\n  and end_year > 2006",
+    "question": "Show me the title of projects which have an end year and a start year after 2006"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title\nfrom projects\norder by end_year - start_year desc\nlimit 1",
+    "question": "Find the projects which lasted the longest"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title from topics where title like 'Raw materials%'",
+    "question": "Show me topic titles which starts with 'Raw materials'"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title from topics where title like '%climate%'",
+    "question": "Show me topic titles which contain the word 'climate'"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select count(*)\nfrom projects as p\n         join people as peep on p.principal_investigator = peep.unics_id\nwhere peep.full_name = 'Thomas Bell'",
+    "question": "Show me the number of projects where Thomas Bell was principal investigator"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select distinct full_name from people",
+    "question": "Show me the all different names of people"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.acronym\nfrom projects as p\nwhere p.total_cost between 100000\n  and 200000",
+    "question": "Find the acronym of projects which have total costs between 100000 and 200000"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.title\nfrom projects as p\nwhere p.total_cost > 1000000",
+    "question": "Show the title of projects with costs higher than 1000000"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.title\nfrom projects as p\nwhere p.total_cost > 1000000",
+    "question": "Show the title of projects with costs higher than a million"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title, member_name\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\n         join project_member_roles as pmr on pm.member_role = pmr.code\nwhere pmr.code = 'partner'",
+    "question": "Show the project title and member name where the member has a partner role "
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select distinct description from erc_research_domains",
+    "question": "What different research domains do exist?"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select c.country_name\nfrom countries as c\n         join institutions as i on c.unics_id = i.country_id",
+    "question": "Show me the country name of all institutes."
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select c.country_name\nfrom countries as c\n         join institutions as i on c.unics_id = i.country_id",
+    "question": "Show me the country of all institutes."
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select country_code2, country_code3 from countries where country_name = 'Andorra'",
+    "question": "What is the country code 2 and country code 3 for Andorra?"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select code\nfrom funding_schemes\nwhere title = 'Framework Partnership Agreement'",
+    "question": "Find the code of the funding scheme for Framework Partnership Agreement"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title\nfrom programmes\nwhere short_name = 'Transport'",
+    "question": "Show me the full title of the program which is called 'Transport' in short."
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select pm.member_name, pr.code\nfrom project_members as pm\n         join projects as p on pm.project = p.unics_id\n         join project_member_roles as pr on pm.member_role = pr.code\nwhere p.acronym = 'GTBB'",
+    "question": "Find member name and role code of project members in project with acronym GTBB"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select pm.member_name, pr.code\nfrom project_members as pm\n         join projects as p on pm.project = p.unics_id\n         join project_member_roles as pr on pm.member_role = pr.code\nwhere p.acronym = 'GTBB'",
+    "question": "Find member name and role code of project members in project GTBB"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title\nfrom programmes\nwhere parent = 'FP7'",
+    "question": "Show titles of programmes which have FP7 as parent program"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title\nfrom programmes\nwhere parent = 'FP7'",
+    "question": "Show titles of programmes which have program with code FP7 as parent program"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.description\nfrom erc_panels as p\n         join erc_research_domains as erd on p.part_of = erd.code\nwhere erd.description = 'Life Sciences'",
+    "question": "Get panel descriptions from research domain Life Sciences"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.description\nfrom erc_panels as p\n         join erc_research_domains as erd on p.part_of = erd.code\nwhere erd.description = 'Life Sciences'",
+    "question": "Get panel descriptions from research domain life sciences"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select member_name\nfrom project_members as mb\n         join activity_types as a on a.code = mb.activity_type\nwhere a.description = 'Research Organisations'",
+    "question": "Find project members of type Research Organisations"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select member_name\nfrom project_members as mb\n         join activity_types as a on a.code = mb.activity_type\nwhere a.description = 'Research Organisations'",
+    "question": "Get names of project members who's activity type description is Research Organisations"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select objective from projects where acronym = 'DEEPCARBON'",
+    "question": "What is the objective of DEEPCARBON?"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select objective from projects where acronym = 'DEEPCARBON'",
+    "question": "What is the objective of the project with acronym DEEPCARBON?"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title from projects where objective like '%carbon capturing%'",
+    "question": "Get the title of projects having the term 'carbon capturing' in it's objective."
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select count(*) from projects where objective like '%carbon capturing%'",
+    "question": "How many projects have an objective which contains 'carbon capturing'?"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\nwhere country_name = 'France'\n    except\nselect i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\n         join eu_territorial_units as etu on i.geocode_regions_3 = etu.geocode_regions\nwhere country_name = 'France'\n  and etu.description = 'Paris'",
+    "question": "Show all names of institutions from France except institutions from the territorial region of Paris"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\nwhere country_name = 'France'\n    except\nselect i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\n         join eu_territorial_units as etu on i.geocode_regions_3 = etu.geocode_regions\nwhere country_name = 'France'\n  and etu.description = 'Paris'",
+    "question": "Show institutions from France except the ones from Paris"
+  }
+]
