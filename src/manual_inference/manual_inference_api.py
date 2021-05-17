@@ -90,7 +90,7 @@ def pose_question(database):
 
     _verify_api_key()
 
-    question = _get_question_from_payload()
+    question, beam_size = _get_data_from_payload()
 
     if _is_cordis_or_spider(database) == 'spider':
         schemas_raw = schemas_raw_spider
@@ -118,10 +118,15 @@ def pose_question(database):
 
     print(f"we found the following potential values in the question: {example_pre_processed['values']}")
 
-    prediction, example = _inference_semql(example_pre_processed, schemas_dict, model)
+    prediction, example, all_beams = _inference_semql(example_pre_processed, schemas_dict, model, beam_size)
 
     print(f"Predicted SemQL-Tree: {prediction['model_result']}")
     sql = _semql_to_sql(prediction, schemas_dict)
+
+    sql_beams = []
+    for beam in all_beams:
+        prediction['model_result'] = beam
+        sql_beams.append(_semql_to_sql(prediction, schemas_dict))
 
     print(f"Transformed to SQL: {sql}")
     result = execute_query_func(sql)
@@ -138,6 +143,7 @@ def pose_question(database):
         'potential_values_found_in_db': prediction['values'],
         'sem_ql': prediction['model_result'],
         'sql': sql,
+        'beams': sql_beams,
         'result': result_max_100_rows
     }
 
@@ -150,11 +156,14 @@ def _verify_api_key():
         abort(403, description="Please provide a valid API Key")
 
 
-def _get_question_from_payload():
+def _get_data_from_payload():
     data = request.get_json(silent=True)
     print(data)
     if data and data['question']:
-        return data['question']
+        beam_size = 1
+        if 'beam_size' in data:
+            beam_size = data['beam_size']
+        return data['question'], beam_size
     else:
         abort(400, description="Please specify a question, e.g. POST { question: 'Whats the question?' }")
 
