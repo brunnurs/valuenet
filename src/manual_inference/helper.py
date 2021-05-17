@@ -14,19 +14,24 @@ from spider.example_builder import build_example
 from intermediate_representation.sem2sql.sem2SQL import transform
 
 
-def _inference_semql(data_row, schemas, model):
+def _inference_semql(data_row, schemas, model, beam_size):
     original_row = copy.deepcopy(data_row)
     example = build_example(data_row, schemas)
 
     with torch.no_grad():
-        results_all = model.parse(example, beam_size=1)
-    results = results_all[0]
-    # here we set assemble the predicted actions (including leaf-nodes) as string
+        results = model.parse(example, beam_size=beam_size)[0]
+
+    # here we set assemble the predicted actions (including leaf-nodes) as string.
     full_prediction = " ".join([str(x) for x in results[0].actions])
+
+    all_beams = []
+    # in case someone is requesting more beams, we assemble them here as well.
+    for beam in results:
+        all_beams.append(" ".join([str(x) for x in beam.actions]))
 
     original_row['model_result'] = full_prediction
 
-    return original_row, example
+    return original_row, example, all_beams
 
 
 def tokenize_question(tokenizer, question):
