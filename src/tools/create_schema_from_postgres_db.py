@@ -18,7 +18,7 @@ def map_data_type(column_type) -> str:
     raise ValueError(f'Unknown column type {column_type}. Please implement first.')
 
 
-def load_db_meta_data(database_host, database_port, database_user, database_password, database, database_schema):
+def load_db_meta_data(database_host, database_port, database_user, database_password, database, database_schema, create_index_statements):
     """
     Read all meta information about a database in PostgreSQL
     @param database_host:
@@ -62,6 +62,10 @@ def load_db_meta_data(database_host, database_port, database_user, database_pass
 
             # noinspection PyTypeChecker
             data['column_types'].append(map_data_type(column_type))
+
+            if create_index_statements and map_data_type(column_type) == 'text' and column_type != 'character':
+                print(f'CREATE INDEX IF NOT EXISTS {table_name}_{column_name}_gist_idx ON {database_schema}.{table_name} USING GIST ({column_name} gist_trgm_ops);')
+
 
         foreign_key_cursor = conn.cursor()
         select_foreign_keys(foreign_key_cursor, table_name)
@@ -134,6 +138,8 @@ if __name__ == '__main__':
     parser.add_argument('--database', default='oncomx_v1_0_25_small', type=str)
     parser.add_argument('--database_schema', default='oncomx_v1_0_25', type=str)
 
+    parser.add_argument('--create_index_statements', default=False, action='store_true')
+
     parser.add_argument('--schema_output_file', default='tables.json', type=str)
 
     args = parser.parse_args()
@@ -143,7 +149,8 @@ if __name__ == '__main__':
                                args.database_user,
                                args.database_password,
                                args.database,
-                               args.database_schema)
+                               args.database_schema,
+                               args.create_index_statements)
 
     with open(args.schema_output_file, 'wt') as out:
         json.dump([schema], out, sort_keys=True, indent=2, separators=(',', ': '))

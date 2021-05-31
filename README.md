@@ -54,7 +54,7 @@ As a trivial approach would still be way too slow, we need smart indices, which 
 
 The following steps are necessary to make the system work on your database.
 * install the `pg_trgm` package: `CREATE EXTENSION pg_trgm;`
-* Create indices for all columns which contain text. You find a script to do this at [resources/database/create_tgrm_indices.sql](/resources/database/create_tgrm_indices.sql). Make sure though no columns changed in the meantime.
+* Create indices for all columns which contain text. You find a script to do this at [resources/database/create_tgrm_indices_cordis.sql](/database/create_tgrm_indices_cordis.sql). Make sure though no columns changed in the meantime.
 * Set the minimal threshold (explanation will follow) for similarity matches. This can be done with e.g. `SELECT set_limit(0.499)`
 
 ##### Query with Similarity using Indices
