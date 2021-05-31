@@ -4,35 +4,35 @@
     "id": "5ecd101c059156a55033df73",
     "user": "kate",
     "question": "Show all of the european research council panel descriptions from projects that started in 2016",
-    "query": "select distinct erc_panels.description\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.start_year = '2016'"
+    "query": "select erc_panels.description\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.start_year = '2016'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ecd10a2059156a55033df74",
     "user": "kate",
     "question": "How many people that are principal investigators have worked in projects that started in 2016?",
-    "query": "select count(distinct people.full_name)\nfrom projects join people on projects.principal_investigator = people.unics_id\nwhere projects.start_year = '2016'"
+    "query": "select count(people.full_name)\nfrom projects join people on projects.principal_investigator = people.unics_id\nwhere projects.start_year = '2016'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ecd1571059156a55033df75",
     "user": "kate",
     "question": "How many european research council panel descriptions are there for projects that do not have the acronym belenus? ",
-    "query": "select count(distinct erc_panels.description)\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.acronym != 'BELENUS'"
+    "query": "select count(erc_panels.description)\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.acronym != 'BELENUS'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ed78f2e059156a55033df76",
     "user": ".aLe",
     "question": "Total number of person participating in projects, whose funding is lower than  2477105.6 euros, from the European Research Council panel \"The Human Mind and its complexity\" in the domain \"Social Sciences And Humanities\".",
-    "query": "select count(distinct people.full_name)\nfrom erc_panels join project_erc_panels on erc_panels.code = project_erc_panels.panel\n join projects on project_erc_panels.project = projects.unics_id\n join erc_research_domains on erc_research_domains.code = erc_panels.part_of\n join people on projects.principal_investigator = people.unics_id\nwhere erc_research_domains.description = 'Social Sciences And Humanities'\nand erc_panels.description = 'The Human Mind and its complexity'\nand projects.total_cost < '2477105.6'"
+    "query": "select count(people.full_name)\nfrom erc_panels join project_erc_panels on erc_panels.code = project_erc_panels.panel\n join projects on project_erc_panels.project = projects.unics_id\n join erc_research_domains on erc_research_domains.code = erc_panels.part_of\n join people on projects.principal_investigator = people.unics_id\nwhere erc_research_domains.description = 'Social Sciences And Humanities'\nand erc_panels.description = 'The Human Mind and its complexity'\nand projects.total_cost < '2477105.6'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ed79013059156a55033df77",
     "user": ".aLe",
     "question": "The descriptions of the European Research Council panels who have funded projects whose starting date is after August 13, 2018. ",
-    "query": "select distinct erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n join projects on projects.unics_id = project_erc_panels.project\nwhere projects.start_date >= '2018-08-13'"
+    "query": "select erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n join projects on projects.unics_id = project_erc_panels.project\nwhere projects.start_date >= '2018-08-13'"
   },
   {
     "db_id": "cordis_temporary",
@@ -46,35 +46,35 @@
     "id": "5ed793c4059156a55033df79",
     "user": ".aLe",
     "question": "Total number of descriptions of European Union territorial units for all countries except Australia and where the OPENLIGHTCOMM LTD company is based.",
-    "query": "select count(distinct eu_territorial_units.description)\nfrom institutions join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\n join countries on countries.unics_id = institutions.country_id\nwhere countries.country_code2 != 'AU'\nand institutions.institutions_name = 'OPENLIGHTCOMM LTD'"
+    "query": "select count(eu_territorial_units.description)\nfrom institutions join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\n join countries on countries.unics_id = institutions.country_id\nwhere countries.country_code2 != 'AU'\nand institutions.institutions_name = 'OPENLIGHTCOMM LTD'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ed79508059156a55033df7a",
     "user": ".aLe",
     "question": "Total number of person from the INACEINOX - INDUSTRIA DE EQUIPAMENTOS INOXIDAVEIS SA company in the Svalbard and Jan Mayen country, and who participated in project as principal investigator for the Servizio ricerca USI department.",
-    "query": "select count(distinct people.full_name)\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere institutions.institutions_name = 'INACEINOX - INDUSTRIA DE EQUIPAMENTOS INOXIDAVEIS SA'\nand countries.country_name = 'Svalbard and Jan Mayen'\nand project_members.department_name != 'Servizio ricerca USI'"
+    "query": "select count(people.full_name)\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere institutions.institutions_name = 'INACEINOX - INDUSTRIA DE EQUIPAMENTOS INOXIDAVEIS SA'\nand countries.country_name = 'Svalbard and Jan Mayen'\nand project_members.department_name != 'Servizio ricerca USI'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ed795ce059156a55033df7b",
     "user": ".aLe",
     "question": "Total number of names of countries not containing Salzburg und Umgebung as territorial unit and where the DAACRO GMBH & CO KG company is placed.",
-    "query": "select count(distinct countries.country_name)\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\n join countries on institutions.country_id = countries.unics_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\nwhere eu_territorial_units.description != 'Salzburg und Umgebung'\nand institutions.institutions_name = 'DAACRO GMBH & CO KG'"
+    "query": "select count(countries.country_name)\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\n join countries on institutions.country_id = countries.unics_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\nwhere eu_territorial_units.description != 'Salzburg und Umgebung'\nand institutions.institutions_name = 'DAACRO GMBH & CO KG'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ed79748059156a55033df7c",
     "user": ".aLe",
     "question": "Show me all subject areas of projects whose starting date is after January 15, 2016.",
-    "query": "select distinct subject_areas.title\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.start_date >= '2016-01-15'"
+    "query": "select subject_areas.title\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.start_date >= '2016-01-15'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ed797d8059156a55033df7d",
     "user": ".aLe",
     "question": "The activity types of project members, which are not placed in the city of ST ASAPH.",
-    "query": "select distinct activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.city != 'ST ASAPH'"
+    "query": "select activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.city != 'ST ASAPH'"
   },
   {
     "db_id": "cordis_temporary",
@@ -116,7 +116,7 @@
     "id": "5ed7aaea059156a55033df83",
     "user": "Francesco Multari",
     "question": "How many are the topics for projects which have a total cost less than 1337480.94?",
-    "query": "select count(distinct topics.title)\nfrom projects join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere projects.total_cost < '1337480.94'"
+    "query": "select count(topics.title)\nfrom projects join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere projects.total_cost < '1337480.94'"
   },
   {
     "db_id": "cordis_temporary",
@@ -137,21 +137,21 @@
     "id": "5ed7b6a8059156a55033df86",
     "user": "Francesco Multari",
     "question": "How many are the projects started in Caserta in the QUANTUM ENGINEERING DEPARTMENT started after the 2015?",
-    "query": "select count(distinct funding_schemes.title)\nfrom eu_territorial_units join institutions on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\n join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere eu_territorial_units.description = 'Caserta'\nand projects.start_year > '2015'\nand project_members.department_name = 'QUANTUM ENGINEERING DEPARTMENT'"
+    "query": "select count(funding_schemes.title)\nfrom eu_territorial_units join institutions on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\n join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere eu_territorial_units.description = 'Caserta'\nand projects.start_year > '2015'\nand project_members.department_name = 'QUANTUM ENGINEERING DEPARTMENT'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ed7b6cf059156a55033df87",
     "user": "Francesco Multari",
     "question": "Show the subject areas of all the projects different than MYPACK",
-    "query": "select distinct subject_areas.title\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.acronym != 'MYPACK'"
+    "query": "select subject_areas.title\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.acronym != 'MYPACK'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ed7bb09059156a55033df88",
     "user": "Francesco Multari",
     "question": "How many are the funding schemes for projects in Libia for the institution JASZ-NAGYKUN-SZOLNOK MEGYE ESELY SZOCIALIS KOZALAPITVANYA?",
-    "query": "select count(distinct funding_schemes.title)\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere institutions.institutions_name = 'JASZ-NAGYKUN-SZOLNOK MEGYE ESELY SZOCIALIS KOZALAPITVANYA'\nand countries.country_name = 'Libya'"
+    "query": "select count(funding_schemes.title)\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere institutions.institutions_name = 'JASZ-NAGYKUN-SZOLNOK MEGYE ESELY SZOCIALIS KOZALAPITVANYA'\nand countries.country_name = 'Libya'"
   },
   {
     "db_id": "cordis_temporary",
@@ -165,28 +165,28 @@
     "id": "5ed7bf3a059156a55033df8a",
     "user": "Francesco Multari",
     "question": "How many different subject areas have the projects with a total cost of 1918600 and a participant that is different from the institution IFAE but has \"Louth County Development Board Office of Community and Ente\" as participating department?",
-    "query": "select count(distinct subject_areas.title)\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join project_members on project_members.project = projects.unics_id\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\n join institutions on institutions.unics_id = project_members.institution_id\nwhere projects.total_cost = '1918600'\nand project_members.department_name = 'Louth County Development Board Office of Community and Enter'\nand institutions.acronym != 'IFAE'"
+    "query": "select count(subject_areas.title)\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join project_members on project_members.project = projects.unics_id\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\n join institutions on institutions.unics_id = project_members.institution_id\nwhere projects.total_cost = '1918600'\nand project_members.department_name = 'Louth County Development Board Office of Community and Enter'\nand institutions.acronym != 'IFAE'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ee0ee25059156a55033df8b",
     "user": "Guillem",
     "question": "Retrieve principal investigators of projects with a title different from \"Skill development and firm upgrading to sustain the competitiveness of the EU manufacturing sector\" and a member whose country is \"French Southern and Antarctic Lands\".",
-    "query": "select distinct people.full_name\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\n join countries on countries.unics_id = institutions.country_id\nwhere countries.country_name = 'French Southern and Antarctic Lands'\nand projects.title != 'Skill development and firm upgrading to sustain the competitiveness of the EU manufacturing sector'"
+    "query": "select people.full_name\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\n join countries on countries.unics_id = institutions.country_id\nwhere countries.country_name = 'French Southern and Antarctic Lands'\nand projects.title != 'Skill development and firm upgrading to sustain the competitiveness of the EU manufacturing sector'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ee0f228059156a55033df8c",
     "user": "Guillem",
-    "question": "What is the total number of distinct ending dates of projects that have a member whose geocode region 3 is not \"R\u00e9gion l\u00e9manique\" but it is the same as that of some institution different from \"FONDAZIONE RI.MED\" whose country is Thailand?",
-    "query": "select count(distinct projects.end_date)\nfrom institutions join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\n join countries on countries.unics_id = institutions.country_id\n join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\nwhere institutions.institutions_name != 'FONDAZIONE RI.MED'\nand countries.country_code2 = 'TH'\nand eu_territorial_units.description != 'R\u00e9gion l\u00e9manique'"
+    "question": "What is the total number of ending dates of projects that have a member whose geocode region 3 is not \"R\u00e9gion l\u00e9manique\" but it is the same as that of some institution different from \"FONDAZIONE RI.MED\" whose country is Thailand?",
+    "query": "select count(projects.end_date)\nfrom institutions join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\n join countries on countries.unics_id = institutions.country_id\n join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\nwhere institutions.institutions_name != 'FONDAZIONE RI.MED'\nand countries.country_code2 = 'TH'\nand eu_territorial_units.description != 'R\u00e9gion l\u00e9manique'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ee0f2bb059156a55033df8d",
     "user": "Guillem",
     "question": "Show me the short name of the institution with acronym INSERM which is a project member and has an eu territorial unit different from Lichtenfels?",
-    "query": "select distinct institutions.short_name\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\nwhere institutions.acronym = 'INSERM'\nand eu_territorial_units.description != 'Lichtenfels'"
+    "query": "select institutions.short_name\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\nwhere institutions.acronym = 'INSERM'\nand eu_territorial_units.description != 'Lichtenfels'"
   },
   {
     "db_id": "cordis_temporary",
@@ -206,15 +206,15 @@
     "db_id": "cordis_temporary",
     "id": "5ee0fd76059156a55033df90",
     "user": "Guillem",
-    "question": "How many different activity types have the members of the project titled \"Neuropsychiatric disorders are a heterogeneous group of mental pathologies that demand prolonged and treatments that are frequently ineffective. Elucidating the cellular and molecular mechanisms under\" that belongs to the subject area \"Healthcare delivery/services\"?",
-    "query": "select count(distinct activity_types.description)\nfrom projects join project_members on projects.unics_id = project_members.project\n join activity_types on project_members.activity_type = activity_types.code\n join project_subject_areas on project_subject_areas.project = projects.unics_id\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\nwhere projects.title = 'Neuropsychiatric disorders are a heterogeneous group of mental pathologies that demand prolonged and treatments that are frequently ineffective. Elucidating the cellular and molecular mechanisms under'\nand subject_areas.title = 'Healthcare delivery/services'"
+    "question": "How many activity types have the members of the project titled \"Neuropsychiatric disorders are a heterogeneous group of mental pathologies that demand prolonged and treatments that are frequently ineffective. Elucidating the cellular and molecular mechanisms under\" that belongs to the subject area \"Healthcare delivery/services\"?",
+    "query": "select count(activity_types.description)\nfrom projects join project_members on projects.unics_id = project_members.project\n join activity_types on project_members.activity_type = activity_types.code\n join project_subject_areas on project_subject_areas.project = projects.unics_id\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\nwhere projects.title = 'Neuropsychiatric disorders are a heterogeneous group of mental pathologies that demand prolonged and treatments that are frequently ineffective. Elucidating the cellular and molecular mechanisms under'\nand subject_areas.title = 'Healthcare delivery/services'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ee0ffa2059156a55033df91",
     "user": "Guillem",
     "question": "Get all principal investigators of projects that started after the 13th of January 2020 and have a member with short name SelFly that is not in the geocode region 3 of Rh\u00f6n-Grabfeld.",
-    "query": "select distinct people.full_name\nfrom project_members join projects on project_members.project = projects.unics_id\n join institutions on institutions.unics_id = project_members.institution_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\n join people on projects.principal_investigator = people.unics_id\nwhere eu_territorial_units.description != 'Rh\u00f6n-Grabfeld'\nand project_members.member_short_name = 'SelFly'\nand projects.start_date > '2020-01-13'"
+    "query": "select people.full_name\nfrom project_members join projects on project_members.project = projects.unics_id\n join institutions on institutions.unics_id = project_members.institution_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\n join people on projects.principal_investigator = people.unics_id\nwhere eu_territorial_units.description != 'Rh\u00f6n-Grabfeld'\nand project_members.member_short_name = 'SelFly'\nand projects.start_date > '2020-01-13'"
   },
   {
     "db_id": "cordis_temporary",
@@ -228,14 +228,14 @@
     "id": "5ee10356059156a55033df93",
     "user": "Guillem",
     "question": "How many members with a participating department different from \"D\u00c3\u00a9l\u00c3\u00a9gation R\u00c3\u00a9gionale Nord-Ouest\" has the project funded by the \"Network of Excellence\" scheme and titled \"Ultrafast spin transport and magnetic order controlled by terahertz electromagnetic pulses\"?",
-    "query": "select count(distinct project_members.member_short_name)\nfrom funding_schemes join projects on funding_schemes.code = projects.ec_fund_scheme\n join project_members on projects.unics_id = project_members.project\nwhere funding_schemes.title = 'Network of Excellence'\nand projects.title = 'Ultrafast spin transport and magnetic order controlled by terahertz electromagnetic pulses'\nand project_members.department_name != 'D\u00c3\u00a9l\u00c3\u00a9gation R\u00c3\u00a9gionale Nord-Ouest'"
+    "query": "select count(project_members.member_short_name)\nfrom funding_schemes join projects on funding_schemes.code = projects.ec_fund_scheme\n join project_members on projects.unics_id = project_members.project\nwhere funding_schemes.title = 'Network of Excellence'\nand projects.title = 'Ultrafast spin transport and magnetic order controlled by terahertz electromagnetic pulses'\nand project_members.department_name != 'D\u00c3\u00a9l\u00c3\u00a9gation R\u00c3\u00a9gionale Nord-Ouest'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5ee103d9059156a55033df94",
     "user": "Guillem",
     "question": "Retrieve country code 2 of country \"New Zealand\" having an institution named \"Parc Agrari del Baix Llobregat\" inside.",
-    "query": "select distinct countries.country_code2\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere countries.country_name = 'New Zealand'\nand institutions.short_name = 'Parc Agrari del Baix Llobregat'"
+    "query": "select countries.country_code2\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere countries.country_name = 'New Zealand'\nand institutions.short_name = 'Parc Agrari del Baix Llobregat'"
   },
   {
     "db_id": "cordis_temporary",
@@ -277,35 +277,35 @@
     "id": "5f75a4d64e36768e8e2f9d7d",
     "user": "Max",
     "question": "How many projects are there outside of Austria that are not called Technology \u201cdemonstrator projects\u201d for exploration?",
-    "query": "select count(distinct project_members.city)\nfrom project_topics join projects on project_topics.project = projects.unics_id\n join project_members on projects.unics_id = project_members.project\n join topics on topics.code = project_topics.topic\nwhere project_members.country != 'AU'\nand topics.title != 'Technology \u201cdemonstrator projects\u201d for exploration'"
+    "query": "select count(project_members.city)\nfrom project_topics join projects on project_topics.project = projects.unics_id\n join project_members on projects.unics_id = project_members.project\n join topics on topics.code = project_topics.topic\nwhere project_members.country != 'AU'\nand topics.title != 'Technology \u201cdemonstrator projects\u201d for exploration'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f75a5144e36768e8e2f9d7e",
     "user": "Max",
     "question": "What is the number of projects that do not have the arconym ENTICE?",
-    "query": "select count(distinct topics.title)\nfrom projects join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere projects.acronym != 'ENTICE'"
+    "query": "select count(topics.title)\nfrom projects join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere projects.acronym != 'ENTICE'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f801d554e36768e8e2f9d7f",
     "user": "Davide Lanti",
-    "question": "Count the number of distinct acronyms for the institutions having a project programme \"Safe and sustainable nanotechnologies\" whose members are all in the city \"Sarno SA\"",
-    "query": "select count(distinct institutions.acronym)\nfrom project_programmes join projects on project_programmes.project = projects.unics_id\n join project_members on projects.unics_id = project_members.project\n join institutions on project_members.institution_id = institutions.unics_id\n join programmes on programmes.code = project_programmes.programme\nwhere programmes.short_name = 'Safe and sustainable nanotechnologies'\nand projects.start_year >= 'None'\nand project_members.city = 'SARNO SA'"
+    "question": "Count the number of acronyms for the institutions having a project programme \"Safe and sustainable nanotechnologies\" whose members are all in the city \"Sarno SA\"",
+    "query": "select count(institutions.acronym)\nfrom project_programmes join projects on project_programmes.project = projects.unics_id\n join project_members on projects.unics_id = project_members.project\n join institutions on project_members.institution_id = institutions.unics_id\n join programmes on programmes.code = project_programmes.programme\nwhere programmes.short_name = 'Safe and sustainable nanotechnologies'\nand projects.start_year >= 'None'\nand project_members.city = 'SARNO SA'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f801e9c4e36768e8e2f9d80",
     "user": "Davide Lanti",
-    "question": "Count the number of distinct descriptions of activity types carried out by project members whose department is not \"Innovation and Technology\"",
-    "query": "select count(distinct activity_types.description)\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.department_name != 'Innovation and Technology'"
+    "question": "Count the number of descriptions of activity types carried out by project members whose department is not \"Innovation and Technology\"",
+    "query": "select count(activity_types.description)\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.department_name != 'Innovation and Technology'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f880751913f25fdb2030f26",
     "user": "kate",
     "question": "List the eu territorial units that have project members with a Grant Office department",
-    "query": "select distinct eu_territorial_units.description\nfrom project_members join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.department_name = 'Grant Office'"
+    "query": "select eu_territorial_units.description\nfrom project_members join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.department_name = 'Grant Office'"
   },
   {
     "db_id": "cordis_temporary",
@@ -326,7 +326,7 @@
     "id": "5f8ea31f913f25fdb2030f29",
     "user": "Stavroula",
     "question": "How many subject areas are associated with projects whose start date is not 2014-03-15?",
-    "query": "select count(distinct subject_areas.title)\nfrom project_subject_areas join subject_areas on project_subject_areas.subject_area = subject_areas.code\n join projects on projects.unics_id = project_subject_areas.project\nwhere projects.start_date != '2014-03-15'"
+    "query": "select count(subject_areas.title)\nfrom project_subject_areas join subject_areas on project_subject_areas.subject_area = subject_areas.code\n join projects on projects.unics_id = project_subject_areas.project\nwhere projects.start_date != '2014-03-15'"
   },
   {
     "db_id": "cordis_temporary",
@@ -353,8 +353,8 @@
     "db_id": "cordis_temporary",
     "id": "5f8edfbf913f25fdb2030f2d",
     "user": "antonismand",
-    "question": "How many different activity types have project members who are not in the city of GEMENOS?",
-    "query": "select count(distinct activity_types.description)\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.city != 'GEMENOS'"
+    "question": "How many activity types have project members who are not in the city of GEMENOS?",
+    "query": "select count(activity_types.description)\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.city != 'GEMENOS'"
   },
   {
     "db_id": "cordis_temporary",
@@ -368,7 +368,7 @@
     "id": "5f993e69913f25fdb2030f2f",
     "user": "Guillem",
     "question": "Show the number of subject areas of projects in the programme \"Research in support of international space partnerships\" that have an acronym different than \"PEPCHIPOMICS\"",
-    "query": "select count(distinct subject_areas.title)\nfrom project_programmes join projects on project_programmes.project = projects.unics_id\n join programmes on programmes.code = project_programmes.programme\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.acronym != 'PEPCHIPOMICS'\nand programmes.short_name = 'Research in support of international space partnerships'"
+    "query": "select count(subject_areas.title)\nfrom project_programmes join projects on project_programmes.project = projects.unics_id\n join programmes on programmes.code = project_programmes.programme\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.acronym != 'PEPCHIPOMICS'\nand programmes.short_name = 'Research in support of international space partnerships'"
   },
   {
     "db_id": "cordis_temporary",
@@ -382,7 +382,7 @@
     "id": "5f99b132913f25fdb2030f31",
     "user": "Guillem",
     "question": "Count the number of ERC panels for projects that do not end in 2020",
-    "query": "select count(distinct erc_panels.description)\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n join projects on projects.unics_id = project_erc_panels.project\nwhere projects.end_year != '2020'"
+    "query": "select count(erc_panels.description)\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n join projects on projects.unics_id = project_erc_panels.project\nwhere projects.end_year != '2020'"
   },
   {
     "db_id": "cordis_temporary",
@@ -396,7 +396,7 @@
     "id": "5f99b2fa913f25fdb2030f33",
     "user": "Guillem",
     "question": "Get country code 2 from country with name Martinique having an institution inside with an acronym different than \"IDIBELL\".",
-    "query": "select distinct countries.country_code2\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere institutions.acronym != 'IDIBELL'\nand countries.country_name = 'Martinique'"
+    "query": "select countries.country_code2\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere institutions.acronym != 'IDIBELL'\nand countries.country_name = 'Martinique'"
   },
   {
     "db_id": "cordis_temporary",
@@ -409,7 +409,7 @@
     "db_id": "cordis_temporary",
     "id": "5f9a7af7913f25fdb2030f35",
     "user": "Davide Lanti",
-    "question": "Select distincct ERC panel descriptions from project ending in 2012",
+    "question": "Select distinct ERC panel descriptions from project ending in 2012",
     "query": "select distinct erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n join projects on projects.unics_id = project_erc_panels.project\nwhere projects.end_year = '2012'"
   },
   {
@@ -417,7 +417,7 @@
     "id": "5f9a7b3b913f25fdb2030f36",
     "user": "Davide Lanti",
     "question": "Retrieve all the titles of funding schemes for projects whose ending year is != 2019 .",
-    "query": "select distinct funding_schemes.title\nfrom projects join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere projects.end_year != '2019'"
+    "query": "select funding_schemes.title\nfrom projects join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere projects.end_year != '2019'"
   },
   {
     "db_id": "cordis_temporary",
@@ -438,7 +438,7 @@
     "id": "5f9a7c17913f25fdb2030f39",
     "user": "Davide Lanti",
     "question": "Count the number of topics titles for projects whose erc panel description is equal to \"The study of the human past\" and whose end date is > \"2021-08-20\"",
-    "query": "select count(distinct topics.title)\nfrom erc_panels join project_erc_panels on erc_panels.code = project_erc_panels.panel\n join projects on project_erc_panels.project = projects.unics_id\n join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere erc_panels.description = 'The study of the human past'\nand projects.end_date > '2021-08-20'"
+    "query": "select count(topics.title)\nfrom erc_panels join project_erc_panels on erc_panels.code = project_erc_panels.panel\n join projects on project_erc_panels.project = projects.unics_id\n join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere erc_panels.description = 'The study of the human past'\nand projects.end_date > '2021-08-20'"
   },
   {
     "db_id": "cordis_temporary",
@@ -452,28 +452,28 @@
     "id": "5f9a7d7f913f25fdb2030f3b",
     "user": "Davide Lanti",
     "question": "Retrieve EU territorial unit descriptions members whose short name is different from \"QA\", working for a project where the topics title is not \"Space Robotic Technologies\"",
-    "query": "select distinct eu_territorial_units.description\nfrom projects join project_members on projects.unics_id = project_members.project\n join project_topics on project_topics.project = projects.unics_id\n join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\n join topics on topics.code = project_topics.topic\nwhere topics.title != 'Space Robotics Technologies'\nand project_members.member_short_name != 'QA'"
+    "query": "select eu_territorial_units.description\nfrom projects join project_members on projects.unics_id = project_members.project\n join project_topics on project_topics.project = projects.unics_id\n join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\n join topics on topics.code = project_topics.topic\nwhere topics.title != 'Space Robotics Technologies'\nand project_members.member_short_name != 'QA'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9a7e8f913f25fdb2030f3c",
     "user": "Davide Lanti",
     "question": "Retrieve the acronyms of projects having a total cost <= 3107350.0 and an institution with geocode region != \"Miasto Warszawa\"",
-    "query": "select distinct projects.acronym\nfrom project_members join projects on project_members.project = projects.unics_id\n join institutions on institutions.unics_id = project_members.institution_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\nwhere eu_territorial_units.description != 'Miasto Warszawa'\nand projects.total_cost <= '3107350'"
+    "query": "select projects.acronym\nfrom project_members join projects on project_members.project = projects.unics_id\n join institutions on institutions.unics_id = project_members.institution_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\nwhere eu_territorial_units.description != 'Miasto Warszawa'\nand projects.total_cost <= '3107350'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9a7f7c913f25fdb2030f3d",
     "user": "Davide Lanti",
-    "question": "Count the number of distinct full names of people whose department is \"Faculty of Mechanical Engineering and Naval Architecture\", whose activity type is \"Research Organisations\", and who are principal investigators of a project.",
-    "query": "select count(distinct people.full_name)\nfrom activity_types join project_members on activity_types.code = project_members.activity_type\n join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere activity_types.description = 'Research Organisations'\nand project_members.department_name = 'Faculty of Mechanical Engineering and Naval Architecture'"
+    "question": "Count the number of full names of people whose department is \"Faculty of Mechanical Engineering and Naval Architecture\", whose activity type is \"Research Organisations\", and who are principal investigators of a project.",
+    "query": "select count(people.full_name)\nfrom activity_types join project_members on activity_types.code = project_members.activity_type\n join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere activity_types.description = 'Research Organisations'\nand project_members.department_name = 'Faculty of Mechanical Engineering and Naval Architecture'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9a803c913f25fdb2030f3e",
     "user": "Davide Lanti",
     "question": "Count the short names of institutions having name \"MOBYDOC SAS\" of people working for projects whose end year is < 2022.",
-    "query": "select count(distinct institutions.short_name)\nfrom projects join project_members on projects.unics_id = project_members.project\n join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\n join institutions on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\nwhere projects.end_year < '2022'\nand institutions.institutions_name = 'MOBYDOC SAS'"
+    "query": "select count(institutions.short_name)\nfrom projects join project_members on projects.unics_id = project_members.project\n join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\n join institutions on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\nwhere projects.end_year < '2022'\nand institutions.institutions_name = 'MOBYDOC SAS'"
   },
   {
     "db_id": "cordis_temporary",
@@ -487,7 +487,7 @@
     "id": "5f9a8125913f25fdb2030f40",
     "user": "Davide Lanti",
     "question": "Retrieve the descriptions of ERC research domains relative to ERC panels with description \"Physiology, Pathophysiology and Endocrinology\"",
-    "query": "select distinct erc_research_domains.description\nfrom erc_panels join erc_research_domains on erc_panels.part_of = erc_research_domains.code\nwhere erc_panels.description = 'Physiology, Pathophysiology and Endocrinology'"
+    "query": "select erc_research_domains.description\nfrom erc_panels join erc_research_domains on erc_panels.part_of = erc_research_domains.code\nwhere erc_panels.description = 'Physiology, Pathophysiology and Endocrinology'"
   },
   {
     "db_id": "cordis_temporary",
@@ -529,7 +529,7 @@
     "id": "5f9a8409913f25fdb2030f46",
     "user": "Davide Lanti",
     "question": "Retrieve the short names of institutions having a project member whose city is != \"KINGSTON ON SOAR NOTTINGHAM\" and acronym \"ICEC\"",
-    "query": "select distinct institutions.short_name\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\nwhere institutions.acronym = 'ICEC'\nand project_members.city != 'KINGSTON ON SOAR NOTTINGHAM'"
+    "query": "select institutions.short_name\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\nwhere institutions.acronym = 'ICEC'\nand project_members.city != 'KINGSTON ON SOAR NOTTINGHAM'"
   },
   {
     "db_id": "cordis_temporary",
@@ -557,7 +557,7 @@
     "id": "5f9bd8b1913f25fdb2030f4a",
     "user": "Stavroula",
     "question": "Retrieve the funding scheme title of the project \"Eradication of tumors by targeting dsRNA selectively to cancer cells and recruitment of the innate immune system\" having a project member with short name FILTRA?",
-    "query": "select distinct funding_schemes.title\nfrom project_members join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere project_members.member_short_name = 'FILTRA'\nand projects.title != 'Eradication of tumors by targeting dsRNA selectively to cancer cells and recruitment of the innate immune system')"
+    "query": "select funding_schemes.title\nfrom project_members join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere project_members.member_short_name = 'FILTRA'\nand projects.title != 'Eradication of tumors by targeting dsRNA selectively to cancer cells and recruitment of the innate immune system')"
   },
   {
     "db_id": "cordis_temporary",
@@ -592,7 +592,7 @@
     "id": "5f9be081913f25fdb2030f4f",
     "user": "antonismand",
     "question": "Show topics that belong to a project with title 'The effects of agronomic practices conducive to organic agriculture on the diversity and function of arbuscular mycorrhizal fungi'.",
-    "query": "select distinct topics.title\nfrom project_topics join topics on project_topics.topic = topics.code\n join projects on projects.unics_id = project_topics.project\nwhere projects.title = 'The effects of agronomic practices conducive to organic agriculture on the diversity and function of arbuscular mycorrhizal fungi')"
+    "query": "select topics.title\nfrom project_topics join topics on project_topics.topic = topics.code\n join projects on projects.unics_id = project_topics.project\nwhere projects.title = 'The effects of agronomic practices conducive to organic agriculture on the diversity and function of arbuscular mycorrhizal fungi')"
   },
   {
     "db_id": "cordis_temporary",
@@ -690,7 +690,7 @@
     "id": "5f9be746913f25fdb2030f5d",
     "user": "Stavroula",
     "question": "How many principal investigators are in institutions located in HT with activity type Private for-profit entities (excluding Higher or Secondary Education Establishments)?",
-    "query": "select count(distinct people.full_name)\nfrom project_members join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\n join activity_types on activity_types.code = project_members.activity_type\nwhere project_members.country = 'HT'\nand activity_types.description != 'Private for-profit entities (excluding Higher or Secondary Education Establishments)'"
+    "query": "select count(people.full_name)\nfrom project_members join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\n join activity_types on activity_types.code = project_members.activity_type\nwhere project_members.country = 'HT'\nand activity_types.description != 'Private for-profit entities (excluding Higher or Secondary Education Establishments)'"
   },
   {
     "db_id": "cordis_temporary",
@@ -739,7 +739,7 @@
     "id": "5f9bebc3913f25fdb2030f64",
     "user": "antonismand",
     "question": "How many different panels have a project with acronym REFREEPERMAG assigned to the institute ECTRL SOLUTIONS SRL in the city of TROIA?",
-    "query": "select count(distinct erc_panels.description)\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere project_members.city = 'TROIA'\nand institutions.institutions_name = 'ECTRL SOLUTIONS SRL'\nand projects.acronym = 'REFREEPERMAG'"
+    "query": "select count(erc_panels.description)\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere project_members.city = 'TROIA'\nand institutions.institutions_name = 'ECTRL SOLUTIONS SRL'\nand projects.acronym = 'REFREEPERMAG'"
   },
   {
     "db_id": "cordis_temporary",
@@ -760,14 +760,14 @@
     "id": "5f9bec84913f25fdb2030f67",
     "user": "antonismand",
     "question": "Retrieve all subject areas assigned to projects with a total cost more than 1492828 having the topic \"Bioactive compounds from meso-organism's bioconversion\"?",
-    "query": "select distinct subject_areas.title\nfrom topics join project_topics on topics.code = project_topics.topic\n join projects on project_topics.project = projects.unics_id\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.total_cost > '1492828'\nand topics.title = 'Bioactive compounds from meso-organisms bioconversion'"
+    "query": "select subject_areas.title\nfrom topics join project_topics on topics.code = project_topics.topic\n join projects on project_topics.project = projects.unics_id\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.total_cost > '1492828'\nand topics.title = 'Bioactive compounds from meso-organisms bioconversion'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9becbf913f25fdb2030f68",
     "user": "Stavroula",
     "question": "How many institutions are with territorial unit, located in CZ, with acronym IEEC and associated with projects which their principal investigators are James Fawcett?",
-    "query": "select count(distinct eu_territorial_units.description)\nfrom people join projects on people.unics_id = projects.principal_investigator\n join project_members on projects.unics_id = project_members.project\n join institutions on project_members.institution_id = institutions.unics_id\n join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.country = 'CZ'\nand people.full_name = 'James Fawcett'\nand institutions.acronym = 'IEEC'"
+    "query": "select count(eu_territorial_units.description)\nfrom people join projects on people.unics_id = projects.principal_investigator\n join project_members on projects.unics_id = project_members.project\n join institutions on project_members.institution_id = institutions.unics_id\n join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.country = 'CZ'\nand people.full_name = 'James Fawcett'\nand institutions.acronym = 'IEEC'"
   },
   {
     "db_id": "cordis_temporary",
@@ -788,14 +788,14 @@
     "id": "5f9bedf1913f25fdb2030f6b",
     "user": "Stavroula",
     "question": "What are the activity types of institutions located in UY?",
-    "query": "select distinct activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.country = 'UY'"
+    "query": "select activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.country = 'UY'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9bee55913f25fdb2030f6c",
     "user": "Stavroula",
     "question": "What are the erc panels descriptions of projects in the erc research domain of Social Sciences And Humanities?",
-    "query": "select distinct erc_panels.description\nfrom erc_research_domains join erc_panels on erc_research_domains.code = erc_panels.part_of\nwhere erc_research_domains.description = 'Social Sciences And Humanities'"
+    "query": "select erc_panels.description\nfrom erc_research_domains join erc_panels on erc_research_domains.code = erc_panels.part_of\nwhere erc_research_domains.description = 'Social Sciences And Humanities'"
   },
   {
     "db_id": "cordis_temporary",
@@ -816,7 +816,7 @@
     "id": "5f9beeec913f25fdb2030f6f",
     "user": "antonismand",
     "question": "What are the different panel descriptions associated with projects that didn't start in 2011?",
-    "query": "select distinct erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n join projects on projects.unics_id = project_erc_panels.project\nwhere projects.start_year != '2011'"
+    "query": "select erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n join projects on projects.unics_id = project_erc_panels.project\nwhere projects.start_year != '2011'"
   },
   {
     "db_id": "cordis_temporary",
@@ -837,14 +837,14 @@
     "id": "5f9bf02c913f25fdb2030f72",
     "user": "Stavroula",
     "question": "How many projects have total cost 1941144 and are assigned to members whose short name is ZZZS with territorial unit description Is\u00e8re?",
-    "query": "select count(distinct projects.end_year)\nfrom eu_territorial_units join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\nwhere eu_territorial_units.description = 'Is\u00e8re'\nand project_members.member_short_name = 'ZZZS'\nand projects.total_cost = '1941144'"
+    "query": "select count(projects.end_year)\nfrom eu_territorial_units join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\nwhere eu_territorial_units.description = 'Is\u00e8re'\nand project_members.member_short_name = 'ZZZS'\nand projects.total_cost = '1941144'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9bf152913f25fdb2030f73",
     "user": "antonismand",
     "question": "Display activity types associated with project members from the country VN.",
-    "query": "select distinct activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.country = 'VN'"
+    "query": "select activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.country = 'VN'"
   },
   {
     "db_id": "cordis_temporary",
@@ -865,35 +865,35 @@
     "id": "5f9bf1d3913f25fdb2030f76",
     "user": "Stavroula",
     "question": "Show all institutions with territorial unit and activity type Higher or Secondary Education Establishments, located in ZW.",
-    "query": "select distinct institutions.institutions_name\nfrom activity_types join project_members on activity_types.code = project_members.activity_type\n join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.country = 'ZW'\nand activity_types.description = 'Higher or Secondary Education Establishments'"
+    "query": "select institutions.institutions_name\nfrom activity_types join project_members on activity_types.code = project_members.activity_type\n join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.country = 'ZW'\nand activity_types.description = 'Higher or Secondary Education Establishments'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9bf1f4913f25fdb2030f77",
     "user": "antonismand",
     "question": "What are the different panel descriptions that have a project?",
-    "query": "select distinct erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n"
+    "query": "select erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9bf203913f25fdb2030f78",
     "user": "Stavroula",
     "question": "What are the subject areas of projects ended in 2011-06-09?",
-    "query": "select distinct subject_areas.title\nfrom project_subject_areas join subject_areas on project_subject_areas.subject_area = subject_areas.code\n join projects on projects.unics_id = project_subject_areas.project\nwhere projects.end_date = '2011-06-09'"
+    "query": "select subject_areas.title\nfrom project_subject_areas join subject_areas on project_subject_areas.subject_area = subject_areas.code\n join projects on projects.unics_id = project_subject_areas.project\nwhere projects.end_date = '2011-06-09'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9bf264913f25fdb2030f79",
     "user": "antonismand",
     "question": "Return project members assigned to projects that started after 2009-02-16 and don't have the topic A European concerted effort on RFID.",
-    "query": "select distinct project_members.member_short_name\nfrom topics join project_topics on topics.code = project_topics.topic\n join projects on project_topics.project = projects.unics_id\n join project_members on projects.unics_id = project_members.project\nwhere projects.start_date > '2009-02-16'\nand topics.title != 'A European concerted effort on RFID'"
+    "query": "select project_members.member_short_name\nfrom topics join project_topics on topics.code = project_topics.topic\n join projects on project_topics.project = projects.unics_id\n join project_members on projects.unics_id = project_members.project\nwhere projects.start_date > '2009-02-16'\nand topics.title != 'A European concerted effort on RFID'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9bf2c4913f25fdb2030f7a",
     "user": "antonismand",
     "question": "What is the full name of principal investigators of projects that didn't end in 2020 ?",
-    "query": "select distinct people.full_name\nfrom projects join people on projects.principal_investigator = people.unics_id\nwhere projects.end_year != '2020'"
+    "query": "select people.full_name\nfrom projects join people on projects.principal_investigator = people.unics_id\nwhere projects.end_year != '2020'"
   },
   {
     "db_id": "cordis_temporary",
@@ -907,14 +907,14 @@
     "id": "5f9bf5c0913f25fdb2030f7c",
     "user": "Stavroula",
     "question": "Retrieve country code 2 of countries associated with the institution UCA, located in Belize with members in EL.",
-    "query": "select distinct countries.country_code2\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\n join countries on institutions.country_id = countries.unics_id\nwhere project_members.country = 'EL'\nand institutions.short_name = 'UCA'\nand countries.country_name = 'Belize'"
+    "query": "select countries.country_code2\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\n join countries on institutions.country_id = countries.unics_id\nwhere project_members.country = 'EL'\nand institutions.short_name = 'UCA'\nand countries.country_name = 'Belize'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9bf5e6913f25fdb2030f7d",
     "user": "antonismand",
     "question": "Show me topics associated with projects that ended before 2013 and have the principal investigator Michael Ingleson",
-    "query": "select distinct topics.title\nfrom people join projects on people.unics_id = projects.principal_investigator\n join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere projects.end_year < '2013'\nand people.full_name = 'Michael Ingleson')"
+    "query": "select topics.title\nfrom people join projects on people.unics_id = projects.principal_investigator\n join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere projects.end_year < '2013'\nand people.full_name = 'Michael Ingleson')"
   },
   {
     "db_id": "cordis_temporary",
@@ -935,21 +935,21 @@
     "id": "5f9c04da913f25fdb2030f80",
     "user": "Stavroula",
     "question": "How many countries of institutions which are not located in AMSTERDAM have as principal investigator J\u00e9r\u00f4me Waser?",
-    "query": "select count(distinct project_members.country)\nfrom projects join project_members on projects.unics_id = project_members.project\n join people on people.unics_id = projects.principal_investigator\nwhere project_members.city != 'ASMTERDAM'\nand people.full_name = 'J\u00e9r\u00f4me Waser'"
+    "query": "select count(project_members.country)\nfrom projects join project_members on projects.unics_id = project_members.project\n join people on people.unics_id = projects.principal_investigator\nwhere project_members.city != 'ASMTERDAM'\nand people.full_name = 'J\u00e9r\u00f4me Waser'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9ebcc6913f25fdb2030f81",
     "user": "George Katsogiannis",
     "question": "Show all activity type descriptions for project members from city BELGRADE-STARI GRAD?",
-    "query": "select distinct activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.city = 'BELGRADE-STARI GRAD')"
+    "query": "select activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.city = 'BELGRADE-STARI GRAD')"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5f9ebd9d913f25fdb2030f82",
     "user": "George Katsogiannis",
     "question": "Which are the funding scheme titles of projects that ended before 2010?",
-    "query": "select distinct funding_schemes.title\nfrom projects join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere projects.end_year < '2010'"
+    "query": "select funding_schemes.title\nfrom projects join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere projects.end_year < '2010'"
   },
   {
     "db_id": "cordis_temporary",
@@ -963,14 +963,14 @@
     "id": "5fa0409d913f25fdb2030f84",
     "user": "George Katsogiannis",
     "question": "How many descriptions are there for European Research Council panels?",
-    "query": "select count(distinct erc_panels.description)\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n"
+    "query": "select count(erc_panels.description)\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa041c7913f25fdb2030f85",
     "user": "George Katsogiannis",
     "question": "How many project programmes are there, with projects that start in 2020 and members that are not from Catalu\u00f1a?",
-    "query": "select count(distinct programmes.title)\nfrom eu_territorial_units join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\n join project_programmes on projects.unics_id = project_programmes.project\n join programmes on project_programmes.programme = programmes.code\nwhere eu_territorial_units.description != 'Catalu\u00f1a'\nand projects.start_year = '2020'"
+    "query": "select count(programmes.title)\nfrom eu_territorial_units join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\n join project_programmes on projects.unics_id = project_programmes.project\n join programmes on project_programmes.programme = programmes.code\nwhere eu_territorial_units.description != 'Catalu\u00f1a'\nand projects.start_year = '2020'"
   },
   {
     "db_id": "cordis_temporary",
@@ -984,7 +984,7 @@
     "id": "5fa04d60913f25fdb2030f87",
     "user": "George Katsogiannis",
     "question": "From which region is the project member whose short name is Spoon?",
-    "query": "select distinct eu_territorial_units.description\nfrom project_members join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.member_short_name = 'Spoon'"
+    "query": "select eu_territorial_units.description\nfrom project_members join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.member_short_name = 'Spoon'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1005,28 +1005,28 @@
     "id": "5fa08977913f25fdb2030f8a",
     "user": "George Katsogiannis",
     "question": "How many people are principal investigators in a project named Transforming the hazardous waste of the metallurgical industry into a valuable raw material, in which a member is from LARNE ANTRIM?",
-    "query": "select count(distinct people.full_name)\nfrom project_members join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere project_members.city = 'LARNE ANTRIM'\nand projects.title = 'Transforming the hazardous waste of the metallurgical industry into a valuable raw material'"
+    "query": "select count(people.full_name)\nfrom project_members join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere project_members.city = 'LARNE ANTRIM'\nand projects.title = 'Transforming the hazardous waste of the metallurgical industry into a valuable raw material'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa08a5f913f25fdb2030f8b",
     "user": "George Katsogiannis",
     "question": "What are the subject areas of projects that start at 2015-04-27 and do not have an institution with the acronym ENSCP as a member?",
-    "query": "select distinct subject_areas.title\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere institutions.acronym != 'ENSCP'\nand projects.start_date != '2015-04-27'"
+    "query": "select subject_areas.title\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere institutions.acronym != 'ENSCP'\nand projects.start_date != '2015-04-27'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa08aa1913f25fdb2030f8c",
     "user": "George Katsogiannis",
     "question": "Show me all the project topics",
-    "query": "select distinct topics.title\nfrom project_topics join topics on project_topics.topic = topics.code\n"
+    "query": "select topics.title\nfrom project_topics join topics on project_topics.topic = topics.code\n"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa10e25913f25fdb2030f8d",
     "user": "George Katsogiannis",
     "question": "How many project topics are there?",
-    "query": "select count(distinct topics.title)\nfrom project_topics join topics on project_topics.topic = topics.code\n"
+    "query": "select count(topics.title)\nfrom project_topics join topics on project_topics.topic = topics.code\n"
   },
   {
     "db_id": "cordis_temporary",
@@ -1061,35 +1061,35 @@
     "id": "5fa12f44913f25fdb2030f92",
     "user": "George Katsogiannis",
     "question": "Display titles of projects with a member from KJERRGARDEN that is also in the same region as an institution from Norway?",
-    "query": "select distinct projects.title\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\n join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\nwhere countries.country_code2 = 'NO'\nand project_members.city = 'KJERRGARDEN')"
+    "query": "select projects.title\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\n join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\nwhere countries.country_code2 = 'NO'\nand project_members.city = 'KJERRGARDEN')"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa12fd3913f25fdb2030f93",
     "user": "George Katsogiannis",
     "question": "How many different end years are there for projects in the subject area of Safety and a total cost of at least 4731647.5?",
-    "query": "select count(distinct projects.end_year)\nfrom project_subject_areas join projects on project_subject_areas.project = projects.unics_id\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\nwhere projects.total_cost >= '4731647.5'\nand subject_areas.title = 'Safety'"
+    "query": "select count(projects.end_year)\nfrom project_subject_areas join projects on project_subject_areas.project = projects.unics_id\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\nwhere projects.total_cost >= '4731647.5'\nand subject_areas.title = 'Safety'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa1304a913f25fdb2030f94",
     "user": "George Katsogiannis",
     "question": "Show me projects that end in 2010 or later and have a panel about Physiology, Pathophysiology and Endocrinology.",
-    "query": "select distinct projects.title\nfrom project_erc_panels join projects on project_erc_panels.project = projects.unics_id\n join erc_panels on erc_panels.code = project_erc_panels.panel\nwhere erc_panels.description = 'Physiology, Pathophysiology and Endocrinology'\nand projects.end_year >= '2010'"
+    "query": "select projects.title\nfrom project_erc_panels join projects on project_erc_panels.project = projects.unics_id\n join erc_panels on erc_panels.code = project_erc_panels.panel\nwhere erc_panels.description = 'Physiology, Pathophysiology and Endocrinology'\nand projects.end_year >= '2010'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa134f2913f25fdb2030f95",
     "user": "George Katsogiannis",
     "question": "Show me the funding schemes for projects that end before 2023",
-    "query": "select distinct funding_schemes.title\nfrom projects join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere projects.end_year < '2023'"
+    "query": "select funding_schemes.title\nfrom projects join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere projects.end_year < '2023'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa138ac913f25fdb2030f96",
     "user": "George Katsogiannis",
     "question": "How many project members from Jersey are there, in projects whose acronym is not iTractor?",
-    "query": "select count(distinct project_members.member_short_name)\nfrom projects join project_members on projects.unics_id = project_members.project\nwhere projects.acronym != 'iTractor'\nand project_members.country = 'JE'"
+    "query": "select count(project_members.member_short_name)\nfrom projects join project_members on projects.unics_id = project_members.project\nwhere projects.acronym != 'iTractor'\nand project_members.country = 'JE'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1103,7 +1103,7 @@
     "id": "5fa2fc3e913f25fdb2030f98",
     "user": "George Katsogiannis",
     "question": "Show me the research domains that have panels about Individuals, institutions and markets",
-    "query": "select distinct erc_research_domains.description\nfrom erc_panels join erc_research_domains on erc_panels.part_of = erc_research_domains.code\nwhere erc_panels.description = 'Individuals, institutions and markets'"
+    "query": "select erc_research_domains.description\nfrom erc_panels join erc_research_domains on erc_panels.part_of = erc_research_domains.code\nwhere erc_panels.description = 'Individuals, institutions and markets'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1117,55 +1117,55 @@
     "id": "5fa30075913f25fdb2030f9a",
     "user": "George Katsogiannis",
     "question": "Get all different subject areas with a project whose acronym is LOWCOST-PBI-HTPEMFC?",
-    "query": "select distinct subject_areas.title\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.acronym = 'LOWCOST-PBI-HTPEMFC'"
+    "query": "select subject_areas.title\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.acronym = 'LOWCOST-PBI-HTPEMFC'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa3064e913f25fdb2030f9b",
     "user": "George Katsogiannis",
     "question": "What are the country codes of institutions with the short name UTT, that are not in Switzerland?",
-    "query": "select distinct countries.country_code2\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere institutions.short_name = 'UTT'\nand countries.country_name != 'Switzerland'"
+    "query": "select countries.country_code2\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere institutions.short_name = 'UTT'\nand countries.country_name != 'Switzerland'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa311c4913f25fdb2030f9c",
     "user": "George Katsogiannis",
     "question": "How many panel descriptions are there?",
-    "query": "select count(distinct erc_panels.description)\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n"
+    "query": "select count(erc_panels.description)\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa3126b913f25fdb2030f9d",
     "user": "George Katsogiannis",
     "question": "How many research domains are there with panels about Neurosciences and neural disorders and projects that end before 2014-11-27?",
-    "query": "select count(distinct erc_research_domains.description)\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\n join erc_research_domains on erc_panels.part_of = erc_research_domains.code\nwhere projects.end_date < '2014-11-27'\nand erc_panels.description = 'Neurosciences and neural disorders'"
+    "query": "select count(erc_research_domains.description)\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\n join erc_research_domains on erc_panels.part_of = erc_research_domains.code\nwhere projects.end_date < '2014-11-27'\nand erc_panels.description = 'Neurosciences and neural disorders'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa31299913f25fdb2030f9e",
     "user": "George Katsogiannis",
     "question": "How many research domain descriptions are there for panels about Applied life sciences and biotechnology?",
-    "query": "select count(distinct erc_research_domains.description)\nfrom erc_panels join erc_research_domains on erc_panels.part_of = erc_research_domains.code\nwhere erc_panels.description = 'Applied life sciences and biotechnology'"
+    "query": "select count(erc_research_domains.description)\nfrom erc_panels join erc_research_domains on erc_panels.part_of = erc_research_domains.code\nwhere erc_panels.description = 'Applied life sciences and biotechnology'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa312de913f25fdb2030f9f",
     "user": "George Katsogiannis",
     "question": "What are the panel descriptions?",
-    "query": "select distinct erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n"
+    "query": "select erc_panels.description\nfrom project_erc_panels join erc_panels on project_erc_panels.panel = erc_panels.code\n"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa31315913f25fdb2030fa0",
     "user": "George Katsogiannis",
     "question": "How many programmes are there in the subject area of Biofuels, with projects that end after 2014-01-14?",
-    "query": "select count(distinct programmes.title)\nfrom projects join project_programmes on projects.unics_id = project_programmes.project\n join project_subject_areas on project_subject_areas.project = projects.unics_id\n join programmes on project_programmes.programme = programmes.code\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\nwhere projects.end_date > '2014-01-14'\nand subject_areas.title = 'Biofuels'"
+    "query": "select count(programmes.title)\nfrom projects join project_programmes on projects.unics_id = project_programmes.project\n join project_subject_areas on project_subject_areas.project = projects.unics_id\n join programmes on project_programmes.programme = programmes.code\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\nwhere projects.end_date > '2014-01-14'\nand subject_areas.title = 'Biofuels'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa916bb913f25fdb2030fa1",
     "user": "Guillem",
-    "question": "Show the total cost of projects in which participates an insitutions named UTC and located in Nepal",
+    "question": "Show the total cost of projects in which participates an institutions named UTC and located in Nepal",
     "query": "select sum(projects.total_cost)\nfrom project_members join projects on project_members.project = projects.unics_id\n join institutions on institutions.unics_id = project_members.institution_id\n join countries on countries.unics_id = institutions.country_id\nwhere countries.country_name = 'Nepal'\nand institutions.short_name = 'UTC'"
   },
   {
@@ -1194,14 +1194,14 @@
     "id": "5fa923fb913f25fdb2030fa5",
     "user": "Guillem",
     "question": "Show the countries that participate in projects that end in or after 2007 and have a funding scheme different from \"Integrating activities implemented as Integrated Infrastructure Initiatives\"",
-    "query": "select distinct countries.country_name\nfrom projects join project_members on projects.unics_id = project_members.project\n join funding_schemes on funding_schemes.code = projects.ec_fund_scheme\n join institutions on project_members.institution_id = institutions.unics_id\n join countries on institutions.country_id = countries.unics_id\nwhere projects.end_year >= '2007'\nand funding_schemes.title != 'Integrating activities implemented as Integrated Infrastructure Initiatives'"
+    "query": "select countries.country_name\nfrom projects join project_members on projects.unics_id = project_members.project\n join funding_schemes on funding_schemes.code = projects.ec_fund_scheme\n join institutions on project_members.institution_id = institutions.unics_id\n join countries on institutions.country_id = countries.unics_id\nwhere projects.end_year >= '2007'\nand funding_schemes.title != 'Integrating activities implemented as Integrated Infrastructure Initiatives'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa927c2913f25fdb2030fa6",
     "user": "Guillem",
     "question": "Show the starting year of projects that end in or after 2007 and correspond to the subject area \"Other Technology\"",
-    "query": "select distinct projects.start_year\nfrom project_subject_areas join projects on project_subject_areas.project = projects.unics_id\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\nwhere subject_areas.title = 'Other Technology'\nand projects.end_year >= '2007'"
+    "query": "select projects.start_year\nfrom project_subject_areas join projects on project_subject_areas.project = projects.unics_id\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\nwhere subject_areas.title = 'Other Technology'\nand projects.end_year >= '2007'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1214,8 +1214,8 @@
     "db_id": "cordis_temporary",
     "id": "5fa92986913f25fdb2030fa8",
     "user": "Guillem",
-    "question": "Show the number of distinct topics of projects with a total cost of 498750 euros whose principal investigator is \"Matthias Schneider\"",
-    "query": "select count(distinct topics.title)\nfrom projects join project_topics on projects.unics_id = project_topics.project\n join people on people.unics_id = projects.principal_investigator\n join topics on project_topics.topic = topics.code\nwhere people.full_name = 'Matthias Schneider'\nand projects.total_cost = '498750'"
+    "question": "Show the number of topics of projects with a total cost of 498750 euros whose principal investigator is \"Matthias Schneider\"",
+    "query": "select count(topics.title)\nfrom projects join project_topics on projects.unics_id = project_topics.project\n join people on people.unics_id = projects.principal_investigator\n join topics on project_topics.topic = topics.code\nwhere people.full_name = 'Matthias Schneider'\nand projects.total_cost = '498750'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1250,14 +1250,14 @@
     "id": "5fa932cb913f25fdb2030fad",
     "user": "Guillem",
     "question": "Show the number of ERC panels of projects that end after 2018 and have a participant  named \"SYNARC SAS\" from the city of \"NANCY\"",
-    "query": "select count(distinct erc_panels.description)\nfrom project_members join projects on project_members.project = projects.unics_id\n join project_erc_panels on projects.unics_id = project_erc_panels.project\n join institutions on institutions.unics_id = project_members.institution_id\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere institutions.institutions_name = 'SYNARC SAS'\nand project_members.city = 'NANCY'\nand projects.end_year > '2018'"
+    "query": "select count(erc_panels.description)\nfrom project_members join projects on project_members.project = projects.unics_id\n join project_erc_panels on projects.unics_id = project_erc_panels.project\n join institutions on institutions.unics_id = project_members.institution_id\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere institutions.institutions_name = 'SYNARC SAS'\nand project_members.city = 'NANCY'\nand projects.end_year > '2018'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fa93633913f25fdb2030fae",
     "user": "Guillem",
     "question": "Show me ERC panels for projects that end in or after 2022",
-    "query": "select distinct erc_panels.description\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.end_year >= '2022'"
+    "query": "select erc_panels.description\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.end_year >= '2022'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1271,35 +1271,35 @@
     "id": "5faa8a44913f25fdb2030fb0",
     "user": "Kurt",
     "question": "Show me the name of project members in Life Science that are not from the Quickborn",
-    "query": "select distinct project_members.member_short_name\nfrom erc_research_domains join erc_panels on erc_research_domains.code = erc_panels.part_of\n join project_erc_panels on erc_panels.code = project_erc_panels.panel\n join projects on project_erc_panels.project = projects.unics_id\n join project_members on projects.unics_id = project_members.project\nwhere erc_research_domains.description = 'Life Sciences'\nand project_members.city != 'QUICKBORN'"
+    "query": "select project_members.member_short_name\nfrom erc_research_domains join erc_panels on erc_research_domains.code = erc_panels.part_of\n join project_erc_panels on erc_panels.code = project_erc_panels.panel\n join projects on project_erc_panels.project = projects.unics_id\n join project_members on projects.unics_id = project_members.project\nwhere erc_research_domains.description = 'Life Sciences'\nand project_members.city != 'QUICKBORN'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8aa0913f25fdb2030fb1",
     "user": "Kurt",
     "question": "Count the number of people that are principle investigators but are not in Social Sciences And Humanities",
-    "query": "select count(distinct people.full_name)\nfrom erc_panels join project_erc_panels on erc_panels.code = project_erc_panels.panel\n join erc_research_domains on erc_research_domains.code = erc_panels.part_of\n join projects on project_erc_panels.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere erc_research_domains.description != 'Social Sciences And Humanities'\nand erc_panels.description != 'Materials and Synthesis'"
+    "query": "select count(people.full_name)\nfrom erc_panels join project_erc_panels on erc_panels.code = project_erc_panels.panel\n join erc_research_domains on erc_research_domains.code = erc_panels.part_of\n join projects on project_erc_panels.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere erc_research_domains.description != 'Social Sciences And Humanities'\nand erc_panels.description != 'Materials and Synthesis'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8b02913f25fdb2030fb2",
     "user": "Kurt",
     "question": "Count number of territorial units of projects with tite \"Maintenance and disposal\" that ended after 2008 and who are not from \"GROTTAFERRATA RM\"",
-    "query": "select count(distinct eu_territorial_units.description)\nfrom projects join project_members on projects.unics_id = project_members.project\n join project_topics on project_topics.project = projects.unics_id\n join topics on topics.code = project_topics.topic\n join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere topics.title = 'Maintenance and disposal'\nand project_members.city != 'GROTTAFERRATA RM'\nand projects.end_year > '2008'"
+    "query": "select count(eu_territorial_units.description)\nfrom projects join project_members on projects.unics_id = project_members.project\n join project_topics on project_topics.project = projects.unics_id\n join topics on topics.code = project_topics.topic\n join eu_territorial_units on project_members.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere topics.title = 'Maintenance and disposal'\nand project_members.city != 'GROTTAFERRATA RM'\nand projects.end_year > '2008'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8b56913f25fdb2030fb3",
     "user": "Kurt",
     "question": "Count the activity types of Highbury Ltd in the country LS",
-    "query": "select count(distinct activity_types.description)\nfrom eu_territorial_units join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join activity_types on project_members.activity_type = activity_types.code\n join institutions on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.country = 'LS'\nand institutions.institutions_name = 'Highbury Ltd'"
+    "query": "select count(activity_types.description)\nfrom eu_territorial_units join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join activity_types on project_members.activity_type = activity_types.code\n join institutions on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\nwhere project_members.country = 'LS'\nand institutions.institutions_name = 'Highbury Ltd'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8b94913f25fdb2030fb4",
     "user": "Kurt",
     "question": "Show the description of activity types of project members that are not from TOLOCHENAZ",
-    "query": "select distinct activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.city != 'TOLOCHENAZ'"
+    "query": "select activity_types.description\nfrom project_members join activity_types on project_members.activity_type = activity_types.code\nwhere project_members.city != 'TOLOCHENAZ'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1313,7 +1313,7 @@
     "id": "5faa8c0e913f25fdb2030fb6",
     "user": "Kurt",
     "question": "Count the title of funding schema of projects that end after 2023",
-    "query": "select count(distinct funding_schemes.title)\nfrom projects join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere projects.end_year >= '2023'"
+    "query": "select count(funding_schemes.title)\nfrom projects join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere projects.end_year >= '2023'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1327,35 +1327,35 @@
     "id": "5faa8cc3913f25fdb2030fb8",
     "user": "Kurt",
     "question": "Count the title of funding schema from Palau with project title \"Monitoring cancer heterogeneity based on the dynamic assessment of the Warburg effect under metabolic perturbation\"",
-    "query": "select count(distinct funding_schemes.title)\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere countries.country_name = 'Palau'\nand projects.title = 'Monitoring cancer heterogeneity based on the dynamic assessment of the Warburg effect under metabolic perturbation'"
+    "query": "select count(funding_schemes.title)\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join project_members on institutions.unics_id = project_members.institution_id\n join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere countries.country_name = 'Palau'\nand projects.title = 'Monitoring cancer heterogeneity based on the dynamic assessment of the Warburg effect under metabolic perturbation'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8cfb913f25fdb2030fb9",
     "user": "Kurt",
     "question": "Count the number of countries where the institution is ACOBIOM and the country code is AS",
-    "query": "select count(distinct countries.country_name)\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere countries.country_code2 = 'AS'\nand institutions.institutions_name = 'ACOBIOM'"
+    "query": "select count(countries.country_name)\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere countries.country_code2 = 'AS'\nand institutions.institutions_name = 'ACOBIOM'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8d46913f25fdb2030fba",
     "user": "Kurt",
     "question": "What is the total cost of projects that are not in Western Sahara but in Riga and started before 2015-10-07",
-    "query": "select count(distinct projects.total_cost)\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\n join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\nwhere countries.country_name != 'Western Sahara'\nand eu_territorial_units.description = 'R\u012bga'\nand projects.start_date <= '2015-10-07'"
+    "query": "select count(projects.total_cost)\nfrom countries join institutions on countries.unics_id = institutions.country_id\n join eu_territorial_units on institutions.geocode_regions_3 = eu_territorial_units.geocode_regions\n join project_members on eu_territorial_units.geocode_regions = project_members.geocode_regions_3\n join projects on project_members.project = projects.unics_id\nwhere countries.country_name != 'Western Sahara'\nand eu_territorial_units.description = 'R\u012bga'\nand projects.start_date <= '2015-10-07'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8d8a913f25fdb2030fbb",
     "user": "Kurt",
     "question": "Show the names of all people from South Western Scotland who have projects that ended before November 1, 2011.",
-    "query": "select distinct people.full_name\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\n join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere projects.end_date < '2011-01-11'\nand eu_territorial_units.description = 'South Western Scotland'"
+    "query": "select people.full_name\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\n join projects on project_members.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere projects.end_date < '2011-01-11'\nand eu_territorial_units.description = 'South Western Scotland'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8df1913f25fdb2030fbc",
     "user": "Kurt",
     "question": "Count the panel descriptions of project with total cost greater than 210446 that are not part of the program Specific RTD programme in the field of telematics applications",
-    "query": "select count(distinct erc_panels.description)\nfrom programmes join project_programmes on programmes.code = project_programmes.programme\n join projects on project_programmes.project = projects.unics_id\n join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.total_cost >= '210446'\nand programmes.short_name != 'Specific RTD programme in the field of telematics applications'"
+    "query": "select count(erc_panels.description)\nfrom programmes join project_programmes on programmes.code = project_programmes.programme\n join projects on project_programmes.project = projects.unics_id\n join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.total_cost >= '210446'\nand programmes.short_name != 'Specific RTD programme in the field of telematics applications'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1369,14 +1369,14 @@
     "id": "5faa8e6f913f25fdb2030fbe",
     "user": "Kurt",
     "question": "What are the title of funding schemes from the institution USJ in the area of Vienna that ended after 2015-02-03",
-    "query": "select distinct funding_schemes.title\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\n join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere institutions.acronym = 'USJ'\nand eu_territorial_units.description = 'Vienne'\nand projects.end_date >= '2015-02-03'"
+    "query": "select funding_schemes.title\nfrom institutions join project_members on institutions.unics_id = project_members.institution_id\n join eu_territorial_units on eu_territorial_units.geocode_regions = institutions.geocode_regions_3\n join projects on project_members.project = projects.unics_id\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere institutions.acronym = 'USJ'\nand eu_territorial_units.description = 'Vienne'\nand projects.end_date >= '2015-02-03'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8ea1913f25fdb2030fbf",
     "user": "Kurt",
     "question": "Count the title of funding schema in the area of \"Innovation and Technology Transfer\" that did not start on Dec 21, 2011",
-    "query": "select count(distinct funding_schemes.title)\nfrom project_subject_areas join projects on project_subject_areas.project = projects.unics_id\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere subject_areas.title = 'Innovation and Technology Transfer'\nand projects.start_date != '2011-12-21'"
+    "query": "select count(funding_schemes.title)\nfrom project_subject_areas join projects on project_subject_areas.project = projects.unics_id\n join subject_areas on subject_areas.code = project_subject_areas.subject_area\n join funding_schemes on projects.ec_fund_scheme = funding_schemes.code\nwhere subject_areas.title = 'Innovation and Technology Transfer'\nand projects.start_date != '2011-12-21'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1390,14 +1390,14 @@
     "id": "5faa8f17913f25fdb2030fc1",
     "user": "Kurt",
     "question": "Show the title of topics in projects with funding scheme 'Large-scale integrating project' that don't have the project acronym MUNDUS",
-    "query": "select distinct topics.title\nfrom funding_schemes join projects on funding_schemes.code = projects.ec_fund_scheme\n join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere funding_schemes.title = 'Large-scale integrating project'\nand projects.acronym != 'MUNDUS')"
+    "query": "select topics.title\nfrom funding_schemes join projects on funding_schemes.code = projects.ec_fund_scheme\n join project_topics on projects.unics_id = project_topics.project\n join topics on project_topics.topic = topics.code\nwhere funding_schemes.title = 'Large-scale integrating project'\nand projects.acronym != 'MUNDUS')"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa8f56913f25fdb2030fc2",
     "user": "Kurt",
     "question": "Show the description of all ERC panels of projects that started in 2016",
-    "query": "select distinct erc_panels.description\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.start_year = '2016'"
+    "query": "select erc_panels.description\nfrom projects join project_erc_panels on projects.unics_id = project_erc_panels.project\n join erc_panels on project_erc_panels.panel = erc_panels.code\nwhere projects.start_year = '2016'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1417,22 +1417,22 @@
     "db_id": "cordis_temporary",
     "id": "5faa9065913f25fdb2030fc5",
     "user": "Kurt",
-    "question": "Show the different country name of projects from the city Schrobenhausen of KLINIKUM AUGSBURG KOMMUNALUNTERNEHMEN with country code NU",
-    "query": "select distinct countries.country_name\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\n join countries on institutions.country_id = countries.unics_id\nwhere project_members.city = 'Schrobenhausen'\nand institutions.institutions_name = 'KLINIKUM AUGSBURG KOMMUNALUNTERNEHMEN'\nand countries.country_code2 = 'NU'"
+    "question": "Show the country name of projects from the city Schrobenhausen of KLINIKUM AUGSBURG KOMMUNALUNTERNEHMEN with country code NU",
+    "query": "select countries.country_name\nfrom project_members join institutions on project_members.institution_id = institutions.unics_id\n join countries on institutions.country_id = countries.unics_id\nwhere project_members.city = 'Schrobenhausen'\nand institutions.institutions_name = 'KLINIKUM AUGSBURG KOMMUNALUNTERNEHMEN'\nand countries.country_code2 = 'NU'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa90bc913f25fdb2030fc6",
     "user": "Kurt",
     "question": "Show the names of people with projects whose acronym is ARETE and whose programme is not in Food, agriculture, forestry, marine research and bioeconomy",
-    "query": "select count(distinct people.full_name)\nfrom programmes join project_programmes on programmes.code = project_programmes.programme\n join projects on project_programmes.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere projects.acronym = 'ARETE'\nand programmes.short_name != 'Food, agriculture, forestry, marine research and bioeconomy'"
+    "query": "select count(people.full_name)\nfrom programmes join project_programmes on programmes.code = project_programmes.programme\n join projects on project_programmes.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere projects.acronym = 'ARETE'\nand programmes.short_name != 'Food, agriculture, forestry, marine research and bioeconomy'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5faa9108913f25fdb2030fc7",
     "user": "Kurt",
     "question": "Show me the subject area of projects from CENTAR ZA KULTURU VELA LUKA that did not start in 2011 in ROSCOFF",
-    "query": "select distinct subject_areas.title\nfrom project_members join projects on project_members.project = projects.unics_id\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\n join institutions on institutions.unics_id = project_members.institution_id\nwhere projects.start_year != '2011'\nand project_members.city = 'ROSCOFF'\nand institutions.institutions_name = 'CENTAR ZA KULTURU VELA LUKA'"
+    "query": "select subject_areas.title\nfrom project_members join projects on project_members.project = projects.unics_id\n join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\n join institutions on institutions.unics_id = project_members.institution_id\nwhere projects.start_year != '2011'\nand project_members.city = 'ROSCOFF'\nand institutions.institutions_name = 'CENTAR ZA KULTURU VELA LUKA'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1452,8 +1452,8 @@
     "db_id": "cordis_temporary",
     "id": "5fb234e7913f25fdb2030fca",
     "user": "ursin",
-    "question": "Count all distinct (by their full name) people which are principal investigators in a project with subject area \u201cClean coal technologies\u201d. The project acronym shall further not be CorticALS.",
-    "query": "select count(distinct people.full_name)\nfrom subject_areas join project_subject_areas on subject_areas.code = project_subject_areas.subject_area\n join projects on project_subject_areas.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere projects.acronym != 'CorticALS'\nand subject_areas.title = 'Clean coal technologies'"
+    "question": "Count all people which are principal investigators in a project with subject area \u201cClean coal technologies\u201d. The project acronym shall further not be CorticALS.",
+    "query": "select count(people.full_name)\nfrom subject_areas join project_subject_areas on subject_areas.code = project_subject_areas.subject_area\n join projects on project_subject_areas.project = projects.unics_id\n join people on projects.principal_investigator = people.unics_id\nwhere projects.acronym != 'CorticALS'\nand subject_areas.title = 'Clean coal technologies'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1467,7 +1467,7 @@
     "id": "5fb23d0b913f25fdb2030fcc",
     "user": "ursin",
     "question": "Show me the name of principal investigators in a project having a project member with activity type description different from \u201cPublic bodies (excluding Research Organisations and Secondary or Higher Education Establishments)\u201d and a project end year different from 2017.",
-    "query": "select distinct people.full_name\nfrom project_members join projects on project_members.project = projects.unics_id\n join activity_types on activity_types.code = project_members.activity_type\n join people on projects.principal_investigator = people.unics_id\nwhere activity_types.description != 'Public bodies (excluding Research Organisations and Secondary or Higher Education Establishments)'\nand projects.end_year != '2017'"
+    "query": "select people.full_name\nfrom project_members join projects on project_members.project = projects.unics_id\n join activity_types on activity_types.code = project_members.activity_type\n join people on projects.principal_investigator = people.unics_id\nwhere activity_types.description != 'Public bodies (excluding Research Organisations and Secondary or Higher Education Establishments)'\nand projects.end_year != '2017'"
   },
   {
     "db_id": "cordis_temporary",
@@ -1481,14 +1481,14 @@
     "id": "5fb255ba913f25fdb2030fce",
     "user": "ursin",
     "question": "Show me subject areas associated with a project starting in 2018",
-    "query": "select distinct subject_areas.title\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.start_year = '2018'"
+    "query": "select subject_areas.title\nfrom projects join project_subject_areas on projects.unics_id = project_subject_areas.project\n join subject_areas on project_subject_areas.subject_area = subject_areas.code\nwhere projects.start_year = '2018'"
   },
   {
     "db_id": "cordis_temporary",
     "id": "5fb2574a913f25fdb2030fcf",
     "user": "ursin",
-    "question": "Show me the distinct country names of institutions with name different from \u201cCHECKLIGHT LTD\u201d",
-    "query": "select distinct countries.country_name\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere institutions.institutions_name != 'CHECKLIGHT LTD'"
+    "question": "Show me country names of institutions with name different from \u201cCHECKLIGHT LTD\u201d",
+    "query": "select countries.country_name\nfrom institutions join countries on institutions.country_id = countries.unics_id\nwhere institutions.institutions_name != 'CHECKLIGHT LTD'"
   },
   {
     "db_id": "cordis_temporary",
