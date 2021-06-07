@@ -66,7 +66,7 @@ def health():
                 VVV           aaaaaaaaaa  aaaallllllll    uuuuuuuu  uuuu    eeeeeeeeeeeeee  NNNNNNNN         NNNNNNN    eeeeeeeeeeeeee            ttttttttttt  
 
 
-    Is up and reay for your request!''')
+    Is up and ready for your request!''')
 
     response.headers["content-type"] = "text/plain"
 
