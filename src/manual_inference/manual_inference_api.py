@@ -1,3 +1,6 @@
+import copy
+import os
+
 import torch
 from flask import Flask, make_response, abort, request
 from flask_cors import CORS
@@ -15,7 +18,7 @@ from named_entity_recognition.database_value_finder.database_value_finder_sqlite
 from preprocessing.utils import merge_data_with_schema
 from utils import setup_device, set_seed_everywhere
 
-app = Flask(__name__)
+app = Flask(__name__, instance_path=f"/{os.getcwd()}/instance")
 CORS(app)
 
 args = read_arguments_manual_inference()
@@ -38,7 +41,6 @@ model.eval()
 print("Load pre-trained model from '{}'".format(args.model_to_load))
 
 nlp = English()
-tokenizer = nlp.Defaults.create_tokenizer(nlp)
 
 
 @app.route('/')
@@ -81,8 +83,8 @@ def pose_question(database):
     Ask a question and get the SemQL, SQL and result, as well as some further information.
     Make sure to provide a proper X-API-Key as header parameter.
 
-    Example (cordis): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Show me project title and cost of the project with the highest total cost"}'  http://localhost:5000/api/question/cordis_temporary
-    Example (spider): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Which bridge has been built by Zaha Hadid?"}'  http://localhost:5000/api/question/architecture
+    Example (cordis): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Show me project title and cost of the project with the highest total cost", "beam_size": 5}'  http://localhost:5000/api/question/cordis_temporary
+    Example (spider): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Which bridge has been built by Zaha Hadid?", "beam_size": 5}'  http://localhost:5000/api/question/architecture
 
     @param database: Database to execute this query against.
     @return:
@@ -107,7 +109,7 @@ def pose_question(database):
         'question': question,
         'query': 'DUMMY',
         'db_id': database,
-        'question_toks': tokenize_question(tokenizer, question)
+        'question_toks': tokenize_question(nlp.tokenizer, question)
     }
 
     print(f"question has been tokenized to : {example['question_toks']}")
@@ -124,9 +126,11 @@ def pose_question(database):
     sql = _semql_to_sql(prediction, schemas_dict)
 
     sql_beams = []
-    for beam in all_beams:
-        prediction['model_result'] = beam
-        sql_beams.append(_semql_to_sql(prediction, schemas_dict))
+    for beam, score in all_beams:
+        # we just copy the whole prediction object, as this structure is required by the _semql_to_sql() method.
+        prediction_for_beam = copy.deepcopy(prediction)
+        prediction_for_beam['model_result'] = beam
+        sql_beams.append((_semql_to_sql(prediction_for_beam, schemas_dict), score))
 
     print(f"Transformed to SQL: {sql}")
     result = execute_query_func(sql)
