@@ -27,7 +27,7 @@ def _inference_semql(data_row, schemas, model, beam_size):
     all_beams = []
     # in case someone is requesting more beams, we assemble them here as well.
     for beam in results:
-        all_beams.append(" ".join([str(x) for x in beam.actions]))
+        all_beams.append((" ".join([str(x) for x in beam.actions]), beam.score.item()))
 
     original_row['model_result'] = full_prediction
 
