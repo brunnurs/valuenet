@@ -563,35 +563,6 @@ def to_str(sql_json, N_T, schema, pre_table_names=None):
         else:
             # if only one select
             if len(sql_json['select'][1]) == 1:
-                agg, col, tab, _ = sql_json['select'][1][0]
-                non_lists = [tab]
-                fix_flag = False
-                # add tab from other part
-                for key, value in table_names.items():
-                    if key not in non_lists:
-                        non_lists.append(key)
-
-                a = non_lists[0]
-                b = None
-                for non in non_lists:
-                    if a != non:
-                        b = non
-                if b:
-                    for pair in current_table['foreign_keys']:
-                        t1 = current_table['table_names'][current_table['col_table'][pair[0]]]
-                        t2 = current_table['table_names'][current_table['col_table'][pair[1]]]
-                        if t1 in [a, b] and t2 in [a, b]:
-                            if pre_table_names and t1 not in pre_table_names:
-                                assert t2 in pre_table_names
-                                t1 = t2
-                            group_by_clause = 'GROUP BY ' + col_to_str('none',
-                                                                       current_table['schema_content'][pair[0]],
-                                                                       t1,
-                                                                       table_names, N_T)
-                            fix_flag = True
-                            break
-
-                if fix_flag is False:
                     agg, col, tab, _ = sql_json['select'][1][0]
                     group_by_clause = 'GROUP BY ' + col_to_str(agg, col, tab, table_names, N_T)
 
