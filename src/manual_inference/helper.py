@@ -113,9 +113,20 @@ def get_schemas_cordis():
     return schemas_raw, schemas_dict, schema_path, database_path
 
 
-def _is_cordis_or_spider(database_name):
+def get_schema_hack_zurich():
+    base_path = Path(Config.DATA_PREFIX) / 'hack_zurich' / 'original'
+    schema_path = str(base_path / 'tables.json')
+
+    schemas_raw, schemas_dict = spider_utils.load_schema(schema_path)
+
+    return schemas_raw, schemas_dict, schema_path
+
+
+def get_data_folder_by_database(database_name):
     if database_name == 'cordis_temporary' or database_name == 'cordis':
         return 'cordis'
+    if database_name == 'hack_zurich':
+        return 'hack_zurich'
     else:
         return 'spider'
 
