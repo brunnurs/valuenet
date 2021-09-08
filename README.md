@@ -12,7 +12,7 @@ Have a look at our paper for the details
 [https://arxiv.org/abs/2006.00888](https://arxiv.org/abs/2006.00888)
 
 
-##Use the deployed API
+## Use the deployed API
 You can use a deployed version of ValueNet via https://valuenet.cloudlab.zhaw.ch. 
 This API is working with a deployed postgres database which can be found in [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp). 
 
@@ -72,7 +72,7 @@ The array `beams`contains more solution candidates (ordered by the score), but m
 ```
 
 
-##Local Inference
+## Local Inference
 To run the trained ValueNet model locally, you have two options:
 1. Pull or build the inference docker image and run it, connected to your local database _(easy)_. 
 2. Run the inference API ([manual_inference_api.py](src/manual_inference/manual_inference_api.py)) from your terminal / IDE, connected to your local database _(medium)_.
@@ -109,8 +109,9 @@ In case you plan to modify/re-train the model, might as well setup the project e
 To do so, follow the environment setup described in [Environment Setup](#environment-setup) and run [manual_inference_api.py](src/manual_inference/manual_inference_api.py). Specify command line parameters as seen in the inference [Dockerfile](docker/inference/Dockerfile) to point to your database.
 
 
-##Train Model
+## Train Model
+
 TODO
 
-###Environment Setup
+### Environment Setup
 TODO
