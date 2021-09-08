@@ -77,7 +77,7 @@ To run the trained ValueNet model locally, you have two options:
 1. Pull or build the inference docker image and run it, connected to your local database _(easy)_. 
 2. Run the inference API ([manual_inference_api.py](src/manual_inference/manual_inference_api.py)) from your terminal / IDE, connected to your local database _(medium)_.
 
-In both case you need to point the system to a database witch contains your data. The easiest way is to install PostgreSQL locally and restore the database dump [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp), which contains all necessary data, tables, views and indices.
+In both case you need to point the system to a database which contains your data. The easiest way is to install PostgreSQL locally and restore the database dump [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp), which contains all necessary data, tables, views and indices.
 
 In case you plan to manipulate the database schema, make sure to also adapt the schema-file which is used by ValueNet at inference time ([tables.json](data/hack_zurich/original/tables.json)). This file contains a high level schema of the database (some tables might be abstracted by simple views) and is the foundation on which ValueNet is synthesizing a query.
 
@@ -97,10 +97,10 @@ To run the docker image use the following command. You might wanna change the **
 ```
 docker run --gpus all -e API_KEY=api_key_you_plan_to_use -e DB_HOST=localhost -e DB_PW=your_secret_db_password -p 5000:5000 --network="host" ursinbrunner/valuenet-inference-hack-zurich:1.0
 ```
-The parameter `--netowrk="host"` is only necessary if you run the database on the docker host system.
+The parameter `--network="host"` is only necessary if you run the database on the docker host system.
 
 #### Adapt docker image
-You might have to adapt the inference docker image, for example because you adapt the database schema file. To do so, have a look at the docker file itself [Dockerfile](docker/inference/Dockerfile) and use/adapt the build script ([build_inference_docker.sh](docker/build_inference_docker.sh))
+You might have to adapt the inference docker image, if for example you adapt the database schema file. To do so, have a look at the docker file itself [Dockerfile](docker/inference/Dockerfile) and use/adapt the build script ([build_inference_docker.sh](docker/build_inference_docker.sh))
 
 ### Run inference API locally
 
