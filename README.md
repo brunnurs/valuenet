@@ -92,7 +92,9 @@ docker pull ursinbrunner/valuenet-inference-hack-zurich:1.0
 
 To run the docker image make sure a **NVIDIA GPU** is available (either on your notebook or in the cloud you prefer) and your Docker environment supports GPUs. To do so, you might follow the official nvidia guide: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/overview.html
 
-To run the docker image use the following command. You might wanna change the **database connection** to point to your database. To do so override the environment variables, as seen here for the database host/password and API key.
+To run the docker image use the following command. You might wanna change the **database connection** to point to your database. To do so override the environment variables, as seen in the following example.
+
+The two non-database specific parameters you need to specify are **API_KEY** and **NER_API_SECRET**. API_KEY you can choose as you please - just make sure you use the same in your API requests. NER API Secret is a Google API key which is used to do NER on the natural language question, with the goal to extract potential values (e.g. *Wetzikon* in the example above). You can get your own API key here [https://cloud.google.com/natural-language/docs/analyzing-entities](https://cloud.google.com/natural-language/docs/analyzing-entities) or ask us during the hack for a key.
 
 ```
 docker run --gpus all -e API_KEY=api_key_you_plan_to_use -e DB_USER=postgres -e DB_PW=your_secret_db_password -e DB_HOST=localhost -e DB_PORT=5432 -e NER_API_SECRET=your_google_ner_api_key -p 5000:5000 --network="host" ursinbrunner/valuenet-inference-hack-zurich:1.0
