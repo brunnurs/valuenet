@@ -4,7 +4,10 @@ import json
 import requests
 
 
-def remote_named_entity_recognition(document):
+def remote_named_entity_recognition(document, ner_api_secret):
+
+    assert ner_api_secret and ner_api_secret != 'PLEASE_ADD_YOUR_OWN_GOOGLE_API_KEY_HERE', "Please add you Google API Key for Named Entity Recognition"
+
     payload = {
         "document": {
             "type": "PLAIN_TEXT",
@@ -14,7 +17,7 @@ def remote_named_entity_recognition(document):
     }
 
     parameters = {
-        'key': 'PLEASE_ADD_YOUR_OWN_GOOGLE_API_KEY!'
+        'key': ner_api_secret
     }
 
     url = 'https://language.googleapis.com/v1beta2/documents:analyzeEntities'
