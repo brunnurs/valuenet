@@ -42,5 +42,6 @@ ENV DB_PORT 5432
 ENV DB_USER postgres
 ENV DB_PW dummy
 ENV DB_SCHEMA public
+ENV NER_API_SECRET PLEASE_ADD_YOUR_OWN_GOOGLE_API_KEY_HERE
 
-ENTRYPOINT python src/manual_inference/manual_inference_api.py --api_key=$API_KEY --model_to_load=$MODEL_TO_LOAD --database_host=$DB_HOST --database_port=$DB_PORT --database_user=$DB_USER --database_password=$DB_PW --database_schema=$DB_SCHEMA
+ENTRYPOINT python src/manual_inference/manual_inference_api.py --api_key=$API_KEY --model_to_load=$MODEL_TO_LOAD --ner_api_secret=$NER_API_SECRET --database_host=$DB_HOST --database_port=$DB_PORT --database_user=$DB_USER --database_password=$DB_PW --database_schema=$DB_SCHEMA
