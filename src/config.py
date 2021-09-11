@@ -136,6 +136,7 @@ def read_arguments_manual_inference():
     # manual_inference
     parser.add_argument('--model_to_load', type=str)
     parser.add_argument('--api_key', default='1234', type=str)
+    parser.add_argument('--ner_api_secret', default='PLEASE_ADD_YOUR_OWN_GOOGLE_API_KEY_HERE', type=str)
 
     # database configuration (in case of PostgreSQL, not needed for sqlite)
     _add_postgresql_configuration(parser)

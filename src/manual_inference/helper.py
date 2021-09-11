@@ -44,8 +44,8 @@ def tokenize_question(tokenizer, question):
     return [str(token) for token in question_tokenized]
 
 
-def _pre_processing(example, db_value_finder):
-    ner_information = remote_named_entity_recognition(example['question'])
+def _pre_processing(example, db_value_finder, ner_api_secret):
+    ner_information = remote_named_entity_recognition(example['question'], ner_api_secret)
 
     token_grouped, token_types, column_matches, value_candidates, _ = pre_process(0, example, ner_information, db_value_finder, is_training=False)
 

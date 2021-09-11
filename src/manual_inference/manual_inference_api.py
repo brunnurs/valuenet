@@ -127,7 +127,7 @@ def pose_question(database):
 
     example_merged, _ = merge_data_with_schema(schemas_raw, [example])
 
-    example_pre_processed = _pre_processing(example_merged[0], db_value_finder)
+    example_pre_processed = _pre_processing(example_merged[0], db_value_finder, args.ner_api_secret)
 
     print(f"we found the following potential values in the question: {example_pre_processed['values']}")
 
