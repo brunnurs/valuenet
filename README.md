@@ -95,7 +95,7 @@ To run the docker image make sure a **NVIDIA GPU** is available (either on your 
 To run the docker image use the following command. You might wanna change the **database connection** to point to your database. To do so override the environment variables, as seen here for the database host/password and API key.
 
 ```
-docker run --gpus all -e API_KEY=api_key_you_plan_to_use -e DB_HOST=localhost -e DB_PW=your_secret_db_password -p 5000:5000 --network="host" ursinbrunner/valuenet-inference-hack-zurich:1.0
+docker run --gpus all -e API_KEY=api_key_you_plan_to_use -e DB_USER=postgres -e DB_PW=your_secret_db_password -e DB_HOST=localhost -e DB_PORT=5432 -e NER_API_SECRET=your_google_ner_api_key -p 5000:5000 --network="host" ursinbrunner/valuenet-inference-hack-zurich:1.0
 ```
 The parameter `--network="host"` is only necessary if you run the database on the docker host system.
 
