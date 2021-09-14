@@ -84,7 +84,7 @@ In case you plan to manipulate the database schema, make sure to also adapt the 
 After you adapted the schema file, make sure to re-build your docker image as the schema file is built in (see [build_inference_docker.sh](docker/build_inference_docker.sh))
 
 ### Run inference docker image (pre-built or adapted by you)
-The docker image used in this case is [Dockerfile](docker/inference/Dockerfile). You can pull the pre-built image from https://hub.docker.com/repository/docker/ursinbrunner/valuenet-inference-hack-zurich.
+The docker image used in this case is [Dockerfile](docker/inference/Dockerfile). You can pull the pre-built image from https://hub.docker.com/r/ursinbrunner/valuenet-inference-hack-zurich.
 
 ```
 docker pull ursinbrunner/valuenet-inference-hack-zurich:1.0
