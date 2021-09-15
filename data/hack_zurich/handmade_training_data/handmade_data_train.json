@@ -1,0 +1,7 @@
+[
+  {
+    "db_id": "hack_zurich",
+    "query": "select access_by_bus\nfrom accessibility_bus as b\n         join spatialunit as s on b.spatialunit_id = s.spatialunit_id\nwhere s.name = 'Schlieren' and b.year = 2014",
+    "question": "How high was the accessibility by bus in Schlieren in 2014?"
+  }
+]

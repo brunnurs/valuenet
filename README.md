@@ -14,9 +14,13 @@ Have a look at our paper for the details
 
 ## Use the deployed API
 You can use a deployed version of ValueNet via https://valuenet.cloudlab.zhaw.ch. 
-This API is working with a deployed postgres database which can be found in [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp). 
+This API is working with a deployed postgres database which can be found in [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp).
+
+Be aware that you use the model in a **zero-shot** way, so the model has never been fine-tuned on the specific database, but only on the ~200 databases provided in the spider dataset (https://github.com/taoyds/spider) 
 
 You might play around with the visual client (use the speech to text button) or access the API directly. Make sure to choose the correct database (`hack_zurich`) and the API key `sjNmaCtviYzXWlS`.
+
+![visual_client.png](visual_client.png)
 
 Here an example how to use the API wit cURL:
 
@@ -110,8 +114,37 @@ To do so, follow the environment setup described in [Environment Setup](#environ
 
 
 ## Train Model
+Training/fine-tuning the model on custom data or even improving the model with new approaches is definitely the most interesting part. It is though also the most challenging one, so don't give up easily!
 
-TODO
+Follow the steps in the given order:
+1. Environment Setup _(medium)_
+2. Prepare & Preprocess Data _(medium)_
+3. Train Model _(easy, but requires time & hardware)_
 
 ### Environment Setup
 TODO
+
+### Prepare & Preprocess Data
+Preparing and preprocessing your data might take most of your time. We first need to bring your custom data into the Spider format (https://github.com/taoyds/spider), before we do more advanced pre-processing and Named Entity Recognition.
+
+#### Add your custom data
+Add your custom data to [handmade_data_train.json](data/hack_zurich/handmade_training_data/handmade_data_train.json) and [handmade_data_dev.json](data/hack_zurich/handmade_training_data/handmade_data_dev.json). You see in both files one sample how to do so. Add both the SQL and the natural language representation for a question.
+
+How do you come up with custom training data for your database is up to you. You might write all question/SQL pairs manually, or you might find a smart way to generate large amounts of training data (e.g. by using a template approach)
+
+Be aware that not the full SQL Syntax is supported. A table alias for example needs to be specified as `table_a as a` and not `table_a a`. Further all joins need to be written in the form `table_a as a join table_b as b on a.id_b = b.id`, so no inner/left/right join specification is allowed. You might stumble over more details, but you can always take the spider dataset as orientation on how to write the SQL.
+
+After you added your data (both _TRAIN_ and _TEST_ split), run the [training_data_builder.py](src/tools/training_data_builder/training_data_builder.py). It will take your custom data and transform it into the Spider representation:
+
+```bash
+python src/tools/training_data_builder/training_data_builder.py --data hack_zurich
+```
+You will now find your custom data in the two files [data/hack_zurich/original/train.json](data/hack_zurich/original/train.json) and [data/hack_zurich/original/dev.json](data/hack_zurich/original/dev.json).
+
+#### Extract Value Candidates using Named Entity Recognition 
+TODO
+
+
+### Train Model
+
+
