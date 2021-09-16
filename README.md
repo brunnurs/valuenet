@@ -139,12 +139,76 @@ Be aware that not the full SQL Syntax is supported. A table alias for example ne
 After you added your data (both _TRAIN_ and _TEST_ split), run the [training_data_builder.py](src/tools/training_data_builder/training_data_builder.py). It will take your custom data and transform it into the Spider representation:
 
 ```bash
-python src/tools/training_data_builder/training_data_builder.py --data hack_zurich
+PYTHONPATH=$(pwd)/src python src/tools/training_data_builder/training_data_builder.py --data hack_zurich
 ```
 You will now find your custom data in the two files [data/hack_zurich/original/train.json](data/hack_zurich/original/train.json) and [data/hack_zurich/original/dev.json](data/hack_zurich/original/dev.json).
 
 #### Extract Value Candidates using Named Entity Recognition 
-TODO
+In this step we try to extract potential _values_ from the natural language question. In the example *'What is the share of electric cars in 2016 for Wetzikon?'*,
+we would like to identify *2016* and *Wetzikon* as value candidates. 
+
+To do so we use a mix of Named Entity Recognition (NER) and heuristics. As NER engine we use the Google Natural Language API. 
+You can get your own API key here [https://cloud.google.com/natural-language/docs/analyzing-entities](https://cloud.google.com/natural-language/docs/analyzing-entities) or ask us during the hack for a key.
+
+Run the script twice, for both *TRAIN* and *DEV* split:
+
+```bash
+PYTHONPATH=$(pwd)/src python src/named_entity_recognition/api_ner/extract_values.py --data_path=data/hack_zurich/original/train.json --output_path=data/hack_zurich/ner_train.json --ner_api_secret=GOOGLE_API_SECRET
+PYTHONPATH=$(pwd)/src python src/named_entity_recognition/api_ner/extract_values.py --data_path=data/hack_zurich/original/dev.json --output_path=data/hack_zurich/ner_dev.json --ner_api_secret=GOOGLE_API_SECRET
+```
+
+We then also extract the ground truth values from the SQL query. Doing this we can verify if our NER approach returns the values required to synthesize the query successfully.
+
+```bash
+PYTHONPATH=$(pwd)/src python src/tools/get_values_from_sql.py --data_path data/hack_zurich/original/train.json --table_path data/hack_zurich/original/tables.json --ner_path data/hack_zurich/ner_train.json
+PYTHONPATH=$(pwd)/src python src/tools/get_values_from_sql.py --data_path data/hack_zurich/original/dev.json --table_path data/hack_zurich/original/tables.json --ner_path data/hack_zurich/ner_dev.json
+```
+
+This last script doesn't create a new file, but adds the ground truth values to the *ner_dev.json* and *ner_train.json* files, see the new attribute *values*:
+
+```json
+    "values": [
+      "Wetzikon",
+      "2016"
+    ]
+```
+
+#### Pre-processing
+The next step is the actual pre-processing. This step contains classical NLP pre-processing, but mostly it's focusing on encoding the DB-schema and values in a way the model can learn from it. As an example we will go through the content of the database and create so called *value hints*, so marking a column if it contains a value we extracted during the last step via NER.
+
+This step is highly parallelized, but might take time if your database is large or you have large amounts of training data.
+
+To execute, run the following script (once for *DEV*, once for *TRAIN*):
+
+```bash
+PYTHONPATH=$(pwd)/src python src/preprocessing/pre_process.py --data_path=data/hack_zurich/original/train.json --ner_data_path=data/hack_zurich/ner_train.json --table_path=data/hack_zurich/original/tables.json --output=data/hack_zurich/preprocessed_train.json --database_host=your_database_host --database_port=5432 --database_user=postgres --database_password=DB_PW --database_schema=public
+PYTHONPATH=$(pwd)/src python src/preprocessing/pre_process.py --data_path=data/hack_zurich/original/dev.json --ner_data_path=data/hack_zurich/ner_dev.json --table_path=data/hack_zurich/original/tables.json --output=data/hack_zurich/preprocessed_dev.json --database_host=your_database_host --database_port=5432 --database_user=postgres --database_password=DB_PW --database_schema=public
+```
+
+#### Modelling JOINs and SQL-to-SemQL
+
+In this last step we model some special JOINs situation as filters and then transform each SQL statement to a SemQL (Semantic Query Language) AST (abstract syntax tree).
+
+The idea train the model on an intermediate query representation (SemQL) instead of pure SQL stems from the [IRNet paper](https://arxiv.org/pdf/1905.08205.pdf)
+with the goal to abstract implementation details of SQL (e.g. the difference between *WHERE* and *HAVING*).
+
+ValueNet will at inference time transform the SemQL representation back to classical SQL.
+
+We start by modeling some JOINs as filters **(minor importance, has most probably no effect on your data - you might skip it)**
+
+```bash
+PYTHONPATH=$(pwd)/src python src/preprocessing/model_joins_as_filter.py --data_path=data/hack_zurich/preprocessed_train.json --table_path=data/hack_zurich/original/tables.json --output=data/hack_zurich/preprocessed_with_joins_train.json 
+PYTHONPATH=$(pwd)/src python src/preprocessing/model_joins_as_filter.py --data_path=data/hack_zurich/preprocessed_dev.json --table_path=data/hack_zurich/original/tables.json --output=data/hack_zurich/preprocessed_with_joins_dev.json 
+```
+
+And then transform SQL to SemQL:
+
+```bash
+ PYTHONPATH=$(pwd)/src python src/preprocessing/sql2SemQL.py --data_path data/hack_zurich/preprocessed_with_joins_train.json --table_path data/hack_zurich/original/tables.json --output data/hack_zurich/train.json 
+ PYTHONPATH=$(pwd)/src python src/preprocessing/sql2SemQL.py --data_path data/hack_zurich/preprocessed_with_joins_dev.json --table_path data/hack_zurich/original/tables.json --output data/hack_zurich/dev.json 
+```
+
+With this script, the pre-processing is done. The files `train.json` and `dev.json` are gonna be  the input for training the neural network in the next chapter.
 
 
 ### Train Model

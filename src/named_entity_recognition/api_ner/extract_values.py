@@ -8,6 +8,7 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--data_path', type=str, required=True)
     arg_parser.add_argument('--output_path', type=str, required=True)
+    arg_parser.add_argument('--ner_api_secret', type=str, required=True)
 
     args = arg_parser.parse_args()
 
@@ -17,7 +18,7 @@ if __name__ == '__main__':
     error_count = 0
     ner_data = []
     for doc in data:
-        extracted_values = remote_named_entity_recognition(doc['question'])
+        extracted_values = remote_named_entity_recognition(doc['question'], args.ner_api_secret)
         if extracted_values:
             ner_data.append({
                 'entities': extracted_values['entities'],
