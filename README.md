@@ -123,10 +123,10 @@ Follow the steps in the given order:
 2. Prepare & Preprocess Data _(medium)_
 3. Train Model _(easy, but requires time & hardware)_
 
-### Environment Setup
+### 1. Environment Setup
 TODO
 
-### Prepare & Preprocess Data
+### 2. Prepare & Preprocess Data
 Preparing and preprocessing your data might take most of your time. We first need to bring your custom data into the Spider format (https://github.com/taoyds/spider), before we do more advanced pre-processing and Named Entity Recognition.
 
 #### Add your custom data
@@ -211,6 +211,37 @@ And then transform SQL to SemQL:
 With this script, the pre-processing is done. The files `train.json` and `dev.json` are gonna be  the input for training the neural network in the next chapter.
 
 
-### Train Model
+### 3. Train Model
+Now that we have the environment ready and the custom data prepared, we want to train or fine-tune the model. There are multiple ways to train a model on custom data, we will go into depth for two of them.
+#### Train Model on Spider and Custom Data combined
+This is the simplest approach: put your custom data together with the large training data from Spider and train the model from scratch (with exception of the transformer encoder, which is already pre-trained).
+
+The idea here is to train the model on the general task of NL-to-SQL by using the large number of samples from Spider, but still teaching it insights of your specific database by adding your custom data.
+
+To do so merge your custom data (most probably [data/hack_zurich/train.json](data/hack_zurich/dev.json)) with the training data from Spider (you find them here, already pre-processed: [data/spider/train.json](data/spider/train.json)). Do the same for the *DEV* split and run the training:
+
+```bash
+python src/main.py --exp_name your_experiment_name --cuda --batch_size 8 --num_epochs 100 --loss_epoch_threshold 70 --sketch_loss_weight 1.0 --beam_size 1 --seed 90
+```
+
+The main script will initialize the training loop and evaluate your model on the dev split after each epoch. 
+Be aware that there are plenty more parameters to configure the training, see [src/config.py](src/config.py) for all potential parameters. If you run into trouble with not enough GPU memory, try reducing batch-size.
+
+We use [Weights & Biases]((https://wandb.ai/site)) for experiment tracking. The easiest way for you is to also get an account, create a project and
+login (https://docs.wandb.ai/ref/cli/wandb-login) before starting the training. Alternatively you can also remove the `wandb` commands and use for example tensorboard to log the metrics in a simple way.
+
+You can expect the model to be decent after 5 epochs. Best results (~ +3% accuracy) we usually achieve after ~70 epochs.
+
+ 
+
+With the configuration above, a training/dev set of ~8000 samples and 100 epochs, **the training takes ~26h on a NVidia Tesla V100 (32GB)**. 
+For **5 epochs, it would therefore take ~1.3h.** 
+
+#### Fine-tune a pre-trained model on your custom data
+An alternative to re-train the model from scratch is to fine-tune a pre-trained model. To do so, we only train on the custom data. 
+Fine-tuning a pre-trained model works usually best by freezing the parameters of large parts of the model and only train the remaining parameters, using a low learning rate. 
+You might even add new layers to the neural network and train this additional parts of the neural network while freezing most of the pre-trained model.
+
+You find a pre-trained model here: https://github.com/brunnurs/valuenet/releases/tag/trained_model
 
 
