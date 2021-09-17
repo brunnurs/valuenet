@@ -114,6 +114,7 @@ In case you plan to modify/re-train the model, might as well setup the project e
 
 To do so, follow the environment setup described in [Environment Setup](#environment-setup) and run [manual_inference_api.py](src/manual_inference/manual_inference_api.py). Specify command line parameters as seen in the inference [Dockerfile](docker/inference/Dockerfile) to point to your database.
 
+As a pre-trained model, use https://github.com/brunnurs/valuenet/releases/tag/trained_model
 
 ## Train Model
 Training/fine-tuning the model on custom data or even improving the model with new approaches is definitely the most interesting part. It is though also the most challenging one, so don't give up easily!
@@ -124,7 +125,22 @@ Follow the steps in the given order:
 3. Train Model _(easy, but requires time & hardware)_
 
 ### 1. Environment Setup
-TODO
+*Caution: this projects has so far only been used on a Linux or macOS environment. It will most probably also work under windows, but you might have to adapt the setup slightly.*
+
+To train the large transformer model, you require a relatively powerful GPU. While inference will already work on a decent Notebook GPU with >= 4GB GPU Memory, training the model (even with small batch sizes) will require at least 12GB of GPU memory, 24GB are preferable. The easiest way to get such a hardware is to rent it temporary, have a look for example at the AWS P2/P3 line (https://aws.amazon.com/ec2/instance-types/p3/).
+We use a classical NVIDIA/CUDA/PyTorch stack for training the model. You find a good guide how to set up this stack here: https://pytorch.org/get-started/locally/.
+
+#### Local setup
+Setup the NVIDIA/CUDA/PyTorch stack as described. To test if you can access the GPU, run the [src/tools/is_cuda_working.py](is_cuda_working.py) script. Then install dependencies with the virtual environment tool of your choice. If you use vanilla `pip`, use the [requirements.txt](requirements.txt) file. If you prefer `pipenv`, use [Pipfile](Pipfile) and [Pipfile.lock](Pipfile.lock).
+
+#### Setup with docker
+An alternative to a local setup is training inside a designated docker environment. This is especially useful if your training runs somewhere in a cloud environment. 
+Use the Dockerfile ([docker/train/Dockerfile](docker/train/Dockerfile)) and adapt `authorized_keys` and `know_hosts` files with your credentials, so you can SSH into the docker container during training. 
+Be aware that the Dockerfile contains all dependencies for training, not though for pre-processing. You might have to add some dependencies if you use the docker environment to exectute the pre-processing.
+
+Be aware that also this docker needs to be started with GPU support.
+
+
 
 ### 2. Prepare & Preprocess Data
 Preparing and preprocessing your data might take most of your time. We first need to bring your custom data into the Spider format (https://github.com/taoyds/spider), before we do more advanced pre-processing and Named Entity Recognition.
