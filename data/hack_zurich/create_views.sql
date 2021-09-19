@@ -1,14 +1,14 @@
-CREATE VIEW accessability_bus AS
+CREATE VIEW accessibility_bus AS
     SELECT v.value as "access_by_bus", v.year, v.spatialunit_id
     FROM indicators i inner join indicator_values2 v on i.indicator_id = v.indicator_id
     WHERE trim(i.name) = 'Access by bus [% of inhabitants]';
 
-CREATE VIEW accessability_train AS
+CREATE VIEW accessibility_train AS
     SELECT v.value as "access_by_suburban_train", v.year, v.spatialunit_id
     FROM indicators i inner join indicator_values2 v on i.indicator_id = v.indicator_id
     WHERE trim(i.name) = 'Access by suburban train [% of inhabitants]';
 
-CREATE VIEW accessability_train_and_bus AS
+CREATE VIEW accessibility_train_and_bus AS
     SELECT v.value as "access_by_suburban_train_and_bus", v.year, v.spatialunit_id
     FROM indicators i inner join indicator_values2 v on i.indicator_id = v.indicator_id
     WHERE trim(i.name) = 'Accessibility by suburban train+bus [% of inhabitants]';
