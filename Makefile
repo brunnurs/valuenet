@@ -16,4 +16,4 @@ jumpin-postgres:
 
 .PHONY: import-data
 import-data:
-	docker-compose exec -i postgres 'psql --dbname=hack_zurich --username=hack_zurich --password < /var/dumps/2021-09-20-hack_zurich.sql'
+	docker-compose exec postgres sh -c 'psql --dbname=hack_zurich --username=hack_zurich --password < /var/dumps/2021-09-20-hack_zurich.sql'
