@@ -88,6 +88,84 @@ In case you plan to manipulate the database schema, make sure to also adapt the 
 
 After you adapted the schema file, make sure to re-build your docker image as the schema file is built in (see [build_inference_docker.sh](docker/build_inference_docker.sh))
 
+### Run the infrastructure using docker-compose with the pre-built image or your own (recommended)
+
+#### Setup a Google API token for Google Natural Language API
+
+The Valuenet API depends on Google API. Make sure your account has a valid API token to use. Otherwise, use the following procedure to generate an API token:
+
+1. Go on <https://console.cloud.google.com> (login with your personal Google account or create one if you don't have any)
+2. Open the *APIs and Services* menu
+3. Open the *Credentials* menu
+4. Select *CREATE CREDENTIALS* and *API key*
+5. Copy and paste the API key in the `docker-compose.yml` file's `NER_API_SECRET` variable
+
+**Please note that you need a valid credit card to enable the Google API and generate a token. It seems like prepaid credit cards are not accepted.**
+
+Here are some screenshots to help you find the menus in the Google console interface.
+
+![APIs and Services menu](./doc/images/01-api-services.png)
+![Credentials menu](./doc/images/02-credentials.png)
+![API Key menu](./doc/images/03-api-key.png)
+
+#### Configure nvidia driver with Docker
+
+To get the infrastructure working with `docker-compose`, you need to have your nvidia working with Docker. To get it working make sure:
+
+- you have installed the nvidia driver for your nvidia GPU
+- your driver is loaded (run `nvidia-smi` and you're all good if no error is shown)
+- you have installed [nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
+- you have installed `nvidia container runtime` (a package should be available for your Linux distribution)
+    - Archlinux example: <https://wiki.archlinux.org/title/docker#Run_GPU_accelerated_Docker_containers_with_NVIDIA_GPUs>
+- you can run `docker run --gpus all nvidia/cuda:11.3.0-runtime-ubuntu20.04 nvidia-smi` without any error
+
+**You need to reboot your system after installing nvidia drivers. You also need to restart the docker service after installing the nvidia container toolkit and nvidia container runtime.**
+Docker service can be restarted by running `sudo systemctl restart docker` (or `sudo service docker restart`).
+
+To make sure docker can access nvidia runtime when using docker-compose make sure the following is in `/etc/docker/daemon.json`:
+
+```json
+{
+  "runtimes": {
+    "nvidia": {
+      "path": "/usr/bin/nvidia-container-runtime",
+      "runtimeArgs": []
+    }
+  }
+}
+```
+
+**Please note that the path to `nvidia-container-runtime` might differ from one distribution to another. Use `which nvidia-container-runtime` to figure out its path and update the `daemon.json` accordingly to your configuration.**
+
+**Docker service needs to be restarted after editing this file.**
+
+#### Start the stack
+
+Run `docker-compose up` in a terminal in the project's root folder to start the stack locally.
+
+To import the data run `docker-compose exec postgres sh -c 'psql --dbname=hack_zurich --username=hack_zurich --password < /var/dumps/2021-09-20-hack_zurich.sql'`. It will prompt you for the password (which is `hack_zurich`). Just input the password and hit Enter to start the import.
+
+The API should now be working. And the following services should be accessible:
+
+- PostgreSQL on `localhost:5432`
+    - username: `hack_zurich`
+    - password: `hack_zurich`
+    - database: `hack_zurich`
+- [Adminer](https://www.adminer.org/) on <http://localhost:8080>
+- Valuenet API on <http://localhost:5000>
+
+To test the API, just run the following command:
+
+```console
+curl 'http://localhost:5000/api/question/hack_zurich' \
+  -X 'PUT' \
+  -H 'X-API-Key: sjNmaCtviYzXWlS' \
+  -H 'Content-Type: application/json;charset=UTF-8' \
+  --data-raw '{"question":"What is the share of electric cars in 2016 for Wetzikon?", "beam_size": 2}' 
+```
+
+To stop the stack either presse Ctrl-C in the terminal running the stack or just run `docker-compose stop` in the project's root folder.
+
 ### Run inference docker image (pre-built or adapted by you)
 
 The docker image used in this case is [Dockerfile](docker/inference/Dockerfile). You can pull the pre-built image from <https://hub.docker.com/r/ursinbrunner/valuenet-inference-hack-zurich>.
