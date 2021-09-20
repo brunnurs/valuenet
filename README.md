@@ -98,14 +98,16 @@ The Valuenet API depends on Google API. Make sure your account has a valid API t
 2. Open the *APIs and Services* menu
 3. Open the *Credentials* menu
 4. Select *CREATE CREDENTIALS* and *API key*
-5. Copy and paste the API key in the `docker-compose.yml` file's `NER_API_SECRET` variable
+5. Copy and paste the API key in the `docker-compose.yml` file's [`NER_API_SECRET` variable](https://github.com/groovytron/valuenet/blob/513931db8cbca7d1fa2a17f691528e58b183b647/docker-compose.yml)
 
-**Please note that you need a valid credit card to enable the Google API and generate a token. It seems like prepaid credit cards are not accepted.**
+**Please note that you need a valid credit card to enable the Google API and generate a token. It seems like prepaid credit cards are not accepted. Google say that you won't be charged automatically so you should not worry about being billed.**
 
 Here are some screenshots to help you find the menus in the Google console interface.
 
 ![APIs and Services menu](./doc/images/01-api-services.png)
+
 ![Credentials menu](./doc/images/02-credentials.png)
+
 ![API Key menu](./doc/images/03-api-key.png)
 
 #### Configure nvidia driver with Docker
@@ -151,7 +153,12 @@ The API should now be working. And the following services should be accessible:
     - username: `hack_zurich`
     - password: `hack_zurich`
     - database: `hack_zurich`
-- [Adminer](https://www.adminer.org/) on <http://localhost:8080>
+- [Adminer](https://www.adminer.org/) on <http://localhost:8080>. Use the following to connect to the database:
+    - System: `PostgreSQL`
+    - Server: `postgres`
+    - Username: `hack_zurich`
+    - Password: `hack_zurich`
+    - Database: `hack_zurich`
 - Valuenet API on <http://localhost:5000>
 
 To test the API, just run the following command:
