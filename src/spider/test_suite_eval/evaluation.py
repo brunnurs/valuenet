@@ -575,7 +575,12 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
             p_str = p_str.replace("value", "1")
             g_str, db, question = g
             db_name = db
-            db = os.path.join(db_dir, db, db + ".db")
+            if db_name == 'hack_zurich':
+                db_ending = ".db"
+            else:
+                db_ending = ".sqlite"
+            db = os.path.join(db_dir, db, db + db_ending)
+            
             schema = Schema(get_schema(db))
             g_sql, _ = get_sql(schema, g_str)
             hardness = evaluator.eval_hardness(g_sql)
