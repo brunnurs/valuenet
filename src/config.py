@@ -52,6 +52,8 @@ def read_arguments_train():
 
     # general configuration
     parser.add_argument('--exp_name', default='exp', type=str)
+    parser.add_argument('--fine_tuning', default=False, action='store_true')
+    parser.add_argument('--model_to_load', default='pretrained_models/best_model.pt', type=str)
     parser.add_argument('--seed', default=90, type=int)
     parser.add_argument('--toy', default=False, action='store_true')
     parser.add_argument('--data_set', default='spider', type=str)

@@ -40,6 +40,9 @@ if __name__ == '__main__':
     grammar = semQL.Grammar()
     model = IRNet(args, device, grammar)
     model.to(device)
+    if args.fine_tuning:
+        print("Loading best pre-trained model {}...".format(args.model_to_load))
+        model.load_state_dict(torch.load(args.model_to_load))
 
     # track the model
     wandb.watch(model, log='parameters')
