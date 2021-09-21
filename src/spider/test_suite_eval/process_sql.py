@@ -89,7 +89,7 @@ def get_schema(db):
     cursor = conn.cursor()
 
     # fetch table names
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' OR type='view';")
     tables = [str(table[0].lower()) for table in cursor.fetchall()]
 
     # fetch table info
@@ -143,6 +143,9 @@ def tokenize(string):
         pre_tok = toks[eq_idx-1]
         if pre_tok in prefix:
             toks = toks[:eq_idx-1] + [pre_tok + "="] + toks[eq_idx+1: ]
+    
+    toks = [i for i in toks if i != ':']
+    toks = [i for i in toks if i != ':numeric']
 
     return toks
 
