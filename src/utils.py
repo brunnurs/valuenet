@@ -88,6 +88,13 @@ def freeze_model(model):
 
 def fine_tuning(model):
     # Freeze the whole model except the last layers (value_pointer_net and table_pointer_net)
+    trainable_before = count_parameters(model)
     model = freeze_model(model)
     model = unfreeze_last_layers(model)
+    trainable_after = count_parameters(model)
+    print(f'Froze {trainable_before - trainable_after} parameters. Remaining {trainable_after}.')
     return model
+
+
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)

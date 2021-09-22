@@ -44,7 +44,7 @@ if __name__ == '__main__':
         print("Loading best pre-trained model {}...".format(args.model_to_load))
         model.load_state_dict(torch.load(args.model_to_load))
         model = fine_tuning(model)
-
+    
     # track the model
     wandb.watch(model, log='parameters')
 
