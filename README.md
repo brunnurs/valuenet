@@ -234,10 +234,16 @@ This is the simplest approach: put your custom data together with the large trai
 
 The idea here is to train the model on the general task of NL-to-SQL by using the large number of samples from Spider, but still teaching it insights of your specific database by adding your custom data.
 
-To do so merge your custom data (most probably [data/hack_zurich/train.json](data/hack_zurich/dev.json)) with the training data from Spider (you find them here, already pre-processed: [data/spider/train.json](data/spider/train.json)). Do the same for the *DEV* split and run the training:
+To do so merge your custom data (most probably [data/hack_zurich/train.json](data/hack_zurich/dev.json)) with the training data from Spider (you find them here, already pre-processed: [data/spider/train.json](data/spider/train.json)). Do the same for the *DEV* split and run the training.
+For training define your data folder with `--data_set`. So if your combined data is located in `data/spider`, define `--data_set spider`.
+
+Be aware that you also need to combine the schema definitions which you find in `data/hack_zurich/original/tables.json` and `data/spider/original/tables.json`, as the training algorithm expects one file with all schema definitions.
+Put then the combined file in the `original` folder of your data, so e.g. `data/spider/original/tables.json` if you use `spider` as the folder for your combined data.
+
+Now you can start the training:
 
 ```bash
-python src/main.py --exp_name your_experiment_name --cuda --batch_size 8 --num_epochs 100 --loss_epoch_threshold 70 --sketch_loss_weight 1.0 --beam_size 1 --seed 90
+python src/main.py --exp_name experiment_name_you_choose --data_set spider --cuda --batch_size 8 --num_epochs 100 --loss_epoch_threshold 70 --sketch_loss_weight 1.0 --beam_size 1 --seed 90
 ```
 
 The main script will initialize the training loop and evaluate your model on the dev split after each epoch. 
