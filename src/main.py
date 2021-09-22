@@ -82,16 +82,17 @@ if __name__ == '__main__':
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
         tqdm.write(eval_results_string)
 
-        total_transformed, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
-                                                                                                           table_data,
-                                                                                                           output_path,
-                                                                                                           args.data_dir,
-                                                                                                           epoch + 1)
+        if args.run_spider_evaluation_after_epoch:
+            total_transformed, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
+                                                                                                               table_data,
+                                                                                                               output_path,
+                                                                                                               args.data_dir,
+                                                                                                               epoch + 1)
 
-        tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(total_transformed - fail_transform, total_transformed))
-        tqdm.write("Results from Spider-Evaluation:")
-        for key, value in spider_eval_results.items():
-            tqdm.write("{}: {}".format(key, value))
+            tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(total_transformed - fail_transform, total_transformed))
+            tqdm.write("Results from Spider-Evaluation:")
+            for key, value in spider_eval_results.items():
+                tqdm.write("{}: {}".format(key, value))
 
         if acc > best_acc:
             save_model(model, os.path.join(output_path))
