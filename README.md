@@ -79,8 +79,9 @@ You will receive a JSON response of the following format, where the actual resul
 
 To run the trained ValueNet model locally, you have two options:
 
-1. Pull or build the inference docker image and run it, connected to your local database _(easy)_.
-2. Run the inference API ([manual_inference_api.py](src/manual_inference/manual_inference_api.py)) from your terminal / IDE, connected to your local database _(medium)_.
+1. Pull or build the inference docker image and run it, connected to a database running as docker image. Start both database and inference via docker compose from scratch _(easy)_.
+2. Pull or build the inference docker image and run it, connected to your local database. Import the database on your existing PostgreSQL server (localhost or wherever you prefer you databases)  _(easy)_.
+3. Run the inference API ([manual_inference_api.py](src/manual_inference/manual_inference_api.py)) from your terminal / IDE, connected to your local database _(medium)_.
 
 In both case you need to point the system to a database which contains your data. The easiest way is to install PostgreSQL locally and restore the database dump [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp), which contains all necessary data, tables, views and indices.
 
@@ -88,7 +89,7 @@ In case you plan to manipulate the database schema, make sure to also adapt the 
 
 After you adapted the schema file, make sure to re-build your docker image as the schema file is built in (see [build_inference_docker.sh](docker/build_inference_docker.sh))
 
-### Run the infrastructure using docker-compose with the pre-built image or your own (recommended)
+### 1. _(recommended)_ Run inference & database docker image with docker-compose. You can use the pre-built image or build your own
 
 #### Setup a Google API token for Google Natural Language API
 
@@ -173,7 +174,7 @@ curl 'http://localhost:5000/api/question/hack_zurich' \
 
 To stop the stack either presse Ctrl-C in the terminal running the stack or just run `docker-compose stop` in the project's root folder.
 
-### Run inference docker image (pre-built or adapted by you)
+### 2. Run inference docker image (pre-built or adapted by you) with an existing PostgreSQL database
 
 The docker image used in this case is [Dockerfile](docker/inference/Dockerfile). You can pull the pre-built image from <https://hub.docker.com/r/ursinbrunner/valuenet-inference-hack-zurich>.
 
@@ -197,7 +198,7 @@ The parameter `--network="host"` is only necessary if you run the database on th
 
 You might have to adapt the inference docker image, if for example you adapt the database schema file. To do so, have a look at the docker file itself [Dockerfile](docker/inference/Dockerfile) and use/adapt the build script ([build_inference_docker.sh](docker/build_inference_docker.sh))
 
-### Run inference API locally
+### 3. Run inference API locally
 
 In case you plan to modify/re-train the model, might as well setup the project environment and run the inference locally via [manual_inference_api.py](src/manual_inference/manual_inference_api.py) script.
 
