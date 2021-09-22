@@ -68,3 +68,26 @@ def save_model(model, model_save_path, model_name="best_model.pt"):
     torch.save(model.state_dict(), os.path.join(model_save_path, model_name))
     # also save the model to "Weights & Biases"
     torch.save(model.state_dict(), os.path.join(wandb.run.dir, 'best_model.pt'))
+
+
+def unfreeze_last_layers(model):
+    # Unfreeze last 2 groups of layers for fine_tuning
+    unfreeze = [model.value_pointer_net.parameters(), model.table_pointer_net.parameters()]
+    for layer_group in unfreeze:
+        for param in layer_group:
+            param.requires_grad = True
+    return model
+            
+
+def freeze_model(model):
+    # Freezing all layers
+    for param in model.parameters():
+        param.requires_grad = False
+    return model
+
+
+def fine_tuning(model):
+    # Freeze the whole model except the last layers (value_pointer_net and table_pointer_net)
+    model = freeze_model(model)
+    model = unfreeze_last_layers(model)
+    return model

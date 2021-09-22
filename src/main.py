@@ -13,7 +13,7 @@ from intermediate_representation import semQL
 from optimizer import build_optimizer_encoder
 from spider import spider_utils
 from training import train
-from utils import setup_device, set_seed_everywhere, save_model, create_experiment_folder
+from utils import setup_device, set_seed_everywhere, save_model, create_experiment_folder, fine_tuning
 
 # initialize experiment tracking @ Weights & Biases
 import wandb
@@ -43,6 +43,7 @@ if __name__ == '__main__':
     if args.fine_tuning:
         print("Loading best pre-trained model {}...".format(args.model_to_load))
         model.load_state_dict(torch.load(args.model_to_load))
+        model = fine_tuning(model)
 
     # track the model
     wandb.watch(model, log='parameters')
@@ -84,17 +85,6 @@ if __name__ == '__main__':
 
         eval_results_string = "Epoch: {}    Sketch-Accuracy: {}     Accuracy: {}".format(epoch + 1, sketch_acc, acc)
         tqdm.write(eval_results_string)
-
-        total_transformed, fail_transform, spider_eval_results = transform_to_sql_and_evaluate_with_spider(predictions,
-                                                                                                           table_data,
-                                                                                                           output_path,
-                                                                                                           args.data_dir,
-                                                                                                           epoch + 1)
-
-        tqdm.write("Successfully transformed {} of {} from SemQL to SQL.".format(total_transformed - fail_transform, total_transformed))
-        tqdm.write("Results from Spider-Evaluation:")
-        for key, value in spider_eval_results.items():
-            tqdm.write("{}: {}".format(key, value))
 
         if acc > best_acc:
             save_model(model, os.path.join(output_path))
