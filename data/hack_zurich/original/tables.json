@@ -444,6 +444,58 @@
         "new_electric_car_registrations"
       ]
     ],
+      [
+        14,
+        "year"
+      ],
+      [
+        14,
+        "spatialunit_id"
+      ],
+      [
+        14,
+        "charging_stations"
+      ]
+    ],
+      [
+        15,
+        "year"
+      ],
+      [
+        15,
+        "spatialunit_id"
+      ],
+      [
+        15,
+        "charging_stations_per_inh"
+      ]
+    ],
+      [
+        16,
+        "year"
+      ],
+      [
+        16,
+        "spatialunit_id"
+      ],
+      [
+        16,
+        "total_electric_cars"
+      ]
+    ],
+      [
+        17,
+        "year"
+      ],
+      [
+        17,
+        "spatialunit_id"
+      ],
+      [
+        17,
+        "total_reg_electric_cars"
+      ]
+    ],
     "column_types": [
       "text",
       "number",
@@ -463,6 +515,18 @@
       "text",
       "text",
       "text",
+      "text",
+      "number",
+      "number",
+      "text",
+      "number",
+      "number",
+      "text",
+      "number",
+      "number",
+      "text",
+      "number",
+      "number",
       "text",
       "number",
       "number",
@@ -554,6 +618,22 @@
       [
         53,
         3
+      ],
+      [
+        56,
+        3
+      ],
+      [
+        59,
+        3
+      ],
+      [
+        62,
+        3
+      ],
+      [
+        65,
+        3
       ]
     ],
     "primary_keys": [
@@ -574,7 +654,11 @@
       "share hybrid cars",
       "share electric cars",
       "new hybrid car registrations",
-      "new electric car registrations"
+      "new electric car registrations",
+      "charging_stations_electric_cars",
+      "charging_stations_electric_cars_per_inh",
+      "total_electric_hybrid_cars",
+      "total_registrations_electric_hybrid_car"
     ],
     "table_names_original": [
       "commune_type",
@@ -588,9 +672,13 @@
       "miv_share",
       "amount_new_pw_registrations",
       "share_hybrid_cars",
-      "share_electric_cars",
+      "share_electric_cars",g
       "new_hybrid_car_registrations",
-      "new_electric_car_registrations"
+      "new_electric_car_registrations",
+      "charging_stations_electric_cars",
+      "charging_stations_electric_cars_per_inh",
+      "total_electric_hybrid_cars",
+      "total_registrations_electric_hybrid_car"
     ]
   }
 ]
