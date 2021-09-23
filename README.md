@@ -84,11 +84,11 @@ To run the trained ValueNet model locally, you have two options:
 2. Pull or build the inference docker image and run it, connected to your local database. Import the database on your existing PostgreSQL server (localhost or wherever you prefer you databases)  _(easy)_.
 3. Run the inference API ([manual_inference_api.py](src/manual_inference/manual_inference_api.py)) from your terminal / IDE, connected to your local database _(medium)_.
 
-In both case you need to point the system to a database which contains your data. The easiest way is to install PostgreSQL locally and restore the database dump [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp), which contains all necessary data, tables, views and indices.
+In both cases you need to point the system to the database which contains your data. The easiest way is to install PostgreSQL locally and restore the database dump [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp), which contains all necessary data, tables, views and indices.
 
-In case you plan to manipulate the database schema, make sure to also adapt the schema-file which is used by ValueNet at inference time ([tables.json](data/hack_zurich/original/tables.json)). This file contains a high level schema of the database (some tables might be abstracted by simple views) and is the foundation on which ValueNet is synthesizing a query.
+In case you plan to manipulate the database schema, make sure to also adapt the schema-file which is used by ValueNet at inference time ([tables.json](data/hack_zurich/original/tables.json)). This file contains a high level schema of the database (some tables might be abstracted by simple views) and is the foundation from which ValueNet is synthesizing a query.
 
-After you adapted the schema file, make sure to re-build your docker image as the schema file is built in (see [build_inference_docker.sh](docker/build_inference_docker.sh))
+After you've adapted the schema file, make sure to re-build your docker image as the schema file is built in (see [build_inference_docker.sh](docker/build_inference_docker.sh))
 
 ### 1. _(recommended)_ Run inference & database docker image with docker-compose. You can use the pre-built image or build your own
 
