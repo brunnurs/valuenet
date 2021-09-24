@@ -199,6 +199,8 @@ The parameter `--network="host"` is only necessary if you run the database on th
 
 You might have to adapt the inference docker image, if for example you adapt the database schema file. To do so, have a look at the docker file itself [Dockerfile](docker/inference/Dockerfile) and use/adapt the build script ([build_inference_docker.sh](docker/build_inference_docker.sh))
 
+If you plan to adapt and build your own docker image, you'll need to create a "models" directory and add your model (or the pretrained model that we have made available here <https://github.com/brunnurs/valuenet/releases/tag/trained_model>) and adapt the build script accordingly.
+
 ### 3. Run inference API locally
 
 In case you plan to modify/re-train the model, might as well setup the project environment and run the inference locally via [manual_inference_api.py](src/manual_inference/manual_inference_api.py) script.
