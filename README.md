@@ -177,10 +177,10 @@ To stop the stack either presse Ctrl-C in the terminal running the stack or just
 
 ### 2. Run inference docker image (pre-built or adapted by you) with an existing PostgreSQL database
 
-The docker image used in this case is [Dockerfile](docker/inference/Dockerfile). You can pull the pre-built image from <https://hub.docker.com/r/ursinbrunner/valuenet-inference-hack-zurich>.
+The docker image used in this case is [Dockerfile](docker/inference/Dockerfile). You can pull the pre-built image from <https://hub.docker.com/r/ckosten/valuenet-inference-hack-zurich>.
 
 ```
-docker pull ursinbrunner/valuenet-inference-hack-zurich:1.0
+docker pull ckosten/valuenet-inference-hack-zurich
 ```
 
 To run the docker image make sure a **NVIDIA GPU** is available (either on your notebook or in the cloud you prefer) and your Docker environment supports GPUs. To do so, you might follow the official nvidia guide: <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/overview.html>
