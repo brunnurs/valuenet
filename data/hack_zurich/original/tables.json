@@ -220,6 +220,54 @@
       [
         13,
         "new electric car registrations"
+      ],
+       [
+        14,
+        "year"
+      ],
+      [
+        14,
+        "spatialunit id"
+      ],
+      [
+        14,
+        "charging stations"
+      ],
+      [
+        15,
+        "year"
+      ],
+      [
+        15,
+        "spatialunit id"
+      ],
+      [
+        15,
+        "charging stations per inh"
+      ],
+      [
+        16,
+        "year"
+      ],
+      [
+        16,
+        "spatialunit id"
+      ],
+      [
+        16,
+        "total electric cars"
+      ],
+      [
+        17,
+        "year"
+      ],
+      [
+        17,
+        "spatialunit id"
+      ],
+      [
+        17,
+        "total reg electric cars"
       ]
     ],
     "column_names_original": [
@@ -442,8 +490,7 @@
       [
         13,
         "new_electric_car_registrations"
-      ]
-    ],
+      ],
       [
         14,
         "year"
@@ -455,8 +502,7 @@
       [
         14,
         "charging_stations"
-      ]
-    ],
+      ],
       [
         15,
         "year"
@@ -468,8 +514,7 @@
       [
         15,
         "charging_stations_per_inh"
-      ]
-    ],
+      ],
       [
         16,
         "year"
@@ -481,8 +526,7 @@
       [
         16,
         "total_electric_cars"
-      ]
-    ],
+      ],
       [
         17,
         "year"
