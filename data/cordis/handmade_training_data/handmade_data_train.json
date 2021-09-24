@@ -1,0 +1,72 @@
+[
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title from projects",
+    "question": "Find all projects"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title from projects where start_year > 2018",
+    "question": "Find projects that started after 2018"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title from projects where start_year < 2018",
+    "question": "Find projects that started before 2018"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select institutions_name\nfrom institutions as i join countries as c on c.unics_id = i.country_id\nwhere country_name = 'Italy'",
+    "question": "Find institutions located in Italy"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select title\nfrom projects join people on projects.principal_investigator = people.unics_id\nwhere full_name = 'Alberto Broggi'",
+    "question": "Find projects where Alberto Broggi was involved"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select count(*) from projects where start_year = 2016",
+    "question": "How many projects started in 2016?"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select sum(total_cost) from projects",
+    "question": "What's the total cost of all projects?"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.title\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\n         join project_member_roles as pmr on pm.member_role = pmr.code\n         join institutions as i on pm.institution_id = i.unics_id\n         join countries as c on i.country_id = c.unics_id\nwhere pmr.code = 'coordinator'\n  and c.country_name = 'Greece'",
+    "question": "Find projects whose coordinator is from Greece"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select i.institutions_name\nfrom project_members as pm\n         join project_member_roles as pmr on pm.member_role = pmr.code\n         join institutions as i on pm.institution_id = i.unics_id\nwhere pmr.code = 'coordinator'",
+    "question": "Find institutions that have acted as a coordinator"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select pm.member_name\nfrom projects as p join project_members as pm on p.unics_id = pm.project\nwhere p.acronym = 'ALFRED'",
+    "question": "List all the members of project ALFRED"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.title\nfrom projects as p join project_programmes as pp on p.unics_id = pp.project\nwhere pp.programme = 'FP7-ICT'",
+    "question": "List all projects under the FP7-ICT programme"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select pmr.code\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\n         join project_member_roles as pmr on pm.member_role = pmr.code\nwhere p.acronym = 'ARGOS'\nand pm.member_name like '%ATHENA%'",
+    "question": "Find the role of ATHENA in project ARGOS"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\n         join project_members as pm on i.unics_id = pm.institution_id\n         join activity_types as a on pm.activity_type = a.code\nwhere a.description = 'Research Organisations'\n  and c.country_name = 'Greece'",
+    "question": "Return all research organisations located in Greece"
+  },
+  {
+    "db_id": "cordis_temporary",
+    "query": "select p.title\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\n         join institutions as i on pm.institution_id = i.unics_id\n         join eu_territorial_units as et on i.geocode_regions_3 = et.geocode_regions\nwhere et.description = 'Schaffhausen'",
+    "question": "Find all projects connected with institutes located in Schaffhausen area"
+  }
+]
