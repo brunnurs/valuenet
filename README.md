@@ -86,7 +86,7 @@ To run the trained ValueNet model locally, you have two options:
 
 In both cases you need to point the system to the database which contains your data. The easiest way is to install PostgreSQL locally and restore the database dump [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp), which contains all necessary data, tables, views and indices.
 
-In case you plan to manipulate the database schema, make sure to also adapt the schema-file which is used by ValueNet at inference time ([tables.json](data/hack_zurich/original/tables.json)). This file contains a high level schema of the database (some tables might be abstracted by simple views) and is the foundation from which ValueNet is synthesizing a query.
+In case you plan to manipulate the database schema, make sure to also adapt the schema-file which is used by ValueNet at inference time ([tables.json](data/hack_zurich/original/tables.json)). This file contains a high level schema of the database (some tables might be abstracted by simple views) and is the foundation from which ValueNet is synthesizing a query. The script which builds the ([tables.json](data/hack_zurich/original/tables.json)) file can be found here ([tables.json script](src/tools/create_schema_from_postgres_db.py)). You may need to adapt the script slightly to capture views as well as tables in your schema.
 
 After you've adapted the schema file, make sure to re-build your docker image as the schema file is built in (see [build_inference_docker.sh](docker/build_inference_docker.sh))
 
