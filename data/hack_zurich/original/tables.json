@@ -702,7 +702,7 @@
       "charging stations electric cars",
       "charging stations electric cars per inh",
       "total electric hybrid cars",
-      "total registrations electric hybrid car"
+      "total registrations electric hybrid cars"
     ],
     "table_names_original": [
       "commune_type",
@@ -722,7 +722,7 @@
       "charging_stations_electric_cars",
       "charging_stations_electric_cars_per_inh",
       "total_electric_hybrid_cars",
-      "total_registrations_electric_hybrid_car"
+      "total_registrations_electric_hybrid_cars"
     ]
   }
 ]
