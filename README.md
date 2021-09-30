@@ -14,7 +14,7 @@ Have a look at our paper for the details <https://arxiv.org/abs/2006.00888>
 
 ## Use the deployed API
 
-You can use a deployed version of ValueNet via <https://valuenet.cloudlab.zhaw.ch> or <https://inference.hackzurich2021.hack-with-admin.ch> (API only).
+You can use a deployed version of ValueNet via <https://valuenet.cloudlab.zhaw.ch>.
 This API is working with a deployed postgres database which can be found in [hack_zurich_database.dmp](data/hack_zurich/hack_zurich_database.dmp).
 
 Be aware that you use the model in a **zero-shot** way, so the model has never been fine-tuned on the specific database, but only on the ~200 databases provided in the spider dataset (<https://github.com/taoyds/spider>)
