@@ -220,6 +220,54 @@
       [
         13,
         "new electric car registrations"
+      ],
+       [
+        14,
+        "year"
+      ],
+      [
+        14,
+        "spatialunit id"
+      ],
+      [
+        14,
+        "charging stations"
+      ],
+      [
+        15,
+        "year"
+      ],
+      [
+        15,
+        "spatialunit id"
+      ],
+      [
+        15,
+        "charging stations per inh"
+      ],
+      [
+        16,
+        "year"
+      ],
+      [
+        16,
+        "spatialunit id"
+      ],
+      [
+        16,
+        "total electric cars"
+      ],
+      [
+        17,
+        "year"
+      ],
+      [
+        17,
+        "spatialunit id"
+      ],
+      [
+        17,
+        "total reg electric cars"
       ]
     ],
     "column_names_original": [
@@ -442,6 +490,54 @@
       [
         13,
         "new_electric_car_registrations"
+      ],
+      [
+        14,
+        "year"
+      ],
+      [
+        14,
+        "spatialunit_id"
+      ],
+      [
+        14,
+        "charging_stations"
+      ],
+      [
+        15,
+        "year"
+      ],
+      [
+        15,
+        "spatialunit_id"
+      ],
+      [
+        15,
+        "charging_stations_per_inh"
+      ],
+      [
+        16,
+        "year"
+      ],
+      [
+        16,
+        "spatialunit_id"
+      ],
+      [
+        16,
+        "total_electric_cars"
+      ],
+      [
+        17,
+        "year"
+      ],
+      [
+        17,
+        "spatialunit_id"
+      ],
+      [
+        17,
+        "total_reg_electric_cars"
       ]
     ],
     "column_types": [
@@ -466,40 +562,52 @@
       "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text",
       "number",
       "number",
-      "text"
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number",
+      "number"
     ],
     "db_id": "hack_zurich",
     "foreign_keys": [
@@ -554,6 +662,22 @@
       [
         53,
         3
+      ],
+      [
+        56,
+        3
+      ],
+      [
+        59,
+        3
+      ],
+      [
+        62,
+        3
+      ],
+      [
+        65,
+        3
       ]
     ],
     "primary_keys": [
@@ -574,7 +698,11 @@
       "share hybrid cars",
       "share electric cars",
       "new hybrid car registrations",
-      "new electric car registrations"
+      "new electric car registrations",
+      "charging stations electric cars",
+      "charging stations electric cars per inh",
+      "total electric hybrid cars",
+      "total registrations electric hybrid cars"
     ],
     "table_names_original": [
       "commune_type",
@@ -590,7 +718,11 @@
       "share_hybrid_cars",
       "share_electric_cars",
       "new_hybrid_car_registrations",
-      "new_electric_car_registrations"
+      "new_electric_car_registrations",
+      "charging_stations_electric_cars",
+      "charging_stations_electric_cars_per_inh",
+      "total_electric_hybrid_cars",
+      "total_registrations_electric_hybrid_cars"
     ]
   }
 ]
