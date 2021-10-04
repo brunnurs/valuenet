@@ -1,0 +1,162 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "subject_areas"
+    },
+    "children": {},
+    "label": "GetData(subject_areas)",
+    "node_id": "000000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "project_subject_areas"
+    },
+    "children": {},
+    "label": "GetData(project_subject_areas)",
+    "node_id": "000000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "subject_areas.code",
+      "attribute_name1": "project_subject_areas.subject_area"
+    },
+    "children": {
+      "000000000": "table0",
+      "000000001": "table1"
+    },
+    "label": "Merge(subject_areas.code, project_subject_areas.subject_area)",
+    "node_id": "00000000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "projects"
+    },
+    "children": {},
+    "label": "GetData(projects)",
+    "node_id": "00000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "project_subject_areas.project",
+      "attribute_name1": "projects.unics_id"
+    },
+    "children": {
+      "00000000": "table0",
+      "00000001": "table1"
+    },
+    "label": "Merge(project_subject_areas.project, projects.unics_id)",
+    "node_id": "0000000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "people"
+    },
+    "children": {},
+    "label": "GetData(people)",
+    "node_id": "0000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "projects.principal_investigator",
+      "attribute_name1": "people.unics_id"
+    },
+    "children": {
+      "0000000": "table0",
+      "0000001": "table1"
+    },
+    "label": "Merge(projects.principal_investigator, people.unics_id)",
+    "node_id": "000000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.acronym",
+      "operation": "!=",
+      "value": "CorticALS"
+    },
+    "children": {
+      "000000": "table"
+    },
+    "label": "Filter(projects.acronym, !=, CorticALS)",
+    "node_id": "00000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "subject_areas.title",
+      "operation": "=",
+      "value": "Clean coal technologies"
+    },
+    "children": {
+      "00000": "table"
+    },
+    "label": "Filter(subject_areas.title, =, Clean coal technologies)",
+    "node_id": "0000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "people.full_name"
+    },
+    "children": {
+      "0000": "result"
+    },
+    "label": "Distinct(people.full_name)",
+    "node_id": "000",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "people.full_name"
+    },
+    "children": {
+      "000": "table"
+    },
+    "label": "ExtractValues(people.full_name)",
+    "node_id": "00",
+    "operation": "ExtractValues",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {},
+    "children": {
+      "00": "table"
+    },
+    "label": "Count",
+    "node_id": "0",
+    "operation": "Count",
+    "results": [],
+    "tokens": []
+  }
+]

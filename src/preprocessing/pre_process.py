@@ -47,19 +47,17 @@ def add_value_match(token, columns_list, column_matches):
     column_matches[column_ix]['full_value_match'] = True
 
 
-def build_db_value_finder(database_path, db_name, schema_path):
-    if db_name != 'cordis_temporary':
-        return DatabaseValueFinderSQLite(database_path, db_name, schema_path)
-    else:
-        # a bit of a hack, when more postgres-db gets added for training we have to improve this.
-        config = {'database': db_name,
-                  'database_host': 'testbed.inode.igd.fraunhofer.de',
-                  'database_port': '18001',
-                  'database_user': 'postgres',
-                  'database_password': 'vdS83DJSQz2xQ',
-                  'database_schema': 'unics_cordis'}
+def build_db_value_finder(db_name, schema_path, args):
+    # If a database path is provided, we assume an SQLite database and initialize the DatabaseValueFinderSQLite.
+    # In case there is no database path we assume a bunch of connection details for the DatabaseValueFinderPostgreSQL-
 
-        return DatabaseValueFinderPostgreSQL(config['database'], schema_path, config)
+    if 'database_path' in args and args.database_path:
+        return DatabaseValueFinderSQLite(args.database_path, db_name, schema_path)
+    else:
+        connection_config = {k: v for k, v in vars(args).items() if k.startswith('database')}
+        connection_config['database'] = db_name
+
+        return DatabaseValueFinderPostgreSQL(db_name, schema_path, connection_config)
 
 
 def add_likely_value_candidates(value_candidates, potential_value_candidates):
@@ -84,7 +82,8 @@ def add_likely_value_candidates(value_candidates, potential_value_candidates):
         value_candidates))
 
 
-def lookup_database(example, ner_information, columns, question_tokens, column_matches, database_value_finder, add_values_from_ground_truth):
+def lookup_database(example, ner_information, columns, question_tokens, column_matches, database_value_finder,
+                    add_values_from_ground_truth):
     """
     Now we use the base data (database) for two things:
     * to put together a list of values from which the neural network later hase to pick the right one.
@@ -92,14 +91,16 @@ def lookup_database(example, ner_information, columns, question_tokens, column_m
     As as input we use the entities extracted by the NER and then boil it down with the help of the base data (database).
     """
 
-    potential_value_candidates = pre_process_ner_candidates(ner_information['entities'], example['question'], example['question_toks'])
+    potential_value_candidates = pre_process_ner_candidates(ner_information['entities'], example['question'],
+                                                            example['question_toks'])
 
     # Here we use the power of the base-data: if we find a potential value in the database, we mark the column we found the value in with a "full value match".
     # TODO: also use the information on table level
     include_primary_key_columns = 'id' in question_tokens
 
     # here we do the actual database lookup
-    database_matches = match_values_in_database(database_value_finder, potential_value_candidates, include_primary_key_columns)
+    database_matches = match_values_in_database(database_value_finder, potential_value_candidates,
+                                                include_primary_key_columns)
 
     # and add the hint to the corresponding column
     for value, column, table in database_matches:
@@ -241,7 +242,10 @@ def pre_process(idx, example, ner_information, db_value_finder, is_training):
                 column_matches[column_idx]['partial_column_match'] += 1
 
     # a lot of interesting stuff happens here - make sure you are aware of it!
-    value_candidates, all_values_found, column_matches = lookup_database(example, ner_information, columns, question_tokens, column_matches, db_value_finder, add_values_from_ground_truth=is_training)
+    value_candidates, all_values_found, column_matches = lookup_database(example, ner_information, columns,
+                                                                         question_tokens, column_matches,
+                                                                         db_value_finder,
+                                                                         add_values_from_ground_truth=is_training)
 
     return token_grouped, token_types, column_matches, value_candidates, all_values_found
 
@@ -249,8 +253,13 @@ def pre_process(idx, example, ner_information, db_value_finder, is_training):
 def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--data_path', type=str, help='dataset', required=True)
-    arg_parser.add_argument('--ner_data_path', type=str, help='NER results (e.g. from Google API)', required=True)
-    arg_parser.add_argument('--database_path', type=str, help='database files', required=True)
+    arg_parser.add_argument('--ner_data_path', type=str, help='NER results (e.g. from Google API), including actual values extracted from SQL', required=True)
+    arg_parser.add_argument('--database_path', type=str, help='Database file in case of SQLite', required=False)
+    arg_parser.add_argument('--database_host', type=str, help='Database host in case of PostgreSQL', required=False)
+    arg_parser.add_argument('--database_port', type=str, help='Host port in case of PostgreSQL', required=False)
+    arg_parser.add_argument('--database_user', type=str, help='Database user in case of PostgreSQL', required=False)
+    arg_parser.add_argument('--database_password', type=str, help='Database password in case of PostgreSQL', required=False)
+    arg_parser.add_argument('--database_schema', type=str, help='Database schema in case of PostgreSQL', required=False)
     arg_parser.add_argument('--table_path', type=str, help='schema data', required=True)
     arg_parser.add_argument('--output', type=str, help='output data')
     args = arg_parser.parse_args()
@@ -261,7 +270,8 @@ def main():
     with open(os.path.join(args.ner_data_path), 'r', encoding='utf-8') as json_file:
         ner_data = json.load(json_file)
 
-    assert len(data) == len(ner_data), 'Both, NER data and actual data (e.g. ner_train.json and train.json) need to have the same amount of rows!'
+    assert len(data) == len(
+        ner_data), 'Both, NER data and actual data (e.g. ner_train.json and train.json) need to have the same amount of rows!'
 
     not_found_count = 0
 
@@ -273,18 +283,22 @@ def main():
     # data = data[7646:7647]
     # ner_data = ner_data[7646:7647]
 
-    results = Parallel(n_jobs=NUM_CORES)(delayed(pre_process)(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data)))
+    results = Parallel(n_jobs=NUM_CORES)(delayed(pre_process)(idx, example, ner_information,
+                                                              build_db_value_finder(example['db_id'], args.table_path, args),
+                                                              is_training=True) for idx, (example, ner_information) in
+                                         enumerate(zip(data, ner_data)))
     # To better debug this code, use the non-parallelized version of the code
     # results = [pre_process(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
 
-    all_token_grouped, all_token_types, all_column_matches, all_value_candidates, all_complete_values_found = zip(*results)
+    all_token_grouped, all_token_types, all_column_matches, all_value_candidates, all_complete_values_found = zip(
+        *results)
 
     for example, token_grouped, token_types, column_matches, value_candidates, complete_values_found in zip(data,
-                                                                                                                all_token_grouped,
-                                                                                                                all_token_types,
-                                                                                                                all_column_matches,
-                                                                                                                all_value_candidates,
-                                                                                                                all_complete_values_found):
+                                                                                                            all_token_grouped,
+                                                                                                            all_token_types,
+                                                                                                            all_column_matches,
+                                                                                                            all_value_candidates,
+                                                                                                            all_complete_values_found):
 
         # this are the only additional information we store after pre-processing
         example['question_arg'] = token_grouped
@@ -297,7 +311,8 @@ def main():
             not_found_count += 1
 
     t.toc(msg="Total pre-processing took")
-    print(f"Could not find all values in {not_found_count} examples. All examples where values could not get extracted, will get disable on evaluation")
+    print(
+        f"Could not find all values in {not_found_count} examples. All examples where values could not get extracted, will get disable on evaluation")
 
     with open(args.output, 'w') as f:
         json.dump(data, f, sort_keys=True, indent=4)

@@ -10,7 +10,8 @@ from spacy.lang.en import English
 from config import read_arguments_manual_inference
 from intermediate_representation import semQL
 from manual_inference.helper import tokenize_question, _inference_semql, _pre_processing, _semql_to_sql, \
-    _execute_query_postgresql, get_schemas_spider, get_schemas_cordis, _is_cordis_or_spider, _execute_query_sqlite
+    _execute_query_postgresql, get_schemas_spider, get_schemas_cordis, get_data_folder_by_database, \
+    _execute_query_sqlite, get_schema_hack_zurich
 from model.model import IRNet
 from named_entity_recognition.database_value_finder.database_value_finder_postgresql import \
     DatabaseValueFinderPostgreSQL
@@ -29,7 +30,8 @@ set_seed_everywhere(args.seed, n_gpu)
 connection_config = {k: v for k, v in vars(args).items() if k.startswith('database')}
 
 schemas_raw_spider, schemas_dict_spider, schema_path_spider, database_path_spider = get_schemas_spider()
-schemas_raw_cordis, schemas_dict_cordis, schema_path_cordis, database_path_cordis = get_schemas_cordis()
+schemas_raw_cordis, schemas_dict_cordis, schema_path_cordis, _ = get_schemas_cordis()
+schemas_raw_hack_zurich, schemas_dict_hack_zurich, schema_path_hack_zurich = get_schema_hack_zurich()
 
 grammar = semQL.Grammar()
 model = IRNet(args, device, grammar)
@@ -85,6 +87,7 @@ def pose_question(database):
 
     Example (cordis): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Show me project title and cost of the project with the highest total cost", "beam_size": 5}'  http://localhost:5000/api/question/cordis_temporary
     Example (spider): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"Which bridge has been built by Zaha Hadid?", "beam_size": 5}'  http://localhost:5000/api/question/architecture
+    Example (hack_zurich): curl -i -X PUT -H "Content-Type: application/json" -H "X-API-Key: 1234" -d '{"question":"What is the share of electric cars in 2016 for Wetzikon?", "beam_size": 2}'  http://localhost:5000/api/question/hack_zurich
 
     @param database: Database to execute this query against.
     @return:
@@ -94,16 +97,24 @@ def pose_question(database):
 
     question, beam_size = _get_data_from_payload()
 
-    if _is_cordis_or_spider(database) == 'spider':
-        schemas_raw = schemas_raw_spider
-        schemas_dict = schemas_dict_spider
-        db_value_finder = DatabaseValueFinderSQLite(database_path_spider, database, schema_path_spider)
-        execute_query_func = lambda sql_to_execute: _execute_query_sqlite(sql_to_execute, database_path_spider, database)
-    else:
+    if get_data_folder_by_database(database) == 'cordis':
         schemas_raw = schemas_raw_cordis
         schemas_dict = schemas_dict_cordis
         db_value_finder = DatabaseValueFinderPostgreSQL(database, schema_path_cordis, connection_config)
-        execute_query_func = lambda sql_to_execute: _execute_query_postgresql(sql_to_execute, database, connection_config)
+        execute_query_func = lambda sql_to_execute: _execute_query_postgresql(sql_to_execute, database,
+                                                                              connection_config)
+    elif get_data_folder_by_database(database) == 'hack_zurich':
+        schemas_raw = schemas_raw_hack_zurich
+        schemas_dict = schemas_dict_hack_zurich
+        db_value_finder = DatabaseValueFinderPostgreSQL(database, schema_path_hack_zurich, connection_config)
+        execute_query_func = lambda sql_to_execute: _execute_query_postgresql(sql_to_execute, database,
+                                                                              connection_config)
+    else:
+        schemas_raw = schemas_raw_spider
+        schemas_dict = schemas_dict_spider
+        db_value_finder = DatabaseValueFinderSQLite(database_path_spider, database, schema_path_spider)
+        execute_query_func = lambda sql_to_execute: _execute_query_sqlite(sql_to_execute, database_path_spider,
+                                                                          database)
 
     example = {
         'question': question,
@@ -116,7 +127,7 @@ def pose_question(database):
 
     example_merged, _ = merge_data_with_schema(schemas_raw, [example])
 
-    example_pre_processed = _pre_processing(example_merged[0], db_value_finder)
+    example_pre_processed = _pre_processing(example_merged[0], db_value_finder, args.ner_api_secret)
 
     print(f"we found the following potential values in the question: {example_pre_processed['values']}")
 

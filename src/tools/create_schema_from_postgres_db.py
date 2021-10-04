@@ -134,7 +134,7 @@ if __name__ == '__main__':
     parser.add_argument('--database_host', default='testbed.inode.igd.fraunhofer.de', type=str)
     parser.add_argument('--database_port', default='18001', type=str)
     parser.add_argument('--database_user', default='postgres', type=str)
-    parser.add_argument('--database_password', default='vdS83DJSQz2xQ', type=str)
+    parser.add_argument('--database_password', default='dummy_password', type=str)
     parser.add_argument('--database', default='oncomx_v1_0_25_small', type=str)
     parser.add_argument('--database_schema', default='oncomx_v1_0_25', type=str)
 

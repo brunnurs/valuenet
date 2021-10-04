@@ -1,0 +1,97 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "funding_schemes"
+    },
+    "children": {},
+    "label": "GetData(funding_schemes)",
+    "node_id": "000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "funding_schemes.title",
+      "operation": "!=",
+      "value": "Cooperation network contracts"
+    },
+    "children": {
+      "000000": "table"
+    },
+    "label": "Filter(funding_schemes.title, !=, Cooperation network contracts)",
+    "node_id": "00000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "projects"
+    },
+    "children": {},
+    "label": "GetData(projects)",
+    "node_id": "00001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "funding_schemes.code",
+      "attribute_name1": "projects.ec_fund_scheme"
+    },
+    "children": {
+      "00000": "table0",
+      "00001": "table1"
+    },
+    "label": "Merge(funding_schemes.code, projects.ec_fund_scheme)",
+    "node_id": "0000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.start_date",
+      "operation": "!=",
+      "value": "2012-06-25"
+    },
+    "children": {
+      "0000": "table"
+    },
+    "label": "Filter(projects.start_date, !=, 2012-06-25)",
+    "node_id": "000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.unics_id"
+    },
+    "children": {
+      "000": "result"
+    },
+    "label": "Distinct(projects.unics_id)",
+    "node_id": "00",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.total_cost"
+    },
+    "children": {
+      "00": "table"
+    },
+    "label": "Average(projects.total_cost)",
+    "node_id": "0",
+    "operation": "Average",
+    "results": [],
+    "tokens": []
+  }
+]

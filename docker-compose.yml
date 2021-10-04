@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: hack_zurich
+      POSTGRES_USER: hack_zurich
+      POSTGRES_PASSWORD: hack_zurich
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/hack_zurich:/var/dumps
+
+  adminer:
+    image: adminer:4.8.1
+    ports:
+      - 8080:8080
+    links:
+      - postgres
+
+  valuenet:
+    image: ursinbrunner/valuenet-inference-hack-zurich:1.0 
+    runtime: nvidia
+    environment:
+      API_KEY: 'sjNmaCtviYzXWlS'
+      DB_USER: hack_zurich
+      DB_PW: hack_zurich
+      DB_HOST: postgres
+      DB_SCHEMA: public
+      DB_PORT: '5432'
+      NER_API_SECRET: 'YOUR_API_TOKEN_HERE'
+    ports:
+      - 5000:5000 

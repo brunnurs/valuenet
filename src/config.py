@@ -37,10 +37,10 @@ def _add_model_configuration(parser):
 
 
 def _add_postgresql_configuration(parser):
-    parser.add_argument('--database_host', default='testbed.inode.igd.fraunhofer.de', type=str)
+    parser.add_argument('--database_host', default='localhost', type=str)
     parser.add_argument('--database_port', default='18001', type=str)
     parser.add_argument('--database_user', default='postgres', type=str)
-    parser.add_argument('--database_password', default='vdS83DJSQz2xQ', type=str)
+    parser.add_argument('--database_password', default='dummy', type=str)
     parser.add_argument('--database_schema', default='unics_cordis', type=str)
 
 
@@ -69,6 +69,9 @@ def read_arguments_train():
     parser.add_argument('--clip_grad', default=5., type=float)
     parser.add_argument('--loss_epoch_threshold', default=50, type=int)
     parser.add_argument('--sketch_loss_weight', default=1.0, type=float)
+
+    parser.add_argument('--run_spider_evaluation_after_epoch', action='store_true', default=False,
+                        help='Run evaluation on the spider test suite after each epoch. If false, only accuracy/sketch_accuracy on the SemQL result is calculated.')
 
     # prediction configuration (run after each epoch)
     parser.add_argument('--beam_size', default=5, type=int, help='beam size for beam search')
@@ -136,6 +139,7 @@ def read_arguments_manual_inference():
     # manual_inference
     parser.add_argument('--model_to_load', type=str)
     parser.add_argument('--api_key', default='1234', type=str)
+    parser.add_argument('--ner_api_secret', default='PLEASE_ADD_YOUR_OWN_GOOGLE_API_KEY_HERE', type=str)
 
     # database configuration (in case of PostgreSQL, not needed for sqlite)
     _add_postgresql_configuration(parser)

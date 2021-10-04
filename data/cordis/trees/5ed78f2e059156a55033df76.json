@@ -1,0 +1,267 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "erc_research_domains"
+    },
+    "children": {},
+    "label": "GetData(erc_research_domains)",
+    "node_id": "000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": [
+      "19",
+      "20",
+      "21",
+      "33"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name": "erc_research_domains.description",
+      "operation": "=",
+      "value": "Social Sciences And Humanities"
+    },
+    "children": {
+      "000000": "table"
+    },
+    "label": "Filter(erc_research_domains.description, =, Social Sciences And Humanities)",
+    "node_id": "00000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": [
+      "33",
+      "35",
+      "36",
+      "37",
+      "38"
+    ]
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "erc_panels"
+    },
+    "children": {},
+    "label": "GetData(erc_panels)",
+    "node_id": "00001000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": [
+      "19",
+      "20",
+      "21",
+      "22",
+      "32",
+      "37",
+      "39"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name": "erc_panels.description",
+      "operation": "=",
+      "value": "The Human Mind and its complexity"
+    },
+    "children": {
+      "00001000": "table"
+    },
+    "label": "Filter(erc_panels.description, =, The Human Mind and its complexity)",
+    "node_id": "0000100",
+    "operation": "Filter",
+    "results": [],
+    "tokens": [
+      "22",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "29"
+    ]
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "project_erc_panels"
+    },
+    "children": {},
+    "label": "GetData(project_erc_panels)",
+    "node_id": "0000101",
+    "operation": "GetData",
+    "results": [],
+    "tokens": [
+      "19",
+      "20",
+      "21",
+      "22"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name0": "erc_panels.code",
+      "attribute_name1": "project_erc_panels.panel"
+    },
+    "children": {
+      "0000100": "table0",
+      "0000101": "table1"
+    },
+    "label": "Merge(erc_panels.code, project_erc_panels.panel)",
+    "node_id": "000010",
+    "operation": "Merge",
+    "results": [],
+    "tokens": [
+      "6",
+      "19",
+      "20",
+      "21",
+      "22"
+    ]
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "projects"
+    },
+    "children": {},
+    "label": "GetData(projects)",
+    "node_id": "00001100",
+    "operation": "GetData",
+    "results": [],
+    "tokens": [
+      "6"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.total_cost",
+      "operation": "<",
+      "value": 2477105.6
+    },
+    "children": {
+      "00001100": "table"
+    },
+    "label": "Filter(projects.total_cost, <, 2477105.6)",
+    "node_id": "0000110",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "people"
+    },
+    "children": {},
+    "label": "GetData(people)",
+    "node_id": "0000111",
+    "operation": "GetData",
+    "results": [],
+    "tokens": [
+      "3"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name0": "projects.principal_investigator",
+      "attribute_name1": "people.unics_id"
+    },
+    "children": {
+      "0000110": "table0",
+      "0000111": "table1"
+    },
+    "label": "Merge(projects.principal_investigator, people.unics_id)",
+    "node_id": "000011",
+    "operation": "Merge",
+    "results": [],
+    "tokens": [
+      "3"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name0": "project_erc_panels.project",
+      "attribute_name1": "projects.unics_id"
+    },
+    "children": {
+      "000010": "table0",
+      "000011": "table1"
+    },
+    "label": "Merge(project_erc_panels.project, projects.unics_id)",
+    "node_id": "00001",
+    "operation": "Merge",
+    "results": [],
+    "tokens": [
+      "6",
+      "19",
+      "20",
+      "21",
+      "22"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name0": "erc_research_domains.code",
+      "attribute_name1": "erc_panels.part_of"
+    },
+    "children": {
+      "00000": "table0",
+      "00001": "table1"
+    },
+    "label": "Merge(erc_research_domains.code, erc_panels.part_of)",
+    "node_id": "0000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": [
+      "19",
+      "20",
+      "21",
+      "22",
+      "33"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name": "people.full_name"
+    },
+    "children": {
+      "0000": "result"
+    },
+    "label": "Distinct(people.full_name)",
+    "node_id": "000",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": [
+      "3"
+    ]
+  },
+  {
+    "arguments": {
+      "attribute_name": "people.full_name"
+    },
+    "children": {
+      "000": "table"
+    },
+    "label": "ExtractValues(people.full_name)",
+    "node_id": "00",
+    "operation": "ExtractValues",
+    "results": [],
+    "tokens": [
+      "1"
+    ]
+  },
+  {
+    "arguments": {},
+    "children": {
+      "00": "table"
+    },
+    "label": "Count",
+    "node_id": "0",
+    "operation": "Count",
+    "results": [],
+    "tokens": [
+      "0",
+      "1"
+    ]
+  }
+]

@@ -1,0 +1,139 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "eu_territorial_units"
+    },
+    "children": {},
+    "label": "GetData(eu_territorial_units)",
+    "node_id": "00000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "project_members"
+    },
+    "children": {},
+    "label": "GetData(project_members)",
+    "node_id": "00000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "eu_territorial_units.geocode_regions",
+      "attribute_name1": "project_members.geocode_regions_3"
+    },
+    "children": {
+      "00000000": "table0",
+      "00000001": "table1"
+    },
+    "label": "Merge(eu_territorial_units.geocode_regions, project_members.geocode_regions_3)",
+    "node_id": "0000000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "eu_territorial_units.description",
+      "operation": "=",
+      "value": "Sheffield"
+    },
+    "children": {
+      "0000000": "table"
+    },
+    "label": "Filter(eu_territorial_units.description, =, Sheffield)",
+    "node_id": "000000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "projects"
+    },
+    "children": {},
+    "label": "GetData(projects)",
+    "node_id": "000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "project_members.project",
+      "attribute_name1": "projects.unics_id"
+    },
+    "children": {
+      "000000": "table0",
+      "000001": "table1"
+    },
+    "label": "Merge(project_members.project, projects.unics_id)",
+    "node_id": "00000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "project_members.department_name",
+      "operation": "!=",
+      "value": "Agrotechnology and Food Science Group"
+    },
+    "children": {
+      "00000": "table"
+    },
+    "label": "Filter(project_members.department_name, !=, Agrotechnology and Food Science Group)",
+    "node_id": "0000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.end_date",
+      "operation": "<=",
+      "value": "2010-11-17"
+    },
+    "children": {
+      "0000": "table"
+    },
+    "label": "Filter(projects.end_date, <=, 2010-11-17)",
+    "node_id": "000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.unics_id"
+    },
+    "children": {
+      "000": "result"
+    },
+    "label": "Distinct(projects.unics_id)",
+    "node_id": "00",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.total_cost"
+    },
+    "children": {
+      "00": "table"
+    },
+    "label": "Average(projects.total_cost)",
+    "node_id": "0",
+    "operation": "Average",
+    "results": [],
+    "tokens": []
+  }
+]

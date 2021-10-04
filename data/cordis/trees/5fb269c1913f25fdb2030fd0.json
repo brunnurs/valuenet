@@ -1,0 +1,178 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "countries"
+    },
+    "children": {},
+    "label": "GetData(countries)",
+    "node_id": "000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "countries.country_name",
+      "operation": "=",
+      "value": "Wallis and Futuna"
+    },
+    "children": {
+      "000000": "table"
+    },
+    "label": "Filter(countries.country_name, =, Wallis and Futuna)",
+    "node_id": "00000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "institutions"
+    },
+    "children": {},
+    "label": "GetData(institutions)",
+    "node_id": "0000100",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "eu_territorial_units"
+    },
+    "children": {},
+    "label": "GetData(eu_territorial_units)",
+    "node_id": "00001010",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "project_members"
+    },
+    "children": {},
+    "label": "GetData(project_members)",
+    "node_id": "00001011",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "eu_territorial_units.geocode_regions",
+      "attribute_name1": "project_members.geocode_regions_3"
+    },
+    "children": {
+      "00001010": "table0",
+      "00001011": "table1"
+    },
+    "label": "Merge(eu_territorial_units.geocode_regions, project_members.geocode_regions_3)",
+    "node_id": "0000101",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "institutions.geocode_regions_3",
+      "attribute_name1": "eu_territorial_units.geocode_regions"
+    },
+    "children": {
+      "0000100": "table0",
+      "0000101": "table1"
+    },
+    "label": "Merge(institutions.geocode_regions_3, eu_territorial_units.geocode_regions)",
+    "node_id": "000010",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "institutions.acronym",
+      "operation": "=",
+      "value": "CED"
+    },
+    "children": {
+      "000010": "table"
+    },
+    "label": "Filter(institutions.acronym, =, CED)",
+    "node_id": "00001",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "countries.unics_id",
+      "attribute_name1": "institutions.country_id"
+    },
+    "children": {
+      "00000": "table0",
+      "00001": "table1"
+    },
+    "label": "Merge(countries.unics_id, institutions.country_id)",
+    "node_id": "0000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "projects"
+    },
+    "children": {},
+    "label": "GetData(projects)",
+    "node_id": "0001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "project_members.project",
+      "attribute_name1": "projects.unics_id"
+    },
+    "children": {
+      "0000": "table0",
+      "0001": "table1"
+    },
+    "label": "Merge(project_members.project, projects.unics_id)",
+    "node_id": "000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.unics_id"
+    },
+    "children": {
+      "000": "result"
+    },
+    "label": "Distinct(projects.unics_id)",
+    "node_id": "00",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.total_cost"
+    },
+    "children": {
+      "00": "table"
+    },
+    "label": "Average(projects.total_cost)",
+    "node_id": "0",
+    "operation": "Average",
+    "results": [],
+    "tokens": []
+  }
+]

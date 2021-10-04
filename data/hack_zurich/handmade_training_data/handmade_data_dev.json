@@ -1,0 +1,7 @@
+[
+  {
+    "db_id": "hack_zurich",
+    "query": "select tel from spatialunit where name = 'Urdorf'",
+    "question": "What is the telephone number of Urdorf?"
+  }
+]

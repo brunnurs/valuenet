@@ -35,4 +35,13 @@ ENV PYTHONPATH /workspace/src
 
 WORKDIR /workspace
 
-ENTRYPOINT python src/manual_inference/manual_inference_api.py --api_key=$API_KEY --model_to_load=models/best_model.pt --database_host=testbed.inode.igd.fraunhofer.de --database_port=18001 --database_user=postgres --database_password=$DB_PW --database_schema=unics_cordis
+ENV API_KEY 1234
+ENV MODEL_TO_LOAD models/best_model.pt
+ENV DB_HOST localhost
+ENV DB_PORT 5432
+ENV DB_USER postgres
+ENV DB_PW dummy
+ENV DB_SCHEMA public
+ENV NER_API_SECRET PLEASE_ADD_YOUR_OWN_GOOGLE_API_KEY_HERE
+
+ENTRYPOINT python src/manual_inference/manual_inference_api.py --api_key=$API_KEY --model_to_load=$MODEL_TO_LOAD --ner_api_secret=$NER_API_SECRET --database_host=$DB_HOST --database_port=$DB_PORT --database_user=$DB_USER --database_password=$DB_PW --database_schema=$DB_SCHEMA
