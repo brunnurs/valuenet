@@ -1,0 +1,78 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "project_topics"
+    },
+    "children": {},
+    "label": "GetData(project_topics)",
+    "node_id": "00000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "topics"
+    },
+    "children": {},
+    "label": "GetData(topics)",
+    "node_id": "00001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "project_topics.topic",
+      "attribute_name1": "topics.code"
+    },
+    "children": {
+      "00000": "table0",
+      "00001": "table1"
+    },
+    "label": "Merge(project_topics.topic, topics.code)",
+    "node_id": "0000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "topics.title"
+    },
+    "children": {
+      "0000": "result"
+    },
+    "label": "Distinct(topics.title)",
+    "node_id": "000",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "topics.title"
+    },
+    "children": {
+      "000": "table"
+    },
+    "label": "ExtractValues(topics.title)",
+    "node_id": "00",
+    "operation": "ExtractValues",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {},
+    "children": {
+      "00": "table"
+    },
+    "label": "Count",
+    "node_id": "0",
+    "operation": "Count",
+    "results": [],
+    "tokens": []
+  }
+]

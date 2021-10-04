@@ -1,0 +1,3461 @@
+[
+  {
+    "entities": [
+      {
+        "name": "cost",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.6501277,
+        "mentions": [
+          {
+            "text": {
+              "content": "cost",
+              "beginOffset": 15
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Theseus",
+        "type": "PERSON",
+        "metadata": {
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Theseus",
+          "mid": "/m/07pdy"
+        },
+        "salience": 0.19961739,
+        "mentions": [
+          {
+            "text": {
+              "content": "Theseus",
+              "beginOffset": 35
+            },
+            "type": "PROPER"
+          }
+        ]
+      },
+      {
+        "name": "project",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.15025488,
+        "mentions": [
+          {
+            "text": {
+              "content": "project",
+              "beginOffset": 27
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find the total cost of the project Theseus",
+    "values": [
+      "Theseus"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "project",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3932472,
+        "mentions": [
+          {
+            "text": {
+              "content": "project",
+              "beginOffset": 19
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "cost",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.30744755,
+        "mentions": [
+          {
+            "text": {
+              "content": "cost",
+              "beginOffset": 11
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Theseus",
+        "type": "PERSON",
+        "metadata": {
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Theseus",
+          "mid": "/m/07pdy"
+        },
+        "salience": 0.17099527,
+        "mentions": [
+          {
+            "text": {
+              "content": "Theseus",
+              "beginOffset": 38
+            },
+            "type": "PROPER"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.12831,
+        "mentions": [
+          {
+            "text": {
+              "content": "title",
+              "beginOffset": 32
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show total cost of project with title Theseus",
+    "values": [
+      "Theseus"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.82643616,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 24
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "acronyms",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.17356384,
+        "mentions": [
+          {
+            "text": {
+              "content": "acronyms",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2018",
+        "type": "DATE",
+        "metadata": {
+          "year": "2018"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2018",
+              "beginOffset": 49
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2018",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2018"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2018",
+              "beginOffset": 49
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me the acronyms of projects that started in 2018",
+    "values": [
+      "2018"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "acronyms",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.62021476,
+        "mentions": [
+          {
+            "text": {
+              "content": "acronyms",
+              "beginOffset": 4
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3797852,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 16
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2018",
+        "type": "DATE",
+        "metadata": {
+          "year": "2018"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2018",
+              "beginOffset": 38
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2018",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2018"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2018",
+              "beginOffset": 38
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Get acronyms of projects beginning in 2018",
+    "values": [
+      "2018"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.82643616,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 22
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "titles",
+        "type": "WORK_OF_ART",
+        "metadata": {},
+        "salience": 0.17356384,
+        "mentions": [
+          {
+            "text": {
+              "content": "titles",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2016",
+        "type": "DATE",
+        "metadata": {
+          "year": "2016"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2016",
+              "beginOffset": 51
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2016",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2016"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2016",
+              "beginOffset": 51
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me the titles of projects that started before 2016",
+    "values": [
+      "2016"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "titles",
+        "type": "WORK_OF_ART",
+        "metadata": {},
+        "salience": 0.83829826,
+        "mentions": [
+          {
+            "text": {
+              "content": "titles",
+              "beginOffset": 5
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.16170174,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 15
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2016",
+        "type": "DATE",
+        "metadata": {
+          "year": "2016"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2016",
+              "beginOffset": 51
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2016",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2016"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2016",
+              "beginOffset": 51
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find titles of projects which started earlier than 2016",
+    "values": [
+      "2016"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "institutions",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.58863026,
+        "mentions": [
+          {
+            "text": {
+              "content": "institutions",
+              "beginOffset": 5
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "region",
+        "type": "LOCATION",
+        "metadata": {},
+        "salience": 0.27860293,
+        "mentions": [
+          {
+            "text": {
+              "content": "region",
+              "beginOffset": 27
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Nordjylland",
+        "type": "LOCATION",
+        "metadata": {
+          "mid": "/m/07kp4c",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/North_Jutland_Region"
+        },
+        "salience": 0.13276677,
+        "mentions": [
+          {
+            "text": {
+              "content": "Nordjylland",
+              "beginOffset": 37
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find institutions from the region of Nordjylland",
+    "values": [
+      "Nordjylland"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "institutions",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.44872507,
+        "mentions": [
+          {
+            "text": {
+              "content": "institutions",
+              "beginOffset": 17
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.35299426,
+        "mentions": [
+          {
+            "text": {
+              "content": "name",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Nordjylland",
+        "type": "LOCATION",
+        "metadata": {
+          "mid": "/m/07kp4c",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/North_Jutland_Region"
+        },
+        "salience": 0.19828066,
+        "mentions": [
+          {
+            "text": {
+              "content": "Nordjylland",
+              "beginOffset": 39
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the name of institutions based in Nordjylland",
+    "values": [
+      "Nordjylland"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.4080682,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 44
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.39561608,
+        "mentions": [
+          {
+            "text": {
+              "content": "name",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "investigators",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.1963157,
+        "mentions": [
+          {
+            "text": {
+              "content": "investigators",
+              "beginOffset": 27
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "DATE",
+        "metadata": {
+          "year": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 69
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 69
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find the name of principal investigators in projects that started in 2014",
+    "values": [
+      "2014"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "investigators",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.6551911,
+        "mentions": [
+          {
+            "text": {
+              "content": "people",
+              "beginOffset": 22
+            },
+            "type": "COMMON"
+          },
+          {
+            "text": {
+              "content": "investigators",
+              "beginOffset": 35
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.1735843,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 52
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.1712246,
+        "mentions": [
+          {
+            "text": {
+              "content": "name",
+              "beginOffset": 14
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "DATE",
+        "metadata": {
+          "year": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 75
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 75
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the full name of people being investigators in projects that began in 2014",
+    "values": [
+      "2014"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.7373552,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 5
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "subject area",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.21646754,
+        "mentions": [
+          {
+            "text": {
+              "content": "subject area",
+              "beginOffset": 20
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Mathematics and Statistics",
+        "type": "WORK_OF_ART",
+        "metadata": {},
+        "salience": 0.04617727,
+        "mentions": [
+          {
+            "text": {
+              "content": "Mathematics and Statistics",
+              "beginOffset": 39
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find projects whose subject area is \u201cMathematics and Statistics\u201d",
+    "values": [
+      "Mathematics and Statistics"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "Mathematics and Statistics",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.306785,
+        "mentions": [
+          {
+            "text": {
+              "content": "subject area",
+              "beginOffset": 63
+            },
+            "type": "COMMON"
+          },
+          {
+            "text": {
+              "content": "Mathematics and Statistics",
+              "beginOffset": 79
+            },
+            "type": "PROPER"
+          }
+        ]
+      },
+      {
+        "name": "acronym",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.2613015,
+        "mentions": [
+          {
+            "text": {
+              "content": "acronym",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "area",
+        "type": "LOCATION",
+        "metadata": {},
+        "salience": 0.15512182,
+        "mentions": [
+          {
+            "text": {
+              "content": "area",
+              "beginOffset": 29
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.13918583,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 49
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "description",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.13760586,
+        "mentions": [
+          {
+            "text": {
+              "content": "description",
+              "beginOffset": 34
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the acronym and subject area description of projects with subject area \u201cMathematics and Statistics\u201d",
+    "values": [
+      "Mathematics and Statistics"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.7400851,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 29
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "topics",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.25991485,
+        "mentions": [
+          {
+            "text": {
+              "content": "topics",
+              "beginOffset": 19
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "DATE",
+        "metadata": {
+          "year": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 52
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 52
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find all different topics of projects that ended in 2014",
+    "values": [
+      "2014"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "topics",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.48085275,
+        "mentions": [
+          {
+            "text": {
+              "content": "topics",
+              "beginOffset": 24
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "titles",
+        "type": "WORK_OF_ART",
+        "metadata": {},
+        "salience": 0.34697074,
+        "mentions": [
+          {
+            "text": {
+              "content": "titles",
+              "beginOffset": 14
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.17217651,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 34
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "DATE",
+        "metadata": {
+          "year": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 62
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2014",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2014"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2014",
+              "beginOffset": 62
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find distinct titles of topics of projects that with end year 2014",
+    "values": [
+      "2014"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.41382492,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 20
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "acronym",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3235356,
+        "mentions": [
+          {
+            "text": {
+              "content": "acronym",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "member",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.13502416,
+        "mentions": [
+          {
+            "text": {
+              "content": "member",
+              "beginOffset": 36
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Greece",
+        "type": "LOCATION",
+        "metadata": {
+          "mid": "/m/035qy",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Greece"
+        },
+        "salience": 0.12761532,
+        "mentions": [
+          {
+            "text": {
+              "content": "Greece",
+              "beginOffset": 48
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the acronym of projects with a member from Greece",
+    "values": [
+      "Greece"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "Show names",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.5998837,
+        "mentions": [
+          {
+            "text": {
+              "content": "Show names",
+              "beginOffset": 0
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "institutions",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.19858399,
+        "mentions": [
+          {
+            "text": {
+              "content": "institutions",
+              "beginOffset": 14
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "France",
+        "type": "LOCATION",
+        "metadata": {
+          "mid": "/m/0f8l9c",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/France"
+        },
+        "salience": 0.11422277,
+        "mentions": [
+          {
+            "text": {
+              "content": "France",
+              "beginOffset": 32
+            },
+            "type": "PROPER"
+          }
+        ]
+      },
+      {
+        "name": "Germany",
+        "type": "LOCATION",
+        "metadata": {
+          "mid": "/m/0345h",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Germany"
+        },
+        "salience": 0.0873096,
+        "mentions": [
+          {
+            "text": {
+              "content": "Germany",
+              "beginOffset": 42
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show names of institutions from France or Germany",
+    "values": [
+      "France",
+      "Germany"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "Show names",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.50059843,
+        "mentions": [
+          {
+            "text": {
+              "content": "Show names",
+              "beginOffset": 0
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "institutions",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.44772995,
+        "mentions": [
+          {
+            "text": {
+              "content": "institutions",
+              "beginOffset": 14
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "France",
+        "type": "LOCATION",
+        "metadata": {
+          "wikipedia_url": "https://en.wikipedia.org/wiki/France",
+          "mid": "/m/0f8l9c"
+        },
+        "salience": 0.051671628,
+        "mentions": [
+          {
+            "text": {
+              "content": "France",
+              "beginOffset": 46
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show names of institutions which are not from France",
+    "values": [
+      "France"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 1,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 10
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2016",
+        "type": "DATE",
+        "metadata": {
+          "year": "2016"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2016",
+              "beginOffset": 35
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2016",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2016"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2016",
+              "beginOffset": 35
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Count the projects that started in 2016",
+    "values": [
+      "2016"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "project",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.43392,
+        "mentions": [
+          {
+            "text": {
+              "content": "project",
+              "beginOffset": 22
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3413477,
+        "mentions": [
+          {
+            "text": {
+              "content": "title",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "cost",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.22473232,
+        "mentions": [
+          {
+            "text": {
+              "content": "cost",
+              "beginOffset": 53
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the title of the project with the highest total cost",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.31119588,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 28
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "members",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.27417228,
+        "mentions": [
+          {
+            "text": {
+              "content": "members",
+              "beginOffset": 17
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.2167346,
+        "mentions": [
+          {
+            "text": {
+              "content": "name",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "project cost",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.19789726,
+        "mentions": [
+          {
+            "text": {
+              "content": "project cost",
+              "beginOffset": 67
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the name of members in projects costing less than the average project cost.",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "id",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.56344163,
+        "mentions": [
+          {
+            "text": {
+              "content": "id",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.28760454,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 15
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "members",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.14895381,
+        "mentions": [
+          {
+            "text": {
+              "content": "members",
+              "beginOffset": 42
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "100",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "100"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "100",
+              "beginOffset": 38
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find the id of projects with at least 100 members",
+    "values": [
+      "100"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "code",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.47716337,
+        "mentions": [
+          {
+            "text": {
+              "content": "code",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "funding scheme",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.23839548,
+        "mentions": [
+          {
+            "text": {
+              "content": "funding scheme",
+              "beginOffset": 31
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.15342005,
+        "mentions": [
+          {
+            "text": {
+              "content": "title",
+              "beginOffset": 18
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "number",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.0765879,
+        "mentions": [
+          {
+            "text": {
+              "content": "number",
+              "beginOffset": 71
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.0544332,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 81
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find the code and title of the funding scheme which funded the highest number of projects.",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.56278056,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 28
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "costs",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.43721944,
+        "mentions": [
+          {
+            "text": {
+              "content": "costs",
+              "beginOffset": 15
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the total costs of all projects",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.73049414,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 21
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.26950583,
+        "mentions": [
+          {
+            "text": {
+              "content": "title",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "2006",
+        "type": "DATE",
+        "metadata": {
+          "year": "2006"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2006",
+              "beginOffset": 76
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "2006",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2006"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2006",
+              "beginOffset": 76
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me the title of projects which have an end year and a start year after 2006",
+    "values": [
+      "2006"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 1,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find the projects which lasted the longest and have an end year and a start year",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "titles",
+        "type": "WORK_OF_ART",
+        "metadata": {},
+        "salience": 0.6897504,
+        "mentions": [
+          {
+            "text": {
+              "content": "titles",
+              "beginOffset": 14
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "materials",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.31024966,
+        "mentions": [
+          {
+            "text": {
+              "content": "materials",
+              "beginOffset": 44
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me topic titles which starts with 'Raw materials'",
+    "values": [
+      "Raw materials"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "titles",
+        "type": "WORK_OF_ART",
+        "metadata": {},
+        "salience": 0.6334305,
+        "mentions": [
+          {
+            "text": {
+              "content": "titles",
+              "beginOffset": 14
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "climate",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.25216478,
+        "mentions": [
+          {
+            "text": {
+              "content": "climate",
+              "beginOffset": 45
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "word",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.1144047,
+        "mentions": [
+          {
+            "text": {
+              "content": "word",
+              "beginOffset": 39
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me topic titles which contain the word 'climate'",
+    "values": [
+      "climate"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "Thomas Bell",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.45405987,
+        "mentions": [
+          {
+            "text": {
+              "content": "Thomas Bell",
+              "beginOffset": 37
+            },
+            "type": "PROPER"
+          },
+          {
+            "text": {
+              "content": "principal investigator",
+              "beginOffset": 53
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.40789673,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 22
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "number",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.13804342,
+        "mentions": [
+          {
+            "text": {
+              "content": "number",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me the number of projects where Thomas Bell was principal investigator",
+    "values": [
+      "Thomas Bell"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "people",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.5843116,
+        "mentions": [
+          {
+            "text": {
+              "content": "people",
+              "beginOffset": 35
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "names",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.4156884,
+        "mentions": [
+          {
+            "text": {
+              "content": "names",
+              "beginOffset": 26
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me the all different names of people",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.47473294,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 20
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "acronym",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3612398,
+        "mentions": [
+          {
+            "text": {
+              "content": "acronym",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "costs",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.16402729,
+        "mentions": [
+          {
+            "text": {
+              "content": "costs",
+              "beginOffset": 46
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "200000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "200000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "200000",
+              "beginOffset": 71
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "100000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "100000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "100000",
+              "beginOffset": 60
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find the acronym of projects which have total costs between 100000 and 200000",
+    "values": [
+      "100000",
+      "200000"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.36847213,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 18
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "costs",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3416654,
+        "mentions": [
+          {
+            "text": {
+              "content": "costs",
+              "beginOffset": 32
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.28986245,
+        "mentions": [
+          {
+            "text": {
+              "content": "title",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "1000000",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1000000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "1000000",
+              "beginOffset": 50
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the title of projects with costs higher than 1000000",
+    "values": [
+      "1000000"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.36597633,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 18
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "costs",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.34301564,
+        "mentions": [
+          {
+            "text": {
+              "content": "costs",
+              "beginOffset": 32
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.291008,
+        "mentions": [
+          {
+            "text": {
+              "content": "title",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "a million",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "1000000"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "a million",
+              "beginOffset": 50
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the title of projects with costs higher than a million",
+    "values": [
+      "1000000"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "project title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.5031796,
+        "mentions": [
+          {
+            "text": {
+              "content": "project title",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "member name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.25709236,
+        "mentions": [
+          {
+            "text": {
+              "content": "member name",
+              "beginOffset": 27
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "partner role",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.13008493,
+        "mentions": [
+          {
+            "text": {
+              "content": "partner role",
+              "beginOffset": 62
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "member",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.10964309,
+        "mentions": [
+          {
+            "text": {
+              "content": "member",
+              "beginOffset": 49
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show the project title and member name where the member has a partner role ",
+    "values": [
+      "partner"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "research domains",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 1,
+        "mentions": [
+          {
+            "text": {
+              "content": "research domains",
+              "beginOffset": 15
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "What different research domains do exist?",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "institutes",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.5646831,
+        "mentions": [
+          {
+            "text": {
+              "content": "institutes",
+              "beginOffset": 32
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "country name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.4353169,
+        "mentions": [
+          {
+            "text": {
+              "content": "country name",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me the country name of all institutes.",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "country",
+        "type": "LOCATION",
+        "metadata": {},
+        "salience": 0.6225086,
+        "mentions": [
+          {
+            "text": {
+              "content": "country",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "institutes",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.3774914,
+        "mentions": [
+          {
+            "text": {
+              "content": "institutes",
+              "beginOffset": 27
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me the country of all institutes.",
+    "values": []
+  },
+  {
+    "entities": [
+      {
+        "name": "country code",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.4695476,
+        "mentions": [
+          {
+            "text": {
+              "content": "country code",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "country code",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3740361,
+        "mentions": [
+          {
+            "text": {
+              "content": "country code",
+              "beginOffset": 31
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Andorra",
+        "type": "LOCATION",
+        "metadata": {
+          "mid": "/m/0hg5",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Andorra"
+        },
+        "salience": 0.15641631,
+        "mentions": [
+          {
+            "text": {
+              "content": "Andorra",
+              "beginOffset": 50
+            },
+            "type": "PROPER"
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "2"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "2",
+              "beginOffset": 25
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "type": "NUMBER",
+        "metadata": {
+          "value": "3"
+        },
+        "salience": 0,
+        "mentions": [
+          {
+            "text": {
+              "content": "3",
+              "beginOffset": 44
+            },
+            "type": "TYPE_UNKNOWN"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "What is the country code 2 and country code 3 for Andorra?",
+    "values": [
+      "Andorra"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "code",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.6120511,
+        "mentions": [
+          {
+            "text": {
+              "content": "code",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "funding scheme",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.2896882,
+        "mentions": [
+          {
+            "text": {
+              "content": "funding scheme",
+              "beginOffset": 21
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Framework Partnership Agreement",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.09826066,
+        "mentions": [
+          {
+            "text": {
+              "content": "Framework Partnership Agreement",
+              "beginOffset": 40
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find the code of the funding scheme for Framework Partnership Agreement",
+    "values": [
+      "Framework Partnership Agreement"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "program",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.6612411,
+        "mentions": [
+          {
+            "text": {
+              "content": "program",
+              "beginOffset": 30
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.22839126,
+        "mentions": [
+          {
+            "text": {
+              "content": "title",
+              "beginOffset": 17
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Transport",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.11036761,
+        "mentions": [
+          {
+            "text": {
+              "content": "Transport",
+              "beginOffset": 55
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show me the full title of the program which is called 'Transport' in short.",
+    "values": [
+      "Transport"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "member name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3248793,
+        "mentions": [
+          {
+            "text": {
+              "content": "member name",
+              "beginOffset": 5
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "project members",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.16044737,
+        "mentions": [
+          {
+            "text": {
+              "content": "project members",
+              "beginOffset": 34
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "role",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.15227036,
+        "mentions": [
+          {
+            "text": {
+              "content": "role",
+              "beginOffset": 21
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "code",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.15227036,
+        "mentions": [
+          {
+            "text": {
+              "content": "code",
+              "beginOffset": 26
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "acronym",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.10859881,
+        "mentions": [
+          {
+            "text": {
+              "content": "acronym",
+              "beginOffset": 66
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "project",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.05543035,
+        "mentions": [
+          {
+            "text": {
+              "content": "project",
+              "beginOffset": 53
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "GTBB",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.04610344,
+        "mentions": [
+          {
+            "text": {
+              "content": "GTBB",
+              "beginOffset": 74
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find member name and role code of project members in project with acronym GTBB",
+    "values": [
+      "GTBB"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "member name",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.37030965,
+        "mentions": [
+          {
+            "text": {
+              "content": "member name",
+              "beginOffset": 5
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "GTBB",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.21229903,
+        "mentions": [
+          {
+            "text": {
+              "content": "GTBB",
+              "beginOffset": 61
+            },
+            "type": "PROPER"
+          },
+          {
+            "text": {
+              "content": "project",
+              "beginOffset": 53
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "code",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.1775492,
+        "mentions": [
+          {
+            "text": {
+              "content": "code",
+              "beginOffset": 26
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "role",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.17553374,
+        "mentions": [
+          {
+            "text": {
+              "content": "role",
+              "beginOffset": 21
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "project members",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.06430838,
+        "mentions": [
+          {
+            "text": {
+              "content": "project members",
+              "beginOffset": 34
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find member name and role code of project members in project GTBB",
+    "values": [
+      "GTBB"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "Show titles",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.42833453,
+        "mentions": [
+          {
+            "text": {
+              "content": "Show titles",
+              "beginOffset": 0
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "programmes",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.41583192,
+        "mentions": [
+          {
+            "text": {
+              "content": "programmes",
+              "beginOffset": 15
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "parent program",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.07895709,
+        "mentions": [
+          {
+            "text": {
+              "content": "parent program",
+              "beginOffset": 44
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "FP7",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.07687645,
+        "mentions": [
+          {
+            "text": {
+              "content": "FP7",
+              "beginOffset": 37
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show titles of programmes which have FP7 as parent program",
+    "values": [
+      "FP7"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "Show titles",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.4971221,
+        "mentions": [
+          {
+            "text": {
+              "content": "Show titles",
+              "beginOffset": 0
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "programmes",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.17049325,
+        "mentions": [
+          {
+            "text": {
+              "content": "programmes",
+              "beginOffset": 15
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "FP7",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.15230194,
+        "mentions": [
+          {
+            "text": {
+              "content": "FP7",
+              "beginOffset": 55
+            },
+            "type": "PROPER"
+          },
+          {
+            "text": {
+              "content": "code",
+              "beginOffset": 50
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "program",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.119280465,
+        "mentions": [
+          {
+            "text": {
+              "content": "program",
+              "beginOffset": 37
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "parent program",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.060802255,
+        "mentions": [
+          {
+            "text": {
+              "content": "parent program",
+              "beginOffset": 62
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show titles of programmes which have program with code FP7 as parent program",
+    "values": [
+      "FP7"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "panel descriptions",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.5056615,
+        "mentions": [
+          {
+            "text": {
+              "content": "panel descriptions",
+              "beginOffset": 4
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "research domain",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.27832153,
+        "mentions": [
+          {
+            "text": {
+              "content": "research domain",
+              "beginOffset": 28
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Life Sciences",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.21601702,
+        "mentions": [
+          {
+            "text": {
+              "content": "Life Sciences",
+              "beginOffset": 44
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Get panel descriptions from research domain Life Sciences",
+    "values": [
+      "Life Sciences"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "panel descriptions",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.69134104,
+        "mentions": [
+          {
+            "text": {
+              "content": "panel descriptions",
+              "beginOffset": 4
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "research domain life sciences",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.308659,
+        "mentions": [
+          {
+            "text": {
+              "content": "research domain life sciences",
+              "beginOffset": 28
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Get panel descriptions from research domain life sciences",
+    "values": [
+      "Life Sciences"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "project members",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.6592422,
+        "mentions": [
+          {
+            "text": {
+              "content": "project members",
+              "beginOffset": 5
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Research Organisations",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.34075776,
+        "mentions": [
+          {
+            "text": {
+              "content": "Research Organisations",
+              "beginOffset": 29
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Find project members of type Research Organisations",
+    "values": [
+      "Research Organisations"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "names",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.46898577,
+        "mentions": [
+          {
+            "text": {
+              "content": "names",
+              "beginOffset": 4
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "project members",
+        "type": "PERSON",
+        "metadata": {},
+        "salience": 0.40906256,
+        "mentions": [
+          {
+            "text": {
+              "content": "project members",
+              "beginOffset": 13
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Research Organisations",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.08110493,
+        "mentions": [
+          {
+            "text": {
+              "content": "Research Organisations",
+              "beginOffset": 64
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "activity type description",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.04084674,
+        "mentions": [
+          {
+            "text": {
+              "content": "activity type description",
+              "beginOffset": 35
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Get names of project members who's activity type description is Research Organisations",
+    "values": [
+      "Research Organisations"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "objective",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.8542745,
+        "mentions": [
+          {
+            "text": {
+              "content": "objective",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "DEEPCARBON",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.1457255,
+        "mentions": [
+          {
+            "text": {
+              "content": "DEEPCARBON",
+              "beginOffset": 25
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "What is the objective of DEEPCARBON?",
+    "values": [
+      "DEEPCARBON"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "objective",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.41092128,
+        "mentions": [
+          {
+            "text": {
+              "content": "objective",
+              "beginOffset": 12
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "project",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3247154,
+        "mentions": [
+          {
+            "text": {
+              "content": "project",
+              "beginOffset": 29
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "DEEPCARBON",
+        "type": "ORGANIZATION",
+        "metadata": {
+          "mid": "/m/0vzr9vh",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Deep_Carbon_Observatory"
+        },
+        "salience": 0.15116669,
+        "mentions": [
+          {
+            "text": {
+              "content": "DEEPCARBON",
+              "beginOffset": 50
+            },
+            "type": "PROPER"
+          }
+        ]
+      },
+      {
+        "name": "acronym",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.113196634,
+        "mentions": [
+          {
+            "text": {
+              "content": "acronym",
+              "beginOffset": 42
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "What is the objective of the project with acronym DEEPCARBON?",
+    "values": [
+      "DEEPCARBON"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "title",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.40668613,
+        "mentions": [
+          {
+            "text": {
+              "content": "title",
+              "beginOffset": 8
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "term",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.3181279,
+        "mentions": [
+          {
+            "text": {
+              "content": "term",
+              "beginOffset": 37
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.1549008,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 17
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "carbon capturing",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.12028516,
+        "mentions": [
+          {
+            "text": {
+              "content": "carbon capturing",
+              "beginOffset": 43
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Get the title of projects having the term 'carbon capturing' in it's objective.",
+    "values": [
+      "carbon capturing"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "objective",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.5830317,
+        "mentions": [
+          {
+            "text": {
+              "content": "objective",
+              "beginOffset": 26
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "projects",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.2730342,
+        "mentions": [
+          {
+            "text": {
+              "content": "projects",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "carbon capturing",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.1439341,
+        "mentions": [
+          {
+            "text": {
+              "content": "carbon capturing",
+              "beginOffset": 52
+            },
+            "type": "COMMON"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "How many projects have an objective which contains 'carbon capturing'?",
+    "values": [
+      "carbon capturing"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "institutions",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.24497148,
+        "mentions": [
+          {
+            "text": {
+              "content": "institutions",
+              "beginOffset": 18
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "institutions",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.22885652,
+        "mentions": [
+          {
+            "text": {
+              "content": "institutions",
+              "beginOffset": 50
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "names",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.17060858,
+        "mentions": [
+          {
+            "text": {
+              "content": "names",
+              "beginOffset": 9
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "region",
+        "type": "LOCATION",
+        "metadata": {},
+        "salience": 0.15543127,
+        "mentions": [
+          {
+            "text": {
+              "content": "region",
+              "beginOffset": 84
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "France",
+        "type": "LOCATION",
+        "metadata": {
+          "mid": "/m/0f8l9c",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/France"
+        },
+        "salience": 0.13387382,
+        "mentions": [
+          {
+            "text": {
+              "content": "France",
+              "beginOffset": 36
+            },
+            "type": "PROPER"
+          }
+        ]
+      },
+      {
+        "name": "Paris",
+        "type": "LOCATION",
+        "metadata": {
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Paris",
+          "mid": "/m/05qtj"
+        },
+        "salience": 0.066258326,
+        "mentions": [
+          {
+            "text": {
+              "content": "Paris",
+              "beginOffset": 94
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show all names of institutions from France except institutions from the territorial region of Paris",
+    "values": [
+      "France",
+      "Paris"
+    ]
+  },
+  {
+    "entities": [
+      {
+        "name": "Show institutions",
+        "type": "ORGANIZATION",
+        "metadata": {},
+        "salience": 0.70595306,
+        "mentions": [
+          {
+            "text": {
+              "content": "Show institutions",
+              "beginOffset": 0
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "France",
+        "type": "LOCATION",
+        "metadata": {
+          "wikipedia_url": "https://en.wikipedia.org/wiki/France",
+          "mid": "/m/0f8l9c"
+        },
+        "salience": 0.14407992,
+        "mentions": [
+          {
+            "text": {
+              "content": "France",
+              "beginOffset": 23
+            },
+            "type": "PROPER"
+          }
+        ]
+      },
+      {
+        "name": "ones",
+        "type": "OTHER",
+        "metadata": {},
+        "salience": 0.07709872,
+        "mentions": [
+          {
+            "text": {
+              "content": "ones",
+              "beginOffset": 41
+            },
+            "type": "COMMON"
+          }
+        ]
+      },
+      {
+        "name": "Paris",
+        "type": "LOCATION",
+        "metadata": {
+          "mid": "/m/05qtj",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Paris"
+        },
+        "salience": 0.07286827,
+        "mentions": [
+          {
+            "text": {
+              "content": "Paris",
+              "beginOffset": 51
+            },
+            "type": "PROPER"
+          }
+        ]
+      }
+    ],
+    "language": "en",
+    "question": "Show institutions from France except the ones from Paris",
+    "values": [
+      "France",
+      "Paris"
+    ]
+  }
+]

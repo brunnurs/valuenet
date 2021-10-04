@@ -1,0 +1,124 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "subject_areas"
+    },
+    "children": {},
+    "label": "GetData(subject_areas)",
+    "node_id": "000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "project_subject_areas"
+    },
+    "children": {},
+    "label": "GetData(project_subject_areas)",
+    "node_id": "000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "subject_areas.code",
+      "attribute_name1": "project_subject_areas.subject_area"
+    },
+    "children": {
+      "000000": "table0",
+      "000001": "table1"
+    },
+    "label": "Merge(subject_areas.code, project_subject_areas.subject_area)",
+    "node_id": "00000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "subject_areas.title",
+      "operation": "=",
+      "value": "Food"
+    },
+    "children": {
+      "00000": "table"
+    },
+    "label": "Filter(subject_areas.title, =, Food)",
+    "node_id": "0000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "projects"
+    },
+    "children": {},
+    "label": "GetData(projects)",
+    "node_id": "00010",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.title",
+      "operation": "=",
+      "value": "Innovative plasma based transformation of food waste into high value graphitic carbon and renewable hydrogen"
+    },
+    "children": {
+      "00010": "table"
+    },
+    "label": "Filter(projects.title, =, Innovative plasma based transformation of food waste into high value graphitic carbon and renewable hydrogen)",
+    "node_id": "0001",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "project_subject_areas.project",
+      "attribute_name1": "projects.unics_id"
+    },
+    "children": {
+      "0000": "table0",
+      "0001": "table1"
+    },
+    "label": "Merge(project_subject_areas.project, projects.unics_id)",
+    "node_id": "000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.unics_id"
+    },
+    "children": {
+      "000": "result"
+    },
+    "label": "Distinct(projects.unics_id)",
+    "node_id": "00",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.total_cost"
+    },
+    "children": {
+      "00": "table"
+    },
+    "label": "Sum(projects.total_cost)",
+    "node_id": "0",
+    "operation": "Sum",
+    "results": [],
+    "tokens": []
+  }
+]

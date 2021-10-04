@@ -1,0 +1,93 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "institutions"
+    },
+    "children": {},
+    "label": "GetData(institutions)",
+    "node_id": "000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "countries"
+    },
+    "children": {},
+    "label": "GetData(countries)",
+    "node_id": "000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "institutions.country_id",
+      "attribute_name1": "countries.unics_id"
+    },
+    "children": {
+      "000000": "table0",
+      "000001": "table1"
+    },
+    "label": "Merge(institutions.country_id, countries.unics_id)",
+    "node_id": "00000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "institutions.institutions_name",
+      "operation": "!=",
+      "value": "CHECKLIGHT LTD"
+    },
+    "children": {
+      "00000": "table"
+    },
+    "label": "Filter(institutions.institutions_name, !=, CHECKLIGHT LTD)",
+    "node_id": "0000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "countries.country_name"
+    },
+    "children": {
+      "0000": "result"
+    },
+    "label": "Distinct(countries.country_name)",
+    "node_id": "000",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "countries.country_name"
+    },
+    "children": {
+      "000": "table"
+    },
+    "label": "ExtractValues(countries.country_name)",
+    "node_id": "00",
+    "operation": "ExtractValues",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {},
+    "children": {
+      "00": "result"
+    },
+    "label": "Done",
+    "node_id": "0",
+    "operation": "Done",
+    "results": [],
+    "tokens": []
+  }
+]

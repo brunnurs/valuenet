@@ -1,0 +1,162 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "activity_types"
+    },
+    "children": {},
+    "label": "GetData(activity_types)",
+    "node_id": "00000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "activity_types.description",
+      "operation": "!=",
+      "value": "Public bodies (excluding Research Organisations and Secondary or Higher Education Establishments)"
+    },
+    "children": {
+      "00000000": "table"
+    },
+    "label": "Filter(activity_types.description, !=, Public bodies (excluding Research Organisations and Secondary or Higher Education Establishments))",
+    "node_id": "0000000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "project_members"
+    },
+    "children": {},
+    "label": "GetData(project_members)",
+    "node_id": "00000010",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "projects"
+    },
+    "children": {},
+    "label": "GetData(projects)",
+    "node_id": "00000011",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "project_members.project",
+      "attribute_name1": "projects.unics_id"
+    },
+    "children": {
+      "00000010": "table0",
+      "00000011": "table1"
+    },
+    "label": "Merge(project_members.project, projects.unics_id)",
+    "node_id": "0000001",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "activity_types.code",
+      "attribute_name1": "project_members.activity_type"
+    },
+    "children": {
+      "0000000": "table0",
+      "0000001": "table1"
+    },
+    "label": "Merge(activity_types.code, project_members.activity_type)",
+    "node_id": "000000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "people"
+    },
+    "children": {},
+    "label": "GetData(people)",
+    "node_id": "000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "projects.principal_investigator",
+      "attribute_name1": "people.unics_id"
+    },
+    "children": {
+      "000000": "table0",
+      "000001": "table1"
+    },
+    "label": "Merge(projects.principal_investigator, people.unics_id)",
+    "node_id": "00000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.end_year",
+      "operation": "!=",
+      "value": 2017
+    },
+    "children": {
+      "00000": "table"
+    },
+    "label": "Filter(projects.end_year, !=, 2017)",
+    "node_id": "0000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "people.full_name"
+    },
+    "children": {
+      "0000": "result"
+    },
+    "label": "Distinct(people.full_name)",
+    "node_id": "000",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "people.full_name"
+    },
+    "children": {
+      "000": "table"
+    },
+    "label": "ExtractValues(people.full_name)",
+    "node_id": "00",
+    "operation": "ExtractValues",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {},
+    "children": {
+      "00": "result"
+    },
+    "label": "IsEmpty",
+    "node_id": "0",
+    "operation": "IsEmpty",
+    "results": [],
+    "tokens": []
+  }
+]
