@@ -1,0 +1,120 @@
+[
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "projects"
+    },
+    "children": {},
+    "label": "GetData(projects)",
+    "node_id": "0000000",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "project_subject_areas"
+    },
+    "children": {},
+    "label": "GetData(project_subject_areas)",
+    "node_id": "0000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "projects.unics_id",
+      "attribute_name1": "project_subject_areas.project"
+    },
+    "children": {
+      "0000000": "table0",
+      "0000001": "table1"
+    },
+    "label": "Merge(projects.unics_id, project_subject_areas.project)",
+    "node_id": "000000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "data_source": "cordisv02",
+      "table_name": "subject_areas"
+    },
+    "children": {},
+    "label": "GetData(subject_areas)",
+    "node_id": "000001",
+    "operation": "GetData",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name0": "project_subject_areas.subject_area",
+      "attribute_name1": "subject_areas.code"
+    },
+    "children": {
+      "000000": "table0",
+      "000001": "table1"
+    },
+    "label": "Merge(project_subject_areas.subject_area, subject_areas.code)",
+    "node_id": "00000",
+    "operation": "Merge",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "projects.start_year",
+      "operation": "=",
+      "value": 2018
+    },
+    "children": {
+      "00000": "table"
+    },
+    "label": "Filter(projects.start_year, =, 2018)",
+    "node_id": "0000",
+    "operation": "Filter",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "subject_areas.title"
+    },
+    "children": {
+      "0000": "result"
+    },
+    "label": "Distinct(subject_areas.title)",
+    "node_id": "000",
+    "operation": "Distinct",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {
+      "attribute_name": "subject_areas.title"
+    },
+    "children": {
+      "000": "table"
+    },
+    "label": "ExtractValues(subject_areas.title)",
+    "node_id": "00",
+    "operation": "ExtractValues",
+    "results": [],
+    "tokens": []
+  },
+  {
+    "arguments": {},
+    "children": {
+      "00": "result"
+    },
+    "label": "IsEmpty",
+    "node_id": "0",
+    "operation": "IsEmpty",
+    "results": [],
+    "tokens": []
+  }
+]

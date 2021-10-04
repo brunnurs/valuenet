@@ -1,0 +1,5933 @@
+[
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find the total cost of the project Theseus",
+    "question_toks": [
+      "Find",
+      "the",
+      "total",
+      "cost",
+      "of",
+      "the",
+      "project",
+      "Theseus"
+    ],
+    "query": "SELECT T1.total_cost FROM projects AS T1 WHERE T1.title = 'Theseus'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                78,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              68,
+              false
+            ],
+            null
+          ],
+          "\"Theseus\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t1.total_cost",
+      "from",
+      "projects",
+      "as",
+      "t1",
+      "where",
+      "t1.title",
+      "=",
+      "\"Theseus\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show total cost of project with title Theseus",
+    "question_toks": [
+      "Show",
+      "total",
+      "cost",
+      "of",
+      "project",
+      "with",
+      "title",
+      "Theseus"
+    ],
+    "query": "SELECT T1.total_cost FROM projects AS T1 WHERE T1.title = 'Theseus'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                78,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              68,
+              false
+            ],
+            null
+          ],
+          "\"Theseus\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t1.total_cost",
+      "from",
+      "projects",
+      "as",
+      "t1",
+      "where",
+      "t1.title",
+      "=",
+      "\"Theseus\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me the acronyms of projects that started in 2018",
+    "question_toks": [
+      "Show",
+      "me",
+      "the",
+      "acronyms",
+      "of",
+      "projects",
+      "that",
+      "started",
+      "in",
+      "2018"
+    ],
+    "query": "SELECT acronym FROM projects WHERE start_year = 2018",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                67,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              75,
+              false
+            ],
+            null
+          ],
+          2018.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "acronym",
+      "from",
+      "projects",
+      "where",
+      "start_year",
+      "=",
+      "2018"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Get acronyms of projects beginning in 2018",
+    "question_toks": [
+      "Get",
+      "acronyms",
+      "of",
+      "projects",
+      "beginning",
+      "in",
+      "2018"
+    ],
+    "query": "SELECT acronym FROM projects WHERE start_year = 2018",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                67,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              75,
+              false
+            ],
+            null
+          ],
+          2018.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "acronym",
+      "from",
+      "projects",
+      "where",
+      "start_year",
+      "=",
+      "2018"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me the titles of projects that started before 2016",
+    "question_toks": [
+      "Show",
+      "me",
+      "the",
+      "titles",
+      "of",
+      "projects",
+      "that",
+      "started",
+      "before",
+      "2016"
+    ],
+    "query": "SELECT title FROM projects WHERE start_year < 2016",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          4,
+          [
+            0,
+            [
+              0,
+              75,
+              false
+            ],
+            null
+          ],
+          2016.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "projects",
+      "where",
+      "start_year",
+      "<",
+      "2016"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find titles of projects which started earlier than 2016",
+    "question_toks": [
+      "Find",
+      "titles",
+      "of",
+      "projects",
+      "which",
+      "started",
+      "earlier",
+      "than",
+      "2016"
+    ],
+    "query": "SELECT title FROM projects WHERE start_year < 2016",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          4,
+          [
+            0,
+            [
+              0,
+              75,
+              false
+            ],
+            null
+          ],
+          2016.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "projects",
+      "where",
+      "start_year",
+      "<",
+      "2016"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find institutions from the region of Nordjylland",
+    "question_toks": [
+      "Find",
+      "institutions",
+      "from",
+      "the",
+      "region",
+      "of",
+      "Nordjylland"
+    ],
+    "query": "SELECT T1.institutions_name\nFROM institutions AS T1\n         JOIN eu_territorial_units AS T2 ON T1.geocode_regions_3 = T2.geocode_regions\nWHERE T2.description = 'Nordjylland'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            7
+          ],
+          [
+            "table_unit",
+            5
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                23,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              14,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                22,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              15,
+              false
+            ],
+            null
+          ],
+          "\"Nordjylland\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t1.institutions_name",
+      "from",
+      "institutions",
+      "as",
+      "t1",
+      "join",
+      "eu_territorial_units",
+      "as",
+      "t2",
+      "on",
+      "t1.geocode_regions_3",
+      "=",
+      "t2.geocode_regions",
+      "where",
+      "t2.description",
+      "=",
+      "\"Nordjylland\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the name of institutions based in Nordjylland",
+    "question_toks": [
+      "Show",
+      "the",
+      "name",
+      "of",
+      "institutions",
+      "based",
+      "in",
+      "Nordjylland"
+    ],
+    "query": "SELECT T1.institutions_name\nFROM institutions AS T1\n         JOIN eu_territorial_units AS T2 ON T1.geocode_regions_3 = T2.geocode_regions\nWHERE T2.description = 'Nordjylland'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            7
+          ],
+          [
+            "table_unit",
+            5
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                23,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              14,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                22,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              15,
+              false
+            ],
+            null
+          ],
+          "\"Nordjylland\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t1.institutions_name",
+      "from",
+      "institutions",
+      "as",
+      "t1",
+      "join",
+      "eu_territorial_units",
+      "as",
+      "t2",
+      "on",
+      "t1.geocode_regions_3",
+      "=",
+      "t2.geocode_regions",
+      "where",
+      "t2.description",
+      "=",
+      "\"Nordjylland\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find the name of principal investigators in projects that started in 2014",
+    "question_toks": [
+      "Find",
+      "the",
+      "name",
+      "of",
+      "principal",
+      "investigators",
+      "in",
+      "projects",
+      "that",
+      "started",
+      "in",
+      "2014"
+    ],
+    "query": "SELECT T2.full_name\nFROM projects AS T1 join people as T2 on T1.principal_investigator = T2.unics_id\nWHERE T1.start_year = 2014",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            8
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                82,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              30,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                31,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              75,
+              false
+            ],
+            null
+          ],
+          2014.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t2.full_name",
+      "from",
+      "projects",
+      "as",
+      "t1",
+      "join",
+      "people",
+      "as",
+      "t2",
+      "on",
+      "t1.principal_investigator",
+      "=",
+      "t2.unics_id",
+      "where",
+      "t1.start_year",
+      "=",
+      "2014"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the full name of people being investigators in projects that began in 2014",
+    "question_toks": [
+      "Show",
+      "the",
+      "full",
+      "name",
+      "of",
+      "people",
+      "being",
+      "investigators",
+      "in",
+      "projects",
+      "that",
+      "began",
+      "in",
+      "2014"
+    ],
+    "query": "SELECT T2.full_name\nFROM projects AS T1 join people as T2 on T1.principal_investigator = T2.unics_id\nWHERE T1.start_year = 2014",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            8
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                82,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              30,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                31,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              75,
+              false
+            ],
+            null
+          ],
+          2014.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t2.full_name",
+      "from",
+      "projects",
+      "as",
+      "t1",
+      "join",
+      "people",
+      "as",
+      "t2",
+      "on",
+      "t1.principal_investigator",
+      "=",
+      "t2.unics_id",
+      "where",
+      "t1.start_year",
+      "=",
+      "2014"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find projects whose subject area is \u201cMathematics and Statistics\u201d",
+    "question_toks": [
+      "Find",
+      "projects",
+      "whose",
+      "subject",
+      "area",
+      "is",
+      "\u201c",
+      "Mathematics",
+      "and",
+      "Statistics",
+      "\u201d"
+    ],
+    "query": "SELECT t1.title\nFROM projects AS T1\n         join project_subject_areas as psa on T1.unics_id = psa.project\n         join subject_areas as sa on psa.subject_area = sa.code\nWHERE sa.title = 'Mathematics and Statistics'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            14
+          ],
+          [
+            "table_unit",
+            17
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              62,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                63,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              83,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              84,
+              false
+            ],
+            null
+          ],
+          "\"Mathematics and Statistics\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t1.title",
+      "from",
+      "projects",
+      "as",
+      "t1",
+      "join",
+      "project_subject_areas",
+      "as",
+      "psa",
+      "on",
+      "t1.unics_id",
+      "=",
+      "psa.project",
+      "join",
+      "subject_areas",
+      "as",
+      "sa",
+      "on",
+      "psa.subject_area",
+      "=",
+      "sa.code",
+      "where",
+      "sa.title",
+      "=",
+      "\"Mathematics and Statistics\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the acronym and subject area description of projects with subject area \u201cMathematics and Statistics\u201d",
+    "question_toks": [
+      "Show",
+      "the",
+      "acronym",
+      "and",
+      "subject",
+      "area",
+      "description",
+      "of",
+      "projects",
+      "with",
+      "subject",
+      "area",
+      "\u201c",
+      "Mathematics",
+      "and",
+      "Statistics",
+      "\u201d"
+    ],
+    "query": "SELECT t1.acronym, sa.description\nFROM projects AS T1\n         join project_subject_areas as psa on T1.unics_id = psa.project\n         join subject_areas as sa on psa.subject_area = sa.code\nWHERE sa.title = 'Mathematics and Statistics'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            14
+          ],
+          [
+            "table_unit",
+            17
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              62,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                63,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              83,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                67,
+                false
+              ],
+              null
+            ]
+          ],
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                85,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              84,
+              false
+            ],
+            null
+          ],
+          "\"Mathematics and Statistics\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t1.acronym",
+      ",",
+      "sa.description",
+      "from",
+      "projects",
+      "as",
+      "t1",
+      "join",
+      "project_subject_areas",
+      "as",
+      "psa",
+      "on",
+      "t1.unics_id",
+      "=",
+      "psa.project",
+      "join",
+      "subject_areas",
+      "as",
+      "sa",
+      "on",
+      "psa.subject_area",
+      "=",
+      "sa.code",
+      "where",
+      "sa.title",
+      "=",
+      "\"Mathematics and Statistics\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find all different topics of projects that ended in 2014",
+    "question_toks": [
+      "Find",
+      "all",
+      "different",
+      "topics",
+      "of",
+      "projects",
+      "that",
+      "ended",
+      "in",
+      "2014"
+    ],
+    "query": "SELECT distinct t.title\nFROM projects AS T1\n         join project_topics as pt on T1.unics_id = pt.project\n         join topics as t on pt.topic = t.code\nwhere t1.end_year = 2014",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            15
+          ],
+          [
+            "table_unit",
+            18
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              64,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                65,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              86,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        true,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                88,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              76,
+              false
+            ],
+            null
+          ],
+          2014.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "distinct",
+      "t.title",
+      "from",
+      "projects",
+      "as",
+      "t1",
+      "join",
+      "project_topics",
+      "as",
+      "pt",
+      "on",
+      "t1.unics_id",
+      "=",
+      "pt.project",
+      "join",
+      "topics",
+      "as",
+      "t",
+      "on",
+      "pt.topic",
+      "=",
+      "t.code",
+      "where",
+      "t1.end_year",
+      "=",
+      "2014"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find distinct titles of topics of projects that with end year 2014",
+    "question_toks": [
+      "Find",
+      "distinct",
+      "titles",
+      "of",
+      "topics",
+      "of",
+      "projects",
+      "that",
+      "with",
+      "end",
+      "year",
+      "2014"
+    ],
+    "query": "SELECT distinct t.title\nFROM projects AS T1\n         join project_topics as pt on T1.unics_id = pt.project\n         join topics as t on pt.topic = t.code\nwhere t1.end_year = 2014",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            15
+          ],
+          [
+            "table_unit",
+            18
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              64,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                65,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              86,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        true,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                88,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              76,
+              false
+            ],
+            null
+          ],
+          2014.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "distinct",
+      "t.title",
+      "from",
+      "projects",
+      "as",
+      "t1",
+      "join",
+      "project_topics",
+      "as",
+      "pt",
+      "on",
+      "t1.unics_id",
+      "=",
+      "pt.project",
+      "join",
+      "topics",
+      "as",
+      "t",
+      "on",
+      "pt.topic",
+      "=",
+      "t.code",
+      "where",
+      "t1.end_year",
+      "=",
+      "2014"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the acronym of projects with a member from Greece",
+    "question_toks": [
+      "Show",
+      "the",
+      "acronym",
+      "of",
+      "projects",
+      "with",
+      "a",
+      "member",
+      "from",
+      "Greece"
+    ],
+    "query": "Select p.acronym\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\n         join institutions as i on pm.institution_id = i.unics_id\n         join countries as c on i.country_id = c.unics_id\nwhere c.country_name = 'Greece'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            12
+          ],
+          [
+            "table_unit",
+            7
+          ],
+          [
+            "table_unit",
+            1
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              42,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                52,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              20,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                21,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              3,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                67,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              4,
+              false
+            ],
+            null
+          ],
+          "\"Greece\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "p.acronym",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "join",
+      "project_members",
+      "as",
+      "pm",
+      "on",
+      "p.unics_id",
+      "=",
+      "pm.project",
+      "join",
+      "institutions",
+      "as",
+      "i",
+      "on",
+      "pm.institution_id",
+      "=",
+      "i.unics_id",
+      "join",
+      "countries",
+      "as",
+      "c",
+      "on",
+      "i.country_id",
+      "=",
+      "c.unics_id",
+      "where",
+      "c.country_name",
+      "=",
+      "\"Greece\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show names of institutions from France or Germany",
+    "question_toks": [
+      "Show",
+      "names",
+      "of",
+      "institutions",
+      "from",
+      "France",
+      "or",
+      "Germany"
+    ],
+    "query": "Select i.institutions_name\nfrom institutions as i\n         join countries as c on i.country_id = c.unics_id\nwhere c.country_name = 'France' or c.country_name = 'Germany'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            7
+          ],
+          [
+            "table_unit",
+            1
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                21,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              3,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                22,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              4,
+              false
+            ],
+            null
+          ],
+          "\"France\"",
+          null
+        ],
+        "or",
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              4,
+              false
+            ],
+            null
+          ],
+          "\"Germany\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "i.institutions_name",
+      "from",
+      "institutions",
+      "as",
+      "i",
+      "join",
+      "countries",
+      "as",
+      "c",
+      "on",
+      "i.country_id",
+      "=",
+      "c.unics_id",
+      "where",
+      "c.country_name",
+      "=",
+      "\"France\"",
+      "or",
+      "c.country_name",
+      "=",
+      "\"Germany\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show names of institutions which are not from France",
+    "question_toks": [
+      "Show",
+      "names",
+      "of",
+      "institutions",
+      "which",
+      "are",
+      "not",
+      "from",
+      "France"
+    ],
+    "query": "Select i.institutions_name\nfrom institutions as i\n         join countries as c on i.country_id = c.unics_id\nwhere c.country_name != 'France'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            7
+          ],
+          [
+            "table_unit",
+            1
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                21,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              3,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                22,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          7,
+          [
+            0,
+            [
+              0,
+              4,
+              false
+            ],
+            null
+          ],
+          "\"France\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "i.institutions_name",
+      "from",
+      "institutions",
+      "as",
+      "i",
+      "join",
+      "countries",
+      "as",
+      "c",
+      "on",
+      "i.country_id",
+      "=",
+      "c.unics_id",
+      "where",
+      "c.country_name",
+      "!=",
+      "\"France\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Count the projects that started in 2016",
+    "question_toks": [
+      "Count",
+      "the",
+      "projects",
+      "that",
+      "started",
+      "in",
+      "2016"
+    ],
+    "query": "Select count(p.unics_id)\nfrom projects as p\nwhere start_year = 2016",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            3,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              75,
+              false
+            ],
+            null
+          ],
+          2016.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "count",
+      "(",
+      "p.unics_id",
+      ")",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "where",
+      "start_year",
+      "=",
+      "2016"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the title of the project with the highest total cost",
+    "question_toks": [
+      "Show",
+      "the",
+      "title",
+      "of",
+      "the",
+      "project",
+      "with",
+      "the",
+      "highest",
+      "total",
+      "cost"
+    ],
+    "query": "Select p.title\nfrom projects as p\nwhere total_cost = (select max(p2.total_cost) from projects as p2)",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              78,
+              false
+            ],
+            null
+          ],
+          {
+            "from": {
+              "table_units": [
+                [
+                  "table_unit",
+                  16
+                ]
+              ],
+              "conds": []
+            },
+            "select": [
+              false,
+              [
+                [
+                  1,
+                  [
+                    0,
+                    [
+                      0,
+                      78,
+                      false
+                    ],
+                    null
+                  ]
+                ]
+              ]
+            ],
+            "where": [],
+            "groupBy": [],
+            "having": [],
+            "orderBy": [],
+            "limit": null,
+            "intersect": null,
+            "union": null,
+            "except": null
+          },
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "p.title",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "where",
+      "total_cost",
+      "=",
+      "(",
+      "select",
+      "max",
+      "(",
+      "p2.total_cost",
+      ")",
+      "from",
+      "projects",
+      "as",
+      "p2",
+      ")"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the name of members in projects costing less than the average project cost.",
+    "question_toks": [
+      "Show",
+      "the",
+      "name",
+      "of",
+      "members",
+      "in",
+      "projects",
+      "costing",
+      "less",
+      "than",
+      "the",
+      "average",
+      "project",
+      "cost",
+      "."
+    ],
+    "query": "SELECT T1.member_name\nFROM project_members AS T1\n         JOIN projects AS T2 ON T1.project = T2.unics_id\nWHERE T2.total_cost < (SELECT AVG(T23.total_cost) FROM projects AS T23)",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            12
+          ],
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                42,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              66,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                45,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          4,
+          [
+            0,
+            [
+              0,
+              78,
+              false
+            ],
+            null
+          ],
+          {
+            "from": {
+              "table_units": [
+                [
+                  "table_unit",
+                  16
+                ]
+              ],
+              "conds": []
+            },
+            "select": [
+              false,
+              [
+                [
+                  5,
+                  [
+                    0,
+                    [
+                      0,
+                      78,
+                      false
+                    ],
+                    null
+                  ]
+                ]
+              ]
+            ],
+            "where": [],
+            "groupBy": [],
+            "having": [],
+            "orderBy": [],
+            "limit": null,
+            "intersect": null,
+            "union": null,
+            "except": null
+          },
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "t1.member_name",
+      "from",
+      "project_members",
+      "as",
+      "t1",
+      "join",
+      "projects",
+      "as",
+      "t2",
+      "on",
+      "t1.project",
+      "=",
+      "t2.unics_id",
+      "where",
+      "t2.total_cost",
+      "<",
+      "(",
+      "select",
+      "avg",
+      "(",
+      "t23.total_cost",
+      ")",
+      "from",
+      "projects",
+      "as",
+      "t23",
+      ")"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find the id of projects with at least 100 members",
+    "question_toks": [
+      "Find",
+      "the",
+      "i",
+      "d",
+      "of",
+      "projects",
+      "with",
+      "at",
+      "least",
+      "100",
+      "members"
+    ],
+    "query": "select p.unics_id\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\ngroup by p.unics_id\nhaving count(p.unics_id) >= 100",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            12
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              42,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [],
+      "groupBy": [
+        [
+          0,
+          66,
+          false
+        ]
+      ],
+      "having": [
+        [
+          false,
+          5,
+          [
+            0,
+            [
+              3,
+              66,
+              false
+            ],
+            null
+          ],
+          100.0,
+          null
+        ]
+      ],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "p.unics_id",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "join",
+      "project_members",
+      "as",
+      "pm",
+      "on",
+      "p.unics_id",
+      "=",
+      "pm.project",
+      "group",
+      "by",
+      "p.unics_id",
+      "having",
+      "count",
+      "(",
+      "p.unics_id",
+      ")",
+      ">=",
+      "100"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find the code and title of the funding scheme which funded the highest number of projects.",
+    "question_toks": [
+      "Find",
+      "the",
+      "code",
+      "and",
+      "title",
+      "of",
+      "the",
+      "funding",
+      "scheme",
+      "which",
+      "funded",
+      "the",
+      "highest",
+      "number",
+      "of",
+      "projects",
+      "."
+    ],
+    "query": "select s.code, s.title\nfrom funding_schemes as s\nwhere s.code = (select s2.code\n                 from funding_schemes as s2\n                          join projects as p on s2.code = p.ec_fund_scheme\n                 group by s2.code\n                 order by count(*) desc\n                 LIMIT 1)",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            6
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                18,
+                false
+              ],
+              null
+            ]
+          ],
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                19,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              18,
+              false
+            ],
+            null
+          ],
+          {
+            "from": {
+              "table_units": [
+                [
+                  "table_unit",
+                  6
+                ],
+                [
+                  "table_unit",
+                  16
+                ]
+              ],
+              "conds": [
+                [
+                  false,
+                  2,
+                  [
+                    0,
+                    [
+                      0,
+                      18,
+                      false
+                    ],
+                    null
+                  ],
+                  [
+                    0,
+                    70,
+                    false
+                  ],
+                  null
+                ]
+              ]
+            },
+            "select": [
+              false,
+              [
+                [
+                  0,
+                  [
+                    0,
+                    [
+                      0,
+                      18,
+                      false
+                    ],
+                    null
+                  ]
+                ]
+              ]
+            ],
+            "where": [],
+            "groupBy": [
+              [
+                0,
+                18,
+                false
+              ]
+            ],
+            "having": [],
+            "orderBy": [
+              "desc",
+              [
+                [
+                  0,
+                  [
+                    3,
+                    0,
+                    false
+                  ],
+                  null
+                ]
+              ]
+            ],
+            "limit": 1,
+            "intersect": null,
+            "union": null,
+            "except": null
+          },
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "s.code",
+      ",",
+      "s.title",
+      "from",
+      "funding_schemes",
+      "as",
+      "s",
+      "where",
+      "s.code",
+      "=",
+      "(",
+      "select",
+      "s2.code",
+      "from",
+      "funding_schemes",
+      "as",
+      "s2",
+      "join",
+      "projects",
+      "as",
+      "p",
+      "on",
+      "s2.code",
+      "=",
+      "p.ec_fund_scheme",
+      "group",
+      "by",
+      "s2.code",
+      "order",
+      "by",
+      "count",
+      "(",
+      "*",
+      ")",
+      "desc",
+      "limit",
+      "1",
+      ")"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the total costs of all projects",
+    "question_toks": [
+      "Show",
+      "the",
+      "total",
+      "costs",
+      "of",
+      "all",
+      "projects"
+    ],
+    "query": "SELECT sum(total_cost)\nFROM projects",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            4,
+            [
+              0,
+              [
+                0,
+                78,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "sum",
+      "(",
+      "total_cost",
+      ")",
+      "from",
+      "projects"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me the title of projects which have an end year and a start year after 2006",
+    "question_toks": [
+      "Show",
+      "me",
+      "the",
+      "title",
+      "of",
+      "projects",
+      "which",
+      "have",
+      "an",
+      "end",
+      "year",
+      "and",
+      "a",
+      "start",
+      "year",
+      "after",
+      "2006"
+    ],
+    "query": "select title\nfrom projects\nwhere start_year > 2006\n  and end_year > 2006",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          3,
+          [
+            0,
+            [
+              0,
+              75,
+              false
+            ],
+            null
+          ],
+          2006.0,
+          null
+        ],
+        "and",
+        [
+          false,
+          3,
+          [
+            0,
+            [
+              0,
+              76,
+              false
+            ],
+            null
+          ],
+          2006.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "projects",
+      "where",
+      "start_year",
+      ">",
+      "2006",
+      "and",
+      "end_year",
+      ">",
+      "2006"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find the projects which lasted the longest",
+    "question_toks": [
+      "Find",
+      "the",
+      "projects",
+      "which",
+      "lasted",
+      "the",
+      "longest"
+    ],
+    "query": "select title\nfrom projects\norder by end_year - start_year desc\nlimit 1",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [
+        "desc",
+        [
+          [
+            1,
+            [
+              0,
+              76,
+              false
+            ],
+            [
+              0,
+              75,
+              false
+            ]
+          ]
+        ]
+      ],
+      "limit": 1,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "projects",
+      "order",
+      "by",
+      "end_year",
+      "-",
+      "start_year",
+      "desc",
+      "limit",
+      "1"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me topic titles which starts with 'Raw materials'",
+    "question_toks": [
+      "Show",
+      "me",
+      "topic",
+      "titles",
+      "which",
+      "starts",
+      "with",
+      "'",
+      "Raw",
+      "materials",
+      "'"
+    ],
+    "query": "select title from topics where title like 'Raw materials%'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            18
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                88,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          9,
+          [
+            0,
+            [
+              0,
+              88,
+              false
+            ],
+            null
+          ],
+          "\"Raw materials%\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "topics",
+      "where",
+      "title",
+      "like",
+      "\"Raw materials%\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me topic titles which contain the word 'climate'",
+    "question_toks": [
+      "Show",
+      "me",
+      "topic",
+      "titles",
+      "which",
+      "contain",
+      "the",
+      "word",
+      "'",
+      "climate",
+      "'"
+    ],
+    "query": "select title from topics where title like '%climate%'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            18
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                88,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          9,
+          [
+            0,
+            [
+              0,
+              88,
+              false
+            ],
+            null
+          ],
+          "\"%climate%\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "topics",
+      "where",
+      "title",
+      "like",
+      "\"%climate%\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me the number of projects where Thomas Bell was principal investigator",
+    "question_toks": [
+      "Show",
+      "me",
+      "the",
+      "number",
+      "of",
+      "projects",
+      "where",
+      "Thomas",
+      "Bell",
+      "was",
+      "principal",
+      "investigator"
+    ],
+    "query": "select count(*)\nfrom projects as p\n         join people as peep on p.principal_investigator = peep.unics_id\nwhere peep.full_name = 'Thomas Bell'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            8
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                82,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              30,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            3,
+            [
+              0,
+              [
+                0,
+                0,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              31,
+              false
+            ],
+            null
+          ],
+          "\"Thomas Bell\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "count",
+      "(",
+      "*",
+      ")",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "join",
+      "people",
+      "as",
+      "peep",
+      "on",
+      "p.principal_investigator",
+      "=",
+      "peep.unics_id",
+      "where",
+      "peep.full_name",
+      "=",
+      "\"Thomas Bell\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me the all different names of people",
+    "question_toks": [
+      "Show",
+      "me",
+      "the",
+      "all",
+      "different",
+      "names",
+      "of",
+      "people"
+    ],
+    "query": "select distinct full_name from people",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            8
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        true,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                31,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "distinct",
+      "full_name",
+      "from",
+      "people"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find the acronym of projects which have total costs between 100000 and 200000",
+    "question_toks": [
+      "Find",
+      "the",
+      "acronym",
+      "of",
+      "projects",
+      "which",
+      "have",
+      "total",
+      "costs",
+      "between",
+      "100000",
+      "and",
+      "200000"
+    ],
+    "query": "select p.acronym\nfrom projects as p\nwhere p.total_cost between 100000\n  and 200000",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                67,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          1,
+          [
+            0,
+            [
+              0,
+              78,
+              false
+            ],
+            null
+          ],
+          100000.0,
+          200000.0
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "p.acronym",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "where",
+      "p.total_cost",
+      "between",
+      "100000",
+      "and",
+      "200000"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the title of projects with costs higher than 1000000",
+    "question_toks": [
+      "Show",
+      "the",
+      "title",
+      "of",
+      "projects",
+      "with",
+      "costs",
+      "higher",
+      "than",
+      "1000000"
+    ],
+    "query": "select p.title\nfrom projects as p\nwhere p.total_cost > 1000000",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          3,
+          [
+            0,
+            [
+              0,
+              78,
+              false
+            ],
+            null
+          ],
+          1000000.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "p.title",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "where",
+      "p.total_cost",
+      ">",
+      "1000000"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the title of projects with costs higher than a million",
+    "question_toks": [
+      "Show",
+      "the",
+      "title",
+      "of",
+      "projects",
+      "with",
+      "costs",
+      "higher",
+      "than",
+      "a",
+      "million"
+    ],
+    "query": "select p.title\nfrom projects as p\nwhere p.total_cost > 1000000",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          3,
+          [
+            0,
+            [
+              0,
+              78,
+              false
+            ],
+            null
+          ],
+          1000000.0,
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "p.title",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "where",
+      "p.total_cost",
+      ">",
+      "1000000"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show the project title and member name where the member has a partner role ",
+    "question_toks": [
+      "Show",
+      "the",
+      "project",
+      "title",
+      "and",
+      "member",
+      "name",
+      "where",
+      "the",
+      "member",
+      "has",
+      "a",
+      "partner",
+      "role"
+    ],
+    "query": "select title, member_name\nfrom projects as p\n         join project_members as pm on p.unics_id = pm.project\n         join project_member_roles as pmr on pm.member_role = pmr.code\nwhere pmr.code = 'partner'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            12
+          ],
+          [
+            "table_unit",
+            11
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                66,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              42,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                53,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              39,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ],
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                45,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              39,
+              false
+            ],
+            null
+          ],
+          "\"partner\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      ",",
+      "member_name",
+      "from",
+      "projects",
+      "as",
+      "p",
+      "join",
+      "project_members",
+      "as",
+      "pm",
+      "on",
+      "p.unics_id",
+      "=",
+      "pm.project",
+      "join",
+      "project_member_roles",
+      "as",
+      "pmr",
+      "on",
+      "pm.member_role",
+      "=",
+      "pmr.code",
+      "where",
+      "pmr.code",
+      "=",
+      "\"partner\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "What different research domains do exist?",
+    "question_toks": [
+      "What",
+      "different",
+      "research",
+      "domains",
+      "do",
+      "exist",
+      "?"
+    ],
+    "query": "select distinct description from erc_research_domains",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            4
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        true,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                13,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "distinct",
+      "description",
+      "from",
+      "erc_research_domains"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me the country name of all institutes.",
+    "question_toks": [
+      "Show",
+      "me",
+      "the",
+      "country",
+      "name",
+      "of",
+      "all",
+      "institutes",
+      "."
+    ],
+    "query": "select c.country_name\nfrom countries as c\n         join institutions as i on c.unics_id = i.country_id",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            1
+          ],
+          [
+            "table_unit",
+            7
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                3,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              21,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                4,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "c.country_name",
+      "from",
+      "countries",
+      "as",
+      "c",
+      "join",
+      "institutions",
+      "as",
+      "i",
+      "on",
+      "c.unics_id",
+      "=",
+      "i.country_id"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me the country of all institutes.",
+    "question_toks": [
+      "Show",
+      "me",
+      "the",
+      "country",
+      "of",
+      "all",
+      "institutes",
+      "."
+    ],
+    "query": "select c.country_name\nfrom countries as c\n         join institutions as i on c.unics_id = i.country_id",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            1
+          ],
+          [
+            "table_unit",
+            7
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                3,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              21,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                4,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "c.country_name",
+      "from",
+      "countries",
+      "as",
+      "c",
+      "join",
+      "institutions",
+      "as",
+      "i",
+      "on",
+      "c.unics_id",
+      "=",
+      "i.country_id"
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "What is the country code 2 and country code 3 for Andorra?",
+    "question_toks": [
+      "What",
+      "is",
+      "the",
+      "country",
+      "code",
+      "2",
+      "and",
+      "country",
+      "code",
+      "3",
+      "for",
+      "Andorra",
+      "?"
+    ],
+    "query": "select country_code2, country_code3 from countries where country_name = 'Andorra'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            1
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                5,
+                false
+              ],
+              null
+            ]
+          ],
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                6,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              4,
+              false
+            ],
+            null
+          ],
+          "\"Andorra\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "country_code2",
+      ",",
+      "country_code3",
+      "from",
+      "countries",
+      "where",
+      "country_name",
+      "=",
+      "\"Andorra\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find the code of the funding scheme for Framework Partnership Agreement",
+    "question_toks": [
+      "Find",
+      "the",
+      "code",
+      "of",
+      "the",
+      "funding",
+      "scheme",
+      "for",
+      "Framework",
+      "Partnership",
+      "Agreement"
+    ],
+    "query": "select code\nfrom funding_schemes\nwhere title = 'Framework Partnership Agreement'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            6
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                18,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              19,
+              false
+            ],
+            null
+          ],
+          "\"Framework Partnership Agreement\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "code",
+      "from",
+      "funding_schemes",
+      "where",
+      "title",
+      "=",
+      "\"Framework Partnership Agreement\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show me the full title of the program which is called 'Transport' in short.",
+    "question_toks": [
+      "Show",
+      "me",
+      "the",
+      "full",
+      "title",
+      "of",
+      "the",
+      "program",
+      "which",
+      "is",
+      "called",
+      "'",
+      "Transport",
+      "'",
+      "in",
+      "short",
+      "."
+    ],
+    "query": "select title\nfrom programmes\nwhere short_name = 'Transport'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            9
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                34,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              35,
+              false
+            ],
+            null
+          ],
+          "\"Transport\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "programmes",
+      "where",
+      "short_name",
+      "=",
+      "\"Transport\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find member name and role code of project members in project with acronym GTBB",
+    "question_toks": [
+      "Find",
+      "member",
+      "name",
+      "and",
+      "role",
+      "code",
+      "of",
+      "project",
+      "members",
+      "in",
+      "project",
+      "with",
+      "acronym",
+      "GTBB"
+    ],
+    "query": "select pm.member_name, pr.code\nfrom project_members as pm\n         join projects as p on pm.project = p.unics_id\n         join project_member_roles as pr on pm.member_role = pr.code\nwhere p.acronym = 'GTBB'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            12
+          ],
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            11
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                42,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              66,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                53,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              39,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                45,
+                false
+              ],
+              null
+            ]
+          ],
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                39,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              67,
+              false
+            ],
+            null
+          ],
+          "\"GTBB\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "pm.member_name",
+      ",",
+      "pr.code",
+      "from",
+      "project_members",
+      "as",
+      "pm",
+      "join",
+      "projects",
+      "as",
+      "p",
+      "on",
+      "pm.project",
+      "=",
+      "p.unics_id",
+      "join",
+      "project_member_roles",
+      "as",
+      "pr",
+      "on",
+      "pm.member_role",
+      "=",
+      "pr.code",
+      "where",
+      "p.acronym",
+      "=",
+      "\"GTBB\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find member name and role code of project members in project GTBB",
+    "question_toks": [
+      "Find",
+      "member",
+      "name",
+      "and",
+      "role",
+      "code",
+      "of",
+      "project",
+      "members",
+      "in",
+      "project",
+      "GTBB"
+    ],
+    "query": "select pm.member_name, pr.code\nfrom project_members as pm\n         join projects as p on pm.project = p.unics_id\n         join project_member_roles as pr on pm.member_role = pr.code\nwhere p.acronym = 'GTBB'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            12
+          ],
+          [
+            "table_unit",
+            16
+          ],
+          [
+            "table_unit",
+            11
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                42,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              66,
+              false
+            ],
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                53,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              39,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                45,
+                false
+              ],
+              null
+            ]
+          ],
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                39,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              67,
+              false
+            ],
+            null
+          ],
+          "\"GTBB\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "pm.member_name",
+      ",",
+      "pr.code",
+      "from",
+      "project_members",
+      "as",
+      "pm",
+      "join",
+      "projects",
+      "as",
+      "p",
+      "on",
+      "pm.project",
+      "=",
+      "p.unics_id",
+      "join",
+      "project_member_roles",
+      "as",
+      "pr",
+      "on",
+      "pm.member_role",
+      "=",
+      "pr.code",
+      "where",
+      "p.acronym",
+      "=",
+      "\"GTBB\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show titles of programmes which have FP7 as parent program",
+    "question_toks": [
+      "Show",
+      "titles",
+      "of",
+      "programmes",
+      "which",
+      "have",
+      "FP7",
+      "as",
+      "parent",
+      "program"
+    ],
+    "query": "select title\nfrom programmes\nwhere parent = 'FP7'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            9
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                34,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              36,
+              false
+            ],
+            null
+          ],
+          "\"FP7\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "programmes",
+      "where",
+      "parent",
+      "=",
+      "\"FP7\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show titles of programmes which have program with code FP7 as parent program",
+    "question_toks": [
+      "Show",
+      "titles",
+      "of",
+      "programmes",
+      "which",
+      "have",
+      "program",
+      "with",
+      "code",
+      "FP7",
+      "as",
+      "parent",
+      "program"
+    ],
+    "query": "select title\nfrom programmes\nwhere parent = 'FP7'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            9
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                34,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              36,
+              false
+            ],
+            null
+          ],
+          "\"FP7\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "programmes",
+      "where",
+      "parent",
+      "=",
+      "\"FP7\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Get panel descriptions from research domain Life Sciences",
+    "question_toks": [
+      "Get",
+      "panel",
+      "descriptions",
+      "from",
+      "research",
+      "domain",
+      "Life",
+      "Sciences"
+    ],
+    "query": "select p.description\nfrom erc_panels as p\n         join erc_research_domains as erd on p.part_of = erd.code\nwhere erd.description = 'Life Sciences'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            3
+          ],
+          [
+            "table_unit",
+            4
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                11,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              12,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                10,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              13,
+              false
+            ],
+            null
+          ],
+          "\"Life Sciences\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "p.description",
+      "from",
+      "erc_panels",
+      "as",
+      "p",
+      "join",
+      "erc_research_domains",
+      "as",
+      "erd",
+      "on",
+      "p.part_of",
+      "=",
+      "erd.code",
+      "where",
+      "erd.description",
+      "=",
+      "\"Life Sciences\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Get panel descriptions from research domain life sciences",
+    "question_toks": [
+      "Get",
+      "panel",
+      "descriptions",
+      "from",
+      "research",
+      "domain",
+      "life",
+      "sciences"
+    ],
+    "query": "select p.description\nfrom erc_panels as p\n         join erc_research_domains as erd on p.part_of = erd.code\nwhere erd.description = 'Life Sciences'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            3
+          ],
+          [
+            "table_unit",
+            4
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                11,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              12,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                10,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              13,
+              false
+            ],
+            null
+          ],
+          "\"Life Sciences\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "p.description",
+      "from",
+      "erc_panels",
+      "as",
+      "p",
+      "join",
+      "erc_research_domains",
+      "as",
+      "erd",
+      "on",
+      "p.part_of",
+      "=",
+      "erd.code",
+      "where",
+      "erd.description",
+      "=",
+      "\"Life Sciences\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Find project members of type Research Organisations",
+    "question_toks": [
+      "Find",
+      "project",
+      "members",
+      "of",
+      "type",
+      "Research",
+      "Organisations"
+    ],
+    "query": "select member_name\nfrom project_members as mb\n         join activity_types as a on a.code = mb.activity_type\nwhere a.description = 'Research Organisations'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            12
+          ],
+          [
+            "table_unit",
+            0
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                1,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              46,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                45,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              2,
+              false
+            ],
+            null
+          ],
+          "\"Research Organisations\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "member_name",
+      "from",
+      "project_members",
+      "as",
+      "mb",
+      "join",
+      "activity_types",
+      "as",
+      "a",
+      "on",
+      "a.code",
+      "=",
+      "mb.activity_type",
+      "where",
+      "a.description",
+      "=",
+      "\"Research Organisations\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Get names of project members who's activity type description is Research Organisations",
+    "question_toks": [
+      "Get",
+      "names",
+      "of",
+      "project",
+      "members",
+      "who",
+      "'s",
+      "activity",
+      "type",
+      "description",
+      "is",
+      "Research",
+      "Organisations"
+    ],
+    "query": "select member_name\nfrom project_members as mb\n         join activity_types as a on a.code = mb.activity_type\nwhere a.description = 'Research Organisations'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            12
+          ],
+          [
+            "table_unit",
+            0
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                1,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              46,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                45,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              2,
+              false
+            ],
+            null
+          ],
+          "\"Research Organisations\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "member_name",
+      "from",
+      "project_members",
+      "as",
+      "mb",
+      "join",
+      "activity_types",
+      "as",
+      "a",
+      "on",
+      "a.code",
+      "=",
+      "mb.activity_type",
+      "where",
+      "a.description",
+      "=",
+      "\"Research Organisations\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "What is the objective of DEEPCARBON?",
+    "question_toks": [
+      "What",
+      "is",
+      "the",
+      "objective",
+      "of",
+      "DEEPCARBON",
+      "?"
+    ],
+    "query": "select objective from projects where acronym = 'DEEPCARBON'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                81,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              67,
+              false
+            ],
+            null
+          ],
+          "\"DEEPCARBON\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "objective",
+      "from",
+      "projects",
+      "where",
+      "acronym",
+      "=",
+      "\"DEEPCARBON\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "What is the objective of the project with acronym DEEPCARBON?",
+    "question_toks": [
+      "What",
+      "is",
+      "the",
+      "objective",
+      "of",
+      "the",
+      "project",
+      "with",
+      "acronym",
+      "DEEPCARBON",
+      "?"
+    ],
+    "query": "select objective from projects where acronym = 'DEEPCARBON'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                81,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              67,
+              false
+            ],
+            null
+          ],
+          "\"DEEPCARBON\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "objective",
+      "from",
+      "projects",
+      "where",
+      "acronym",
+      "=",
+      "\"DEEPCARBON\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Get the title of projects having the term 'carbon capturing' in it's objective.",
+    "question_toks": [
+      "Get",
+      "the",
+      "title",
+      "of",
+      "projects",
+      "having",
+      "the",
+      "term",
+      "'",
+      "carbon",
+      "capturing",
+      "'",
+      "in",
+      "it",
+      "'s",
+      "objective",
+      "."
+    ],
+    "query": "select title from projects where objective like '%carbon capturing%'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                68,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          9,
+          [
+            0,
+            [
+              0,
+              81,
+              false
+            ],
+            null
+          ],
+          "\"%carbon capturing%\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "title",
+      "from",
+      "projects",
+      "where",
+      "objective",
+      "like",
+      "\"%carbon capturing%\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "How many projects have an objective which contains 'carbon capturing'?",
+    "question_toks": [
+      "How",
+      "many",
+      "projects",
+      "have",
+      "an",
+      "objective",
+      "which",
+      "contains",
+      "'",
+      "carbon",
+      "capturing",
+      "'",
+      "?"
+    ],
+    "query": "select count(*) from projects where objective like '%carbon capturing%'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            16
+          ]
+        ],
+        "conds": []
+      },
+      "select": [
+        false,
+        [
+          [
+            3,
+            [
+              0,
+              [
+                0,
+                0,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          9,
+          [
+            0,
+            [
+              0,
+              81,
+              false
+            ],
+            null
+          ],
+          "\"%carbon capturing%\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": null
+    },
+    "query_toks": [
+      "select",
+      "count",
+      "(",
+      "*",
+      ")",
+      "from",
+      "projects",
+      "where",
+      "objective",
+      "like",
+      "\"%carbon capturing%\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show all names of institutions from France except institutions from the territorial region of Paris",
+    "question_toks": [
+      "Show",
+      "all",
+      "names",
+      "of",
+      "institutions",
+      "from",
+      "France",
+      "except",
+      "institutions",
+      "from",
+      "the",
+      "territorial",
+      "region",
+      "of",
+      "Paris"
+    ],
+    "query": "select i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\nwhere country_name = 'France'\n    except\nselect i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\n         join eu_territorial_units as etu on i.geocode_regions_3 = etu.geocode_regions\nwhere country_name = 'France'\n  and etu.description = 'Paris'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            7
+          ],
+          [
+            "table_unit",
+            1
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                3,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              21,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                22,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              4,
+              false
+            ],
+            null
+          ],
+          "\"France\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": {
+        "from": {
+          "table_units": [
+            [
+              "table_unit",
+              7
+            ],
+            [
+              "table_unit",
+              1
+            ],
+            [
+              "table_unit",
+              5
+            ]
+          ],
+          "conds": [
+            [
+              false,
+              2,
+              [
+                0,
+                [
+                  0,
+                  3,
+                  false
+                ],
+                null
+              ],
+              [
+                0,
+                21,
+                false
+              ],
+              null
+            ],
+            "and",
+            [
+              false,
+              2,
+              [
+                0,
+                [
+                  0,
+                  23,
+                  false
+                ],
+                null
+              ],
+              [
+                0,
+                14,
+                false
+              ],
+              null
+            ]
+          ]
+        },
+        "select": [
+          false,
+          [
+            [
+              0,
+              [
+                0,
+                [
+                  0,
+                  22,
+                  false
+                ],
+                null
+              ]
+            ]
+          ]
+        ],
+        "where": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                4,
+                false
+              ],
+              null
+            ],
+            "\"France\"",
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                15,
+                false
+              ],
+              null
+            ],
+            "\"Paris\"",
+            null
+          ]
+        ],
+        "groupBy": [],
+        "having": [],
+        "orderBy": [],
+        "limit": null,
+        "intersect": null,
+        "union": null,
+        "except": null
+      }
+    },
+    "query_toks": [
+      "select",
+      "i.institutions_name",
+      "from",
+      "institutions",
+      "as",
+      "i",
+      "join",
+      "countries",
+      "as",
+      "c",
+      "on",
+      "c.unics_id",
+      "=",
+      "i.country_id",
+      "where",
+      "country_name",
+      "=",
+      "\"France\"",
+      "except",
+      "select",
+      "i.institutions_name",
+      "from",
+      "institutions",
+      "as",
+      "i",
+      "join",
+      "countries",
+      "as",
+      "c",
+      "on",
+      "c.unics_id",
+      "=",
+      "i.country_id",
+      "join",
+      "eu_territorial_units",
+      "as",
+      "etu",
+      "on",
+      "i.geocode_regions_3",
+      "=",
+      "etu.geocode_regions",
+      "where",
+      "country_name",
+      "=",
+      "\"France\"",
+      "and",
+      "etu.description",
+      "=",
+      "\"Paris\""
+    ]
+  },
+  {
+    "db_id": "cordis_temporary",
+    "question": "Show institutions from France except the ones from Paris",
+    "question_toks": [
+      "Show",
+      "institutions",
+      "from",
+      "France",
+      "except",
+      "the",
+      "ones",
+      "from",
+      "Paris"
+    ],
+    "query": "select i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\nwhere country_name = 'France'\n    except\nselect i.institutions_name\nfrom institutions as i\n         join countries as c on c.unics_id = i.country_id\n         join eu_territorial_units as etu on i.geocode_regions_3 = etu.geocode_regions\nwhere country_name = 'France'\n  and etu.description = 'Paris'",
+    "sql": {
+      "from": {
+        "table_units": [
+          [
+            "table_unit",
+            7
+          ],
+          [
+            "table_unit",
+            1
+          ]
+        ],
+        "conds": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                3,
+                false
+              ],
+              null
+            ],
+            [
+              0,
+              21,
+              false
+            ],
+            null
+          ]
+        ]
+      },
+      "select": [
+        false,
+        [
+          [
+            0,
+            [
+              0,
+              [
+                0,
+                22,
+                false
+              ],
+              null
+            ]
+          ]
+        ]
+      ],
+      "where": [
+        [
+          false,
+          2,
+          [
+            0,
+            [
+              0,
+              4,
+              false
+            ],
+            null
+          ],
+          "\"France\"",
+          null
+        ]
+      ],
+      "groupBy": [],
+      "having": [],
+      "orderBy": [],
+      "limit": null,
+      "intersect": null,
+      "union": null,
+      "except": {
+        "from": {
+          "table_units": [
+            [
+              "table_unit",
+              7
+            ],
+            [
+              "table_unit",
+              1
+            ],
+            [
+              "table_unit",
+              5
+            ]
+          ],
+          "conds": [
+            [
+              false,
+              2,
+              [
+                0,
+                [
+                  0,
+                  3,
+                  false
+                ],
+                null
+              ],
+              [
+                0,
+                21,
+                false
+              ],
+              null
+            ],
+            "and",
+            [
+              false,
+              2,
+              [
+                0,
+                [
+                  0,
+                  23,
+                  false
+                ],
+                null
+              ],
+              [
+                0,
+                14,
+                false
+              ],
+              null
+            ]
+          ]
+        },
+        "select": [
+          false,
+          [
+            [
+              0,
+              [
+                0,
+                [
+                  0,
+                  22,
+                  false
+                ],
+                null
+              ]
+            ]
+          ]
+        ],
+        "where": [
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                4,
+                false
+              ],
+              null
+            ],
+            "\"France\"",
+            null
+          ],
+          "and",
+          [
+            false,
+            2,
+            [
+              0,
+              [
+                0,
+                15,
+                false
+              ],
+              null
+            ],
+            "\"Paris\"",
+            null
+          ]
+        ],
+        "groupBy": [],
+        "having": [],
+        "orderBy": [],
+        "limit": null,
+        "intersect": null,
+        "union": null,
+        "except": null
+      }
+    },
+    "query_toks": [
+      "select",
+      "i.institutions_name",
+      "from",
+      "institutions",
+      "as",
+      "i",
+      "join",
+      "countries",
+      "as",
+      "c",
+      "on",
+      "c.unics_id",
+      "=",
+      "i.country_id",
+      "where",
+      "country_name",
+      "=",
+      "\"France\"",
+      "except",
+      "select",
+      "i.institutions_name",
+      "from",
+      "institutions",
+      "as",
+      "i",
+      "join",
+      "countries",
+      "as",
+      "c",
+      "on",
+      "c.unics_id",
+      "=",
+      "i.country_id",
+      "join",
+      "eu_territorial_units",
+      "as",
+      "etu",
+      "on",
+      "i.geocode_regions_3",
+      "=",
+      "etu.geocode_regions",
+      "where",
+      "country_name",
+      "=",
+      "\"France\"",
+      "and",
+      "etu.description",
+      "=",
+      "\"Paris\""
+    ]
+  }
+]
