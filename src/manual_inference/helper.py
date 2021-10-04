@@ -122,11 +122,23 @@ def get_schema_hack_zurich():
     return schemas_raw, schemas_dict, schema_path
 
 
+def get_schema_oncomx():
+    base_path = Path(Config.DATA_PREFIX) / 'oncomx' / 'original'
+    schema_path = str(base_path / 'tables.json')
+
+    schemas_raw, schemas_dict = spider_utils.load_schema(schema_path)
+
+    return schemas_raw, schemas_dict, schema_path
+
+
+
 def get_data_folder_by_database(database_name):
     if database_name == 'cordis_temporary' or database_name == 'cordis':
         return 'cordis'
     if database_name == 'hack_zurich':
         return 'hack_zurich'
+    if database_name == 'oncomx_v1_0_25_small':
+        return 'oncomx'
     else:
         return 'spider'
 

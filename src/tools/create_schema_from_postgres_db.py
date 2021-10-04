@@ -49,6 +49,9 @@ def load_db_meta_data(database_host, database_port, database_user, database_pass
     cursor = conn.cursor()
     select_tables(cursor, database_schema)
 
+    if create_index_statements:
+        print(f'In case trigram similarity (https://www.postgresql.org/docs/9.1/pgtrgm.html) is not yet supported by this database, activate it by adding this extension: CREATE EXTENSION pg_trgm;')
+
     for idx_table, (table_name,) in enumerate(cursor.fetchall()):
         data['table_names_original'].append(table_name)
         data['table_names'].append(table_name.lower().replace("_", ' '))
