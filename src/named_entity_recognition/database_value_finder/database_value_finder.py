@@ -54,16 +54,16 @@ class DatabaseValueFinder:
                                                                self.database_schema['table_names']))
                 for value, _, column, table in matching_values_list[:self.max_results]]
 
-    def _get_relevant_columns(self, include_primary_keys, text_columns_only=False):
+    def _get_relevant_columns(self, include_primary_keys, column_types=['text']):
         """
         To avoid too many false positives in the matches we avoid certain columns. Foreign keys are by default discarded,
         primary keys can also get discarded by setting the include_primary_keys to False.
-        For some DB-implementation we support by now only text columns (due to special indices), so we can sort all
-        others out by the text_columns_only flag.
+        We can further specify, what column types we are interested in (different column types --> different similarity matching).
+        To see all possible column types, have a look at create_schema_from_postgres_db.map_data_type()
         """
         table_columns = {}
         for idx, (table_idx, column_name) in enumerate(self.database_schema['column_names_original']):
-            if not text_columns_only or self.database_schema['column_types'][idx] == 'text':
+            if self.database_schema['column_types'][idx] in column_types:
                 if column_name != '*':
                     if not is_foreign_key(idx, self.database_schema['foreign_keys']):
                         if include_primary_keys or not is_primary_key(idx, self.database_schema['primary_keys']):

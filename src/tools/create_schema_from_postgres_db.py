@@ -6,10 +6,12 @@ import psycopg2
 from tools.create_schema_from_sqlite_db import convert_fk_index
 
 
-def map_data_type(column_type) -> str:
+def map_data_type(column_type: str) -> str:
 
-    if 'character' in column_type or 'text' in column_type:
+    if 'text' in column_type or 'character varying' in column_type:
         return 'text'
+    if 'character' in column_type:
+        return 'character'
     if 'numeric' in column_type or 'double' in column_type or 'precision' in column_type or 'int' in column_type:
         return 'number'
     if 'boolean' in column_type:
@@ -66,8 +68,13 @@ def load_db_meta_data(database_host, database_port, database_user, database_pass
             # noinspection PyTypeChecker
             data['column_types'].append(map_data_type(column_type))
 
-            if create_index_statements and map_data_type(column_type) == 'text' and column_type != 'character':
-                print(f'CREATE INDEX IF NOT EXISTS {table_name}_{column_name}_gist_idx ON {database_schema}.{table_name} USING GIST ({column_name} gist_trgm_ops);')
+            if create_index_statements:
+                if map_data_type(column_type) == 'text':
+                    # build specific trigram similarity index
+                    print(f'CREATE INDEX IF NOT EXISTS {table_name}_{column_name}_gist_idx ON {database_schema}.{table_name} USING GIST ({column_name} gist_trgm_ops);')
+                else:
+                    # build just a normal B-tree index
+                    print(f'CREATE INDEX IF NOT EXISTS {table_name}_{column_name}_idx ON {database_schema}.{table_name} ({column_name});')
 
 
         foreign_key_cursor = conn.cursor()
@@ -81,10 +88,11 @@ def load_db_meta_data(database_host, database_port, database_user, database_pass
         primary_key_cursor = conn.cursor()
         select_primary_keys(primary_key_cursor, table_name)
 
-        all_column_names = [column_name for _, column_name in data['column_names_original']]
+        # also include table name, as we otherwise run into issues with duplicates given that many column appear repeatedly (as PK/FK)
+        all_column_names = [f"{data['table_names_original'][t_idx]}.{column_name}" for t_idx, column_name in data['column_names_original']]
         for primary_key_name, in primary_key_cursor.fetchall():
             # noinspection PyTypeChecker
-            data['primary_keys'].append(all_column_names.index(primary_key_name))
+            data['primary_keys'].append(all_column_names.index(f'{table_name}.{primary_key_name}'))
 
     data['foreign_keys'] = all_foreign_keys_temporary
     data['foreign_keys'] = convert_fk_index(data)

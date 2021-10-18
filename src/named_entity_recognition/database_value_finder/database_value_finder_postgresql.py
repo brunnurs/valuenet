@@ -1,6 +1,31 @@
+from typing import List, Tuple, Union
+
 import psycopg2
+from pytictoc import TicToc
 
 from named_entity_recognition.database_value_finder.database_value_finder import DatabaseValueFinder
+
+
+def _filter_character_values(potential_values: List[Tuple[str, float]]) -> List[str]:
+    return [v for v, t in potential_values if len(v) == 1 and not v.isnumeric()]
+
+
+def _filter_numeric_values(potential_values: List[Tuple[str,float]]) -> List[Union[float,int]]:
+
+    def numeric_only(value):
+        try:
+            return int(value)
+        except ValueError:
+            pass
+
+        try:
+            return float(value)
+        except ValueError:
+            pass
+
+        return False
+
+    return [numeric_only(v) for v,t in potential_values if numeric_only(v)]
 
 
 class DatabaseValueFinderPostgreSQL(DatabaseValueFinder):
@@ -22,21 +47,43 @@ class DatabaseValueFinderPostgreSQL(DatabaseValueFinder):
     def find_similar_values_in_database(self, potential_values, include_primary_keys):
         matching_values = set()
 
-        # right now the similarity search on PostgreSQL supports only text columns due to the special indices
-        table_text_column_mapping = self._get_relevant_columns(include_primary_keys, text_columns_only=True)
+        # The similarity search on PostgreSQL supports only text columns due to the special indices
+        table_text_column_mapping = self._get_relevant_columns(include_primary_keys, column_types=['text'])
+
+        # For numbers, we do an exact matching. We also don't include PKs/FKs, as we almost always get a match with those
+        table_number_column_mapping = self._get_relevant_columns(False, column_types=['number'])
+
+        # Same for characters
+        table_character_column_mapping = self._get_relevant_columns(False, column_types=['character'])
 
         conn = psycopg2.connect(database=self.database, user=self.db_user, password=self.db_password, host=self.db_host, port=self.db_port, options=self.db_options)
 
         for table, columns in table_text_column_mapping.items():
             for column in columns:
-                matches = self._find_matches_in_column(table, column, potential_values, conn)
+                matches = self._find_matches_in_column_using_similarity(table, column, potential_values, conn)
                 matching_values.update(matches)
+
+        # while we search for all values on text/varchar columns, numeric columns can only contain numeric values
+        potential_numeric_values = _filter_numeric_values(potential_values)
+        if len(potential_numeric_values) > 0:
+            for table, columns in table_number_column_mapping.items():
+                for column in columns:
+                    matches = self._find_matches_in_column_by_exact_matching(table, column, potential_numeric_values, conn)
+                    matching_values.update(matches)
+
+        #
+        potential_character_values = _filter_character_values(potential_values)
+        if len(potential_character_values) > 0:
+            for table, columns in table_character_column_mapping.items():
+                for column in columns:
+                    matches = self._find_matches_in_column_by_exact_matching(table, column, potential_character_values, conn)
+                    matching_values.update(matches)
 
         conn.close()
 
         return self._top_n_results(matching_values)
 
-    def _find_matches_in_column(self, table, column, potential_values, connection):
+    def _find_matches_in_column_using_similarity(self, table, column, potential_values, connection):
         query = self._assemble_query(column, table, potential_values)
         # print(query)
         # toc = TicToc()
@@ -49,10 +96,36 @@ class DatabaseValueFinderPostgreSQL(DatabaseValueFinder):
         # print(len(rows))
 
         # r[0] is always the value of the column we query. r[1:] represents the similarity with all potential values.
-        # Keep in mind that we only get the result back, if one of the similarities was higher than the similiarity-threshold
+        # Keep in mind that we only get the result back, if one of the similarities was higher than the similarity-threshold
         # for this potential value. By using the max() function we therefore always get the similarity of the potential value
         # that matched best to the value of the column
         return list(map(lambda r: (r[0], max(r[1:]), column, table), rows))
+
+    def _find_matches_in_column_by_exact_matching(self, table, column, potential_values, connection):
+        # print(query)
+        # toc = TicToc()
+        # toc.tic()
+
+        exact_matches = ' OR '.join([f"{column} = %s" for _ in potential_values])
+
+        cursor = connection.cursor()
+        cursor.execute(f"""
+            SELECT {column} FROM {table} 
+            WHERE {exact_matches};
+            """,
+                       potential_values)
+        rows = cursor.fetchall()
+        # toc.toc(f"{table}.{column} took")
+        # print(len(rows))
+
+        # r[0] is always the value of the column which matches with the potential value. As we know that it is always an
+        # exact match, we set the similarity score to 1.0. A potential row, where we search for 245345 and 56565 could look like this:
+        # [(245345, 1.0, my_fancy_column_A, my_fancy_table),
+        #  (56565, 1.0,, my_fancy_column_A, my_fancy_table)]
+
+        # be aware that we can have multiple matches per column, as all filters are OR concatenated
+        return list(map(lambda r: (r[0], 1.0, column, table), rows))
+
 
     @staticmethod
     def _assemble_query(column, table, potential_values):

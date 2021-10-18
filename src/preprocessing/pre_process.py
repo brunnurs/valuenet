@@ -96,7 +96,8 @@ def lookup_database(example, ner_information, columns, question_tokens, column_m
 
     # Here we use the power of the base-data: if we find a potential value in the database, we mark the column we found the value in with a "full value match".
     # TODO: also use the information on table level
-    include_primary_key_columns = 'id' in question_tokens
+    # include_primary_key_columns = 'id' in question_tokens
+    include_primary_key_columns = True
 
     # here we do the actual database lookup
     database_matches = match_values_in_database(database_value_finder, potential_value_candidates,
