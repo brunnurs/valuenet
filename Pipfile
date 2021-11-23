@@ -28,6 +28,7 @@ flask-cors = "*"
 sqlparse = "*"
 pymongo = "*"
 psycopg2-binary = "*"
+openai = "*"
 
 [requires]
 python_version = "3.8"
