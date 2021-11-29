@@ -20,7 +20,7 @@ def transform(original_schema_path: Path, new_schema_path: Path, tables_of_inter
             continue
 
         table = {
-            "name": table_original,
+            "name": original_schema['table_names'][table_idx],
             "original_name": table_original,
             "columns": []
         }
@@ -31,7 +31,7 @@ def transform(original_schema_path: Path, new_schema_path: Path, tables_of_inter
             # we loop over all columns, but only care about the columns of the current table.
             if table_idx == column_table_idx:
                 column = {
-                    "name": column[1],
+                    "name": original_schema['column_names'][column_idx][1],
                     "original_name": column[1],
                     "logical_datatype": original_schema['column_types'][column_idx],
                     "original_datatype": original_schema['column_types'][column_idx]

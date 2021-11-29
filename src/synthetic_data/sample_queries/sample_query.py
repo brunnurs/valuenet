@@ -6,6 +6,7 @@ from typing import List, Tuple, Union, Any
 
 import psycopg2
 
+from intermediate_representation.sem2sql.sem2SQL import transform
 from synthetic_data.helper import map_semql_actions_only
 # DO NOT remove this imports! They are use by the dynamic eval() command in to_semql()
 from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, V, Root1, Action
@@ -88,11 +89,15 @@ def sample_value(v: V, values: dict, table_value: str, column_value: str, genera
     if v.id_c in values:
         return v.id_c, values[v.id_c]
 
+    table_meta_information = [t for t in generative_schema if t['name'] == table_value][0]
+    column_meta_information = [c for c in table_meta_information['columns'] if c['name'] == column_value][0]
+
     cursor = db_connection.cursor()
     # we select a random value from the table/column we selected before.
     # Why don't we use a random selection directly on the database, e.g. by using TABLESAMPLE SYSTEM? -->
-    # we want reproducable results, which requires us to set the seed for any random component
-    cursor.execute(f"SELECT {table_value}.{column_value} FROM {table_value} LIMIT 1000")
+    # we want reproducible results, which requires us to set the seed for any random component
+    cursor.execute(f"SELECT {table_meta_information['original_name']}.{column_meta_information['original_name']} "
+                   f"FROM {table_meta_information['original_name']} LIMIT 1000")
     all_values = cursor.fetchall()
 
     sampled_value = random.choice(all_values)
@@ -124,6 +129,32 @@ def resolve_quadruplet(column_value_quadruplet: Tuple,
         return (column_key, column_value), (table_key, table_value), ()
 
 
+def replace_with_sampled_table_column_values(random_same_structure_query,columns, tables, values):
+
+    # we replace all not-used columns/tables/values with a dummy value - to make sure we don't accidentally use the
+    # original schema in our query.
+    for idx in range(len(random_same_structure_query['col_set'])):
+        random_same_structure_query['col_set'][idx] = 'YOU SHALL NOT SEE THIS!'
+
+    # Then we replace the schema values with our sampled data (columns, tables, values)
+    for idx, column_name in columns.items():
+        random_same_structure_query['col_set'][idx] = column_name
+
+    for idx in range(len(random_same_structure_query['table_names'])):
+        random_same_structure_query['table_names'][idx] = 'YOU SHALL NOT SEE THIS!'
+
+    for idx, table_name in tables.items():
+        random_same_structure_query['table_names'][idx] = table_name
+
+    for idx in range(len(random_same_structure_query['values'])):
+        random_same_structure_query['values'][idx] = 'YOU SHALL NOT SEE THIS!'
+
+    for idx, value in values.items():
+        random_same_structure_query['values'][idx] = value
+
+    return random_same_structure_query
+
+
 def sample_query(query_type: str, spider_data: List, data_path:Path, db_connection: SimpleNamespace) -> str:
 
     # if query_type == 'Root1(3) Root(3) Sel(0) N(0) A(0) C(*) T(*) Filter(2) A(0) C(*) T(*) V(*)':
@@ -142,7 +173,8 @@ def sample_query(query_type: str, spider_data: List, data_path:Path, db_connecti
                             options=db_connection.db_options)
 
     with open(data_path / 'original' / 'tables.json') as f:
-        original_schema = json.load(f)
+        schemas = json.load(f)
+        original_schema = schemas[0]  # we assume there is only one db-schema in this file
 
     with open(data_path / 'generative' / 'generative_schema.json') as f:
         generative_schema = json.load(f)
@@ -170,5 +202,12 @@ def sample_query(query_type: str, spider_data: List, data_path:Path, db_connecti
 
         columns[new_columns[0]] = new_columns[1]
         tables[new_tables[0]] = new_tables[1]
-        values[new_values[0]] = new_values[1]
 
+        if new_values:
+            values[new_values[0]] = new_values[1]
+
+    query_with_sampled_elements = replace_with_sampled_table_column_values(random_same_structure_query, columns, tables, values)
+
+    transformed_sql_query = transform(query_with_sampled_elements, original_schema, query_with_sampled_elements['rule_label'])
+
+    return transformed_sql_query[0]

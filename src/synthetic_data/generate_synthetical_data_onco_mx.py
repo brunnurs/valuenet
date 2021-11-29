@@ -49,15 +49,32 @@ def ask_gpt(few_shot_samples: List[dict], sample_to_ask_for: str, number_of_choi
     return response, prompt
 
 
+def load_handmade_samples(data_path: Path):
+    # load hand-made, OncoMX specific training data. We use them to prompt-engineer GPT-3
+    samples = csv.DictReader(open(data_path / 'generative' / 'sample_queries.csv'))
+
+    # replace new lines with a space to be more consistent
+    example_queries = [{'query': re.sub(r'(\r\n|\r|\n)', ' ', row['query']), 'question': row['question']}
+                       for row in samples]
+    return example_queries
+
+
 def main(args):
     # group query types based on spider data
     grouped_semql, data = group_query_types(args.spider_data)
 
     example_queries = load_handmade_samples(Path(args.data_path))
 
+    db_config = SimpleNamespace(database=args.database,
+                                db_user=args.db_user,
+                                db_password=args.db_password,
+                                db_host=args.db_host,
+                                db_port=args.db_port,
+                                db_options=args.db_options)
+
     # only consider the 3 most common queries for now
     for idx, (query_type, _) in enumerate(grouped_semql.most_common(3)):
-        sampled_query = sample_query(query_type, data, Path(args.data_path), SimpleNamespace(dummy=23))
+        sampled_query = sample_query(query_type, data, Path(args.data_path), db_config)
 
         print(f'We sample query "{sampled_query}" for query type "{query_type}".')
 
@@ -76,16 +93,6 @@ def main(args):
             f.write('\n'.join(gpt_choices))
 
 
-def load_handmade_samples(data_path: Path):
-    # load hand-made, OncoMX specific training data. We use them to prompt-engineer GPT-3
-    samples = csv.DictReader(open(data_path / 'generative' / 'sample_queries.csv'))
-
-    # replace new lines with a space to be more consistent
-    example_queries = [{'query': re.sub(r'(\r\n|\r|\n)', ' ', row['query']), 'question': row['question']}
-                       for row in samples]
-    return example_queries
-
-
 if __name__ == '__main__':
     random.seed(42)
     openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -96,6 +103,13 @@ if __name__ == '__main__':
     arg_parser.add_argument('--number_of_samples_to_use', type=int, default=10)
     arg_parser.add_argument('--output_folder', type=str, default='data/synthetic_data_oncomx')
     arg_parser.add_argument('--number_of_choices', type=int, default=8)
+
+    arg_parser.add_argument('--database', type=str, default='oncomx_v1_0_25_small')
+    arg_parser.add_argument('--db_user', type=str, default='postgres')
+    arg_parser.add_argument('--db_password', type=str, default='vdS83DJSQz2xQ')
+    arg_parser.add_argument('--db_host', type=str, default='testbed.inode.igd.fraunhofer.de')
+    arg_parser.add_argument('--db_port', type=str, default='18001')
+    arg_parser.add_argument('--db_options', type=str, default=f"-c search_path=oncomx_v1_0_25,public")
 
     args = arg_parser.parse_args()
     main(args)
