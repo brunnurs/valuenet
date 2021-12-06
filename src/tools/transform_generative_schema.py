@@ -1,10 +1,31 @@
 import argparse
 import json
 from pathlib import Path
-from typing import List
+from typing import List, Dict
 
 
-def transform(original_schema_path: Path, new_schema_path: Path, tables_of_interest:List[str]):
+class GenerativeSchema:
+    def __init__(self, generative_schema_path: Path) -> None:
+        with open(generative_schema_path) as f:
+            self.schema = json.load(f)
+
+    @property
+    def tables(self) -> List[str]:
+        return [table['name'] for table in self.schema]
+
+    def schema_for_table(self, table: str) -> Dict:
+        return [t for t in self.schema if t['name'] == table][0]
+
+    def schema_for_column(self, table: str, column: str) -> Dict:
+        table_schema = self.schema_for_table(table)
+        return [c for c in table_schema['columns'] if c['name'] == column][0]
+
+    def all_columns_of_table(self, table: str) -> List[str]:
+        table_schema = self.schema_for_table(table)
+        return [column['name'] for column in table_schema['columns']]
+
+
+def transform(original_schema_path: Path, new_schema_path: Path, tables_of_interest: List[str]):
     with open(original_schema_path) as f:
         original_schema = json.load(f)
 

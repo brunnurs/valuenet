@@ -6,10 +6,11 @@ from typing import List, Tuple, Union, Any
 
 import psycopg2
 
-from intermediate_representation.sem2sql.sem2SQL import transform
+from intermediate_representation.sem2sql.sem2SQL import transform, build_graph
 from synthetic_data.helper import map_semql_actions_only
 # DO NOT remove this imports! They are use by the dynamic eval() command in to_semql()
 from intermediate_representation.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, V, Root1, Action
+from tools.transform_generative_schema import GenerativeSchema
 
 
 def to_semql(semql_st: str):
@@ -39,13 +40,13 @@ def filter_column_value_quadruplets(query_as_semql: List[Action]) -> List[Tuple]
     return column_value_quadruplets
 
 
-def sample_table(t: T, tables: dict, generative_schema: dict) -> Tuple[int, str]:
+def sample_table(t: T, tables: dict, generative_schema: GenerativeSchema, original_schema: dict) -> Tuple[int, str]:
     # there is a good chance that this table has been used before and is just re-mentioned
     # (e.g. multiple columns selected on the same table). In that case, don't sample a new one!
     if t.id_c in tables:
         return t.id_c, tables[t.id_c]
 
-    table_names = [table['name'] for table in generative_schema]
+    table_names = generative_schema.tables
 
     # only sample on tables which are not yet used
     unused_tables = list(set(table_names) - set(tables.values()))
@@ -58,7 +59,7 @@ def sample_table(t: T, tables: dict, generative_schema: dict) -> Tuple[int, str]
     return t.id_c, sampled_table
 
 
-def sample_column(c: C, a: A, columns: dict, table_value: str, generative_schema: dict) -> Tuple[int, str]:
+def sample_column(c: C, a: A, columns: dict, table_value: str, generative_schema: GenerativeSchema) -> Tuple[int, str]:
     if c.id_c in columns:
         return c.id_c, columns[c.id_c]
 
@@ -66,17 +67,16 @@ def sample_column(c: C, a: A, columns: dict, table_value: str, generative_schema
     if c.id_c == 0:
         return c.id_c, '*'
 
-    sub_schema_for_table = [t for t in generative_schema if t['name'] == table_value][0]
-    column_names = [column['name'] for column in sub_schema_for_table['columns']]
+    column_names = generative_schema.all_columns_of_table(table_value)
 
     # only sample on columns which are not yet used
     unused_columns = list(set(column_names) - set(columns.values()))
 
-    # depending on the aggregation-type (max, min, sum, avg) we need to further filter for numeric types
+    # depending on the aggregation-type (max, min, sum, avg) we need to further filter for numeric types only
     if a.id_c in [1, 2, 4, 5]:
         unused_columns = [
-            column['name'] for column in sub_schema_for_table['columns']
-            if column['name'] in unused_columns and column['logical_datatype'] == 'number'
+            column for column in unused_columns
+            if generative_schema.schema_for_column(table_value, column)['logical_datatype'] == 'number'
         ]
 
     assert len(unused_columns) > 0, "we try to sample more different columns than there is in this schema"
@@ -85,12 +85,12 @@ def sample_column(c: C, a: A, columns: dict, table_value: str, generative_schema
     return c.id_c, sampled_column
 
 
-def sample_value(v: V, values: dict, table_value: str, column_value: str, generative_schema: dict, db_connection: Any):
+def sample_value(v: V, values: dict, table_value: str, column_value: str, generative_schema: GenerativeSchema, db_connection: Any):
     if v.id_c in values:
         return v.id_c, values[v.id_c]
 
-    table_meta_information = [t for t in generative_schema if t['name'] == table_value][0]
-    column_meta_information = [c for c in table_meta_information['columns'] if c['name'] == column_value][0]
+    table_meta_information = generative_schema.schema_for_table(table_value)
+    column_meta_information = generative_schema.schema_for_column(table_value, column_value)
 
     cursor = db_connection.cursor()
     # we select a random value from the table/column we selected before.
@@ -110,14 +110,14 @@ def resolve_quadruplet(column_value_quadruplet: Tuple,
                        tables: dict,
                        values: dict,
                        original_schema: dict,
-                       generative_schema: dict,
+                       generative_schema: GenerativeSchema,
                        db_connection: Any) -> Union[Tuple, Tuple, Tuple]:
 
     a: A = column_value_quadruplet[0]
     c: C = column_value_quadruplet[1]
     t: T = column_value_quadruplet[2]
 
-    table_key, table_value = sample_table(t, tables, generative_schema)
+    table_key, table_value = sample_table(t, tables, generative_schema, original_schema)
     column_key, column_value = sample_column(c, a, columns, table_value, generative_schema)
 
     if len(column_value_quadruplet) > 3:
@@ -176,8 +176,7 @@ def sample_query(query_type: str, spider_data: List, data_path:Path, db_connecti
         schemas = json.load(f)
         original_schema = schemas[0]  # we assume there is only one db-schema in this file
 
-    with open(data_path / 'generative' / 'generative_schema.json') as f:
-        generative_schema = json.load(f)
+    generative_schema = GenerativeSchema(data_path / 'generative' / 'generative_schema.json')
 
     # find queries with the same structure as the query type we are looking for.
     same_structure_querys = [e for e in spider_data if map_semql_actions_only(e['rule_label']) == query_type]
