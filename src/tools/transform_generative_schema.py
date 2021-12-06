@@ -13,16 +13,19 @@ class GenerativeSchema:
     def tables(self) -> List[str]:
         return [table['name'] for table in self.schema]
 
-    def schema_for_table(self, table: str) -> Dict:
+    def get_schema_for_table(self, table: str) -> Dict:
         return [t for t in self.schema if t['name'] == table][0]
 
-    def schema_for_column(self, table: str, column: str) -> Dict:
-        table_schema = self.schema_for_table(table)
+    def get_schema_for_column(self, table: str, column: str) -> Dict:
+        table_schema = self.get_schema_for_table(table)
         return [c for c in table_schema['columns'] if c['name'] == column][0]
 
     def all_columns_of_table(self, table: str) -> List[str]:
-        table_schema = self.schema_for_table(table)
+        table_schema = self.get_schema_for_table(table)
         return [column['name'] for column in table_schema['columns']]
+
+    def get_original_table_name(self, table: str) -> str:
+        return self.get_schema_for_table(table)['original_name']
 
 
 def transform(original_schema_path: Path, new_schema_path: Path, tables_of_interest: List[str]):
@@ -79,9 +82,18 @@ if __name__ == '__main__':
     # we don't consider all tables but just the one of interest. This normally does not include simple connection tables.
     tables = [
         'disease',
-        'biomarker_fda_test',
+        'disease_mutation',
         'differential_expression',
-        'biomarker'
+        'biomarker',
+        'biomarker_edrn',
+        'biomarker_alias',
+        'biomarker_fda_test',
+        'biomarker_fda_test_trial',
+        'biomarker_fda',
+        'healthy_expression',
+        'stage',
+        'species',
+        'anatomical_entity'
     ]
 
     transform(args.original_schema, args.new_schema, tables)

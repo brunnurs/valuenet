@@ -2,7 +2,7 @@ import json
 import random
 from pathlib import Path
 from types import SimpleNamespace
-from typing import List, Tuple, Union, Any
+from typing import List, Tuple, Union, Any, Dict
 
 import psycopg2
 
@@ -40,6 +40,33 @@ def filter_column_value_quadruplets(query_as_semql: List[Action]) -> List[Tuple]
     return column_value_quadruplets
 
 
+def find_unused_tables_closest_to_used_tables(unused_tables: List[str], used_tables: List[str], original_schema: dict, generative_schema: GenerativeSchema):
+    original_schema_graph = build_graph(original_schema)
+
+    distance: Dict[str, int] = {}
+
+    # we search for each unused table the closest used table in the schema graph
+    for unused_table in unused_tables:
+        distance[unused_table] = 10000
+        unused_table_original = generative_schema.get_original_table_name(unused_table)
+
+        for used_table in used_tables:
+            used_table_original = generative_schema.get_original_table_name(used_table)
+
+            hops = original_schema_graph.dijkstra(used_table_original, unused_table_original)
+
+            if len(hops) < distance[unused_table]:
+                distance[unused_table] = len(hops)
+
+    # sort by distance (ASC)
+    distance_sorted: Dict[str, int] = dict(sorted(distance.items(), key=lambda item: item[1]))
+    min_distance = list(distance_sorted.values())[0]
+
+    # return all tables with a minimal distance. This is the set we then sample from.
+    tables_with_min_distance = [table for table, distance in distance_sorted.items() if distance == min_distance]
+    return tables_with_min_distance
+
+
 def sample_table(t: T, tables: dict, generative_schema: GenerativeSchema, original_schema: dict) -> Tuple[int, str]:
     # there is a good chance that this table has been used before and is just re-mentioned
     # (e.g. multiple columns selected on the same table). In that case, don't sample a new one!
@@ -51,7 +78,12 @@ def sample_table(t: T, tables: dict, generative_schema: GenerativeSchema, origin
     # only sample on tables which are not yet used
     unused_tables = list(set(table_names) - set(tables.values()))
 
-    # TODO: implement a mechanism to only sample on "close" tables, so use the schema graph to calculate distance.
+    # if it's not the first table, we want to know only the unused_tables closest to the current graph
+    if len(tables) > 0:
+        unused_tables = find_unused_tables_closest_to_used_tables(unused_tables,
+                                                                  list(tables.values()),
+                                                                  original_schema,
+                                                                  generative_schema)
 
     assert len(unused_tables) > 0, "we try to sample more different tables than there is in this schema"
     sampled_table = random.choice(unused_tables)
@@ -76,7 +108,7 @@ def sample_column(c: C, a: A, columns: dict, table_value: str, generative_schema
     if a.id_c in [1, 2, 4, 5]:
         unused_columns = [
             column for column in unused_columns
-            if generative_schema.schema_for_column(table_value, column)['logical_datatype'] == 'number'
+            if generative_schema.get_schema_for_column(table_value, column)['logical_datatype'] == 'number'
         ]
 
     assert len(unused_columns) > 0, "we try to sample more different columns than there is in this schema"
@@ -89,8 +121,8 @@ def sample_value(v: V, values: dict, table_value: str, column_value: str, genera
     if v.id_c in values:
         return v.id_c, values[v.id_c]
 
-    table_meta_information = generative_schema.schema_for_table(table_value)
-    column_meta_information = generative_schema.schema_for_column(table_value, column_value)
+    table_meta_information = generative_schema.get_schema_for_table(table_value)
+    column_meta_information = generative_schema.get_schema_for_column(table_value, column_value)
 
     cursor = db_connection.cursor()
     # we select a random value from the table/column we selected before.
