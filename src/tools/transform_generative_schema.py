@@ -27,6 +27,9 @@ class GenerativeSchema:
     def get_original_table_name(self, table: str) -> str:
         return self.get_schema_for_table(table)['original_name']
 
+    def get_logical_table_name(self, table: str) -> str:
+        return self.get_schema_for_table(table)['logical_name']
+
 
 def transform(original_schema_path: Path, new_schema_path: Path, tables_of_interest: List[str]):
     with open(original_schema_path) as f:
@@ -46,6 +49,7 @@ def transform(original_schema_path: Path, new_schema_path: Path, tables_of_inter
         table = {
             "name": original_schema['table_names'][table_idx],
             "original_name": table_original,
+            "logical_name": table_original,
             "columns": []
         }
 
@@ -57,8 +61,9 @@ def transform(original_schema_path: Path, new_schema_path: Path, tables_of_inter
                 column = {
                     "name": original_schema['column_names'][column_idx][1],
                     "original_name": column[1],
+                    "logical_name": column[1],
+                    "original_datatype": original_schema['column_types'][column_idx],
                     "logical_datatype": original_schema['column_types'][column_idx],
-                    "original_datatype": original_schema['column_types'][column_idx]
                 }
 
                 table["columns"].append(column)
@@ -83,17 +88,8 @@ if __name__ == '__main__':
     tables = [
         'disease',
         'disease_mutation',
-        'differential_expression',
-        'biomarker',
-        'biomarker_edrn',
-        'biomarker_alias',
-        'biomarker_fda_test',
-        'biomarker_fda_test_trial',
-        'biomarker_fda',
-        'healthy_expression',
-        'stage',
-        'species',
-        'anatomical_entity'
+        'anatomical_entity',
+        'disease_mutation_impact_prediction'
     ]
 
     transform(args.original_schema, args.new_schema, tables)

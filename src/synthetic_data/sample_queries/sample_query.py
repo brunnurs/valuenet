@@ -27,7 +27,7 @@ def filter_column_value_quadruplets(query_as_semql: List[Action]) -> List[Tuple]
             current_quadruplet = (query_as_semql[idx], query_as_semql[idx + 1], query_as_semql[idx + 2])
 
             # in some cases, the A, C, T triplet is followed by a Value V
-            if isinstance(query_as_semql[idx + 3], V):
+            if len(query_as_semql) > idx + 3 and isinstance(query_as_semql[idx + 3], V):
                 current_quadruplet = (*current_quadruplet, query_as_semql[idx + 3])
                 idx += 4
             else:
@@ -187,7 +187,29 @@ def replace_with_sampled_table_column_values(random_same_structure_query,columns
     return random_same_structure_query
 
 
-def sample_query(query_type: str, spider_data: List, data_path:Path, db_connection: SimpleNamespace) -> str:
+def replace_logic_names(sampled_query: str, tables: List[str], columns: List[str], generative_schema: GenerativeSchema):
+    """
+    Replace original table and column names with the "logic" names from the generative schema.
+    """
+    sampled_query_replaced = sampled_query
+
+    for table in tables:
+        original_table_name = generative_schema.get_original_table_name(table)
+        logical_table_name = generative_schema.get_logical_table_name(table)
+
+        sampled_query_replaced = sampled_query_replaced.replace(original_table_name, logical_table_name)
+
+        # there is a good chance that we find the wrong column if we search in all columns - because of duplicates.
+        # by focusing on a table it is still possible to find wrong columns, but far less likely
+        table_schema = generative_schema.get_schema_for_table(table)
+        for column in table_schema['columns']:
+            if column['name'] in columns:
+                sampled_query_replaced = sampled_query_replaced.replace(f".{column['original_name']}", f".{column['logical_name']}")
+
+    return sampled_query_replaced
+
+
+def sample_query(query_type: str, spider_data: List, original_schema: dict, generative_schema: GenerativeSchema, db_connection: SimpleNamespace) -> Tuple[str, str]:
 
     # if query_type == 'Root1(3) Root(3) Sel(0) N(0) A(0) C(*) T(*) Filter(2) A(0) C(*) T(*) V(*)':
     #     return "SELECT biomarker_description FROM biomarker WHERE gene_symbol = 'CCL22'"
@@ -204,15 +226,11 @@ def sample_query(query_type: str, spider_data: List, data_path:Path, db_connecti
                             port=db_connection.db_port,
                             options=db_connection.db_options)
 
-    with open(data_path / 'original' / 'tables.json') as f:
-        schemas = json.load(f)
-        original_schema = schemas[0]  # we assume there is only one db-schema in this file
-
-    generative_schema = GenerativeSchema(data_path / 'generative' / 'generative_schema.json')
-
     # find queries with the same structure as the query type we are looking for.
-    same_structure_querys = [e for e in spider_data if map_semql_actions_only(e['rule_label']) == query_type]
-    random_same_structure_query = same_structure_querys[0] # Todo: sample here from all possible ones.
+    same_structure_queries = [e for e in spider_data if map_semql_actions_only(e['rule_label']) == query_type]
+    random_same_structure_query = same_structure_queries[0] # Todo: sample here from all possible ones.
+
+    # print(f"The query template we sample from is '{random_same_structure_query['rule_label']}'. The actual query is: '{random_same_structure_query['query']}'")
 
     semql_structure = to_semql(random_same_structure_query['rule_label'])
 
@@ -239,6 +257,8 @@ def sample_query(query_type: str, spider_data: List, data_path:Path, db_connecti
 
     query_with_sampled_elements = replace_with_sampled_table_column_values(random_same_structure_query, columns, tables, values)
 
-    transformed_sql_query = transform(query_with_sampled_elements, original_schema, query_with_sampled_elements['rule_label'])
+    transformed_sql_query = transform(query_with_sampled_elements, original_schema, query_with_sampled_elements['rule_label'])[0].strip()
 
-    return transformed_sql_query[0]
+    sampled_query_replaced = replace_logic_names(transformed_sql_query, list(tables.values()), list(columns.values()), generative_schema)
+
+    return transformed_sql_query, sampled_query_replaced

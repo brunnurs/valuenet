@@ -1,5 +1,6 @@
 import argparse
 import csv
+import json
 import os
 import random
 import re
@@ -11,6 +12,7 @@ from typing import List
 
 from synthetic_data.group_pairs_to_find_templates import group_query_types, map_semql_actions_only
 from synthetic_data.sample_queries.sample_query import sample_query
+from tools.transform_generative_schema import GenerativeSchema
 
 
 def ask_gpt(few_shot_samples: List[dict], sample_to_ask_for: str, number_of_choices: int):
@@ -65,6 +67,12 @@ def main(args):
 
     example_queries = load_handmade_samples(Path(args.data_path))
 
+    with open(Path(args.data_path) / 'original' / 'tables.json') as f:
+        schemas = json.load(f)
+        original_schema = schemas[0]  # we assume there is only one db-schema in this file
+
+    generative_schema = GenerativeSchema(Path(args.data_path) / 'generative' / 'generative_schema.json')
+
     db_config = SimpleNamespace(database=args.database,
                                 db_user=args.db_user,
                                 db_password=args.db_password,
@@ -72,25 +80,28 @@ def main(args):
                                 db_port=args.db_port,
                                 db_options=args.db_options)
 
-    # only consider the 3 most common queries for now
-    for idx, (query_type, _) in enumerate(grouped_semql.most_common(3)):
-        sampled_query = sample_query(query_type, data, Path(args.data_path), db_config)
+    # The total amount of samples will be this number multiplied by the number of different query types.
+    for round_idx in range(2):
+        # only consider the 3 most common queries for now
+        for idx, (query_type, _) in enumerate(grouped_semql.most_common(4)):
+            sampled_query, sampled_query_replaced = sample_query(query_type, data, original_schema, generative_schema, db_config)
 
-        print(f'We sample query "{sampled_query}" for query type "{query_type}".')
+            print(f'We sample query "{sampled_query}" for query type "{query_type}".\n'
+                  f'Rewritten query (logic names) is "{sampled_query_replaced}"')
 
-        # We use a few handmade OncoMX samples to prompt-engineer the few-shot learning
-        random_samples = random.sample(example_queries, k=args.number_of_samples_to_use)
+            # We use a few handmade OncoMX samples to prompt-engineer the few-shot learning
+            random_samples = random.sample(example_queries, k=args.number_of_samples_to_use)
 
-        response, prompt = ask_gpt(random_samples, sampled_query, args.number_of_choices)
+            response, prompt = ask_gpt(random_samples, sampled_query_replaced, args.number_of_choices)
 
-        gpt_choices = [f"({idx}) {c['text'].strip()}" for idx, c in enumerate(response['choices'])]
+            gpt_choices = [f"({idx}) {c['text'].strip()}" for idx, c in enumerate(response['choices'])]
 
-        with open(Path(args.output_folder) / f'{idx}.txt', 'w') as f:
-            f.write(prompt)
-            f.write('\nOriginal Answer:\n')
-            f.write(sampled_query)
-            f.write('\nGPT-3 choices:\n')
-            f.write('\n'.join(gpt_choices))
+            with open(Path(args.output_folder) / f'{round_idx}_{idx}.txt', 'w') as f:
+                f.write(prompt)
+                f.write('\nOriginal Answer:\n')
+                f.write(sampled_query)
+                f.write('\nGPT-3 choices:\n')
+                f.write('\n'.join(gpt_choices))
 
 
 if __name__ == '__main__':

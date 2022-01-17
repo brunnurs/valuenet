@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 from synthetic_data.helper import map_semql_actions_only
 
 
-def group_query_types(data_path:str) -> Tuple[Counter, List]:
+def group_query_types(data_path: str) -> Tuple[Counter, List]:
 
     with open(data_path, 'r') as fp:
         data = json.load(fp)

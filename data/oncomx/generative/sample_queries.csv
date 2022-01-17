@@ -1,0 +1,88 @@
+question,query
+Show me the description of all biomarkers,SELECT T1.biomarker_description FROM biomarker AS T1
+Show the gene symbol and the description of biomarkers,"SELECT T1.gene_symbol, T1.biomarker_description FROM biomarker AS T1"
+How many biomarkers are there,SELECT count(*) FROM biomarker AS T1
+Show biomarker drugs,SELECT T1.biomarker_drug FROM biomarker_fda_drug AS T1
+Show me the gene symbol of biomarkers,SELECT T1.gene_symbol FROM biomarker AS T1
+Show me the name of anatomical entities,SELECT T1.name FROM anatomical_entity AS T1
+Show all anatomical entities,SELECT T1.name FROM anatomical_entity AS T1
+Show me the name of anatomical entities and the name of all species,"SELECT T1.name,
+T2.speciescommonname FROM anatomical_entity AS T1 JOIN 
+healthy_expression AS T13 ON T1.id = T13.uberon_anatomical_id JOIN 
+xref_gene_ensembl AS T14 ON T13.ensembl_gene_id = T14.ensembl_gene_id 
+JOIN species AS T2 ON T14.speciesid = T2.speciesid"
+List all disease names,SELECT T1.name FROM disease AS T1
+Show names of all diseases,SELECT T1.name FROM disease AS T1
+all information about species,SELECT * FROM species AS T1
+Show all information in differential expression,SELECT * FROM differential_expression AS T1
+Show name of diseases where the A1BG gene expression is up regulated,"SELECT d.name FROM differential_expression as de JOIN disease as d ON de.doid=d.id
+WHERE gene_symbol='A1BG' and expression_change_direction='up'"
+Show all gene symbols in differential expression,SELECT DISTINCT T1.gene_symbol FROM differential_expression AS T1
+Identify a list of genes expressed in lung cancer,SELECT T1.gene_symbol FROM differential_expression AS T1 JOIN disease AS T2 ON T1.doid = T2.id WHERE T2.name = 'lung cancer'
+Identify a list of genes expressed in lung cancer that are statistically significant,SELECT distinct gene_symbol FROM differential_expression AS de JOIN disease AS d ON d.id= de.doid WHERE  d.name = 'lung cancer' and statistical_significance = 'Yes'
+Show tests by Roche,SELECT * FROM biomarker_fda_test AS WHERE .test_manufacturer like '%Roche%'
+Show distinct manufacturer of tests for gene BRAF ,"SELECT distinct(T2.test_manufacturer) 
+FROM biomarker as T0 
+JOIN biomarker_fda AS T1 on T0.id = T1.id
+JOIN biomarker_fda_test AS T2 ON T1.test_trade_name = T2.test_trade_name AND T1.test_submission = T2.test_submission
+WHERE T0.gene_symbol = 'BRAF'"
+Show distinct manufacturer of predictive tests for gene BRAF ,"SELECT distinct(T2.test_manufacturer) 
+FROM biomarker as T0 
+JOIN biomarker_fda AS T1 on T0.id = T1.id
+JOIN biomarker_fda_test AS T2 ON T1.test_trade_name = T2.test_trade_name AND T1.test_submission = T2.test_submission
+JOIN biomarker_fda_test_use T3 ON T2.test_trade_name = T2.test_trade_name
+WHERE T0.gene_symbol = 'BRAF' AND T3.actual_use='predictive'"
+Show number of test devices trials of Roche,SELECT count( *) FROM biomarker_fda_test AS T1 WHERE T1.test_manufacturer = 'Roche'
+Show number of test trials of 23andMe,"SELECT count(*) 
+FROM biomarker_fda_test_trial AS T1 
+JOIN biomarker_fda_test AS T2 ON T1.test_trade_name = T2.test_trade_name 
+WHERE T2.test_manufacturer = '23andMe'"
+Show the name of all tests that are in clinical use,"SELECT distinct test_trade_name 
+FROM biomarker_fda_test
+WHERE test_adoption_evidence = 'clinical use'"
+Show all information about stages,SELECT * FROM stage AS T1
+Show all information about disease mutations,SELECT * FROM disease_mutation AS T1
+Show all information about disease mutations of the anatomical entity liver,"SELECT * FROM 
+disease_mutation AS T1 JOIN disease_mutation_tissue AS T13 ON T1.id = 
+T13.disease_mutation_id JOIN anatomical_entity AS T2 ON 
+T13.uberon_anatomical_id = T2.id WHERE T2.name = 'liver'"
+Show all information about disease mutations of the liver,"SELECT * FROM 
+disease_mutation AS T1 JOIN disease_mutation_tissue AS T13 ON T1.id = 
+T13.disease_mutation_id JOIN anatomical_entity AS T2 ON 
+T13.uberon_anatomical_id = T2.id WHERE T2.name = 'liver'"
+Show all i disease mutations of the liver,"SELECT * FROM 
+disease_mutation AS T1 JOIN disease_mutation_tissue AS T13 ON T1.id = 
+T13.disease_mutation_id JOIN anatomical_entity AS T2 ON 
+T13.uberon_anatomical_id = T2.id WHERE T2.name = 'liver'"
+Show all information about disease mutations of lung cancer,SELECT * FROM disease_mutation AS T1 JOIN disease AS T2 ON T1.doid = T2.id WHERE T2.name = 'lung cancer'
+Show disease mutations of lung cancer,SELECT * FROM disease_mutation AS T1 JOIN disease AS T2 ON T1.doid = T2.id WHERE T2.name = 'lung cancer'
+Show all information about differential expression of lung cancer,SELECT DISTINCT * FROM differential_expression AS T1 JOIN disease AS T2 ON T1.doid = T2.id WHERE T2.name = 'lung cancer'
+Show the pvalue of differential expression of lung cancer,SELECT T1.pvalue FROM differential_expression AS T1 JOIN disease AS T2 ON T1.doid = T2.id WHERE T2.name = 'lung cancer'
+Show all information about healthy expressions,SELECT * FROM healthy_expression
+Identify mutations in all forms of breast cancer,SELECT * FROM disease_mutation AS dm JOIN disease AS d ON dm.doid=d.id WHERE d.name = 'breast cancer'
+Show all information about mutations in all forms of breast cancer,SELECT * FROM disease_mutation AS dm JOIN disease AS d ON dm.doid=d.id WHERE d.name = 'breast cancer'
+Show all mutations of lung cancer,SELECT * FROM disease_mutation AS dm JOIN disease AS d ON dm.doid=d.id WHERE d.name = 'lung cancer'
+Show all information about mutations of lung cancer,SELECT * FROM disease_mutation AS dm JOIN disease AS d ON dm.doid=d.id WHERE d.name = 'lung cancer'
+Show the gene symbol and the description of cancer biomarkers,"SELECT gene_symbol, biomarker_description FROM biomarker WHERE test_is_a_panel=false"
+Show biomarkers for breast cancer,"SELECT distinct b.gene_symbol, b.biomarker_description  FROM biomarker AS b LEFT JOIN
+ biomarker_edrn as edrn ON edrn.id=b.id LEFT JOIN 
+  biomarker_fda as fda ON fda.id=b.id LEFT JOIN 
+  biomarker_fda_test as t ON fda.test_trade_name=t.test_trade_name AND fda.test_submission=t.test_submission
+  LEFT JOIN anatomical_entity as anat ON anat.id=edrn.uberon_anatomical_id LEFT JOIN cancer_tissue as ct ON ct.uberon_anatomical_id=anat.id
+  LEFT JOIN disease as d ON d.id=t.doid or d.id=ct.doid
+ WHERE b.test_is_a_panel=false AND d.name='breast cancer' AND b.gene_symbol is not null"
+Show cancer biomarker panels ,"SELECT distinct b.gene_symbol, b.biomarker_description, d.name FROM biomarker AS b LEFT JOIN
+ biomarker_edrn as edrn ON edrn.id=b.id LEFT JOIN 
+  biomarker_fda as fda ON fda.id=b.id LEFT JOIN 
+  biomarker_fda_test as t ON fda.test_trade_name=t.test_trade_name AND fda.test_submission=t.test_submission
+  LEFT JOIN anatomical_entity as anat ON anat.id=edrn.uberon_anatomical_id LEFT JOIN cancer_tissue as ct ON ct.uberon_anatomical_id=anat.id
+  LEFT JOIN disease as d ON d.id=t.doid or d.id=ct.doid
+ WHERE b.test_is_a_panel=true AND b.biomarker_description is not null"
+Show all information about diseases with cancer,SELECT distinct name FROM disease WHERE name like '%cancer%'
+Show all cancer types ,SELECT distinct * FROM disease where id != 0;
+Show healthy organs,SELECT * FROM healthy_expression
+What are the healthy organs where the A1BG is expressed.,"SELECT DISTINCT anat.name  FROM healthy_expression as he JOIN
+ xref_gene_ensembl as g ON g.ensembl_gene_id=he.ensembl_gene_id JOIN
+ anatomical_entity as anat ON anat.id=he.uberon_anatomical_id
+  WHERE
+ g.gene_symbol='A1BG' and  expression_level_gene_relative!='ABSENT'"
