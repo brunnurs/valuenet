@@ -274,7 +274,7 @@ def col_to_str(agg, col, tab, table_names, N=1, is_distinct=False):
     distinct_str = 'DISTINCT' if is_distinct else ''
     if agg == 'none':
         if tab not in table_names:
-            table_names[tab] = 'T' + str(len(table_names) + N)
+            table_names[tab] = tab.replace(' ', '_')
         table_alias = table_names[tab]
         if col == '*':
             return '*'
@@ -282,11 +282,11 @@ def col_to_str(agg, col, tab, table_names, N=1, is_distinct=False):
     else:
         if col == '*':
             if tab is not None and tab not in table_names:
-                table_names[tab] = 'T' + str(len(table_names) + N)
+                table_names[tab] = tab.replace(' ', '_')
             return '%s(%s %s)' % (agg, distinct_str, _col)
         else:
             if tab not in table_names:
-                table_names[tab] = 'T' + str(len(table_names) + N)
+                table_names[tab] = tab.replace(' ', '_')
             table_alias = table_names[tab]
             return '%s(%s %s.%s)' % (agg, distinct_str, table_alias, _col)
 

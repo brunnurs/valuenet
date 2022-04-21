@@ -2,7 +2,7 @@ def infer_from_clause(table_names, graph, columns):
     tables = list(table_names.keys())
 
     if len(tables) == 1:  # no JOINS needed - just return the simple "FROM" clause.
-        return "FROM {} AS {}".format(tables[0], table_names[tables[0]])
+        return f"FROM {tables[0]} "
     else:  # we have to deal with multiple tables - and find the shortest path between them
         join_clauses, cross_join_clauses = generate_path_by_graph(graph, table_names, tables)
 
@@ -16,31 +16,20 @@ def infer_from_clause(table_names, graph, columns):
         # the first case is kind of an exception case, as we need to write two tables, for example: "A AS T1 JOIN B AS T2 ON ....".
         # All the following joins will only be "... JOIN T2 ON ...."
         if idx == 0:
-            stringified_join_clauses.append("{} AS {} JOIN {} AS {} ON {}.{} = {}.{}".format(start,
-                                                                                           start_alias,
-                                                                                           end,
-                                                                                           end_alias,
-                                                                                           start_alias,
-                                                                                           entry_column,
-                                                                                           end_alias,
-                                                                                           exit_column))
+            stringified_join_clauses.append(
+                f"{start} JOIN {end} ON {start_alias}.{entry_column} = {end_alias}.{exit_column}")
         else:
-            stringified_join_clauses.append("JOIN {} AS {} ON {}.{} = {}.{}".format(end,
-                                                                                  end_alias,
-                                                                                  start_alias,
-                                                                                  entry_column,
-                                                                                  end_alias,
-                                                                                  exit_column))
+            stringified_join_clauses.append(f"JOIN {end} ON {start_alias}.{entry_column} = {end_alias}.{exit_column}")
 
     # that's the cross-join exception cases. We have to add them for syntactical correctness, even though it will not result
     # in a good query at execution.
     for table, table_alias in cross_join_clauses:
         if len(stringified_join_clauses) == 0:
-            stringified_join_clauses.append("{} AS {}".format(table, table_alias))
+            stringified_join_clauses.append(f"{table}")
         else:
-            stringified_join_clauses.append("JOIN {} AS {}".format(table, table_alias))
+            stringified_join_clauses.append(f"JOIN {table}")
 
-    return 'FROM ' + ' '.join(stringified_join_clauses)
+    return f'FROM {" ".join(stringified_join_clauses)}'
 
 
 def generate_path_by_graph(graph, table_names, tables):
@@ -71,19 +60,13 @@ def generate_path_by_graph(graph, table_names, tables):
     # be aware that, as we only consider INNER JOINS, A <-> B is equal to B <-> A! So we also have to remove this edges.
     edges_deduplicated = _deduplicate_edges(edges)
 
-    # "max_alias_idx" is the highest alias in the current join_clause (e.g. "T1, T2, T3"). We need to find it as we
-    # wanna add new tables and continue the enumeration properly.
-    max_alias_idx = _get_max_alias(table_names)
-
     # now for each edge we now have to add both, the start table and the end table to the join_clause (including the PK/FK-columns).
     for edge in edges_deduplicated:
         if edge.start not in table_names:
-            table_names[edge.start] = 'T' + str(max_alias_idx + 1)
-            max_alias_idx += 1
+            table_names[edge.start] = edge.start.replace(' ', '_')
 
         if edge.end not in table_names:
-            table_names[edge.end] = 'T' + str(max_alias_idx + 1)
-            max_alias_idx += 1
+            table_names[edge.end] = edge.end.replace(' ', '_')
 
         join_clause.append((edge.start,
                             table_names[edge.start],
