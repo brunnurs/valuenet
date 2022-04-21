@@ -11,7 +11,8 @@ def remote_named_entity_recognition(document, ner_api_secret):
     payload = {
         "document": {
             "type": "PLAIN_TEXT",
-            "content": document
+            "content": document,
+            "language": "en"  # we need to set the language manually, as the google language detection sometimes fails due to e.g. Dutch names
         },
         "encodingType": 'UTF8'
     }

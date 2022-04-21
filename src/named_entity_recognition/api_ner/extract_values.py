@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 
-from named_entity_recognition.api_ner.google_api_repository import remote_named_entity_recognition
+from src.named_entity_recognition.api_ner.google_api_repository import remote_named_entity_recognition
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
