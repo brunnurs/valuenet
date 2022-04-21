@@ -1,4 +1,5 @@
 import argparse
+import decimal
 import json
 import os
 
@@ -19,6 +20,15 @@ from joblib import Parallel, delayed
 # keep always a few cores free
 NUM_CORES = max(multiprocessing.cpu_count() - 2, 1)
 
+
+class DecimalEncoder(json.JSONEncoder):
+    """
+    We sometimes struggle with decimals in json.dumps, therefore just always encode them as strings.
+    """
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return str(o)
+        return super(DecimalEncoder, self).default(o)
 
 def lemmatize_list(names):
     # TODO: replace this splitting/lemmatization with spacy
@@ -281,18 +291,17 @@ def main():
 
     # To analyze a specific sample use this. You find the sample-idx with e.g. this code snippet:
     # [(idx, query) for idx, query in enumerate(data) if query['question'] == "THE QUESTION YOU SEARCH FOR"]
-    # data = data[7646:7647]
-    # ner_data = ner_data[7646:7647]
+    # data = data[1073:1073 + 1]
+    # ner_data = ner_data[1073:1073 + 1]
 
     results = Parallel(n_jobs=NUM_CORES)(delayed(pre_process)(idx, example, ner_information,
                                                               build_db_value_finder(example['db_id'], args.table_path, args),
                                                               is_training=True) for idx, (example, ner_information) in
                                          enumerate(zip(data, ner_data)))
     # To better debug this code, use the non-parallelized version of the code
-    # results = [pre_process(idx, example, ner_information, build_db_value_finder(args.database_path, example['db_id'], args.table_path), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
+    # results = [pre_process(idx, example, ner_information, build_db_value_finder(example['db_id'], args.table_path, args), is_training=True) for idx, (example, ner_information) in enumerate(zip(data, ner_data))]
 
-    all_token_grouped, all_token_types, all_column_matches, all_value_candidates, all_complete_values_found = zip(
-        *results)
+    all_token_grouped, all_token_types, all_column_matches, all_value_candidates, all_complete_values_found = zip(*results)
 
     for example, token_grouped, token_types, column_matches, value_candidates, complete_values_found in zip(data,
                                                                                                             all_token_grouped,
@@ -316,7 +325,7 @@ def main():
         f"Could not find all values in {not_found_count} examples. All examples where values could not get extracted, will get disable on evaluation")
 
     with open(args.output, 'w') as f:
-        json.dump(data, f, sort_keys=True, indent=4)
+        json.dump(data, f, sort_keys=True, indent=4, cls=DecimalEncoder)
 
 
 if __name__ == '__main__':
