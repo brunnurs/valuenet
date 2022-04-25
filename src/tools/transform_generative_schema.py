@@ -79,17 +79,27 @@ def transform(original_schema_path: Path, new_schema_path: Path, tables_of_inter
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--original_schema', default='data/oncomx/original/tables.json', type=str)
-    parser.add_argument('--new_schema', default='data/oncomx/generative/generative_schema.json', type=str)
+    parser.add_argument('--original_schema', default='data/cordis/original/tables.json', type=str)
+    parser.add_argument('--new_schema', default='data/cordis/generative/generative_schema.json', type=str)
 
     args = parser.parse_args()
 
     # we don't consider all tables but just the one of interest. This normally does not include simple connection tables.
     tables = [
-        'disease',
-        'disease_mutation',
-        'anatomical_entity',
-        'disease_mutation_impact_prediction'
+        'projects',
+        'people',
+        'ec_framework_programs',
+        'funding_schemes',
+        'topics',
+        'project_members',
+        'subject_areas',
+        'programmes',
+        'erc_research_domains',
+        'project_member_roles',
+        'activity_types',
+        'countries',
+        'eu_territorial_units',
+        'institutions'
     ]
 
     transform(args.original_schema, args.new_schema, tables)

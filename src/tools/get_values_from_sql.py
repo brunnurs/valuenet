@@ -27,7 +27,12 @@ if __name__ == '__main__':
         ner_data = json.load(json_file)
 
     if len(ner_data) != len(data):
-        raise ValueError(f'There are {len(ner_data)} NER data rows and {len(data)} samples in the data set. Something is wrong!')
+        raise ValueError(f'There are {len(ner_data)} NER data rows and {len(data)} samples in the data set. Something is wrong! '
+                         f'Comment in the next few lines to figure out which questions are missing (e.g. failed during the NER step)')
+
+    # for i in range(len(data)):
+    #     if data[i]['question'] != ner_data[i]['question']:
+    #         print(f'Question {i} is not the same between the two files')
 
     for row, ner_row in zip(data, ner_data):
 
