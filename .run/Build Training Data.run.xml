@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="#2 Build Training (train/dev) Data. You still have to do the NER tasks, see NER" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing INODE">
+  <configuration default="false" name="#1 Build Training (train/dev) Data. You still have to do the NER tasks, see NER" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing CORDIS">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />

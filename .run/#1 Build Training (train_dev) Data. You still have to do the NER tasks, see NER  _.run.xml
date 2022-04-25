@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="#2 pre-process dataset, includig values (TRAIN)" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing CORDIS">
+  <configuration default="false" name="#1 Build Training (train/dev) Data. You still have to do the NER tasks, see NER  _" type="PythonConfigurationType" factoryName="Python" folderName="preprocessing HACK_ZURICH">
     <module name="proton" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
@@ -12,8 +12,8 @@
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/preprocessing/pre_process.py" />
-    <option name="PARAMETERS" value="--data_path=data/cordis/original/train.json --ner_data_path=data/cordis/ner_train.json --database_host=testbed.inode.igd.fraunhofer.de --database_port=18001 --database_user=postgres --database_password=ADD_PW_FRAUNHOFER --database_schema=unics_cordis --table_path=data/cordis/original/tables.json --output=data/cordis/preprocessed_train.json" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/tools/training_data_builder/training_data_builder.py" />
+    <option name="PARAMETERS" value="--data hack_zurich" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
