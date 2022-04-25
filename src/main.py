@@ -94,6 +94,9 @@ if __name__ == '__main__':
             for key, value in spider_eval_results.items():
                 tqdm.write("{}: {}".format(key, value))
 
+        if epoch % 10 == 0 and epoch > 0:
+            save_model(model, os.path.join(output_path), model_name=f'model_epoch_{epoch}.pt')
+
         if acc > best_acc:
             save_model(model, os.path.join(output_path))
             tqdm.write("Accuracy of this epoch ({}) is higher then the so far best accuracy ({}). Save model.".format(acc, best_acc))

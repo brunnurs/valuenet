@@ -127,7 +127,7 @@ def evaluate_cordis(groundtruth_path: Path, prediction_path: Path, database: str
         try:
             results_prediction = _execute_query_postgresql(p, database, connection_config)
         except Exception as ex:
-            print("Prediction is not a valid SQL query:")
+            print("Could not execute query. Error:", ex)
             print(f"Q: {q.strip()}")
             print(f"P: {p.strip()}")
             print(f"G: {g.strip()}")
