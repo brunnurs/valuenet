@@ -1,0 +1,548 @@
+[
+  {
+    "name": "ec framework programs",
+    "original_name": "ec_framework_programs",
+    "logical_name": "ec_framework_programs",
+    "columns": [
+      {
+        "name": "ec framework program name",
+        "original_name": "ec_framework_program_name",
+        "logical_name": "program_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "funding schemes",
+    "original_name": "funding_schemes",
+    "logical_name": "funding_schemes",
+    "columns": [
+      {
+        "name": "code",
+        "original_name": "code",
+        "logical_name": "code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "title",
+        "original_name": "title",
+        "logical_name": "title",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "people",
+    "original_name": "people",
+    "logical_name": "people",
+    "columns": [
+      {
+        "name": "full name",
+        "original_name": "full_name",
+        "logical_name": "full_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "project members",
+    "original_name": "project_members",
+    "logical_name": "project_members",
+    "columns": [
+      {
+        "name": "unics id",
+        "original_name": "unics_id",
+        "logical_name": "id",
+        "original_datatype": "number",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "rcn",
+        "original_name": "rcn",
+        "logical_name": "rcn",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "member name",
+        "original_name": "member_name",
+        "logical_name": "member_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "activity type",
+        "original_name": "activity_type",
+        "logical_name": "activity_type",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "country",
+        "original_name": "country",
+        "logical_name": "country",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "street",
+        "original_name": "street",
+        "logical_name": "street",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "city",
+        "original_name": "city",
+        "logical_name": "city",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "postal code",
+        "original_name": "postal_code",
+        "logical_name": "postal_code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "ec contribution",
+        "original_name": "ec_contribution",
+        "logical_name": "ec_contribution",
+        "original_datatype": "number",
+        "logical_datatype": "number"
+      },
+      {
+        "name": "institution id",
+        "original_name": "institution_id",
+        "logical_name": "institution_id",
+        "original_datatype": "number",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "member role",
+        "original_name": "member_role",
+        "logical_name": "member_role",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "member short name",
+        "original_name": "member_short_name",
+        "logical_name": "member_short_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "department name",
+        "original_name": "department_name",
+        "logical_name": "department_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "vat number",
+        "original_name": "vat_number",
+        "logical_name": "vat_number",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "latitude",
+        "original_name": "latitude",
+        "logical_name": "latitude",
+        "original_datatype": "number",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "longitude",
+        "original_name": "longitude",
+        "logical_name": "longitude",
+        "original_datatype": "number",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "projects",
+    "original_name": "projects",
+    "logical_name": "projects",
+    "columns": [
+      {
+        "name": "unics id",
+        "original_name": "unics_id",
+        "logical_name": "unics_id",
+        "original_datatype": "number",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "acronym",
+        "original_name": "acronym",
+        "logical_name": "acronym",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "title",
+        "original_name": "title",
+        "logical_name": "title",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "ec call",
+        "original_name": "ec_call",
+        "logical_name": "ec_call",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "ec fund scheme",
+        "original_name": "ec_fund_scheme",
+        "logical_name": "ec_fund_scheme",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "start date",
+        "original_name": "start_date",
+        "logical_name": "start_date",
+        "original_datatype": "time",
+        "logical_datatype": "time"
+      },
+      {
+        "name": "end date",
+        "original_name": "end_date",
+        "logical_name": "end_date",
+        "original_datatype": "time",
+        "logical_datatype": "time"
+      },
+      {
+        "name": "start year",
+        "original_name": "start_year",
+        "logical_name": "start_year",
+        "original_datatype": "number",
+        "logical_datatype": "time"
+      },
+      {
+        "name": "end year",
+        "original_name": "end_year",
+        "logical_name": "end_year",
+        "original_datatype": "number",
+        "logical_datatype": "time"
+      },
+      {
+        "name": "homepage",
+        "original_name": "homepage",
+        "logical_name": "homepage",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "total cost",
+        "original_name": "total_cost",
+        "logical_name": "total_cost",
+        "original_datatype": "number",
+        "logical_datatype": "number"
+      },
+      {
+        "name": "ec max contribution",
+        "original_name": "ec_max_contribution",
+        "logical_name": "ec_max_contribution",
+        "original_datatype": "number",
+        "logical_datatype": "number"
+      },
+      {
+        "name": "framework program",
+        "original_name": "framework_program",
+        "logical_name": "framework_program",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "topics",
+    "original_name": "topics",
+    "logical_name": "topics",
+    "columns": [
+      {
+        "name": "code",
+        "original_name": "code",
+        "logical_name": "code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "rcn",
+        "original_name": "rcn",
+        "logical_name": "rcn",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "title",
+        "original_name": "title",
+        "logical_name": "title",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "subject areas",
+    "original_name": "subject_areas",
+    "logical_name": "subject_areas",
+    "columns": [
+      {
+        "name": "code",
+        "original_name": "code",
+        "logical_name": "code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "title",
+        "original_name": "title",
+        "logical_name": "title",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "description",
+        "original_name": "description",
+        "logical_name": "description",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "project member roles",
+    "original_name": "project_member_roles",
+    "logical_name": "project_member_roles",
+    "columns": [
+      {
+        "name": "code",
+        "original_name": "code",
+        "logical_name": "code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "description",
+        "original_name": "description",
+        "logical_name": "description",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "programmes",
+    "original_name": "programmes",
+    "logical_name": "programmes",
+    "columns": [
+      {
+        "name": "code",
+        "original_name": "code",
+        "logical_name": "code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "rcn",
+        "original_name": "rcn",
+        "logical_name": "rcn",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "title",
+        "original_name": "title",
+        "logical_name": "title",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "short name",
+        "original_name": "short_name",
+        "logical_name": "short_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "eu territorial units",
+    "original_name": "eu_territorial_units",
+    "logical_name": "eu_territorial_units",
+    "columns": [
+      {
+        "name": "geocode regions",
+        "original_name": "geocode_regions",
+        "logical_name": "geocode_regions",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "description",
+        "original_name": "description",
+        "logical_name": "description",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "erc research domains",
+    "original_name": "erc_research_domains",
+    "logical_name": "erc_research_domains",
+    "columns": [
+      {
+        "name": "code",
+        "original_name": "code",
+        "logical_name": "code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "description",
+        "original_name": "description",
+        "logical_name": "description",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "ec framework programs",
+    "original_name": "ec_framework_programs",
+    "logical_name": "ec_framework_programs",
+    "columns": [
+      {
+        "name": "ec framework program name",
+        "original_name": "ec_framework_program_name",
+        "logical_name": "program_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "countries",
+    "original_name": "countries",
+    "logical_name": "countries",
+    "columns": [
+      {
+        "name": "country name",
+        "original_name": "country_name",
+        "logical_name": "country_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "country code2",
+        "original_name": "country_code2",
+        "logical_name": "country_code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "activity types",
+    "original_name": "activity_types",
+    "logical_name": "activity_types",
+    "columns": [
+      {
+        "name": "code",
+        "original_name": "code",
+        "logical_name": "code",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "description",
+        "original_name": "description",
+        "logical_name": "description",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  },
+  {
+    "name": "institutions",
+    "original_name": "institutions",
+    "logical_name": "institutions",
+    "columns": [
+      {
+        "name": "unics id",
+        "original_name": "unics_id",
+        "logical_name": "unics_id",
+        "original_datatype": "number",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "institutions name",
+        "original_name": "institutions_name",
+        "logical_name": "institutions_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "geocode regions 3",
+        "original_name": "geocode_regions_3",
+        "logical_name": "geocode_regions_3",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "db pedia url",
+        "original_name": "db_pedia_url",
+        "logical_name": "db_pedia_url",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "wikidata url",
+        "original_name": "wikidata_url",
+        "logical_name": "wikidata_url",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "grid id",
+        "original_name": "grid_id",
+        "logical_name": "grid_id",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "acronym",
+        "original_name": "acronym",
+        "logical_name": "acronym",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "short name",
+        "original_name": "short_name",
+        "logical_name": "short_name",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      },
+      {
+        "name": "website",
+        "original_name": "website",
+        "logical_name": "website",
+        "original_datatype": "text",
+        "logical_datatype": "text"
+      }
+    ]
+  }
+]
