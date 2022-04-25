@@ -49,21 +49,38 @@ def main(args: argparse.Namespace):
 
     training_sample_paths: List[Path] = []
 
-    training_sample_paths.append(Path(f'data/{args.data}/handmade_training_data/handmade_data_train.json'))
+    # this is usually where the human-made training data exists
+    human_made_data_path = Path(f'data/{args.data}/handmade_training_data/handmade_data_train.json')
+    if human_made_data_path.exists():
+        training_sample_paths.append(human_made_data_path)
 
-    if args.data == 'cordis':
-        training_sample_paths.append(Path('data/cordis/trees/all_adapted.json'))
+    # this is usually where the synthetic, GPT-3 based training data exists
+    synthetic_data_path = Path(f'data/{args.data}/generative/all_synthetic.json')
+    if synthetic_data_path.exists():
+        training_sample_paths.append(synthetic_data_path)
+
+    # we should not use that data anymore
+
+    # if args.data == 'cordis':
+    #     training_sample_paths.append(Path('data/cordis/trees/all_adapted.json'))
 
     samples = []
+    n_not_successful = 0
     for path in training_sample_paths:
         with open(path, 'r', encoding='utf-8') as file_handle:
             data = json.load(file_handle)
 
             for sample in data:
-                transformed = transform_sample(sample, schemas_dict, nlp.tokenizer)
-                samples.append(transformed)
+                try:
+                    transformed = transform_sample(sample, schemas_dict, nlp.tokenizer)
+                    samples.append(transformed)
+                except Exception as e:
+                    print(f'Error while transforming sample: {e}')
+                    print(f'Sample: {sample}')
+                    n_not_successful += 1
 
-    print(f'successfully transformed {len(samples)} samples for train split')
+
+    print(f'successfully transformed {len(samples)} samples for train split. {n_not_successful} samples could not be transformed.')
 
     with open(Path(f'data/{args.data}/original/train.json'), 'w', encoding='utf-8') as f:
         json.dump(samples, f, indent=2)
