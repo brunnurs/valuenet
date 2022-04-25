@@ -29,6 +29,7 @@ sqlparse = "*"
 pymongo = "*"
 psycopg2-binary = "*"
 openai = "*"
+sentence-transformers = "*"
 
 [requires]
 python_version = "3.8"
