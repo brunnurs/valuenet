@@ -1,4 +1,4 @@
-# Hack Zurich Tutorial
+# ValueNet Tutorial
 
 Hi there! You can use ValueNet for Text-to-SQL translations in the following ways:
 
