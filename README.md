@@ -10,7 +10,10 @@ Hi there! You can use ValueNet for Text-to-SQL translations in the following way
 
 ValueNet is a neural network architecture which aims to translate a natural language question into the corresponding SQL query.
 
-Have a look at our paper for the details <https://arxiv.org/abs/2006.00888>
+Have a look at our paper for the details 
+
+Ursin Brunner, Kurt Stockinger: ValueNet: A Natural Language-to-SQL System that Learns from Database Information. International Conference on Data Engineering (ICDE) 2021
+<https://arxiv.org/abs/2006.00888>
 
 ## Use the deployed API
 
